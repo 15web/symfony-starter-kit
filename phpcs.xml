@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/squizlabs/php_codesniffer/phpcs.xsd">
+
+    <arg name="basepath" value="."/>
+    <arg name="cache" value="var/.phpcs-cache"/>
+    <arg name="colors"/>
+    <arg name="extensions" value="php"/>
+
+    <file>src/</file>
+
+    <exclude-pattern>Kernel.php</exclude-pattern>
+
+    <config name="installed_paths" value="vendor/slevomat/coding-standard"/><!-- relative path from PHPCS source location -->
+
+    <!-- Looks for unused inherited variables passed to closure via use. -->
+    <rule ref="SlevomatCodingStandard.Functions.UnusedInheritedVariablePassedToClosure"/>
+
+    <!-- Looks for unused parameters. -->
+    <rule ref="SlevomatCodingStandard.Functions.UnusedParameter"/>
+
+    <!-- Looks for useless parameter default value. -->
+    <rule ref="SlevomatCodingStandard.Functions.UselessParameterDefaultValue"/>
+
+    <!-- Looks for unused imports from other namespaces. -->
+    <rule ref="SlevomatCodingStandard.Namespaces.UnusedUses">
+        <properties>
+            <!-- enables searching for class names in annotations.-->
+            <property name="searchAnnotations" value="true"/>
+        </properties>
+    </rule>
+
+    <!-- Prohibits uses from the same namespace. -->
+    <rule ref="SlevomatCodingStandard.Namespaces.UseFromSameNamespace"/>
+
+    <!-- Looks for use alias that is same as unqualified name. -->
+    <rule ref="SlevomatCodingStandard.Namespaces.UselessAlias"/>
+
+    <!-- Disallows references. -->
+    <rule ref="SlevomatCodingStandard.PHP.DisallowReference"/>
+
+    <!-- Requires nowdoc syntax instead of heredoc when possible. -->
+    <rule ref="SlevomatCodingStandard.PHP.RequireNowdoc"/>
+
+    <!-- PHP optimizes some internal functions into special opcodes on VM level. Such optimization results in much faster execution compared to calling standard function.  -->
+    <rule ref="SlevomatCodingStandard.PHP.OptimizedFunctionsWithoutUnpacking"/>
+
+    <!-- Looks for useless semicolons. -->
+    <rule ref="SlevomatCodingStandard.PHP.UselessSemicolon"/>
+
+    <!-- Disallows use of super global variables. -->
+    <rule ref="SlevomatCodingStandard.Variables.DisallowSuperGlobalVariable"/>
+
+    <!-- Looks for duplicate assignments to a variable. -->
+    <rule ref="SlevomatCodingStandard.Variables.DuplicateAssignmentToVariable"/>
+
+    <!-- Looks for unused variables. -->
+    <rule ref="SlevomatCodingStandard.Variables.UnusedVariable"/>
+
+    <!-- Looks for useless variables. -->
+    <rule ref="SlevomatCodingStandard.Variables.UselessVariable"/>
+</ruleset>

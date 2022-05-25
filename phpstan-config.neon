@@ -1,0 +1,24 @@
+parameters:
+    checkUninitializedProperties: true
+    level: 9
+    tmpDir: ./var/cache
+    paths:
+        - src
+    excludePaths:
+    doctrine:
+        objectManagerLoader: phpstan/object-manager.php
+
+includes:
+    - vendor/phpstan/phpstan/conf/bleedingEdge.neon
+    - vendor/phpstan/phpstan-doctrine/extension.neon
+    - vendor/phpstan/phpstan-strict-rules/rules.neon
+    - phpstan/phpstan-baseline.neon
+
+rules:
+    - PHPStan\Rules\Doctrine\ORM\EntityNotFinalRule
+
+services:
+    -
+        class: App\PHPStan\GedmoUnCheckPropertiesExtension
+        tags:
+            - phpstan.properties.readWriteExtension
