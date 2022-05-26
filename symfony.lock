@@ -107,15 +107,6 @@
     "monolog/monolog": {
         "version": "2.6.0"
     },
-    "nette/neon": {
-        "version": "v3.3.3"
-    },
-    "nette/utils": {
-        "version": "v3.2.7"
-    },
-    "nikic/php-parser": {
-        "version": "v4.13.2"
-    },
     "php-cs-fixer/diff": {
         "version": "v2.0.2"
     },
@@ -154,9 +145,6 @@
     },
     "roave/security-advisories": {
         "version": "dev-latest"
-    },
-    "sebastian/diff": {
-        "version": "4.0.4"
     },
     "slevomat/coding-standard": {
         "version": "7.2.1"
@@ -365,33 +353,6 @@
     },
     "symfony/yaml": {
         "version": "v6.0.3"
-    },
-    "symplify/astral": {
-        "version": "10.2.7"
-    },
-    "symplify/autowire-array-parameter": {
-        "version": "10.2.7"
-    },
-    "symplify/composer-json-manipulator": {
-        "version": "10.2.7"
-    },
-    "symplify/easy-testing": {
-        "version": "10.2.7"
-    },
-    "symplify/package-builder": {
-        "version": "10.2.7"
-    },
-    "symplify/phpstan-rules": {
-        "version": "10.2.7"
-    },
-    "symplify/rule-doc-generator-contracts": {
-        "version": "10.2.7"
-    },
-    "symplify/smart-file-system": {
-        "version": "10.2.7"
-    },
-    "symplify/symplify-kernel": {
-        "version": "10.2.7"
     },
     "twig/extra-bundle": {
         "version": "v3.4.0"
