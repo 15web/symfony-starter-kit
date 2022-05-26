@@ -1,38 +1,28 @@
 name: Check Code Quality
 
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-
-permissions:
-  contents: read
+on: [ push ]
 
 jobs:
-  build:
-
+  check:
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v3
-    - name: Build PHP image
+      - uses: actions/checkout@v3
 
-    - name: Validate composer.json and composer.lock
-      run: ./bin/docker-run-cmd.bash composer validate --strict
-
-    - name: Cache Composer packages
-      id: composer-cache
-      uses: actions/cache@v3
-      with:
-        path: vendor
-        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-php-
-
-    - name: Install dependencies
-      run: ./bin/docker-run-cmd.bash composer install --prefer-dist --no-progress
-    
-    - name: Check code quality
-    - run: ./bin/check-code-quality.bash
+      - name: Validate composer.json and composer.lock
+        run: ./bin/docker-run-cmd.bash composer validate --strict
+  
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
+  
+      - name: Install dependencies
+        run: ./bin/docker-run-cmd.bash composer install --prefer-dist --no-progress
+      
+      - name: Check code quality
+        run: ./bin/check-code-quality.bash
 
