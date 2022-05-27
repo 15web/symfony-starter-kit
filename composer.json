@@ -1,4 +1,6 @@
 {
+    "name": "15web/symfony-starter-kit",
+    "description": "Starter kit for symfony projects",
     "type": "project",
     "license": "proprietary",
     "minimum-stability": "stable",
@@ -43,7 +45,8 @@
         "allow-plugins": {
             "composer/package-versions-deprecated": true,
             "symfony/flex": true,
-            "symfony/runtime": true
+            "symfony/runtime": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true
         },
         "optimize-autoloader": true,
         "preferred-install": {

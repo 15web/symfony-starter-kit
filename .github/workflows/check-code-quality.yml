@@ -10,7 +10,7 @@ jobs:
 
       - name: Validate composer.json and composer.lock
         run: ./bin/docker-run-cmd.bash composer validate --strict
-  
+
       - name: Cache Composer packages
         id: composer-cache
         uses: actions/cache@v3
@@ -19,10 +19,9 @@ jobs:
           key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-php-
-  
+
       - name: Install dependencies
         run: ./bin/docker-run-cmd.bash composer install --prefer-dist --no-progress
-      
+
       - name: Check code quality
         run: ./bin/check-code-quality.bash
-
