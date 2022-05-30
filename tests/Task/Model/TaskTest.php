@@ -8,13 +8,13 @@ use PHPUnit\Framework\TestCase;
 
 class TaskTest extends TestCase
 {
-    public function textCorrectCreation(): void
+    public function testCorrectCreation(): void
     {
         $task = new Task(new TaskName($expectedName = 'new task'));
 
         self::assertSame($expectedName, $task->getTaskName()->getValue());
         self::assertNotNull($task->getCreatedAt());
-        self::assertNull($task->getUpdatedAt());
+        self::assertNotNull($task->getUpdatedAt());
     }
 
     public function testCorrectChangeName(): void
