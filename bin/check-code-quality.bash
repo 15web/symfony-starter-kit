@@ -7,3 +7,4 @@ set -Eeuo pipefail
 ./bin/docker-run-cmd.bash vendor/bin/phpcs --colors -p
 ./bin/docker-run-cmd.bash bin/console lint:twig
 ./bin/docker-run-cmd.bash bin/console lint:container
+./bin/docker-run-cmd.bash vendor/bin/phpunit -v
