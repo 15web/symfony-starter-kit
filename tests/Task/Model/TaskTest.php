@@ -14,7 +14,7 @@ class TaskTest extends TestCase
 
         self::assertSame($expectedName, $task->getTaskName()->getValue());
         self::assertNotNull($task->getCreatedAt());
-        self::assertNotNull($task->getUpdatedAt());
+        self::assertNull($task->getUpdatedAt());
     }
 
     public function testCorrectChangeName(): void
