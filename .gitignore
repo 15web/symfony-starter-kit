@@ -9,3 +9,9 @@
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
+
+###> docker ###
+/docker/.env
+/docker/backend/.env
+/docker/mysql/.env
+###< docker ###

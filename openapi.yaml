@@ -1,0 +1,60 @@
+openapi: 3.0.3
+info:
+    title: symfony-starter-kit
+    version: 1.0.0
+servers:
+    -   url: '/'
+paths:
+    /login:
+        post:
+            summary: 'Пройти аутентификацию'
+            tags: [ 'Аутентификация' ]
+            security: [ ]
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            required: [ username, password ]
+                            properties:
+                                username:
+                                    type: string
+                                    description: 'Email пользователя'
+                                    example: 'test@example.com'
+                                password:
+                                    type: string
+                                    description: 'Пароль пользователя'
+                                    example: '123qweQWE'
+            responses:
+                200:
+                    description: 'Api-токен'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    token:
+                                        type: string
+                                        format: uuid
+                                        example: '01FX4N3XFJVP5YQ3QNF5VPYD63'
+                                    name:
+                                        type: string
+                                        format: email
+                                        example: 'Продавец'
+                500:
+                    description: 'Пользователь неактивен'
+    /logout:
+        get:
+            summary: 'Выйти'
+            tags: [ 'Аутентификация' ]
+            responses:
+                200:
+                    description: 'Удаляет токен'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    success:
+                                        type: boolean
+                                        enum: [ true ]
+                                        default: true
