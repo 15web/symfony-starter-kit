@@ -5,4 +5,4 @@
 # http://dev.mysql.com/doc/mysql/en/server-system-variables.html
 
 [mysqld]
-default-time-zone='Europe/Moscow'
+default-time-zone='+03:00'
