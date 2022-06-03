@@ -9,7 +9,19 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Validate composer.json and composer.lock
-        run: ./bin/docker-run-cmd.bash composer validate --strict
+        run: cd ./docker && ./manage.bash setup-envs && cat .env
+
+      - name: Cache Docker env
+        id: docker-env-cache
+        uses: actions/cache@v3
+        with:
+          path: docker/.env
+          key: docker-env-${{ hashFiles('docker/.env') }}
+          restore-keys: |
+            docker-env-
+
+      - name: Validate composer.json and composer.lock
+        run: cd ./docker && ./manage.bash run-backend composer validate --strict
 
       - name: Cache Composer packages
         id: composer-cache
@@ -21,7 +33,7 @@ jobs:
             ${{ runner.os }}-php-
 
       - name: Install dependencies
-        run: ./bin/docker-run-cmd.bash composer install --prefer-dist --no-progress
+        run: cd ./docker && ./manage.bash run-backend composer install --prefer-dist --no-progress
 
       - name: Check code quality
-        run: ./bin/check-code-quality.bash
+        run: cd ./docker && ./manage.bash run-backend composer check

@@ -1,0 +1,39 @@
+version: '3.8'
+services:
+    backend:
+        build:
+            context: ./backend/
+            target: base
+            args:
+                USER_ID: ${USER_ID}
+        volumes:
+            - ../:/app/
+            - composer_cache:/home/dev/.composer
+        env_file: backend/.env
+        depends_on: [ mysql ]
+    nginx:
+        build:
+            context: ./nginx/
+        ports:
+            - ${NGINX_PORT}:80
+        depends_on: [ backend ]
+    mysql:
+        build:
+            context: ./mysql/
+        volumes:
+            - mysql:/var/lib/mysql/
+        ports:
+            - ${MYSQL_PORT}:3306
+        env_file: ./mysql/.env
+    mailhog:
+        image: mailhog/mailhog
+    docs:
+        image: swaggerapi/swagger-ui
+        environment:
+            SWAGGER_JSON_URL: /docs/openapi.yaml
+            BASE_URL: /docs
+        volumes:
+            - ../openapi.yaml:/usr/share/nginx/html/openapi.yaml:ro
+volumes:
+    mysql:
+    composer_cache:

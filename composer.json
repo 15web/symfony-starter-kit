@@ -90,7 +90,17 @@
         ],
         "post-update-cmd": [
             "@auto-scripts"
-        ]
+        ],
+        "stan": "vendor/bin/phpstan analyse -c phpstan-config.neon --ansi",
+        "fixer-check": "php-cs-fixer --config=php-cs-fixer-config.php fix --dry-run --diff --ansi -v",
+        "fixer-fix": "php-cs-fixer --config=php-cs-fixer-config.php fix --ansi -v",
+        "sniffer-check": "phpcs --colors -p",
+        "sniffer-fix": "phpcbf --colors -p",
+        "unit": "bin/phpunit -v",
+        "twig-lint": "bin/console lint:twig",
+        "container-lint": "bin/console lint:container",
+        "check": ["@stan", "@fixer-check", "@sniffer-check", "@unit", "@twig-lint", "@container-lint"],
+        "fix": ["@fixer-fix", "@sniffer-fix"]
     },
     "conflict": {
         "symfony/symfony": "*"
