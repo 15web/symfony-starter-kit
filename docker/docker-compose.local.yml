@@ -7,7 +7,7 @@ services:
             args:
                 USER_ID: ${USER_ID}
         volumes:
-            - ../:/app/
+            - ../backend:/app/
             - composer_cache:/home/dev/.composer
         env_file: backend/.env
         depends_on: [ mysql ]
@@ -33,7 +33,7 @@ services:
             SWAGGER_JSON_URL: /docs/openapi.yaml
             BASE_URL: /docs
         volumes:
-            - ../openapi.yaml:/usr/share/nginx/html/openapi.yaml:ro
+            - ../backend/openapi.yaml:/usr/share/nginx/html/openapi.yaml:ro
 volumes:
     mysql:
     composer_cache:

@@ -8,7 +8,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Validate composer.json and composer.lock
+      - name: Setup docker env
         run: cd ./docker && ./manage.bash setup-envs && cat .env
 
       - name: Cache Docker env
