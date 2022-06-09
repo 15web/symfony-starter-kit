@@ -35,5 +35,8 @@ jobs:
       - name: Install dependencies
         run: cd ./docker && ./manage.bash run-backend composer install --prefer-dist --no-progress
 
+      - name: Install DB migrations
+        run: cd ./docker && ./manage.bash run-backend bin/console doctrine:migrations:migrate --no-interaction
+
       - name: Check code quality
         run: cd ./docker && ./manage.bash run-backend composer check
