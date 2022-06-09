@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Task\Model;
 
 use App\Task\Model\Task;
 use App\Task\Model\TaskName;
 use PHPUnit\Framework\TestCase;
 
-class TaskTest extends TestCase
+final class TaskTest extends TestCase
 {
     public function testCorrectCreation(): void
     {

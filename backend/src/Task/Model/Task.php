@@ -17,15 +17,16 @@ class Task
     #[ORM\Embedded]
     private TaskName $taskName;
 
+    #[ORM\Column]
     private bool $isCompleted;
 
     #[ORM\Column]
     private readonly \DateTimeImmutable $createdAt;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $completedAt;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updatedAt;
 
     public function __construct(TaskName $taskName)

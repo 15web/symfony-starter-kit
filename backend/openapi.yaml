@@ -3,58 +3,208 @@ info:
     title: symfony-starter-kit
     version: 1.0.0
 servers:
-    -   url: '/'
+    -   url: '/api'
 paths:
-    /login:
+    /tasks:
+        get:
+            summary: 'Список задач'
+            responses:
+                200:
+                    description: 'Возвращает список задач'
+                    content:
+                        application\json:
+                            schema:
+                                type: array
+                                items:
+                                    type: object
+                                    properties:
+                                        id:
+                                            type: string
+                                            format: uuid
+                                            description: 'ID задачи'
+                                            example: 'dc8dbada-b154-4ffb-b21c-da70162e2704'
+                                        taskName:
+                                            type: string
+                                            description: 'Наименование задачи'
+                                            example: 'Моя первая задача'
+                                        isCompleted:
+                                            type: boolean
+                                            description: 'Выполнена ли задача'
+                                            example: true
+
+    /tasks/{id}:
+        get:
+            summary: 'Подробная информация по задаче'
+            parameters:
+                -   $ref: '#/components/parameters/taskId'
+            responses:
+                200:
+                    description: 'Возвращает подробную информацию по задаче'
+                    content:
+                        application\json:
+                            schema:
+                                type: array
+                                items:
+                                    type: object
+                                    properties:
+                                        id:
+                                            type: string
+                                            format: uuid
+                                            description: 'ID задачи'
+                                            example: 'dc8dbada-b154-4ffb-b21c-da70162e2704'
+                                        taskName:
+                                            type: string
+                                            description: 'Наименование задачи'
+                                            example: 'Моя первая задача'
+                                        isCompleted:
+                                            type: boolean
+                                            description: 'Выполнена ли задача'
+                                            example: true
+                                        createdAt:
+                                            type: string
+                                            description: 'Дата создания'
+                                            example: '2021-10-28T16:19:44+00:00'
+                                        completedAt:
+                                            type: string
+                                            description: 'Дата завершения'
+                                            example: '2021-10-28T16:19:44+00:00'
+                                            nullable: true
+                                        updatedAt:
+                                            type: string
+                                            description: 'Дата обновления'
+                                            example: '2021-10-28T16:19:44+00:00'
+                                            nullable: true
+                404:
+                    description: 'Задача не найдена'
+
+    /tasks/create:
         post:
-            summary: 'Пройти аутентификацию'
-            tags: [ 'Аутентификация' ]
-            security: [ ]
+            summary: 'Создать задачу'
             requestBody:
                 content:
                     application/json:
                         schema:
-                            required: [ username, password ]
                             properties:
-                                username:
+                                taskName:
                                     type: string
-                                    description: 'Email пользователя'
-                                    example: 'test@example.com'
-                                password:
-                                    type: string
-                                    description: 'Пароль пользователя'
-                                    example: '123qweQWE'
+                                    required: true
+                                    description: 'Наименование задачи'
+                                    example: 'Моя первая задача'
             responses:
                 200:
-                    description: 'Api-токен'
+                    description: 'Задача создана'
                     content:
                         application/json:
                             schema:
-                                type: object
-                                properties:
-                                    token:
-                                        type: string
-                                        format: uuid
-                                        example: '01FX4N3XFJVP5YQ3QNF5VPYD63'
-                                    name:
-                                        type: string
-                                        format: email
-                                        example: 'Продавец'
-                500:
-                    description: 'Пользователь неактивен'
-    /logout:
-        get:
-            summary: 'Выйти'
-            tags: [ 'Аутентификация' ]
-            responses:
-                200:
-                    description: 'Удаляет токен'
+                                $ref: '#/components/schemas/successResponse'
+                400:
+                    description: 'Ошибка запроса'
                     content:
                         application/json:
                             schema:
-                                type: object
-                                properties:
-                                    success:
-                                        type: boolean
-                                        enum: [ true ]
-                                        default: true
+                                $ref: '#/components/schemas/errorBadRequest'
+
+    /tasks/{id}/update-task-name:
+        post:
+            summary: 'Обновить наименование задачи'
+            parameters:
+                -   $ref: '#/components/parameters/taskId'
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            properties:
+                                taskName:
+                                    type: string
+                                    required: true
+                                    description: 'Наименование задачи'
+                                    example: 'Моя вторая задача'
+            responses:
+                200:
+                    description: 'Наименование задачи обновлено'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/successResponse'
+                400:
+                    description: 'Ошибка запроса'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/errorBadRequest'
+                404:
+                    description: 'Задача не найдена'
+
+    /tasks/{id}/remove:
+        post:
+            summary: 'Удаляет задачу'
+            parameters:
+                -   $ref: '#/components/parameters/taskId'
+            responses:
+                200:
+                    description: 'Задача удалена'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/successResponse'
+                400:
+                    description: 'Ошибка запроса'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/errorBadRequest'
+                404:
+                    description: 'Задача не найдена'
+
+    /tasks/{id}/complete:
+        post:
+            summary: 'Завершает задачу'
+            parameters:
+                -   $ref: '#/components/parameters/taskId'
+            responses:
+                200:
+                    description: 'Задача завершена'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/successResponse'
+                400:
+                    description: 'Задача уже выполнена'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/errorBadRequest'
+                404:
+                    description: 'Задача не найдена'
+components:
+    schemas:
+        successResponse:
+            type: object
+            properties:
+                success:
+                    type: boolean
+                    enum: [ true ]
+                    default: true
+        errorBadRequest:
+            type: object
+            properties:
+                error:
+                    type: boolean
+                    enum: [ true ]
+                    default: true
+                code:
+                    type: integer
+                    example: 400
+                errorMessage:
+                    type: string
+                    example: 'Неверный формат запроса'
+    parameters:
+        taskId:
+            name: id
+            in: path
+            required: true
+            description: 'ID задачи'
+            example: '123e4567-e89b-12d3-a456-426614174000'
+            schema:
+                type: string
+                format: uuid
