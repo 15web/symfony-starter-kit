@@ -99,7 +99,19 @@
         "unit": "bin/phpunit -v",
         "twig-lint": "bin/console lint:twig",
         "container-lint": "bin/console lint:container",
-        "check": ["@stan", "@fixer-check", "@sniffer-check", "@unit", "@twig-lint", "@container-lint"],
+        "validate-schema": "bin/console doctrine:schema:validate",
+        "cache-prod-check": "bin/console cache:warmup --env=prod",
+        "deprications-check": "bin/console debug:container --deprecations",
+        "check": [
+            "@container-lint",
+            "@validate-schema",
+            "@twig-lint",
+            "@unit",
+            "@stan",
+            "@fixer-check",
+            "@sniffer-check",
+            "@cache-prod-check"
+        ],
         "fix": ["@fixer-fix", "@sniffer-fix"]
     },
     "conflict": {
