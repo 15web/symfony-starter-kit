@@ -40,3 +40,10 @@ jobs:
 
       - name: Check code quality
         run: cd ./docker && ./manage.bash run-backend composer check
+
+      - name: Install DB test
+        run: cd ./docker && ./manage.bash install-test
+
+      - name: Install DB test
+        run: cd ./docker && ./manage.bash test
+

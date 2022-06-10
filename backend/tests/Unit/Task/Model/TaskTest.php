@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Task\Model;
+namespace App\Tests\Unit\Task\Model;
 
 use App\Task\Model\Task;
 use App\Task\Model\TaskName;

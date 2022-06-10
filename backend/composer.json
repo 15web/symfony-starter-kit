@@ -34,6 +34,7 @@
         "webmozart/assert": "^1.10"
     },
     "require-dev": {
+        "dama/doctrine-test-bundle": "^7.1",
         "friendsofphp/php-cs-fixer": "^3.8",
         "phpstan/phpstan": "^1.7",
         "phpstan/phpstan-doctrine": "^1.3",
@@ -96,7 +97,6 @@
         "fixer-fix": "php-cs-fixer --config=php-cs-fixer-config.php fix --ansi -v",
         "sniffer-check": "phpcs --colors -p",
         "sniffer-fix": "phpcbf --colors -p",
-        "unit": "bin/phpunit -v",
         "twig-lint": "bin/console lint:twig",
         "container-lint": "bin/console lint:container",
         "validate-schema": "bin/console doctrine:schema:validate",
@@ -106,7 +106,6 @@
             "@container-lint",
             "@validate-schema",
             "@twig-lint",
-            "@unit",
             "@stan",
             "@fixer-check",
             "@sniffer-check",

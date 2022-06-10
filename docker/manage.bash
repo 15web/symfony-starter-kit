@@ -33,6 +33,14 @@ setupEnvs() {
     echo 'Envs set up!';
 }
 
+installTest() {
+    docker-compose exec mysql mysql -proot -e "drop database if exists db_name_test;";
+    docker-compose exec mysql mysql -proot -e "create database if not exists db_name_test;";
+    docker-compose exec mysql mysql -proot -e "GRANT ALL PRIVILEGES ON db_name_test.* TO 'db_user'@'%';";
+    runBackend bin/console --env=test doctrine:migrations:migrate --no-interaction
+    runBackend bin/console --env=test cache:clear
+}
+
 install() {
     docker-compose build
 
@@ -41,6 +49,8 @@ install() {
     docker-compose up --detach --force-recreate --remove-orphans
 
     runBackend ./bin/console doctrine:migrations:migrate --no-interaction
+
+    installTest
 
     echo "Done!"
 }
@@ -105,6 +115,17 @@ case $COMMAND in
         setupEnvs;
 
         runBackend composer check
+
+        runBackend bin/console --env=test cache:clear
+        docker-compose run --rm -e APP_ENV=test backend bin/phpunit
+
+        ;;
+    install-test)
+        installTest
+        ;;
+    test)
+        runBackend bin/console --env=test cache:clear
+        docker-compose run --rm -e APP_ENV=test backend bin/phpunit -v
         ;;
     fix | f)
         setupEnvs;
@@ -135,6 +156,8 @@ case $COMMAND in
             run-backend[rb],
             logs[l],
             check[c],
+            install-test,
+            test,
             fix[f],
             hooks-install[hi],
             setup-envs[se].'
