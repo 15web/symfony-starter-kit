@@ -121,9 +121,13 @@ case $COMMAND in
 
         ;;
     install-test)
+        setupEnvs;
+
         installTest
         ;;
     test)
+        setupEnvs;
+
         runBackend bin/console --env=test cache:clear
         docker-compose run --rm -e APP_ENV=test backend bin/phpunit -v
         ;;

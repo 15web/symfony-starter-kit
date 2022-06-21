@@ -147,12 +147,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/successResponse'
-                400:
-                    description: 'Ошибка запроса'
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/errorBadRequest'
                 404:
                     description: 'Задача не найдена'
 
