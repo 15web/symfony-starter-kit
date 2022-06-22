@@ -70,7 +70,8 @@
     "autoload-dev": {
         "psr-4": {
             "App\\Tests\\": "tests/",
-            "App\\PHPStan\\": "phpstan/"
+            "App\\PHPStan\\": "phpstan/",
+            "Studio15\\CodeQuality\\PHPCodeSniffer\\": "phpcs/"
         }
     },
     "replace": {
@@ -95,8 +96,8 @@
         "stan": "vendor/bin/phpstan analyse -c phpstan-config.neon --ansi",
         "fixer-check": "php-cs-fixer --config=php-cs-fixer-config.php fix --dry-run --diff --ansi -v",
         "fixer-fix": "php-cs-fixer --config=php-cs-fixer-config.php fix --ansi -v",
-        "sniffer-check": "phpcs --colors -p",
-        "sniffer-fix": "phpcbf --colors -p",
+        "sniffer-check": "phpcs --standard=phpcs.xml,phpcs/ruleset.xml --colors -p",
+        "sniffer-fix": "phpcbf --standard=phpcs.xml,phpcs/ruleset.xml --colors -p",
         "twig-lint": "bin/console lint:twig",
         "container-lint": "bin/console lint:container",
         "validate-schema": "bin/console doctrine:schema:validate",
