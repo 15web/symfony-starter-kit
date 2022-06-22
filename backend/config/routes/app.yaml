@@ -1,4 +1,4 @@
 app:
     resource: ../../src/
-    type: annotation
+    type: attribute
     prefix: /api
