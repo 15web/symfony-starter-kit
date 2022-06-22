@@ -34,9 +34,9 @@ setupEnvs() {
 }
 
 installTest() {
-    docker-compose exec mysql mysql -proot -e "drop database if exists db_name_test;";
-    docker-compose exec mysql mysql -proot -e "create database if not exists db_name_test;";
-    docker-compose exec mysql mysql -proot -e "GRANT ALL PRIVILEGES ON db_name_test.* TO 'db_user'@'%';";
+    docker-compose exec -T mysql mysql -proot -e "drop database if exists db_name_test;";
+    docker-compose exec -T mysql mysql -proot -e "create database if not exists db_name_test;";
+    docker-compose exec -T mysql mysql -proot -e "GRANT ALL PRIVILEGES ON db_name_test.* TO 'db_user'@'%';";
     runBackend bin/console --env=test doctrine:migrations:migrate --no-interaction
     runBackend bin/console --env=test cache:clear
 }
