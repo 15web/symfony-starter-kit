@@ -119,6 +119,8 @@ case $COMMAND in
         runBackend bin/console --env=test cache:clear
         docker-compose run --rm -e APP_ENV=test backend bin/phpunit
 
+        runBackend bin/console app:openapi-routes-diff ./openapi.yaml
+
         ;;
     install-test)
         setupEnvs;

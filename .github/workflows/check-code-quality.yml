@@ -41,6 +41,9 @@ jobs:
       - name: Check code quality
         run: cd ./docker && ./manage.bash run-backend composer check
 
+      - name: Check difference between OpenApi and application endpoints
+        run: cd ./docker && ./manage.bash run-backend bin/console app:openapi-routes-diff ./openapi.yaml
+
       - name: Install DB test
         run: cd ./docker && ./manage.bash install-test
 
