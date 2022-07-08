@@ -32,11 +32,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-php-
 
-      - name: Install dependencies
-        run: cd ./docker && ./manage.bash run-backend composer install --prefer-dist --no-progress
-
-      - name: Install DB migrations
-        run: cd ./docker && ./manage.bash run-backend bin/console doctrine:migrations:migrate --no-interaction
+      - name: Install services
+        run: cd ./docker && ./manage.bash install-test
 
       - name: Check code quality
         run: cd ./docker && ./manage.bash run-backend composer check
@@ -44,9 +41,5 @@ jobs:
       - name: Check difference between OpenApi and application endpoints
         run: cd ./docker && ./manage.bash run-backend bin/console app:openapi-routes-diff ./openapi.yaml
 
-      - name: Install DB test
-        run: cd ./docker && ./manage.bash install-test
-
-      - name: Install DB test
+      - name: Run functional tests
         run: cd ./docker && ./manage.bash test
-
