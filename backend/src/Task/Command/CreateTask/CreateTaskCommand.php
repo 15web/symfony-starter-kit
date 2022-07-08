@@ -11,6 +11,6 @@ final class CreateTaskCommand implements ApiRequest
 {
     public function __construct(public readonly string $taskName)
     {
-        Assert::notEmpty($taskName);
+        Assert::notEmpty($taskName, 'Укажите наименование задачи');
     }
 }

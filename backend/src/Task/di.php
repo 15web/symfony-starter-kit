@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace App\Task;
 
-use App\Task\Action\CompleteTaskAction;
-use App\Task\Action\CreateTaskAction;
-use App\Task\Action\RemoveTaskAction;
-use App\Task\Action\TaskInfo\TaskInfoAction;
-use App\Task\Action\TaskList\TaskListAction;
-use App\Task\Action\UpdateTaskNameAction;
 use App\Task\Command\CompleteTask;
 use App\Task\Command\CreateTask\CreateTask;
 use App\Task\Command\RemoveTask;
 use App\Task\Command\UpdateTaskName\UpdateTaskName;
+use App\Task\Http\CompleteTaskAction;
+use App\Task\Http\CreateTaskAction;
+use App\Task\Http\RemoveTaskAction;
+use App\Task\Http\TaskInfo\TaskInfoAction;
+use App\Task\Http\TaskList\TaskListAction;
+use App\Task\Http\UpdateTaskNameAction;
 use App\Task\Model\Tasks;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 

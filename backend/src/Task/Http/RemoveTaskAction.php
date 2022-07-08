@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Task\Action;
+namespace App\Task\Http;
 
 use App\Infrastructure\SuccessResponse;
 use App\Task\Command\RemoveTask;

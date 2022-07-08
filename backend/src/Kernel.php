@@ -18,6 +18,8 @@ final class Kernel extends BaseKernel
         $container->import('../config/{packages}/*.yaml');
         $container->import('../config/{packages}/'.$this->environment.'/*.yaml');
 
+        $container->import('./**/{config}.php');
+
         $container->import('./**/{di}.php');
         $container->import("./**/{di}_{$this->environment}.php");
     }

@@ -5,6 +5,69 @@ info:
 servers:
     -   url: '/api'
 paths:
+    /sign-up:
+        post:
+            summary: 'Регистрация пользователя'
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            properties:
+                                email:
+                                    type: string
+                                    format: email
+                                    required: true
+                                    description: 'Email пользователя'
+                                    example: 'test@test.ru'
+            responses:
+                200:
+                    description: 'Пользователь успешно зарегистрирован'
+                    content:
+                        application/json:
+                            schema:
+                                oneOf:
+                                    -   $ref: '#/components/schemas/successResponse'
+                                    -   $ref: '#/components/schemas/errorResponse'
+                400:
+                    description: 'Ошибка запроса'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/errorBadRequest'
+    /sign-in:
+        post:
+            summary: 'Аутентификация пользователя'
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            properties:
+                                email:
+                                    type: string
+                                    format: email
+                                    required: true
+                                    description: 'Email пользователя'
+                                    example: 'test@test.ru'
+                                password:
+                                    type: string
+                                    required: true
+                                    description: 'Пароль пользователя'
+                                    example: 'qwer1234'
+            responses:
+                200:
+                    description: 'Аутентификация прошла успешно'
+                    content:
+                        application/json:
+                            schema:
+                                oneOf:
+                                    -   $ref: '#/components/schemas/authResponse'
+                                    -   $ref: '#/components/schemas/errorResponse'
+                400:
+                    description: 'Ошибка запроса'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/errorBadRequest'
     /tasks:
         get:
             summary: 'Список задач'
@@ -176,10 +239,23 @@ components:
             type: object
             properties:
                 success:
-                    type: boolean
                     enum: [ true ]
+                    type: boolean
                     default: true
         errorBadRequest:
+            type: object
+            properties:
+                error:
+                    enum: [ true ]
+                    type: boolean
+                    default: true
+                code:
+                    type: integer
+                    example: 400
+                errorMessage:
+                    type: string
+                    example: 'Неверный формат запроса'
+        errorResponse:
             type: object
             properties:
                 error:
@@ -188,10 +264,21 @@ components:
                     default: true
                 code:
                     type: integer
-                    example: 400
+                    example: 1
                 errorMessage:
                     type: string
-                    example: 'Неверный формат запроса'
+                    example: 'Ошибка валидации'
+        authResponse:
+            type: object
+            properties:
+                token:
+                    type: string
+                    format: uuid
+                    example: '123e4567-e89b-12d3-a456-426614174000'
+                email:
+                    type: string
+                    format: email
+                    example: 'test@test.com'
     parameters:
         taskId:
             name: id

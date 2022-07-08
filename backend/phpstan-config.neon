@@ -1,4 +1,6 @@
 parameters:
+    scanDirectories:
+        - var/cache
     checkUninitializedProperties: true
     level: 9
     tmpDir: ./var/cache

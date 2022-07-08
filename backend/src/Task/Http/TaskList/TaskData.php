@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Task\Action\TaskList;
+namespace App\Task\Http\TaskList;
 
 use Symfony\Component\Uid\Uuid;
 

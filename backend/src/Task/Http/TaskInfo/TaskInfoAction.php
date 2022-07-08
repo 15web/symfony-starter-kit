@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Task\Action\TaskInfo;
+namespace App\Task\Http\TaskInfo;
 
 use App\Task\Model\Task;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
