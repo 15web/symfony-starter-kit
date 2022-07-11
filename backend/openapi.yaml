@@ -8,6 +8,7 @@ paths:
     /sign-up:
         post:
             summary: 'Регистрация пользователя'
+            security: [ ]
             requestBody:
                 content:
                     application/json:
@@ -37,6 +38,7 @@ paths:
     /sign-in:
         post:
             summary: 'Аутентификация пользователя'
+            security: [ ]
             requestBody:
                 content:
                     application/json:
@@ -68,6 +70,14 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/errorBadRequest'
+                401:
+                    description: 'Не верный логин или пароль'
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    error:
+                                        type: string
     /tasks:
         get:
             summary: 'Список задач'
@@ -234,6 +244,11 @@ paths:
                 404:
                     description: 'Задача не найдена'
 components:
+    securitySchemes:
+        ApiTokenAuth:
+            type: apiKey
+            in: header
+            name: X-AUTH-TOKEN
     schemas:
         successResponse:
             type: object
@@ -289,3 +304,5 @@ components:
             schema:
                 type: string
                 format: uuid
+security:
+    -   ApiTokenAuth: [ ]

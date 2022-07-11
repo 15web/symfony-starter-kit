@@ -6,6 +6,7 @@ namespace App\User;
 
 use App\User\Command\CreateToken;
 use App\User\Command\SingUp\SignUp;
+use App\User\Http\ApiTokenAuthenticator;
 use App\User\Http\SignInAction;
 use App\User\Http\SignUpAction;
 use App\User\Model\Users;
@@ -21,6 +22,7 @@ return static function (ContainerConfigurator $di): void {
     $services->set(SignUp::class);
     $services->set(CreateToken::class);
 
+    $services->set(ApiTokenAuthenticator::class);
     $services->set(SendNewPassword::class);
 
     $services->set(SignUpAction::class)->tag('controller.service_arguments');

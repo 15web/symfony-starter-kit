@@ -25,13 +25,8 @@ final class UserTokens
         $this->entityManager->persist($userToken);
     }
 
-    public function getById(Uuid $id): UserToken
+    public function findById(Uuid $id): ?UserToken
     {
-        $token = $this->repository->find($id);
-        if ($token === null) {
-            throw new \DomainException('Токен не найден');
-        }
-
-        return $token;
+        return $this->repository->find($id);
     }
 }

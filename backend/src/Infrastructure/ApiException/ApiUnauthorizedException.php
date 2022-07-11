@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class ApiUnauthorizedException extends \Exception implements ApiException
 {
-    public function __construct(private readonly string $errorMessage)
+    public function __construct(private readonly string $errorMessage = 'Необходимо пройти аутентификацию')
     {
         parent::__construct();
     }

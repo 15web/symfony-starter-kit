@@ -6,24 +6,27 @@ namespace App\Tests\Functional\Task;
 
 use App\Tests\Functional\SDK\ApiWebTestCase;
 use App\Tests\Functional\SDK\Task;
+use App\Tests\Functional\SDK\User;
 use Symfony\Component\Uid\Uuid;
 
 final class RemoveTaskTest extends ApiWebTestCase
 {
     public function testSuccess(): void
     {
-        Task::create('Тестовая задача 1');
-        Task::create('Тестовая задача 2');
+        $token = User::authFirst();
 
-        $tasks = Task::list();
+        Task::create('Тестовая задача 1', $token);
+        Task::create('Тестовая задача 2', $token);
+
+        $tasks = Task::list($token);
 
         $task1Id = $tasks[0]['id'];
         $task2Id = $tasks[1]['id'];
 
-        $response = self::request('POST', "/api/tasks/{$task1Id}/remove");
+        $response = self::request('POST', "/api/tasks/{$task1Id}/remove", null, false, $token);
         self::assertSuccessBodyResponse($response);
 
-        $tasks = Task::list();
+        $tasks = Task::list($token);
 
         self::assertCount(1, $tasks);
         self::assertSame($task2Id, $tasks[0]['id']);
@@ -31,10 +34,12 @@ final class RemoveTaskTest extends ApiWebTestCase
 
     public function testNotFound(): void
     {
-        Task::create('Тестовая задача 1');
+        $token = User::authFirst();
+
+        Task::create('Тестовая задача 1', $token);
 
         $taskId = (string) Uuid::v4();
-        $response = self::request('POST', "/api/tasks/{$taskId}/remove");
+        $response = self::request('POST', "/api/tasks/{$taskId}/remove", null, false, $token);
         self::assertNotFoundResponse($response);
     }
 }

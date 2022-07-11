@@ -20,7 +20,7 @@ final class SignInAction
     public function __invoke(#[CurrentUser] ?User $user): UserResponse
     {
         if ($user === null) {
-            throw new ApiUnauthorizedException('Необходимо пройти аутентификацию');
+            throw new ApiUnauthorizedException();
         }
 
         $token = ($this->createToken)($user);

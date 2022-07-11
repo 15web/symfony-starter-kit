@@ -46,6 +46,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return [$this->userRole->value];
     }
 
+    /**
+     * Записать захешированный пароль
+     */
     public function applyPassword(string $password): void
     {
         Assert::notEmpty($password);

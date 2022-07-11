@@ -71,6 +71,7 @@ class ApiWebTestCase extends WebTestCase
         $response = self::jsonDecode($response->getContent());
         self::assertTrue($response['error']);
         self::assertSame($response['code'], $apiErrorCode);
+        self::assertNotEmpty($response['errorMessage']);
     }
 
     public static function assertAccessDeniedResponse(Response $response): void
@@ -86,10 +87,5 @@ class ApiWebTestCase extends WebTestCase
     public static function assertForbiddenResponse(Response $response): void
     {
         self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
-    }
-
-    public static function assertUnauthorizedResponse(Response $response): void
-    {
-        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
     }
 }
