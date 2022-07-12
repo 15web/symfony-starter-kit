@@ -37,13 +37,13 @@ final class SingUpTest extends ApiWebTestCase
         self::request('POST', '/api/sign-up', $body);
         $response = self::request('POST', '/api/sign-up', $body);
 
-        self::assertBadResponseResponse($response, 1);
+        self::assertApiError($response, 1);
     }
 
     public function testBadRequest(): void
     {
         $body = json_encode(['email' => 'test'], JSON_THROW_ON_ERROR);;
         $response = self::request('POST', '/api/sign-up', $body, true);
-        self::assertBadRequestResponse($response);
+        self::assertBadRequest($response);
     }
 }

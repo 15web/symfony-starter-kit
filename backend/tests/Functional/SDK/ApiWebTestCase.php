@@ -51,7 +51,7 @@ class ApiWebTestCase extends WebTestCase
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
     }
 
-    public static function assertSuccessBodyResponse(Response $response): void
+    public static function assertSuccessContentResponse(Response $response): void
     {
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
 
@@ -59,12 +59,12 @@ class ApiWebTestCase extends WebTestCase
         self::assertTrue($response['success']);
     }
 
-    public static function assertBadRequestResponse(Response $response): void
+    public static function assertBadRequest(Response $response): void
     {
         self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
     }
 
-    public static function assertBadResponseResponse(Response $response, int $apiErrorCode): void
+    public static function assertApiError(Response $response, int $apiErrorCode): void
     {
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
 
@@ -74,17 +74,17 @@ class ApiWebTestCase extends WebTestCase
         self::assertNotEmpty($response['errorMessage']);
     }
 
-    public static function assertAccessDeniedResponse(Response $response): void
+    public static function assertAccessDenied(Response $response): void
     {
         self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
     }
 
-    public static function assertNotFoundResponse(Response $response): void
+    public static function assertNotFound(Response $response): void
     {
         self::assertSame(Response::HTTP_NOT_FOUND, $response->getStatusCode());
     }
 
-    public static function assertForbiddenResponse(Response $response): void
+    public static function assertForbidden(Response $response): void
     {
         self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
     }

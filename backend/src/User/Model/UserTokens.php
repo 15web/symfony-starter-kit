@@ -29,4 +29,9 @@ final class UserTokens
     {
         return $this->repository->find($id);
     }
+
+    public function remove(UserToken $userToken): void
+    {
+        $this->entityManager->remove($userToken);
+    }
 }

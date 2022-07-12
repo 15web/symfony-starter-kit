@@ -20,7 +20,7 @@ final class CompleteTaskTest extends ApiWebTestCase
         $taskId = $tasks[0]['id'];
 
         $response = self::request('POST', "/api/tasks/{$taskId}/complete", null, false, $token);
-        self::assertSuccessBodyResponse($response);
+        self::assertSuccessContentResponse($response);
 
         $response = self::request('GET', "/api/tasks/{$taskId}", null, false, $token);
         $task = self::jsonDecode($response->getContent());
@@ -41,7 +41,7 @@ final class CompleteTaskTest extends ApiWebTestCase
         self::request('POST', "/api/tasks/{$taskId}/complete", null, false, $token);
 
         $response = self::request('POST', "/api/tasks/{$taskId}/complete", null, false, $token);
-        self::assertBadRequestResponse($response);
+        self::assertBadRequest($response);
     }
 
     public function testTaskNotFound(): void
@@ -52,6 +52,6 @@ final class CompleteTaskTest extends ApiWebTestCase
 
         $taskId = (string) Uuid::v4();
         $response = self::request('POST', "/api/tasks/{$taskId}/complete", null, false, $token);
-        self::assertNotFoundResponse($response);
+        self::assertNotFound($response);
     }
 }

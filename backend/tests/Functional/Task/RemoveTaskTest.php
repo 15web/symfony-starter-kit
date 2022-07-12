@@ -24,7 +24,7 @@ final class RemoveTaskTest extends ApiWebTestCase
         $task2Id = $tasks[1]['id'];
 
         $response = self::request('POST', "/api/tasks/{$task1Id}/remove", null, false, $token);
-        self::assertSuccessBodyResponse($response);
+        self::assertSuccessContentResponse($response);
 
         $tasks = Task::list($token);
 
@@ -40,6 +40,6 @@ final class RemoveTaskTest extends ApiWebTestCase
 
         $taskId = (string) Uuid::v4();
         $response = self::request('POST', "/api/tasks/{$taskId}/remove", null, false, $token);
-        self::assertNotFoundResponse($response);
+        self::assertNotFound($response);
     }
 }

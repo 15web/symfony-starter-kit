@@ -23,7 +23,7 @@ final class ChangeTaskNameTest extends ApiWebTestCase
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
         $response = self::request('POST', "/api/tasks/{$taskId}/update-task-name", $body, false, $token);
-        self::assertSuccessBodyResponse($response);
+        self::assertSuccessContentResponse($response);
 
         $response = self::request('GET', "/api/tasks/{$taskId}", null, false, $token);
         $task = self::jsonDecode($response->getContent());
@@ -43,18 +43,18 @@ final class ChangeTaskNameTest extends ApiWebTestCase
 
         $taskId = (string) Uuid::v4();
         $response = self::request('POST', "/api/tasks/{$taskId}/update-task-name", $body, false, $token);
-        self::assertNotFoundResponse($response);
+        self::assertNotFound($response);
     }
 
     public function testBadRequests(): void
     {
         $token = User::authFirst();
-        $this->assertBadRequest([], $token);
-        $this->assertBadRequest(['badKey'], $token);
-        $this->assertBadRequest(['taskName' => ''], $token);
+        $this->assertBadRequests([], $token);
+        $this->assertBadRequests(['badKey'], $token);
+        $this->assertBadRequests(['taskName' => ''], $token);
     }
 
-    private function assertBadRequest(array $body, string $token): void
+    private function assertBadRequests(array $body, string $token): void
     {
         Task::create('Тестовая задача 1', $token);
 
@@ -64,6 +64,6 @@ final class ChangeTaskNameTest extends ApiWebTestCase
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
         $response = self::request('POST', "/api/tasks/{$taskId}/update-task-name", $body, false, $token);
-        self::assertBadRequestResponse($response);
+        self::assertBadRequest($response);
     }
 }

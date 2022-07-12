@@ -7,6 +7,7 @@ namespace App\User;
 use App\User\Command\CreateToken;
 use App\User\Command\SingUp\SignUp;
 use App\User\Http\ApiTokenAuthenticator;
+use App\User\Http\LogoutAction;
 use App\User\Http\SignInAction;
 use App\User\Http\SignUpAction;
 use App\User\Model\Users;
@@ -27,4 +28,5 @@ return static function (ContainerConfigurator $di): void {
 
     $services->set(SignUpAction::class)->tag('controller.service_arguments');
     $services->set(SignInAction::class)->tag('controller.service_arguments');
+    $services->set(LogoutAction::class)->tag('controller.service_arguments');
 };

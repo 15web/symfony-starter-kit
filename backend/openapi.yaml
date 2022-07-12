@@ -8,6 +8,7 @@ paths:
     /sign-up:
         post:
             summary: 'Регистрация пользователя'
+            tags: [ 'Аутентификация' ]
             security: [ ]
             requestBody:
                 content:
@@ -38,6 +39,7 @@ paths:
     /sign-in:
         post:
             summary: 'Аутентификация пользователя'
+            tags: [ 'Аутентификация' ]
             security: [ ]
             requestBody:
                 content:
@@ -78,9 +80,21 @@ paths:
                                 properties:
                                     error:
                                         type: string
+    /logout:
+        get:
+            summary: 'Выйти из приложения'
+            tags: [ 'Аутентификация' ]
+            responses:
+                200:
+                    description: 'Выход прошел успешно'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/successResponse'
     /tasks:
         get:
             summary: 'Список задач'
+            tags: [ 'Задачи' ]
             responses:
                 200:
                     description: 'Возвращает список задач'
@@ -108,6 +122,7 @@ paths:
     /tasks/{id}:
         get:
             summary: 'Подробная информация по задаче'
+            tags: [ 'Задачи' ]
             parameters:
                 -   $ref: '#/components/parameters/taskId'
             responses:
@@ -153,6 +168,7 @@ paths:
     /tasks/create:
         post:
             summary: 'Создать задачу'
+            tags: [ 'Задачи' ]
             requestBody:
                 content:
                     application/json:
@@ -180,6 +196,7 @@ paths:
     /tasks/{id}/update-task-name:
         post:
             summary: 'Обновить наименование задачи'
+            tags: [ 'Задачи' ]
             parameters:
                 -   $ref: '#/components/parameters/taskId'
             requestBody:
@@ -211,6 +228,7 @@ paths:
     /tasks/{id}/remove:
         post:
             summary: 'Удаляет задачу'
+            tags: [ 'Задачи' ]
             parameters:
                 -   $ref: '#/components/parameters/taskId'
             responses:
@@ -226,6 +244,7 @@ paths:
     /tasks/{id}/complete:
         post:
             summary: 'Завершает задачу'
+            tags: [ 'Задачи' ]
             parameters:
                 -   $ref: '#/components/parameters/taskId'
             responses:

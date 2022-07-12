@@ -17,7 +17,7 @@ final class CreateTaskTest extends ApiWebTestCase
         $response = Task::create($taskName = 'Тестовая задача', $token);
 
         self::assertSuccessResponse($response);
-        self::assertSuccessBodyResponse($response);
+        self::assertSuccessContentResponse($response);
 
         $tasks = Task::list($token);
 
@@ -31,20 +31,20 @@ final class CreateTaskTest extends ApiWebTestCase
     {
         $token = User::authFirst();
 
-        $this->assertBadRequest([], $token);
-        $this->assertBadRequest(['badKey'], $token);
-        $this->assertBadRequest(['taskName' => ''], $token);
+        $this->assertBadRequests([], $token);
+        $this->assertBadRequests(['badKey'], $token);
+        $this->assertBadRequests(['taskName' => ''], $token);
 
         $badJson = '{"taskName"=1}';
         $response = self::request('POST', '/api/tasks/create', $badJson, false, $token);
-        self::assertBadRequestResponse($response);
+        self::assertBadRequest($response);
     }
 
-    private function assertBadRequest(array $body, string $token): void
+    private function assertBadRequests(array $body, string $token): void
     {
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
         $response = self::request('POST', '/api/tasks/create', $body, false, $token);
-        self::assertBadRequestResponse($response);
+        self::assertBadRequest($response);
     }
 }

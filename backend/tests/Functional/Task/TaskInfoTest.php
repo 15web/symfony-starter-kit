@@ -42,6 +42,6 @@ final class TaskInfoTest extends ApiWebTestCase
 
         $taskId = (string) Uuid::v4();
         $response = self::request('GET', "/api/tasks/{$taskId}", null, false, $token);
-        self::assertNotFoundResponse($response);
+        self::assertNotFound($response);
     }
 }
