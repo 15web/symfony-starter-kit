@@ -28,7 +28,7 @@ final class TaskListAction
             throw new ApiUnauthorizedException();
         }
 
-        $tasks = $this->tasks->findAll();
+        $tasks = $this->tasks->findAllByUserId($user->getId());
         foreach ($tasks as $task) {
             yield new TaskData(
                 $task->getId(),

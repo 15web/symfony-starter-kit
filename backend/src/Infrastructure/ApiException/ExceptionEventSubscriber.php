@@ -32,11 +32,6 @@ final class ExceptionEventSubscriber implements EventSubscriberInterface
     public function setResponse(ExceptionEvent $event): void
     {
         $e = $event->getThrowable();
-        $request = $event->getRequest();
-
-        if (!\in_array('application/json', $request->getAcceptableContentTypes(), true)) {
-            return;
-        }
 
         if (($e instanceof ApiException) === false) {
             return;

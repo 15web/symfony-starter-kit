@@ -23,9 +23,9 @@ final class Tasks
     /**
      * @return Task[]
      */
-    public function findAll(): array
+    public function findAllByUserId(Uuid $userId): array
     {
-        return $this->repository->findBy([], ['isCompleted' => 'ASC', 'createdAt' => 'DESC']);
+        return $this->repository->findBy(['userId' => $userId], ['isCompleted' => 'ASC', 'createdAt' => 'DESC']);
     }
 
     public function getById(Uuid $id): Task

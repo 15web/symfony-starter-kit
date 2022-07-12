@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Task\Http\TaskInfo;
 
+use App\Infrastructure\ApiException\ApiNotFoundException;
 use App\Infrastructure\ApiException\ApiUnauthorizedException;
 use App\Task\Model\Task;
 use App\User\Model\User;
@@ -21,6 +22,10 @@ final class TaskInfoAction
     {
         if ($user === null) {
             throw new ApiUnauthorizedException();
+        }
+
+        if ($user->getId()->equals($task->getUserId()) === false) {
+            throw new ApiNotFoundException();
         }
 
         return new TaskData(

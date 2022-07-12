@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Task\Http;
 
 use App\Infrastructure\ApiException\ApiBadRequestException;
+use App\Infrastructure\ApiException\ApiNotFoundException;
 use App\Infrastructure\ApiException\ApiUnauthorizedException;
 use App\Infrastructure\SuccessResponse;
 use App\Task\Command\UpdateTaskName\UpdateTaskName;
@@ -29,6 +30,10 @@ final class UpdateTaskNameAction
     {
         if ($user === null) {
             throw new ApiUnauthorizedException();
+        }
+
+        if ($user->getId()->equals($task->getUserId()) === false) {
+            throw new ApiNotFoundException();
         }
 
         try {

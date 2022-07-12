@@ -8,6 +8,7 @@ use App\Infrastructure\Flusher;
 use App\Task\Model\Task;
 use App\Task\Model\TaskName;
 use App\Task\Model\Tasks;
+use Symfony\Component\Uid\Uuid;
 
 final class CreateTask
 {
@@ -15,9 +16,9 @@ final class CreateTask
     {
     }
 
-    public function __invoke(CreateTaskCommand $createTaskCommand): void
+    public function __invoke(CreateTaskCommand $createTaskCommand, Uuid $userId): void
     {
-        $task = new Task(new TaskName($createTaskCommand->taskName));
+        $task = new Task(new TaskName($createTaskCommand->taskName), $userId);
         $this->tasks->add($task);
 
         $this->flusher->flush();

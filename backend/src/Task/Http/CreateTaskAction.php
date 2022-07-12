@@ -29,7 +29,7 @@ final class CreateTaskAction
         }
 
         try {
-            ($this->createTask)($createTaskCommand);
+            ($this->createTask)($createTaskCommand, $user->getId());
         } catch (\InvalidArgumentException $e) {
             throw new ApiBadRequestException($e->getMessage());
         }

@@ -6,15 +6,19 @@ namespace App\Tests\Unit\Task\Model;
 
 use App\Task\Model\Task;
 use App\Task\Model\TaskName;
+use App\User\Model\User;
+use App\User\Model\UserEmail;
 use PHPUnit\Framework\TestCase;
 
 final class TaskTest extends TestCase
 {
     public function testCorrectCreation(): void
     {
-        $task = new Task(new TaskName($expectedName = 'new task'));
+        $user = new User(new UserEmail('test@example.com'));
+        $task = new Task(new TaskName($expectedName = 'new task'), $user->getId());
 
         self::assertSame($expectedName, $task->getTaskName()->getValue());
+        self::assertSame($user->getId(), $task->getUserId());
         self::assertFalse($task->isCompleted());
         self::assertNotNull($task->getCreatedAt());
         self::assertNull($task->getUpdatedAt());
@@ -23,7 +27,8 @@ final class TaskTest extends TestCase
 
     public function testCorrectChangeName(): void
     {
-        $task = new Task(new TaskName('new task'));
+        $user = new User(new UserEmail('test@example.com'));
+        $task = new Task(new TaskName('new task'), $user->getId());
         $task->changeTaskName(new TaskName($expectedNewName = 'changed task'));
 
         self::assertSame($expectedNewName, $task->getTaskName()->getValue());
@@ -32,7 +37,8 @@ final class TaskTest extends TestCase
 
     public function testMarkAsDone(): void
     {
-        $task = new Task(new TaskName('new task'));
+        $user = new User(new UserEmail('test@example.com'));
+        $task = new Task(new TaskName('new task'), $user->getId());
         $task->markAsDone();
 
         self::assertTrue($task->isCompleted());
@@ -42,7 +48,8 @@ final class TaskTest extends TestCase
 
     public function testAlreadyCompletedTask(): void
     {
-        $task = new Task(new TaskName('new task'));
+        $user = new User(new UserEmail('test@example.com'));
+        $task = new Task(new TaskName('new task'), $user->getId());
         $task->markAsDone();
 
         $this->expectException(\DomainException::class);
