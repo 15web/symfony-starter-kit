@@ -99,7 +99,7 @@ paths:
                 200:
                     description: 'Возвращает список задач'
                     content:
-                        application\json:
+                        application/json:
                             schema:
                                 type: array
                                 items:
@@ -129,7 +129,7 @@ paths:
                 200:
                     description: 'Возвращает подробную информацию по задаче'
                     content:
-                        application\json:
+                        application/json:
                             schema:
                                 type: array
                                 items:
