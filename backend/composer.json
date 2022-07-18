@@ -38,6 +38,7 @@
         "webmozart/assert": "^1.10"
     },
     "require-dev": {
+        "cebe/php-openapi": "^1.7",
         "dama/doctrine-test-bundle": "^7.1",
         "friendsofphp/php-cs-fixer": "^3.8",
         "league/openapi-psr7-validator": "^0.18.0",
@@ -107,17 +108,19 @@
         "sniffer-fix": "phpcbf --standard=phpcs.xml,phpcs/ruleset.xml --colors -p",
         "twig-lint": "bin/console lint:twig templates",
         "container-lint": "bin/console lint:container",
-        "validate-schema": "bin/console doctrine:schema:validate",
+        "validate-doctrine-schema": "bin/console doctrine:schema:validate",
+        "validate-openapi-schema": "vendor/bin/php-openapi validate ./openapi.yaml",
         "cache-prod-check": "bin/console cache:warmup --env=prod",
         "deprications-check": "bin/console debug:container --deprecations",
         "check": [
             "@container-lint",
-            "@validate-schema",
+            "@validate-doctrine-schema",
             "@twig-lint",
             "@stan",
             "@fixer-check",
             "@sniffer-check",
-            "@cache-prod-check"
+            "@cache-prod-check",
+            "@validate-openapi-schema"
         ],
         "fix": ["@fixer-fix", "@sniffer-fix"]
     },
