@@ -7,7 +7,6 @@ namespace App\Tests\Functional\Task;
 use App\Tests\Functional\SDK\ApiWebTestCase;
 use App\Tests\Functional\SDK\Task;
 use App\Tests\Functional\SDK\User;
-use Symfony\Component\Uid\Uuid;
 
 final class CreateTaskTest extends ApiWebTestCase
 {
@@ -36,7 +35,7 @@ final class CreateTaskTest extends ApiWebTestCase
         $this->assertBadRequests(['taskName' => ''], $token);
 
         $badJson = '{"taskName"=1}';
-        $response = self::request('POST', '/api/tasks/create', $badJson, false, $token);
+        $response = self::request('POST', '/api/tasks/create', $badJson, token: $token, validateRequestSchema: false);
         self::assertBadRequest($response);
     }
 
@@ -44,7 +43,7 @@ final class CreateTaskTest extends ApiWebTestCase
     {
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request('POST', '/api/tasks/create', $body, false, $token);
+        $response = self::request('POST', '/api/tasks/create', $body, token: $token, validateRequestSchema: false);
         self::assertBadRequest($response);
     }
 }

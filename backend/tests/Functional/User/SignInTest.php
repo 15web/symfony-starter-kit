@@ -15,7 +15,7 @@ final class SignInTest extends ApiWebTestCase
         $userEmail = $body['email'] = 'first@example.com';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        self::request('POST', '/api/sign-up', $body, true);
+        self::request('POST', '/api/sign-up', $body, newClient: true);
 
         /** @var TemplatedEmail $emailMessage */
         $emailMessage = self::getMailerMessage();
@@ -59,7 +59,7 @@ final class SignInTest extends ApiWebTestCase
         $body['email'] = 'first@example.com';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        self::request('POST', '/api/sign-up', $body, true);
+        self::request('POST', '/api/sign-up', $body, newClient: true);
 
         /** @var TemplatedEmail $emailMessage */
         $emailMessage = self::getMailerMessage();
@@ -77,8 +77,9 @@ final class SignInTest extends ApiWebTestCase
 
     public function testBadRequest(): void
     {
-        $body = json_encode(['email' => 'test', 'password' => ''], JSON_THROW_ON_ERROR);;
-        $response = self::request('POST', '/api/sign-in', $body, true);
+        $body = json_encode(['email' => 'test', 'password' => ''], JSON_THROW_ON_ERROR);
+        $response = self::request('POST', '/api/sign-in', $body, newClient: true, validateRequestSchema: false);
+
         self::assertAccessDenied($response);
     }
 }

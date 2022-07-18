@@ -21,7 +21,7 @@ final class TaskInfoTest extends ApiWebTestCase
 
         $taskId = $tasks[0]['id'];
 
-        $response = self::request('GET', "/api/tasks/{$taskId}", null, false, $token);
+        $response = self::request('GET', "/api/tasks/{$taskId}", token: $token);
         self::assertSuccessResponse($response);
 
         $task = self::jsonDecode($response->getContent());
@@ -41,7 +41,7 @@ final class TaskInfoTest extends ApiWebTestCase
         Task::create('Тестовая задача 1', $token);
 
         $taskId = (string) Uuid::v4();
-        $response = self::request('GET', "/api/tasks/{$taskId}", null, false, $token);
+        $response = self::request('GET', "/api/tasks/{$taskId}", token: $token);
         self::assertNotFound($response);
     }
 }

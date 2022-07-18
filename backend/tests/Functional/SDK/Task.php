@@ -14,12 +14,12 @@ final class Task extends ApiWebTestCase
         $body['taskName'] = $taskName;
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        return self::request('POST', '/api/tasks/create', $body, false, $token);
+        return self::request('POST', '/api/tasks/create', $body, token: $token);
     }
 
     public static function list(string $token): array
     {
-        $response = self::request('GET', '/api/tasks', null, false, $token);
+        $response = self::request('GET', '/api/tasks', token: $token);
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
 

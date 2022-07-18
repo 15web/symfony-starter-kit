@@ -18,16 +18,17 @@ paths:
                                 email:
                                     type: string
                                     format: email
-                                    required: true
                                     description: 'Email пользователя'
                                     example: 'test@test.ru'
+                            required:
+                                - email
             responses:
                 200:
                     description: 'Пользователь успешно зарегистрирован'
                     content:
                         application/json:
                             schema:
-                                oneOf:
+                                anyOf:
                                     -   $ref: '#/components/schemas/successResponse'
                                     -   $ref: '#/components/schemas/errorResponse'
                 400:
@@ -49,21 +50,22 @@ paths:
                                 email:
                                     type: string
                                     format: email
-                                    required: true
                                     description: 'Email пользователя'
                                     example: 'test@test.ru'
                                 password:
                                     type: string
-                                    required: true
                                     description: 'Пароль пользователя'
                                     example: 'qwer1234'
+                            required:
+                                - email
+                                - password
             responses:
                 200:
                     description: 'Аутентификация прошла успешно'
                     content:
                         application/json:
                             schema:
-                                oneOf:
+                                anyOf:
                                     -   $ref: '#/components/schemas/authResponse'
                                     -   $ref: '#/components/schemas/errorResponse'
                 400:
@@ -91,6 +93,14 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/successResponse'
+                401:
+                    description: 'Доступ запрещен'
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    message:
+                                        type: string
     /tasks:
         get:
             summary: 'Список задач'
@@ -131,37 +141,35 @@ paths:
                     content:
                         application/json:
                             schema:
-                                type: array
-                                items:
-                                    type: object
-                                    properties:
-                                        id:
-                                            type: string
-                                            format: uuid
-                                            description: 'ID задачи'
-                                            example: 'dc8dbada-b154-4ffb-b21c-da70162e2704'
-                                        taskName:
-                                            type: string
-                                            description: 'Наименование задачи'
-                                            example: 'Моя первая задача'
-                                        isCompleted:
-                                            type: boolean
-                                            description: 'Выполнена ли задача'
-                                            example: true
-                                        createdAt:
-                                            type: string
-                                            description: 'Дата создания'
-                                            example: '2021-10-28T16:19:44+00:00'
-                                        completedAt:
-                                            type: string
-                                            description: 'Дата завершения'
-                                            example: '2021-10-28T16:19:44+00:00'
-                                            nullable: true
-                                        updatedAt:
-                                            type: string
-                                            description: 'Дата обновления'
-                                            example: '2021-10-28T16:19:44+00:00'
-                                            nullable: true
+                                type: object
+                                properties:
+                                    id:
+                                        type: string
+                                        format: uuid
+                                        description: 'ID задачи'
+                                        example: 'dc8dbada-b154-4ffb-b21c-da70162e2704'
+                                    taskName:
+                                        type: string
+                                        description: 'Наименование задачи'
+                                        example: 'Моя первая задача'
+                                    isCompleted:
+                                        type: boolean
+                                        description: 'Выполнена ли задача'
+                                        example: true
+                                    createdAt:
+                                        type: string
+                                        description: 'Дата создания'
+                                        example: '2021-10-28T16:19:44+00:00'
+                                    completedAt:
+                                        type: string
+                                        description: 'Дата завершения'
+                                        example: '2021-10-28T16:19:44+00:00'
+                                        nullable: true
+                                    updatedAt:
+                                        type: string
+                                        description: 'Дата обновления'
+                                        example: '2021-10-28T16:19:44+00:00'
+                                        nullable: true
                 404:
                     description: 'Задача не найдена'
 
@@ -176,9 +184,10 @@ paths:
                             properties:
                                 taskName:
                                     type: string
-                                    required: true
                                     description: 'Наименование задачи'
                                     example: 'Моя первая задача'
+                            required:
+                                - taskName
             responses:
                 200:
                     description: 'Задача создана'
@@ -206,9 +215,10 @@ paths:
                             properties:
                                 taskName:
                                     type: string
-                                    required: true
                                     description: 'Наименование задачи'
                                     example: 'Моя вторая задача'
+                            required:
+                                - taskName
             responses:
                 200:
                     description: 'Наименование задачи обновлено'

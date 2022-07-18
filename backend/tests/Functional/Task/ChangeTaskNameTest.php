@@ -22,10 +22,10 @@ final class ChangeTaskNameTest extends ApiWebTestCase
         $body['taskName'] = $secondName = 'Тестовая задача 2';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request('POST', "/api/tasks/{$taskId}/update-task-name", $body, false, $token);
+        $response = self::request('POST', "/api/tasks/{$taskId}/update-task-name", $body, token: $token);
         self::assertSuccessContentResponse($response);
 
-        $response = self::request('GET', "/api/tasks/{$taskId}", null, false, $token);
+        $response = self::request('GET', "/api/tasks/{$taskId}", token: $token);
         $task = self::jsonDecode($response->getContent());
 
         self::assertSame($secondName, $task['taskName']);
@@ -42,7 +42,7 @@ final class ChangeTaskNameTest extends ApiWebTestCase
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
         $taskId = (string) Uuid::v4();
-        $response = self::request('POST', "/api/tasks/{$taskId}/update-task-name", $body, false, $token);
+        $response = self::request('POST', "/api/tasks/{$taskId}/update-task-name", $body, token: $token);
         self::assertNotFound($response);
     }
 
@@ -63,7 +63,13 @@ final class ChangeTaskNameTest extends ApiWebTestCase
 
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request('POST', "/api/tasks/{$taskId}/update-task-name", $body, false, $token);
+        $response = self::request(
+            'POST',
+            "/api/tasks/{$taskId}/update-task-name",
+            $body,
+            token: $token,
+            validateRequestSchema: false
+        );
         self::assertBadRequest($response);
     }
 }

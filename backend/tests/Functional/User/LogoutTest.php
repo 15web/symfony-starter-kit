@@ -6,7 +6,6 @@ namespace App\Tests\Functional\User;
 
 use App\Tests\Functional\SDK\ApiWebTestCase;
 use App\Tests\Functional\SDK\User;
-use Symfony\Component\Uid\Uuid;
 
 final class LogoutTest extends ApiWebTestCase
 {
@@ -14,10 +13,10 @@ final class LogoutTest extends ApiWebTestCase
     {
         $token = User::authFirst();
 
-        $response = self::request('GET', '/api/logout', null, false, $token);
+        $response = self::request('GET', '/api/logout', token: $token);
         self::assertSuccessResponse($response);
 
-        $response = self::request('GET', '/api/logout', null, false, $token);
+        $response = self::request('GET', '/api/logout', token: $token);
         self::assertAccessDenied($response);
     }
 }
