@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\ArgumentValueResolver;
+namespace App\Infrastructure\ApiRequestResolver;
 
 interface ApiRequest
 {

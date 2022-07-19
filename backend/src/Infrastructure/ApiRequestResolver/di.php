@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\ArgumentValueResolver;
+namespace App\Infrastructure\ApiRequestResolver;
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $di): void {
     $services = $di->services()->defaults()->autowire()->autoconfigure();
 
-    $services->set(ApiRequestResolver::class);
+    $services->set(ApiRequestArgumentValueResolver::class);
 };

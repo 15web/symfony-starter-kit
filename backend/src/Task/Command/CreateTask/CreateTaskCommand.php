@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Task\Command\CreateTask;
 
-use App\Infrastructure\ArgumentValueResolver\ApiRequest;
+use App\Infrastructure\ApiRequestResolver\ApiRequest;
 use Webmozart\Assert\Assert;
 
 final class CreateTaskCommand implements ApiRequest

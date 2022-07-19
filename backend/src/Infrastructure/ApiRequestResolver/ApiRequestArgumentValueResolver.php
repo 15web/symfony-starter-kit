@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\ArgumentValueResolver;
+namespace App\Infrastructure\ApiRequestResolver;
 
 use App\Infrastructure\ApiException\ApiBadRequestException;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,7 +11,7 @@ use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\SerializerInterface;
 
-final class ApiRequestResolver implements ArgumentValueResolverInterface
+final class ApiRequestArgumentValueResolver implements ArgumentValueResolverInterface
 {
     public function __construct(private readonly SerializerInterface $serializer)
     {

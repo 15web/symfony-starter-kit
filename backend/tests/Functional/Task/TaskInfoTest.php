@@ -19,6 +19,8 @@ final class TaskInfoTest extends ApiWebTestCase
 
         $tasks = Task::list($token);
 
+        self::assertCount(1, $tasks);
+
         $taskId = $tasks[0]['id'];
 
         $response = self::request('GET', "/api/tasks/{$taskId}", token: $token);

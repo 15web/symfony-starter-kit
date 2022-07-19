@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\User\Command\SingUp;
 
-use App\Infrastructure\ArgumentValueResolver\ApiRequest;
+use App\Infrastructure\ApiRequestResolver\ApiRequest;
 use Webmozart\Assert\Assert;
 
 final class SignUpCommand implements ApiRequest

@@ -11,6 +11,7 @@ use App\Task\Command\UpdateTaskName\UpdateTaskName;
 use App\Task\Http\CompleteTaskAction;
 use App\Task\Http\CreateTaskAction;
 use App\Task\Http\RemoveTaskAction;
+use App\Task\Http\TaskArgumentValueResolver;
 use App\Task\Http\TaskInfo\TaskInfoAction;
 use App\Task\Http\TaskList\TaskListAction;
 use App\Task\Http\UpdateTaskNameAction;
@@ -26,6 +27,8 @@ return static function (ContainerConfigurator $di): void {
     $services->set(UpdateTaskName::class);
     $services->set(CompleteTask::class);
     $services->set(RemoveTask::class);
+
+    $services->set(TaskArgumentValueResolver::class);
 
     $services->set(TaskInfoAction::class)->tag('controller.service_arguments');
     $services->set(TaskListAction::class)->tag('controller.service_arguments');
