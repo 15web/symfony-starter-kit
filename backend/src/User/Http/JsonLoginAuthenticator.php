@@ -4,51 +4,59 @@ declare(strict_types=1);
 
 namespace App\User\Http;
 
+use App\Infrastructure\ApiException\ApiBadRequestException;
 use App\Infrastructure\ApiException\ApiErrorResponse;
 use App\Infrastructure\ApiException\ApiUnauthorizedException;
-use App\User\Model\UserTokens;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
+use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
+use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordCredentials;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
-use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\SerializerInterface;
-use Symfony\Component\Uid\Uuid;
+use Webmozart\Assert\Assert;
 
-final class ApiTokenAuthenticator extends AbstractAuthenticator
+final class JsonLoginAuthenticator extends AbstractAuthenticator
 {
-    public const TOKEN_NAME = 'X-AUTH-TOKEN';
+    private const EMAIL_KEY = 'email';
+    private const PASSWORD_KEY = 'password';
+    private const CHECK_PATH = 'sign-in';
 
-    public function __construct(
-        private readonly UserTokens $userTokens,
-        private readonly SerializerInterface $serializer,
-    ) {
+    public function __construct(private readonly SerializerInterface $serializer)
+    {
     }
 
     public function supports(Request $request): ?bool
     {
-        return $request->headers->has(self::TOKEN_NAME);
+        return $request->attributes->get('_route') === self::CHECK_PATH && $request->isMethod('POST');
     }
 
+    /**
+     * @throws ApiBadRequestException
+     */
     public function authenticate(Request $request): Passport
     {
-        $apiToken = $request->headers->get(self::TOKEN_NAME);
-        if ($apiToken === null) {
-            throw new CustomUserMessageAuthenticationException('Не передан токен');
+        try {
+            /** @var array<string, string> $data */
+            $data = json_decode((string) $request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+            $email = $data[self::EMAIL_KEY];
+            Assert::email($email);
+
+            $password = $data[self::PASSWORD_KEY];
+        } catch (\Throwable $e) {
+            throw new ApiBadRequestException('Неверный формат запроса');
         }
 
-        $userToken = $this->userTokens->findById(Uuid::fromString($apiToken));
-        if ($userToken === null) {
-            throw new CustomUserMessageAuthenticationException('Токен не найден');
-        }
-
-        return new SelfValidatingPassport(new UserBadge($userToken->getUser()->getUserEmail()->getValue()));
+        return new Passport(
+            new UserBadge($email),
+            new PasswordCredentials($password)
+        );
     }
 
     /**
@@ -64,7 +72,11 @@ final class ApiTokenAuthenticator extends AbstractAuthenticator
      */
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
-        $message = strtr($exception->getMessageKey(), $exception->getMessageData());
+        $message = 'Ошибка аутентификации';
+        if ($exception instanceof BadCredentialsException) {
+            $message = 'Не верный логин или пароль';
+        }
+
         $apiException = new ApiUnauthorizedException($message);
         $content = $this->serializer->serialize(
             new ApiErrorResponse($apiException->getErrorMessage(), $apiException->getApiCode()),

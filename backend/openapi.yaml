@@ -79,9 +79,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                properties:
-                                    error:
-                                        type: string
+                                $ref: '#/components/schemas/errorAuthResponse'
     /logout:
         get:
             summary: 'Выйти из приложения'
@@ -98,9 +96,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                properties:
-                                    message:
-                                        type: string
+                                $ref: '#/components/schemas/errorAuthResponse'
     /tasks:
         get:
             summary: 'Список задач'
@@ -366,6 +362,19 @@ components:
                     type: string
                     format: email
                     example: 'test@test.com'
+        errorAuthResponse:
+            type: object
+            properties:
+                error:
+                    enum: [ true ]
+                    type: boolean
+                    default: true
+                code:
+                    type: integer
+                    example: 401
+                errorMessage:
+                    type: string
+                    example: 'Необходимо пройти аутентификацию'
     parameters:
         taskId:
             name: id
