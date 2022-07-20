@@ -128,6 +128,8 @@ paths:
                                             type: boolean
                                             description: 'Выполнена ли задача'
                                             example: true
+                401:
+                    description: 'Доступ запрещен'
 
     /tasks/{id}:
         get:
@@ -172,6 +174,8 @@ paths:
                                         nullable: true
                 404:
                     description: 'Задача не найдена'
+                401:
+                    description: 'Доступ запрещен'
 
     /tasks/create:
         post:
@@ -201,6 +205,8 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/errorBadRequest'
+                401:
+                    description: 'Доступ запрещен'
 
     /tasks/{id}/update-task-name:
         post:
@@ -234,6 +240,8 @@ paths:
                                 $ref: '#/components/schemas/errorBadRequest'
                 404:
                     description: 'Задача не найдена'
+                401:
+                    description: 'Доступ запрещен'
 
     /tasks/{id}/remove:
         post:
@@ -250,6 +258,8 @@ paths:
                                 $ref: '#/components/schemas/successResponse'
                 404:
                     description: 'Задача не найдена'
+                401:
+                    description: 'Доступ запрещен'
 
     /tasks/{id}/complete:
         post:
@@ -272,6 +282,39 @@ paths:
                                 $ref: '#/components/schemas/errorBadRequest'
                 404:
                     description: 'Задача не найдена'
+                401:
+                    description: 'Доступ запрещен'
+
+    /export/tasks.{format}:
+        get:
+            summary: 'Экспорт задач в нужном формате'
+            tags: [ 'Задачи' ]
+            parameters:
+                -   in: path
+                    name: format
+                    required: true
+                    description: 'Формат (csv, xml)'
+                    example: 'csv'
+                    schema:
+                        type: string
+                        enum:
+                            - csv
+                            - xml
+            responses:
+                200:
+                    description: 'Список задач успешно экспортирован'
+                    content:
+                        text/csv:
+                            schema:
+                                type: string
+                                example: '2021-11-16T16:52:08+00:00,Задача 1,выполнена'
+                        text/xml:
+                            schema:
+                                type: string
+                                example: '<?xml version="1.0"?><response><item key="0"><id>da5b20a7-3c8b-4516-bc7c-7297c0e2f686</id><createdAt>2022-07-12T12:13:23+00:00</createdAt><taskName>Тестовая задача</taskName><isCompleted>0</isCompleted></item></response>'
+                401:
+                    description: 'Доступ запрещен'
+
 components:
     securitySchemes:
         ApiTokenAuth:
