@@ -1,22 +1,73 @@
-framework:
-    messenger:
-        # Uncomment this (and the failed transport below) to send failed messages to this transport for later handling.
-        # failure_transport: failed
+when@dev:
+    framework:
+        messenger:
+            reset_on_message: true
+            # Uncomment this (and the failed transport below) to send failed messages to this transport for later handling.
+            failure_transport: failed
+            transports:
+                # https://symfony.com/doc/current/messenger.html#transport-configuration
+                async:
+                    dsn: "%env(MESSENGER_TRANSPORT_DSN)%"
+                    retry_strategy:
+                        delay: 60000 # 60s * 1000ms
+                failed: 'doctrine://default?queue_name=failed'
+            routing:
+                # Route your messages to the transports
+                'App\Infrastructure\Message': async
+            buses:
+                command_bus:
+                    middleware:
+                    # each time a message is handled, the Doctrine connection
+                    # is "pinged" and reconnected if it's closed. Useful
+                    # if your workers run for a long time and the database
+                    # connection is sometimes lost
+                    - doctrine_ping_connection
 
-        transports:
-            # https://symfony.com/doc/current/messenger.html#transport-configuration
-            # async: '%env(MESSENGER_TRANSPORT_DSN)%'
-            # failed: 'doctrine://default?queue_name=failed'
-            # sync: 'sync://'
+                    # After handling, the Doctrine connection is closed,
+                    # which can free up database connections in a worker,
+                    # instead of keeping them open forever
+                    - doctrine_close_connection
 
-        routing:
-            # Route your messages to the transports
-            # 'App\Message\YourMessage': async
+                    # https://symfony.com/doc/5.3/messenger.html#other-middlewares
+                    - router_context
 
-# when@test:
-#    framework:
-#        messenger:
-#            transports:
-#                # replace with your transport name here (e.g., my_transport: 'in-memory://')
-#                # For more Messenger testing tools, see https://github.com/zenstruck/messenger-test
-#                async: 'in-memory://'
+when@test:
+    framework:
+        messenger:
+            transports:
+                sync: 'sync://'
+            routing:
+                'App\Infrastructure\Message': sync
+
+when@prod:
+    framework:
+        messenger:
+            reset_on_message: true
+            # Uncomment this (and the failed transport below) to send failed messages to this transport for later handling.
+            failure_transport: failed
+            transports:
+                # https://symfony.com/doc/current/messenger.html#transport-configuration
+                async:
+                    dsn: 'doctrine://default'
+                    retry_strategy:
+                        delay: 60000 # 60s * 1000ms
+                failed: 'doctrine://default?queue_name=failed'
+            routing:
+                # Route your messages to the transports
+                'App\Infrastructure\Message': async
+            buses:
+                command_bus:
+                    middleware:
+                    # each time a message is handled, the Doctrine connection
+                    # is "pinged" and reconnected if it's closed. Useful
+                    # if your workers run for a long time and the database
+                    # connection is sometimes lost
+                    - doctrine_ping_connection
+
+                    # After handling, the Doctrine connection is closed,
+                    # which can free up database connections in a worker,
+                    # instead of keeping them open forever
+                    - doctrine_close_connection
+
+                    # https://symfony.com/doc/5.3/messenger.html#other-middlewares
+                    - router_context

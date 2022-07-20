@@ -21,3 +21,18 @@ RUN su dev -c 'mkdir -p /home/dev/.composer/ /home/dev/app/'
 USER dev
 
 WORKDIR /app/
+
+FROM base as messenger
+
+USER root
+
+RUN apt-get update; \
+    apt-get install -y --no-install-recommends supervisor;
+
+# https://symfony.com/doc/current/messenger.html#graceful-shutdown
+RUN install-php-extensions pcntl
+
+COPY messenger/messenger-worker.conf /etc/supervisor/conf.d/messenger-worker.conf
+COPY messenger/supervisord.conf /etc/supervisor/supervisord.conf
+
+CMD ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]
