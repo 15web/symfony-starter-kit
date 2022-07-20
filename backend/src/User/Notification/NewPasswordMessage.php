@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\User\Notification;
 
+use App\Infrastructure\Message;
 use Webmozart\Assert\Assert;
 
-final class NewPasswordMessage
+final class NewPasswordMessage implements Message
 {
     public function __construct(private readonly string $plaintextPassword, private readonly string $email)
     {

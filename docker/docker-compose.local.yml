@@ -11,6 +11,16 @@ services:
             - composer_cache:/home/dev/.composer
         env_file: backend/.env
         depends_on: [ mysql ]
+    messenger:
+        build:
+            context: ./backend/
+            target: messenger
+            args:
+                USER_ID: ${USER_ID}
+        volumes:
+            - ../backend:/app/
+        env_file: backend/.env
+        depends_on: [ mysql ]
     nginx:
         build:
             context: ./nginx/
