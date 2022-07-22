@@ -10,4 +10,5 @@ return static function (ContainerConfigurator $di): void {
     $services = $di->services()->defaults()->autowire()->autoconfigure();
 
     $services->set(ExceptionEventSubscriber::class);
+    $services->set(CreateExceptionJsonResponse::class);
 };

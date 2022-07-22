@@ -4,19 +4,21 @@ declare(strict_types=1);
 
 namespace App\User\Http;
 
-use App\Infrastructure\ApiException\ApiErrorResponse;
 use App\Infrastructure\ApiException\ApiUnauthorizedException;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Infrastructure\ApiException\CreateExceptionJsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\SerializerInterface;
 
+/**
+ * Входная точка для генерации неавторизованных ответов (доступ запрещён).
+ *
+ * @see https://symfony.com/doc/current/security/access_denied_handler.html#customize-the-unauthorized-response
+ */
 final class AuthenticationEntryPoint implements AuthenticationEntryPointInterface
 {
-    public function __construct(private readonly SerializerInterface $serializer)
+    public function __construct(private readonly CreateExceptionJsonResponse $createExceptionJsonResponse)
     {
     }
 
@@ -27,12 +29,6 @@ final class AuthenticationEntryPoint implements AuthenticationEntryPointInterfac
      */
     public function start(Request $request, ?AuthenticationException $authException = null): Response
     {
-        $apiException = new ApiUnauthorizedException();
-        $content = $this->serializer->serialize(
-            new ApiErrorResponse($apiException->getErrorMessage(), $apiException->getApiCode()),
-            JsonEncoder::FORMAT
-        );
-
-        return new JsonResponse($content, $apiException->getHttpCode(), [], true);
+        return ($this->createExceptionJsonResponse)(new ApiUnauthorizedException());
     }
 }

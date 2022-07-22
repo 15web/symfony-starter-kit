@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace App\User\Http;
 
-use App\Infrastructure\ApiException\ApiErrorResponse;
 use App\Infrastructure\ApiException\ApiUnauthorizedException;
+use App\Infrastructure\ApiException\CreateExceptionJsonResponse;
 use App\User\Model\UserTokens;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -17,8 +16,6 @@ use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Uid\Uuid;
 
 final class ApiTokenAuthenticator extends AbstractAuthenticator
@@ -27,7 +24,7 @@ final class ApiTokenAuthenticator extends AbstractAuthenticator
 
     public function __construct(
         private readonly UserTokens $userTokens,
-        private readonly SerializerInterface $serializer,
+        private readonly CreateExceptionJsonResponse $createExceptionJsonResponse,
     ) {
     }
 
@@ -64,13 +61,12 @@ final class ApiTokenAuthenticator extends AbstractAuthenticator
      */
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
+        /**
+         * Генерирует сообщение об ошибке по шаблону, например:
+         * strtr('Too many failed login attempts, please try again in %minutes% minute', ['%minutes%' => $value])
+         */
         $message = strtr($exception->getMessageKey(), $exception->getMessageData());
-        $apiException = new ApiUnauthorizedException($message);
-        $content = $this->serializer->serialize(
-            new ApiErrorResponse($apiException->getErrorMessage(), $apiException->getApiCode()),
-            JsonEncoder::FORMAT
-        );
 
-        return new JsonResponse($content, $apiException->getHttpCode(), [], true);
+        return ($this->createExceptionJsonResponse)(new ApiUnauthorizedException($message));
     }
 }

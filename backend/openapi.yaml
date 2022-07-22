@@ -36,7 +36,11 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/errorBadRequest'
+                                $ref: '#/components/schemas/errorResponse'
+                            example:
+                                error: true
+                                code: 400
+                                errorMessage: 'Неверный формат запроса'
     /sign-in:
         post:
             summary: 'Аутентификация пользователя'
@@ -73,13 +77,21 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/errorBadRequest'
+                                $ref: '#/components/schemas/errorResponse'
+                            example:
+                                error: true
+                                code: 400
+                                errorMessage: 'Неверный формат запроса'
                 401:
-                    description: 'Не верный логин или пароль'
+                    description: 'Ошибка аутентификации'
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/errorAuthResponse'
+                                $ref: '#/components/schemas/errorResponse'
+                            example:
+                                error: true
+                                code: 401
+                                errorMessage: 'Не верный логин или пароль'
     /logout:
         get:
             summary: 'Выйти из приложения'
@@ -96,7 +108,11 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/errorAuthResponse'
+                                $ref: '#/components/schemas/errorResponse'
+                            example:
+                                error: true
+                                code: 401
+                                errorMessage: 'Необходимо пройти аутентификацию'
     /tasks:
         get:
             summary: 'Список задач'
@@ -126,6 +142,14 @@ paths:
                                             example: true
                 401:
                     description: 'Доступ запрещен'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/errorResponse'
+                            example:
+                                error: true
+                                code: 401
+                                errorMessage: 'Необходимо пройти аутентификацию'
 
     /tasks/{id}:
         get:
@@ -172,6 +196,14 @@ paths:
                     description: 'Задача не найдена'
                 401:
                     description: 'Доступ запрещен'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/errorResponse'
+                            example:
+                                error: true
+                                code: 401
+                                errorMessage: 'Необходимо пройти аутентификацию'
 
     /tasks/create:
         post:
@@ -200,9 +232,21 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/errorBadRequest'
+                                $ref: '#/components/schemas/errorResponse'
+                            example:
+                                error: true
+                                code: 400
+                                errorMessage: 'Неверный формат запроса'
                 401:
                     description: 'Доступ запрещен'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/errorResponse'
+                            example:
+                                error: true
+                                code: 401
+                                errorMessage: 'Необходимо пройти аутентификацию'
 
     /tasks/{id}/update-task-name:
         post:
@@ -233,11 +277,23 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/errorBadRequest'
+                                $ref: '#/components/schemas/errorResponse'
+                            example:
+                                error: true
+                                code: 400
+                                errorMessage: 'Неверный формат запроса'
                 404:
                     description: 'Задача не найдена'
                 401:
                     description: 'Доступ запрещен'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/errorResponse'
+                            example:
+                                error: true
+                                code: 401
+                                errorMessage: 'Необходимо пройти аутентификацию'
 
     /tasks/{id}/remove:
         post:
@@ -256,6 +312,14 @@ paths:
                     description: 'Задача не найдена'
                 401:
                     description: 'Доступ запрещен'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/errorResponse'
+                            example:
+                                error: true
+                                code: 401
+                                errorMessage: 'Необходимо пройти аутентификацию'
 
     /tasks/{id}/complete:
         post:
@@ -275,11 +339,23 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/errorBadRequest'
+                                $ref: '#/components/schemas/errorResponse'
+                            example:
+                                error: true
+                                code: 400
+                                errorMessage: 'Неверный формат запроса'
                 404:
                     description: 'Задача не найдена'
                 401:
                     description: 'Доступ запрещен'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/errorResponse'
+                            example:
+                                error: true
+                                code: 401
+                                errorMessage: 'Необходимо пройти аутентификацию'
 
     /export/tasks.{format}:
         get:
@@ -310,6 +386,14 @@ paths:
                                 example: '<?xml version="1.0"?><response><item key="0"><id>da5b20a7-3c8b-4516-bc7c-7297c0e2f686</id><createdAt>2022-07-12T12:13:23+00:00</createdAt><taskName>Тестовая задача</taskName><isCompleted>0</isCompleted></item></response>'
                 401:
                     description: 'Доступ запрещен'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/errorResponse'
+                            example:
+                                error: true
+                                code: 401
+                                errorMessage: 'Необходимо пройти аутентификацию'
 
 components:
     securitySchemes:
@@ -325,19 +409,6 @@ components:
                     enum: [ true ]
                     type: boolean
                     default: true
-        errorBadRequest:
-            type: object
-            properties:
-                error:
-                    enum: [ true ]
-                    type: boolean
-                    default: true
-                code:
-                    type: integer
-                    example: 400
-                errorMessage:
-                    type: string
-                    example: 'Неверный формат запроса'
         errorResponse:
             type: object
             properties:
@@ -347,10 +418,12 @@ components:
                     default: true
                 code:
                     type: integer
-                    example: 1
                 errorMessage:
                     type: string
-                    example: 'Ошибка валидации'
+            example:
+                error: true
+                code: 1
+                errorMessage: 'Ошибка валидации'
         authResponse:
             type: object
             properties:
@@ -362,19 +435,6 @@ components:
                     type: string
                     format: email
                     example: 'test@test.com'
-        errorAuthResponse:
-            type: object
-            properties:
-                error:
-                    enum: [ true ]
-                    type: boolean
-                    default: true
-                code:
-                    type: integer
-                    example: 401
-                errorMessage:
-                    type: string
-                    example: 'Необходимо пройти аутентификацию'
     parameters:
         taskId:
             name: id
