@@ -1,0 +1,51 @@
+parameters:
+    paths:
+        - ./src
+    exclude_files:
+        - '#.*test.*#'
+    layers:
+        -
+            name: Infrastructure
+            collectors:
+                -
+                    type: className
+                    regex: App\\Infrastructure\\.*
+        -
+            name: Http
+            collectors:
+                -
+                    type: className
+                    regex: App\\.*\\Http\\.*
+        -
+            name: Model
+            collectors:
+                -
+                    type: className
+                    regex: App\\.*\\Model\\.*
+        -
+            name: Command
+            collectors:
+                -
+                    type: className
+                    regex: App\\.*\\Command\\.*
+        -
+            name: Notification
+            collectors:
+                -
+                    type: className
+                    regex: App\\.*\\Notification\\.*
+    ruleset:
+        Http:
+            - Model
+            - Command
+            - Infrastructure
+        Notification:
+            - Model
+            - Infrastructure
+        Command:
+            - Model
+            - Infrastructure
+            - Notification
+        Model:
+            - Infrastructure
+        Infrastructure: ~
