@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace App\User\Http;
 
+use App\Infrastructure\ApiException\ApiUnauthorizedException;
+use App\Infrastructure\ApiException\CreateExceptionJsonResponse;
 use App\User\Model\UserTokens;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -21,8 +22,10 @@ final class ApiTokenAuthenticator extends AbstractAuthenticator
 {
     public const TOKEN_NAME = 'X-AUTH-TOKEN';
 
-    public function __construct(private readonly UserTokens $userTokens)
-    {
+    public function __construct(
+        private readonly UserTokens $userTokens,
+        private readonly CreateExceptionJsonResponse $createExceptionJsonResponse,
+    ) {
     }
 
     public function supports(Request $request): ?bool
@@ -58,14 +61,12 @@ final class ApiTokenAuthenticator extends AbstractAuthenticator
      */
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
-        $data = [
-            // you may want to customize or obfuscate the message first
-            'message' => strtr($exception->getMessageKey(), $exception->getMessageData()),
+        /**
+         * Генерирует сообщение об ошибке по шаблону, например:
+         * strtr('Too many failed login attempts, please try again in %minutes% minute', ['%minutes%' => $value])
+         */
+        $message = strtr($exception->getMessageKey(), $exception->getMessageData());
 
-            // or to translate this message
-            // $this->translator->trans($exception->getMessageKey(), $exception->getMessageData())
-        ];
-
-        return new JsonResponse($data, Response::HTTP_UNAUTHORIZED);
+        return ($this->createExceptionJsonResponse)(new ApiUnauthorizedException($message));
     }
 }

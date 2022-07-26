@@ -10,7 +10,7 @@ use App\User\Model\User;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
-#[Route('/sign-in', name: 'sign-in', methods: ['POST'])]
+#[Route('/sign-in', name: JsonLoginAuthenticator::SIGN_IN, methods: JsonLoginAuthenticator::SIGN_IN_METHODS)]
 final class SignInAction
 {
     public function __construct(private readonly CreateToken $createToken)

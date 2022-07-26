@@ -80,6 +80,6 @@ final class SignInTest extends ApiWebTestCase
         $body = json_encode(['email' => 'test', 'password' => ''], JSON_THROW_ON_ERROR);
         $response = self::request('POST', '/api/sign-in', $body, newClient: true, validateRequestSchema: false);
 
-        self::assertAccessDenied($response);
+        self::assertBadRequest($response);
     }
 }
