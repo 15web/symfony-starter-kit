@@ -15,13 +15,8 @@ final class RemoveTaskTest extends ApiWebTestCase
     {
         $token = User::authFirst();
 
-        Task::create('Тестовая задача 1', $token);
-        Task::create('Тестовая задача 2', $token);
-
-        $tasks = Task::list($token);
-
-        $task1Id = $tasks[0]['id'];
-        $task2Id = $tasks[1]['id'];
+        $task1Id = Task::createAndReturnId('Тестовая задача 1', $token);
+        $task2Id = Task::createAndReturnId('Тестовая задача 2', $token);
 
         $response = self::request('POST', "/api/tasks/{$task1Id}/remove", token: $token);
         self::assertSuccessContentResponse($response);

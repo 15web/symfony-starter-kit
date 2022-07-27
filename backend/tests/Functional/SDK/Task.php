@@ -17,6 +17,14 @@ final class Task extends ApiWebTestCase
         return self::request('POST', '/api/tasks/create', $body, token: $token);
     }
 
+    public static function createAndReturnId(string $taskName, string $token): string
+    {
+        $response = self::create($taskName, $token);
+        $taskInfo = self::jsonDecode($response->getContent());
+
+        return $taskInfo['id'];
+    }
+
     public static function list(string $token): array
     {
         $response = self::request('GET', '/api/tasks', token: $token);

@@ -2,11 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Task\Http;
+namespace App\Task\Http\CreateTask;
 
 use App\Infrastructure\ApiException\ApiBadRequestException;
 use App\Infrastructure\ApiException\ApiUnauthorizedException;
-use App\Infrastructure\SuccessResponse;
 use App\Task\Command\CreateTask\CreateTask;
 use App\Task\Command\CreateTask\CreateTaskCommand;
 use App\User\Model\User;
@@ -22,18 +21,18 @@ final class CreateTaskAction
     {
     }
 
-    public function __invoke(CreateTaskCommand $createTaskCommand, #[CurrentUser] ?User $user): SuccessResponse
+    public function __invoke(CreateTaskCommand $createTaskCommand, #[CurrentUser] ?User $user): TaskData
     {
         if ($user === null) {
             throw new ApiUnauthorizedException();
         }
 
         try {
-            ($this->createTask)($createTaskCommand, $user->getId());
+            $taskId = ($this->createTask)($createTaskCommand, $user->getId());
         } catch (\InvalidArgumentException $e) {
             throw new ApiBadRequestException($e->getMessage());
         }
 
-        return new SuccessResponse();
+        return new TaskData($taskId);
     }
 }

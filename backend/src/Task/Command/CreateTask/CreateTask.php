@@ -16,11 +16,13 @@ final class CreateTask
     {
     }
 
-    public function __invoke(CreateTaskCommand $createTaskCommand, Uuid $userId): void
+    public function __invoke(CreateTaskCommand $createTaskCommand, Uuid $userId): Uuid
     {
         $task = new Task(new TaskName($createTaskCommand->taskName), $userId);
         $this->tasks->add($task);
 
         $this->flusher->flush();
+
+        return $task->getId();
     }
 }

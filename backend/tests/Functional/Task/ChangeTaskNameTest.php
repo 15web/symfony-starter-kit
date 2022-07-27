@@ -14,9 +14,7 @@ final class ChangeTaskNameTest extends ApiWebTestCase
     public function testSuccess(): void
     {
         $token = User::authFirst();
-        Task::create('Тестовая задача 1', $token);
-        $tasks = Task::list($token);
-        $taskId = $tasks[0]['id'];
+        $taskId = Task::createAndReturnId('Тестовая задача 1', $token);
 
         $body = [];
         $body['taskName'] = $secondName = 'Тестовая задача 2';
@@ -56,10 +54,7 @@ final class ChangeTaskNameTest extends ApiWebTestCase
 
     private function assertBadRequests(array $body, string $token): void
     {
-        Task::create('Тестовая задача 1', $token);
-
-        $tasks = Task::list($token);
-        $taskId = $tasks[0]['id'];
+        $taskId = Task::createAndReturnId('Тестовая задача 1', $token);
 
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 

@@ -15,13 +15,11 @@ final class TaskInfoTest extends ApiWebTestCase
     {
         $token = User::authFirst();
 
-        Task::create($taskName = 'Тестовая задача 1', $token);
+        $taskId= Task::createAndReturnId($taskName = 'Тестовая задача 1', $token);
 
         $tasks = Task::list($token);
 
         self::assertCount(1, $tasks);
-
-        $taskId = $tasks[0]['id'];
 
         $response = self::request('GET', "/api/tasks/{$taskId}", token: $token);
         self::assertSuccessResponse($response);

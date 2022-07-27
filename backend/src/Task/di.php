@@ -9,7 +9,7 @@ use App\Task\Command\CreateTask\CreateTask;
 use App\Task\Command\RemoveTask;
 use App\Task\Command\UpdateTaskName\UpdateTaskName;
 use App\Task\Http\CompleteTaskAction;
-use App\Task\Http\CreateTaskAction;
+use App\Task\Http\CreateTask\CreateTaskAction;
 use App\Task\Http\RemoveTaskAction;
 use App\Task\Http\TaskArgumentValueResolver;
 use App\Task\Http\TaskInfo\TaskInfoAction;

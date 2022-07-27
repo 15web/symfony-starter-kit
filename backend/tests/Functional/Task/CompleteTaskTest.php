@@ -15,9 +15,7 @@ final class CompleteTaskTest extends ApiWebTestCase
     {
         $token = User::authFirst();
 
-        Task::create('Тестовая задача 1', $token);
-        $tasks = Task::list($token);
-        $taskId = $tasks[0]['id'];
+        $taskId = Task::createAndReturnId('Тестовая задача 1', $token);
 
         $response = self::request('POST', "/api/tasks/{$taskId}/complete", token: $token);
         self::assertSuccessContentResponse($response);
@@ -34,9 +32,7 @@ final class CompleteTaskTest extends ApiWebTestCase
     {
         $token = User::authFirst();
 
-        Task::create('Тестовая задача 1', $token);
-        $tasks = Task::list($token);
-        $taskId = $tasks[0]['id'];
+        $taskId = Task::createAndReturnId('Тестовая задача 1', $token);
 
         self::request('POST', "/api/tasks/{$taskId}/complete", token: $token);
 
