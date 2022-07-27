@@ -155,7 +155,7 @@ case $COMMAND in
         logs $ARGS_WITHOUT_FIRST;
         ;;
     hooks-install | hi)
-        printf '#!/usr/bin/env sh\n\n./docker/manage.bash check;\n' > .git/hooks/pre-commit;
+        printf '#!/usr/bin/env sh\n\ncd docker;./manage.bash check;\n' > ../.git/hooks/pre-commit;
 
         chmod +x .git/hooks/pre-commit;
         ;;

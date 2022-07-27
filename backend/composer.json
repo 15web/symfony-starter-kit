@@ -57,14 +57,16 @@
         "symfony/phpunit-bridge": "^6.1",
         "symfony/psr-http-message-bridge": "^2.1",
         "symfony/stopwatch": "6.1.*",
-        "symfony/web-profiler-bundle": "6.1.*"
+        "symfony/web-profiler-bundle": "6.1.*",
+        "veewee/composer-run-parallel": "^1.1"
     },
     "config": {
         "allow-plugins": {
             "composer/package-versions-deprecated": true,
             "symfony/flex": true,
             "symfony/runtime": true,
-            "dealerdirect/phpcodesniffer-composer-installer": true
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "veewee/composer-run-parallel": true
         },
         "optimize-autoloader": true,
         "preferred-install": {
@@ -115,17 +117,7 @@
         "validate-openapi-schema": "vendor/bin/php-openapi validate ./openapi.yaml",
         "deptrac-check": "vendor/bin/deptrac analyse --config-file=deptrac.yaml --cache-file=var/cache/.deptrac.cache",
         "deprications-check": "bin/console debug:container --deprecations",
-        "check": [
-            "@container-lint",
-            "@validate-doctrine-schema",
-            "@twig-lint",
-            "@stan",
-            "@fixer-check",
-            "@sniffer-check",
-            "@cache-prod-check",
-            "@validate-openapi-schema",
-            "@deptrac-check"
-        ],
+        "check": "@parallel container-lint validate-doctrine-schema twig-lint stan fixer-check sniffer-check cache-prod-check validate-openapi-schema deptrac-check",
         "fix": ["@fixer-fix", "@sniffer-fix"]
     },
     "conflict": {
