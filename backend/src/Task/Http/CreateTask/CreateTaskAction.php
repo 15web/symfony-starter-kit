@@ -12,6 +12,7 @@ use App\User\Model\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
+use Symfony\Component\Uid\Uuid;
 
 #[IsGranted('ROLE_USER')]
 #[Route('/tasks/create', methods: ['POST'])]
@@ -28,7 +29,8 @@ final class CreateTaskAction
         }
 
         try {
-            $taskId = ($this->createTask)($createTaskCommand, $user->getId());
+            $taskId = Uuid::v4();
+            ($this->createTask)($createTaskCommand, $taskId, $user->getId());
         } catch (\InvalidArgumentException $e) {
             throw new ApiBadRequestException($e->getMessage());
         }

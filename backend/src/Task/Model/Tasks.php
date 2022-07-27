@@ -20,14 +20,6 @@ final class Tasks
         $this->repository = $this->entityManager->getRepository(Task::class);
     }
 
-    /**
-     * @return Task[]
-     */
-    public function findAllByUserId(Uuid $userId): array
-    {
-        return $this->repository->findBy(['userId' => $userId], ['isCompleted' => 'ASC', 'createdAt' => 'DESC']);
-    }
-
     public function getById(Uuid $id): Task
     {
         $task = $this->repository->find($id);

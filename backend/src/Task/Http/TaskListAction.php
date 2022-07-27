@@ -2,10 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Task\Http\TaskList;
+namespace App\Task\Http;
 
 use App\Infrastructure\ApiException\ApiUnauthorizedException;
-use App\Task\Model\Tasks;
+use App\Task\Query\Task\FindAllTasksByUserId;
+use App\Task\Query\Task\FindAllTasksByUserIdQuery;
+use App\Task\Query\Task\TaskData;
 use App\User\Model\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Routing\Annotation\Route;
@@ -15,26 +17,19 @@ use Symfony\Component\Security\Http\Attribute\CurrentUser;
 #[Route('/tasks', methods: ['GET'])]
 final class TaskListAction
 {
-    public function __construct(private readonly Tasks $tasks)
+    public function __construct(private readonly FindAllTasksByUserId $findAllTasksByUserId)
     {
     }
 
     /**
-     * @return \Generator<TaskData>
+     * @return TaskData[]
      */
-    public function __invoke(#[CurrentUser] ?User $user): \Generator
+    public function __invoke(#[CurrentUser] ?User $user): array
     {
         if ($user === null) {
             throw new ApiUnauthorizedException();
         }
 
-        $tasks = $this->tasks->findAllByUserId($user->getId());
-        foreach ($tasks as $task) {
-            yield new TaskData(
-                $task->getId(),
-                $task->getTaskName()->getValue(),
-                $task->isCompleted(),
-            );
-        }
+        return ($this->findAllTasksByUserId)(new FindAllTasksByUserIdQuery($user->getId()));
     }
 }

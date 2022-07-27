@@ -6,7 +6,7 @@ namespace App\Task\Http\Export\Csv;
 
 use App\Task\Http\Export\Exporter;
 use App\Task\Http\Export\Format;
-use App\Task\Model\Task;
+use App\Task\Query\Task\TaskData;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -27,7 +27,7 @@ final class CsvExporter implements Exporter
     }
 
     /**
-     * @param Task[] $tasks
+     * @param TaskData[] $tasks
      */
     public function export(array $tasks): BinaryFileResponse
     {
@@ -43,7 +43,7 @@ final class CsvExporter implements Exporter
     }
 
     /**
-     * @param Task[] $tasks
+     * @param TaskData[] $tasks
      *
      * @return \Generator<CsvTaskData>
      */
@@ -51,11 +51,9 @@ final class CsvExporter implements Exporter
     {
         foreach ($tasks as $task) {
             yield new CsvTaskData(
-                $task->getId(),
-                $task->getCreatedAt(),
-                $task->getCompletedAt(),
-                $task->getTaskName()->getValue(),
-                $task->isCompleted(),
+                $task->id,
+                $task->taskName,
+                $task->isCompleted,
             );
         }
     }

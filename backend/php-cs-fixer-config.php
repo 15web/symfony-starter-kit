@@ -45,5 +45,6 @@ return (new PhpCsFixer\Config())
         'static_lambda' => true,
         // Write conditions in Yoda style (`true`), non-Yoda style (`['equal' => false, 'identical' => false, 'less_and_greater' => false]`) or ignore those conditions (`null`) based on configuration.
         'yoda_style' => ['equal' => false, 'identical' => false, 'less_and_greater' => false],
+        'return_assignment' => false,
     ])
     ->setFinder($finder);

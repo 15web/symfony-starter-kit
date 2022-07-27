@@ -10,8 +10,6 @@ final class CsvTaskData
 {
     public function __construct(
         public readonly Uuid $id,
-        public readonly \DateTimeImmutable $createdAt,
-        public readonly ?\DateTimeImmutable $completedAt,
         public readonly string $taskName,
         public readonly bool $isCompleted,
     ) {
