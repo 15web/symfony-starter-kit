@@ -33,8 +33,6 @@ final class ExportTasksTest extends ApiWebTestCase
         foreach ($tasks as $task) {
             self::assertNotSame('', $task['id']);
             self::assertNotSame('', $task['taskName']);
-            self::assertNotSame('', $task['createdAt']);
-            self::assertSame('', $task['completedAt']);
             self::assertFalse((bool) $task['isCompleted']);
         }
     }

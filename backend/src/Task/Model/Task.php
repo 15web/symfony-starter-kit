@@ -32,9 +32,9 @@ class Task
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updatedAt;
 
-    public function __construct(TaskName $taskName, Uuid $userId)
+    public function __construct(Uuid $id, TaskName $taskName, Uuid $userId)
     {
-        $this->id = Uuid::v4();
+        $this->id = $id;
         $this->taskName = $taskName;
         $this->userId = $userId;
         $this->createdAt = new \DateTimeImmutable();

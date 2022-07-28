@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace App\Task\Http\Export;
 
-use App\Task\Model\Tasks;
+use App\Task\Query\Task\FindAllTasksByUserId;
+use App\Task\Query\Task\FindAllTasksByUserIdQuery;
 use App\User\Model\User;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
@@ -14,14 +15,14 @@ final class ExportTasks
      * @param Exporter[] $exporters
      */
     public function __construct(
-        private readonly Tasks $tasks,
+        private readonly FindAllTasksByUserId $findAllTasksByUserId,
         private readonly iterable $exporters,
     ) {
     }
 
     public function __invoke(Format $format, User $user): BinaryFileResponse
     {
-        $tasks = $this->tasks->findAllByUserId($user->getId());
+        $tasks = ($this->findAllTasksByUserId)(new FindAllTasksByUserIdQuery($user->getId()));
 
         foreach ($this->exporters as $exporter) {
             if ($exporter->support($format) === true) {
