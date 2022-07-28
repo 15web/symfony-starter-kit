@@ -29,6 +29,12 @@ parameters:
                     type: className
                     regex: App\\.*\\Command\\.*
         -
+            name: Query
+            collectors:
+                -
+                    type: className
+                    regex: App\\.*\\Query\\.*
+        -
             name: Notification
             collectors:
                 -
@@ -38,6 +44,7 @@ parameters:
         Http:
             - Model
             - Command
+            - Query
             - Infrastructure
         Notification:
             - Model
@@ -46,6 +53,8 @@ parameters:
             - Model
             - Infrastructure
             - Notification
+        Query:
+            - Infrastructure
         Model:
             - Infrastructure
         Infrastructure: ~

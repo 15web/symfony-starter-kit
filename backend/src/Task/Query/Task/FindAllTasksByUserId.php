@@ -31,10 +31,9 @@ final class FindAllTasksByUserId
                 ORDER BY is_completed, created_at DESC
             SQL;
 
-        $stmt = $this->connection->prepare($sql);
-        $stmt->bindValue('user_id', $query->userId->toBinary());
-
-        $result = $stmt->executeQuery()->fetchAllAssociative();
+        $result = $this->connection
+            ->executeQuery($sql, ['user_id' => $query->userId->toBinary()])
+            ->fetchAllAssociative();
 
         $class = TaskData::class;
 
