@@ -2,8 +2,7 @@
 
 [![Code quality status](https://github.com/15web/symfony-starter-kit/actions/workflows/check-code-quality.yml/badge.svg)](https://github.com/15web/symfony-starter-kit/actions)
 
-Заготовка для старта проектов на Symfony
-
+Заготовка для старта проектов на Symfony 6, PHP 8.1, Mysql 8
 
 ## Запуск
 
@@ -16,18 +15,18 @@ cd ./your-folder-name/docker
 
 ```
 
-Настроить порты можно тут `./your-folder-name/docker/.env`, потом запустить `./manage.bash i`
+Порты настраиваются в файле `./your-folder-name/docker/.env`
 
-## Проверка кода
+После настройки портов запустить `./manage.bash i`
+
+Документация OpenAPI доступна по адресу http://localhost:8088/docs
+
+Тестирование писем http://localhost:8088/mailhog
+
+## Запуск проверок исходного кода
 
 ```shell
 cd ./your-folder-name/docker
 
 ./manage.bash c
 ```
-
-## Документация OpenAPI
-
-Документация OpenAPI доступна по адресу http://localhost:8088/docs/
-
-Заменить 8088 порт на тот который указан в `./your-folder-name/docker/.env`
