@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Task\Http\Export;
 
-use App\Task\Query\Task\TaskData;
+use App\Task\Query\FindAllByUserId\TaskData;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 interface Exporter

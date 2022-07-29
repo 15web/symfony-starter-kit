@@ -12,7 +12,7 @@ use App\Task\Http\CompleteTaskAction;
 use App\Task\Http\CreateTask\CreateTaskAction;
 use App\Task\Http\RemoveTaskAction;
 use App\Task\Http\TaskArgumentValueResolver;
-use App\Task\Http\TaskInfo\TaskInfoAction;
+use App\Task\Http\TaskInfoAction;
 use App\Task\Http\TaskListAction;
 use App\Task\Http\UpdateTaskNameAction;
 use App\Task\Model\Tasks;

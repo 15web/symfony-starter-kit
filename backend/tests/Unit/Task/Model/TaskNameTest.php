@@ -9,11 +9,12 @@ use PHPUnit\Framework\TestCase;
 
 final class TaskNameTest extends TestCase
 {
-    public function testCorrectName(): void
+    public function testEquals(): void
     {
-        $taskName = new TaskName($expectedName = 'new task');
+        $taskName1 = new TaskName('new task');
+        $taskName2 = new TaskName('new task');
 
-        self::assertSame($expectedName, $taskName->getValue());
+        self::assertTrue($taskName1->equalTo($taskName2));
     }
 
     public function testEmptyName(): void

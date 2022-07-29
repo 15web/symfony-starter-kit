@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace App\Task\Model;
 
+use App\Infrastructure\ValueObject;
 use Doctrine\ORM\Mapping as ORM;
 use Webmozart\Assert\Assert;
 
 #[ORM\Embeddable]
-final class TaskName
+final class TaskName implements ValueObject
 {
     #[ORM\Column]
     private readonly string $value;
@@ -20,8 +21,8 @@ final class TaskName
         $this->value = $value;
     }
 
-    public function getValue(): string
+    public function equalTo(ValueObject $other): bool
     {
-        return $this->value;
+        return $other::class === self::class && $this->value === $other->value;
     }
 }

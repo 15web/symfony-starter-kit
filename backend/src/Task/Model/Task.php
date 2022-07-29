@@ -52,7 +52,7 @@ class Task
     public function markAsDone(): void
     {
         if ($this->isCompleted === true) {
-            throw new \DomainException('Задача уже выполнена');
+            throw new TaskAlreadyIsDoneException('Задача уже выполнена');
         }
 
         $this->isCompleted = true;
@@ -60,38 +60,8 @@ class Task
         $this->completedAt = new \DateTimeImmutable();
     }
 
-    public function getId(): Uuid
+    public function isBelongToUser(Uuid $userId): bool
     {
-        return $this->id;
-    }
-
-    public function getTaskName(): TaskName
-    {
-        return $this->taskName;
-    }
-
-    public function getCreatedAt(): \DateTimeImmutable
-    {
-        return $this->createdAt;
-    }
-
-    public function getCompletedAt(): ?\DateTimeImmutable
-    {
-        return $this->completedAt;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeImmutable
-    {
-        return $this->updatedAt;
-    }
-
-    public function isCompleted(): bool
-    {
-        return $this->isCompleted;
-    }
-
-    public function getUserId(): Uuid
-    {
-        return $this->userId;
+        return $userId->equals($this->userId);
     }
 }

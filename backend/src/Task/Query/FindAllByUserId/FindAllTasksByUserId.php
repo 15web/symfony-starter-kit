@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Task\Query\Task;
+namespace App\Task\Query\FindAllByUserId;
 
 use Doctrine\DBAL\Connection;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;

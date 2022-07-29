@@ -8,6 +8,7 @@ use App\Infrastructure\ApiException\ApiBadRequestException;
 use App\Infrastructure\SuccessResponse;
 use App\Task\Command\CompleteTask;
 use App\Task\Model\Task;
+use App\Task\Model\TaskAlreadyIsDoneException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -23,7 +24,7 @@ final class CompleteTaskAction
     {
         try {
             ($this->completeTask)($task);
-        } catch (\DomainException $e) {
+        } catch (TaskAlreadyIsDoneException $e) {
             throw new ApiBadRequestException($e->getMessage());
         }
 

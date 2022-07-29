@@ -13,6 +13,9 @@ final class CompleteTask
     {
     }
 
+    /**
+     * @throws \App\Task\Model\TaskAlreadyIsDoneException
+     */
     public function __invoke(Task $task): void
     {
         $task->markAsDone();

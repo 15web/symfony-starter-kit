@@ -8,6 +8,7 @@ use App\Infrastructure\ApiException\ApiBadRequestException;
 use App\Infrastructure\ApiException\ApiNotFoundException;
 use App\Infrastructure\ApiException\ApiUnauthorizedException;
 use App\Task\Model\Task;
+use App\Task\Model\TaskNotFoundException;
 use App\Task\Model\Tasks;
 use App\User\Model\User;
 use Symfony\Component\HttpFoundation\Request;
@@ -53,13 +54,13 @@ final class TaskArgumentValueResolver implements ArgumentValueResolverInterface
         try {
             Assert::uuid($taskId, 'Укажите валидный id');
             $task = $this->tasks->getById(Uuid::fromString($taskId));
-        } catch (\DomainException $exception) {
+        } catch (TaskNotFoundException $exception) {
             throw new ApiNotFoundException($exception->getMessage());
         } catch (\InvalidArgumentException $exception) {
             throw new ApiBadRequestException($exception->getMessage());
         }
 
-        if ($user->getId()->equals($task->getUserId()) === false) {
+        if ($task->isBelongToUser($user->getId()) === false) {
             throw new ApiNotFoundException('Задача не найдена');
         }
 

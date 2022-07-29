@@ -24,7 +24,7 @@ final class Tasks
     {
         $task = $this->repository->find($id);
         if ($task === null) {
-            throw new \DomainException('Задача не найдена');
+            throw new TaskNotFoundException('Задача не найдена');
         }
 
         return $task;
