@@ -20,14 +20,11 @@ class Task
     #[ORM\Embedded]
     private TaskName $taskName;
 
-    #[ORM\Column]
-    private bool $isCompleted;
+    #[ORM\Embedded]
+    private TaskCompleted $taskCompleted;
 
     #[ORM\Column]
     private readonly \DateTimeImmutable $createdAt;
-
-    #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $completedAt;
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updatedAt;
@@ -38,9 +35,8 @@ class Task
         $this->taskName = $taskName;
         $this->userId = $userId;
         $this->createdAt = new \DateTimeImmutable();
-        $this->completedAt = null;
         $this->updatedAt = null;
-        $this->isCompleted = false;
+        $this->taskCompleted = new TaskCompleted(isCompleted: false);
     }
 
     public function changeTaskName(TaskName $taskName): void
@@ -51,12 +47,11 @@ class Task
 
     public function markAsDone(): void
     {
-        if ($this->isCompleted === true) {
+        if ($this->taskCompleted->isCompleted() === true) {
             throw new TaskAlreadyIsDoneException('Задача уже выполнена');
         }
 
-        $this->isCompleted = true;
+        $this->taskCompleted = new TaskCompleted(true, new \DateTimeImmutable());
         $this->updatedAt = new \DateTimeImmutable();
-        $this->completedAt = new \DateTimeImmutable();
     }
 }

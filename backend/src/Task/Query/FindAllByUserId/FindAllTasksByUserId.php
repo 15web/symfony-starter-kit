@@ -19,10 +19,10 @@ final class FindAllTasksByUserId
     {
         $dql = <<<'DQL'
                 SELECT
-                NEW App\Task\Query\FindAllByUserId\TaskData(t.id, t.taskName.value, t.isCompleted, t.createdAt)
+                NEW App\Task\Query\FindAllByUserId\TaskData(t.id, t.taskName.value, t.taskCompleted.isCompleted, t.createdAt)
                 FROM App\Task\Domain\Task AS t
                 WHERE t.userId = :userId
-                ORDER BY t.isCompleted, t.createdAt DESC
+                ORDER BY t.taskCompleted.isCompleted, t.createdAt DESC
             DQL;
 
         $dqlQuery = $this->entityManager->createQuery($dql);

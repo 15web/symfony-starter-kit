@@ -21,7 +21,7 @@ final class FindUncompletedTasksByUserId
                 SELECT
                 NEW App\Task\Query\FindUncompletedTasksByUserId\TaskData(t.taskName.value, t.createdAt)
                 FROM App\Task\Domain\Task AS t
-                WHERE t.userId = :userId AND t.isCompleted = false
+                WHERE t.userId = :userId AND t.taskCompleted.isCompleted = false
                 ORDER BY t.createdAt DESC
             DQL;
 

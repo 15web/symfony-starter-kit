@@ -16,7 +16,7 @@ final class FindTaskById
     {
         $dql = <<<'DQL'
                 SELECT
-                NEW App\Task\Query\FindById\TaskData(t.id, t.taskName.value, t.isCompleted, t.createdAt, t.completedAt, t.updatedAt)
+                NEW App\Task\Query\FindById\TaskData(t.id, t.taskName.value, t.taskCompleted.isCompleted, t.createdAt, t.taskCompleted.completedAt, t.updatedAt)
                 FROM App\Task\Domain\Task AS t
                 WHERE t.id = :id and t.userId = :userId
             DQL;
