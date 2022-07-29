@@ -226,7 +226,13 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/successResponse'
+                                type: object
+                                properties:
+                                    id:
+                                        type: string
+                                        format: uuid
+                                        description: 'ID задачи'
+                                        example: 'dc8dbada-b154-4ffb-b21c-da70162e2704'
                 400:
                     description: 'Ошибка запроса'
                     content:
