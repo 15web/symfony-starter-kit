@@ -22,6 +22,8 @@ jobs:
 
       - name: Validate composer.json and composer.lock
         run: cd ./docker && ./manage.bash run-backend composer validate --strict
+        env:
+          USE_MUTAGEN: 0
 
       - name: Cache Composer packages
         id: composer-cache
