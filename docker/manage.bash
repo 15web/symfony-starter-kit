@@ -13,7 +13,19 @@ os-depend-sed-in-place() {
 setupEnvs() {
     [ ! -f ./.env ] && cp ./.env.dist ./.env
 
-    COMPOSE_FILE_ENV="COMPOSE_FILE='docker-compose.local.yml'";
+    if [ "$(grep 'USE_MUTAGEN' ./.env)" == 'USE_MUTAGEN=1' ]; then
+        echo 'Mutagen used.';
+        COMPOSE_FILE_ENV="COMPOSE_FILE='docker-compose.local.yml:mutagen-compose.yml'";
+        compose() {
+            mutagen-compose "$@"
+        }
+    else
+        COMPOSE_FILE_ENV="COMPOSE_FILE='docker-compose.local.yml'";
+        compose() {
+            docker-compose "$@"
+        }
+    fi
+
     if [ "$(grep 'COMPOSE_FILE' ./.env)" != '' ]; then
         os-depend-sed-in-place -E "s|^.*COMPOSE_FILE=.*$|$COMPOSE_FILE_ENV|" ./.env;
     else
@@ -25,18 +37,6 @@ setupEnvs() {
         os-depend-sed-in-place -E "s|^.*USER_ID=.*$|$USER_ID_ENV|" ./.env;
     else
         echo "$USER_ID_ENV" >> ./.env;
-    fi
-
-    source '.env'
-    if [ "$USE_MUTAGEN" == 1 ]; then
-        echo 'Mutagen used.'
-        compose() {
-            mutagen-compose -f "$COMPOSE_FILE" -f "$MUTAGEN_FILE" "$@"
-        }
-    else
-        compose() {
-            docker-compose "$@"
-        }
     fi
 
     [ ! -f ./backend/.env ] && cp ./backend/.env.dist ./backend/.env
@@ -70,6 +70,14 @@ install() {
 
     compose up --detach --force-recreate --remove-orphans
 
+    printf "Waiting for mysql"
+    until echo 'select 1;' | compose exec -T mysql mysql -proot &>/dev/null
+    do
+      printf "."
+      sleep 1
+    done
+    printf "\nMysql is up!\n"
+
     runBackend ./bin/console doctrine:migrations:migrate --no-interaction
     runBackend ./bin/console messenger:setup-transports
 
@@ -91,7 +99,7 @@ update() {
 }
 
 build() {
-    compose build --no-cache
+    compose build
     runBackend composer install --no-scripts --prefer-dist
     compose up -d --force-recreate --remove-orphans
 }
