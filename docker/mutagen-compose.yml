@@ -1,0 +1,30 @@
+services:
+  backend:
+    volumes:
+      - code:/app/
+volumes:
+  code:
+
+
+x-mutagen:
+  sync:
+    defaults:
+      ignore:
+        vcs: true
+        paths:
+          - ".DS_Store"
+          - ".idea"
+    code-storage:
+      alpha: "../backend"
+      beta: "volume://code"
+      mode: "two-way-resolved"
+      ignore:
+        paths:
+          - "var/cache/*"
+      permissions:
+        defaultDirectoryMode: 0775
+        defaultFileMode: 0664
+      configurationBeta:
+        permissions:
+          defaultOwner: "id:${USER_ID:-1000}"
+          defaultGroup: "id:${USER_ID:-1000}"

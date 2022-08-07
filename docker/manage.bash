@@ -13,7 +13,19 @@ os-depend-sed-in-place() {
 setupEnvs() {
     [ ! -f ./.env ] && cp ./.env.dist ./.env
 
-    COMPOSE_FILE_ENV="COMPOSE_FILE='docker-compose.local.yml'";
+    if [ "$(grep 'USE_MUTAGEN' ./.env)" == 'USE_MUTAGEN=1' ]; then
+        echo 'Mutagen used.';
+        COMPOSE_FILE_ENV="COMPOSE_FILE='docker-compose.local.yml:mutagen-compose.yml'";
+        compose() {
+            mutagen-compose "$@"
+        }
+    else
+        COMPOSE_FILE_ENV="COMPOSE_FILE='docker-compose.local.yml'";
+        compose() {
+            docker-compose "$@"
+        }
+    fi
+
     if [ "$(grep 'COMPOSE_FILE' ./.env)" != '' ]; then
         os-depend-sed-in-place -E "s|^.*COMPOSE_FILE=.*$|$COMPOSE_FILE_ENV|" ./.env;
     else
@@ -34,29 +46,37 @@ setupEnvs() {
 }
 
 installTest() {
-    docker-compose build backend mysql
+    compose build backend mysql
 
     runBackend composer install --no-scripts --prefer-dist --no-progress
 
-    docker-compose up --detach --force-recreate --remove-orphans backend mysql
+    compose up --detach --force-recreate --remove-orphans backend mysql
 
     runBackend ./bin/console doctrine:migrations:migrate --no-interaction
     runBackend ./bin/console messenger:setup-transports
 
-    docker-compose exec -T mysql mysql -proot -e "drop database if exists db_name_test;";
-    docker-compose exec -T mysql mysql -proot -e "create database if not exists db_name_test;";
-    docker-compose exec -T mysql mysql -proot -e "GRANT ALL PRIVILEGES ON db_name_test.* TO 'db_user'@'%';";
+    compose exec -T mysql mysql -proot -e "drop database if exists db_name_test;";
+    compose exec -T mysql mysql -proot -e "create database if not exists db_name_test;";
+    compose exec -T mysql mysql -proot -e "GRANT ALL PRIVILEGES ON db_name_test.* TO 'db_user'@'%';";
 
     runBackend bin/console --env=test doctrine:migrations:migrate --no-interaction
     runBackend bin/console --env=test cache:clear
 }
 
 install() {
-    docker-compose build
+    compose build
 
     runBackend composer install --no-scripts --prefer-dist
 
-    docker-compose up --detach --force-recreate --remove-orphans
+    compose up --detach --force-recreate --remove-orphans
+
+    printf "Waiting for mysql"
+    until echo 'select 1;' | compose exec -T mysql mysql -proot &>/dev/null
+    do
+      printf "."
+      sleep 1
+    done
+    printf "\nMysql is up!\n"
 
     runBackend ./bin/console doctrine:migrations:migrate --no-interaction
     runBackend ./bin/console messenger:setup-transports
@@ -65,31 +85,39 @@ install() {
 }
 
 up() {
-    docker-compose up -d --force-recreate --remove-orphans
+    compose up -d --force-recreate --remove-orphans
 }
 
 down() {
-    docker-compose down --remove-orphans
+    compose down --remove-orphans
 }
 
 update() {
-    docker-compose pull
-    docker-compose build --pull
+    compose pull
+    compose build --pull
     runBackend composer update
 }
 
 build() {
-    docker-compose build
+    compose build
     runBackend composer install --no-scripts --prefer-dist
-    docker-compose up -d --force-recreate --remove-orphans
+    compose up -d --force-recreate --remove-orphans
 }
 
 runBackend() {
-    docker-compose run --rm backend "$@"
+    compose run --rm backend "$@"
 }
 
 logs() {
-    docker-compose logs "$@"
+    compose logs "$@"
+}
+
+cleanup-mutagen() {
+    mutagen-compose down --volumes;
+
+    mutagen sync terminate --all;
+
+    exit 0;
 }
 
 COMMAND=$1
@@ -127,7 +155,7 @@ case $COMMAND in
         runBackend composer check
 
         runBackend bin/console --env=test cache:clear
-        docker-compose run --rm -e APP_ENV=test backend bin/phpunit
+        compose run --rm -e APP_ENV=test backend bin/phpunit
 
         runBackend bin/console app:openapi-routes-diff ./openapi.yaml
 
@@ -141,7 +169,7 @@ case $COMMAND in
         setupEnvs;
 
         runBackend bin/console --env=test cache:clear
-        docker-compose run --rm -e APP_ENV=test backend bin/phpunit -v
+        compose run --rm -e APP_ENV=test backend bin/phpunit -v
         ;;
     fix | f)
         setupEnvs;
@@ -158,6 +186,9 @@ case $COMMAND in
         printf '#!/usr/bin/env sh\n\ncd docker;./manage.bash check;\n' > ../.git/hooks/pre-commit;
 
         chmod +x .git/hooks/pre-commit;
+        ;;
+    cleanup-mutagen | cm)
+        cleanup-mutagen
         ;;
     setup-envs | se)
         setupEnvs;
@@ -176,6 +207,7 @@ case $COMMAND in
             test,
             fix[f],
             hooks-install[hi],
+            cleanup-mutagen[cm],
             setup-envs[se].'
         ;;
 esac
