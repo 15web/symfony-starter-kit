@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\Task\Model;
 
-use App\Task\Model\TaskName;
+use App\Task\Domain\TaskName;
 use PHPUnit\Framework\TestCase;
 
 final class TaskNameTest extends TestCase

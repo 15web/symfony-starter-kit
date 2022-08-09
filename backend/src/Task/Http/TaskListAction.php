@@ -8,7 +8,7 @@ use App\Infrastructure\ApiException\ApiUnauthorizedException;
 use App\Task\Query\FindAllByUserId\FindAllTasksByUserId;
 use App\Task\Query\FindAllByUserId\FindAllTasksByUserIdQuery;
 use App\Task\Query\FindAllByUserId\TaskData;
-use App\User\Model\User;
+use App\User\Domain\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;

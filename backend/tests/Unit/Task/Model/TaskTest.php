@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\Task\Model;
 
-use App\Task\Model\Task;
-use App\Task\Model\TaskAlreadyIsDoneException;
-use App\Task\Model\TaskName;
-use App\User\Model\User;
-use App\User\Model\UserEmail;
+use App\Task\Domain\Task;
+use App\Task\Domain\TaskAlreadyIsDoneException;
+use App\Task\Domain\TaskName;
+use App\User\Domain\User;
+use App\User\Domain\UserEmail;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Uid\Uuid;
 

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Task\Command;
 
 use App\Infrastructure\Flusher;
-use App\Task\Model\Task;
+use App\Task\Domain\Task;
 
 final class CompleteTask
 {
@@ -14,7 +14,7 @@ final class CompleteTask
     }
 
     /**
-     * @throws \App\Task\Model\TaskAlreadyIsDoneException
+     * @throws \App\Task\Domain\TaskAlreadyIsDoneException
      */
     public function __invoke(Task $task): void
     {

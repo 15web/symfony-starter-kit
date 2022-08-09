@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Task\Model;
+namespace App\Task\Domain;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Task\Command;
 
 use App\Infrastructure\Flusher;
-use App\Task\Model\Task;
-use App\Task\Model\Tasks;
+use App\Task\Domain\Task;
+use App\Task\Domain\Tasks;
 
 final class RemoveTask
 {

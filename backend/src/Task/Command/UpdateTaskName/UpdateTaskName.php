@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Task\Command\UpdateTaskName;
 
 use App\Infrastructure\Flusher;
-use App\Task\Model\Task;
-use App\Task\Model\TaskName;
+use App\Task\Domain\Task;
+use App\Task\Domain\TaskName;
 
 final class UpdateTaskName
 {

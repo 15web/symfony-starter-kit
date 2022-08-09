@@ -6,7 +6,7 @@ namespace App\User\Http;
 
 use App\Infrastructure\ApiException\ApiUnauthorizedException;
 use App\Infrastructure\ApiException\CreateExceptionJsonResponse;
-use App\User\Model\UserTokens;
+use App\User\Domain\UserTokens;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;

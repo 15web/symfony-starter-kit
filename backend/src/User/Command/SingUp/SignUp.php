@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\User\Command\SingUp;
 
 use App\Infrastructure\Flusher;
-use App\User\Model\User;
-use App\User\Model\UserEmail;
-use App\User\Model\Users;
+use App\User\Domain\User;
+use App\User\Domain\UserEmail;
+use App\User\Domain\Users;
 use App\User\Notification\NewPasswordMessage;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;

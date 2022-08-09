@@ -6,14 +6,14 @@ namespace App\User;
 
 use App\User\Command\CreateToken;
 use App\User\Command\SingUp\SignUp;
+use App\User\Domain\Users;
+use App\User\Domain\UserTokens;
 use App\User\Http\ApiTokenAuthenticator;
 use App\User\Http\AuthenticationEntryPoint;
 use App\User\Http\JsonLoginAuthenticator;
 use App\User\Http\LogoutAction;
 use App\User\Http\SignInAction;
 use App\User\Http\SignUpAction;
-use App\User\Model\Users;
-use App\User\Model\UserTokens;
 use App\User\Notification\SendNewPassword;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 

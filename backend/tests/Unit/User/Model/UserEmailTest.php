@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\User\Model;
 
-use App\User\Model\UserEmail;
+use App\User\Domain\UserEmail;
 use PHPUnit\Framework\TestCase;
 
 final class UserEmailTest extends TestCase

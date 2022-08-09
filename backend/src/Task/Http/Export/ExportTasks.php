@@ -6,7 +6,7 @@ namespace App\Task\Http\Export;
 
 use App\Task\Query\FindAllByUserId\FindAllTasksByUserId;
 use App\Task\Query\FindAllByUserId\FindAllTasksByUserIdQuery;
-use App\User\Model\User;
+use App\User\Domain\User;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 final class ExportTasks

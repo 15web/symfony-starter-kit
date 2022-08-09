@@ -8,6 +8,7 @@ use App\Task\Command\CompleteTask;
 use App\Task\Command\CreateTask\CreateTask;
 use App\Task\Command\RemoveTask;
 use App\Task\Command\UpdateTaskName\UpdateTaskName;
+use App\Task\Domain\Tasks;
 use App\Task\Http\CompleteTaskAction;
 use App\Task\Http\CreateTask\CreateTaskAction;
 use App\Task\Http\RemoveTaskAction;
@@ -15,7 +16,6 @@ use App\Task\Http\TaskArgumentValueResolver;
 use App\Task\Http\TaskInfoAction;
 use App\Task\Http\TaskListAction;
 use App\Task\Http\UpdateTaskNameAction;
-use App\Task\Model\Tasks;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $di): void {

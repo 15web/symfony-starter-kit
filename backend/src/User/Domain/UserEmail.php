@@ -2,14 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Task\Model;
+namespace App\User\Domain;
 
-use App\Infrastructure\ValueObject;
 use Doctrine\ORM\Mapping as ORM;
 use Webmozart\Assert\Assert;
 
 #[ORM\Embeddable]
-final class TaskName implements ValueObject
+final class UserEmail
 {
     #[ORM\Column]
     private readonly string $value;
@@ -17,12 +16,13 @@ final class TaskName implements ValueObject
     public function __construct(string $value)
     {
         Assert::notEmpty($value);
+        Assert::email($value);
 
         $this->value = $value;
     }
 
-    public function equalTo(ValueObject $other): bool
+    public function getValue(): string
     {
-        return $other::class === self::class && $this->value === $other->value;
+        return $this->value;
     }
 }

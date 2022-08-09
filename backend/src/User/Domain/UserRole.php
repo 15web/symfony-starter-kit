@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\User\Model;
+namespace App\User\Domain;
 
 enum UserRole: string
 {

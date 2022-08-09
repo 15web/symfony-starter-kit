@@ -6,7 +6,7 @@ namespace App\User\Http;
 
 use App\Infrastructure\ApiException\ApiUnauthorizedException;
 use App\User\Command\CreateToken;
-use App\User\Model\User;
+use App\User\Domain\User;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 

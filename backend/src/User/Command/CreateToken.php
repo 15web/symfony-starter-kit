@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\User\Command;
 
 use App\Infrastructure\Flusher;
-use App\User\Model\User;
-use App\User\Model\UserToken;
-use App\User\Model\UserTokens;
+use App\User\Domain\User;
+use App\User\Domain\UserToken;
+use App\User\Domain\UserTokens;
 
 final class CreateToken
 {

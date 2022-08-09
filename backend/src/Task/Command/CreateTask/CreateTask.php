@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Task\Command\CreateTask;
 
 use App\Infrastructure\Flusher;
-use App\Task\Model\Task;
-use App\Task\Model\TaskName;
-use App\Task\Model\Tasks;
+use App\Task\Domain\Task;
+use App\Task\Domain\TaskName;
+use App\Task\Domain\Tasks;
 use Symfony\Component\Uid\Uuid;
 
 final class CreateTask
