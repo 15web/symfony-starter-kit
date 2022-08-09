@@ -11,15 +11,6 @@ jobs:
       - name: Setup docker env
         run: cd ./docker && ./manage.bash setup-envs && cat .env
 
-#      - name: Cache Docker env
-#        id: docker-env-cache
-#        uses: actions/cache@v3
-#        with:
-#          path: docker/.env
-#          key: docker-env-${{ hashFiles('docker/.env') }}
-#          restore-keys: |
-#            docker-env-
-
       - name: Validate composer.json and composer.lock
         run: cd ./docker && ./manage.bash run-backend composer validate --strict
 
