@@ -17,7 +17,7 @@ final class FindAllTasksByUserId
      */
     public function __invoke(FindAllTasksByUserIdQuery $query): array
     {
-        $dql = <<<DQL
+        $dql = <<<'DQL'
                 SELECT
                 NEW App\Task\Query\FindAllByUserId\TaskData(t.id, t.taskName.value, t.isCompleted, t.createdAt)
                 FROM App\Task\Domain\Task AS t
