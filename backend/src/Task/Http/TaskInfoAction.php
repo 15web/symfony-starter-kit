@@ -7,6 +7,7 @@ namespace App\Task\Http;
 use App\Infrastructure\ApiException\ApiNotFoundException;
 use App\Infrastructure\ApiException\ApiUnauthorizedException;
 use App\Task\Query\FindById\FindTaskById;
+use App\Task\Query\FindById\FindTaskByIdQuery;
 use App\Task\Query\FindById\TaskData;
 use App\Task\Query\FindById\TaskNotFoundException;
 use App\User\Domain\User;
@@ -30,7 +31,7 @@ final class TaskInfoAction
         }
 
         try {
-            $taskData = ($this->findTaskById)($id, $user->getId());
+            $taskData = ($this->findTaskById)(new FindTaskByIdQuery($id, $user->getId()));
         } catch (TaskNotFoundException $e) {
             throw new ApiNotFoundException($e->getMessage());
         }
