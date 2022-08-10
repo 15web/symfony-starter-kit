@@ -32,4 +32,12 @@ final class Users
 
         return $this->repository->findOneBy(['userEmail.value' => $email]);
     }
+
+    /**
+     * @return User[]
+     */
+    public function getAll(): array
+    {
+        return $this->repository->findAll();
+    }
 }
