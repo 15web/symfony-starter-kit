@@ -13,7 +13,7 @@ final class Users
     /**
      * @var EntityRepository<User>
      */
-    private EntityRepository $repository;
+    private readonly EntityRepository $repository;
 
     public function __construct(private readonly EntityManagerInterface $entityManager)
     {

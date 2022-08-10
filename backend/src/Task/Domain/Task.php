@@ -59,9 +59,4 @@ class Task
         $this->updatedAt = new \DateTimeImmutable();
         $this->completedAt = new \DateTimeImmutable();
     }
-
-    public function isBelongToUser(Uuid $userId): bool
-    {
-        return $userId->equals($this->userId);
-    }
 }

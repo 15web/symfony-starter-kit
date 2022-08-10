@@ -14,14 +14,6 @@ use Symfony\Component\Uid\Uuid;
 
 final class TaskTest extends TestCase
 {
-    public function testCorrectCreation(): void
-    {
-        $user = new User(new UserEmail('test@example.com'));
-
-        $task = new Task(Uuid::v4(), new TaskName('new task'), $user->getId());
-
-        self::assertTrue($task->isBelongToUser($user->getId()));
-    }
     public function testAlreadyCompletedTask(): void
     {
         $user = new User(new UserEmail('test@example.com'));
