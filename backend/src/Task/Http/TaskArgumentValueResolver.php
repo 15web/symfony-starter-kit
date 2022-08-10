@@ -8,9 +8,8 @@ use App\Infrastructure\ApiException\ApiBadRequestException;
 use App\Infrastructure\ApiException\ApiNotFoundException;
 use App\Infrastructure\ApiException\ApiUnauthorizedException;
 use App\Task\Domain\Task;
-use App\Task\Domain\TaskNotFoundException;
-use App\Task\Domain\Tasks;
 use App\User\Domain\User;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
@@ -20,8 +19,10 @@ use Webmozart\Assert\Assert;
 
 final class TaskArgumentValueResolver implements ArgumentValueResolverInterface
 {
-    public function __construct(private readonly Security $security, private readonly Tasks $tasks)
-    {
+    public function __construct(
+        private readonly Security $security,
+        private readonly EntityManagerInterface $entityManager,
+    ) {
     }
 
     /**
@@ -53,9 +54,13 @@ final class TaskArgumentValueResolver implements ArgumentValueResolverInterface
 
         try {
             Assert::uuid($taskId, 'Укажите валидный id');
-            $task = $this->tasks->getById(Uuid::fromString($taskId));
-        } catch (TaskNotFoundException $exception) {
-            throw new ApiNotFoundException($exception->getMessage());
+
+            /** @var ?Task $task */
+            $task = $this->entityManager->getRepository(Task::class)->find(Uuid::fromString($taskId));
+
+            if ($task === null) {
+                throw new ApiNotFoundException('Задача не найдена');
+            }
         } catch (\InvalidArgumentException $exception) {
             throw new ApiBadRequestException($exception->getMessage());
         }

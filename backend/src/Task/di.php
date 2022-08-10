@@ -8,7 +8,6 @@ use App\Task\Command\CompleteTask;
 use App\Task\Command\CreateTask\CreateTask;
 use App\Task\Command\RemoveTask;
 use App\Task\Command\UpdateTaskName\UpdateTaskName;
-use App\Task\Domain\Tasks;
 use App\Task\Http\CompleteTaskAction;
 use App\Task\Http\CreateTask\CreateTaskAction;
 use App\Task\Http\RemoveTaskAction;
@@ -20,8 +19,6 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (ContainerConfigurator $di): void {
     $services = $di->services()->defaults()->autowire()->autoconfigure();
-
-    $services->set(Tasks::class);
 
     $services->set(CreateTask::class);
     $services->set(UpdateTaskName::class);

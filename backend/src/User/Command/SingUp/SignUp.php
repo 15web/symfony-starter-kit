@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\User\Command\SingUp;
 
-use App\Infrastructure\Flusher;
 use App\User\Domain\User;
 use App\User\Domain\UserEmail;
 use App\User\Domain\Users;
 use App\User\Notification\NewPasswordMessage;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\String\ByteString;
@@ -17,7 +17,7 @@ final class SignUp
 {
     public function __construct(
         private readonly UserPasswordHasherInterface $passwordHasher,
-        private readonly Flusher $flusher,
+        private readonly EntityManagerInterface $entityManager,
         private readonly Users $users,
         private readonly MessageBusInterface $messageBus,
     ) {
@@ -43,7 +43,7 @@ final class SignUp
         $user->applyPassword($hashedPassword);
 
         $this->users->add($user);
-        $this->flusher->flush();
+        $this->entityManager->flush();
 
         $this->messageBus->dispatch(new NewPasswordMessage($plaintextPassword, $userEmail->getValue()));
     }

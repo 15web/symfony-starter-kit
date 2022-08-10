@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Task\Command;
 
-use App\Infrastructure\Flusher;
 use App\Task\Domain\Task;
+use Doctrine\ORM\EntityManagerInterface;
 
 final class CompleteTask
 {
-    public function __construct(private readonly Flusher $flusher)
+    public function __construct(private readonly EntityManagerInterface $entityManager)
     {
     }
 
@@ -20,6 +20,6 @@ final class CompleteTask
     {
         $task->markAsDone();
 
-        $this->flusher->flush();
+        $this->entityManager->flush();
     }
 }
