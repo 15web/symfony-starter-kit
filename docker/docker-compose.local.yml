@@ -44,6 +44,12 @@ services:
             BASE_URL: /docs
         volumes:
             - ../backend/openapi.yaml:/usr/share/nginx/html/openapi.yaml:ro
+    redoc:
+        image: redocly/redoc
+        environment:
+            SPEC_URL: openapi.yaml
+        volumes:
+            - ../backend/openapi.yaml:/usr/share/nginx/html/openapi.yaml:ro
 volumes:
     mysql:
     composer_cache:
