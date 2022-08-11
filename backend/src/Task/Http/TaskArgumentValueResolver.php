@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Task\Http;
 
+use App\AsService;
 use App\Infrastructure\ApiException\ApiBadRequestException;
 use App\Infrastructure\ApiException\ApiNotFoundException;
 use App\Infrastructure\ApiException\ApiUnauthorizedException;
@@ -18,6 +19,7 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Uid\Uuid;
 use Webmozart\Assert\Assert;
 
+#[AsService]
 final class TaskArgumentValueResolver implements ArgumentValueResolverInterface
 {
     /**

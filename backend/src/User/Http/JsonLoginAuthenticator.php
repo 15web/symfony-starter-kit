@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\User\Http;
 
+use App\AsService;
 use App\Infrastructure\ApiException\ApiBadRequestException;
 use App\Infrastructure\ApiException\ApiUnauthorizedException;
 use App\Infrastructure\ApiException\CreateExceptionJsonResponse;
@@ -18,6 +19,7 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordC
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Webmozart\Assert\Assert;
 
+#[AsService]
 final class JsonLoginAuthenticator extends AbstractAuthenticator
 {
     public const SIGN_IN = 'sign-in';

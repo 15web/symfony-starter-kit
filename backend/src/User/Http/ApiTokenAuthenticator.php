@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\User\Http;
 
+use App\AsService;
 use App\Infrastructure\ApiException\ApiUnauthorizedException;
 use App\Infrastructure\ApiException\CreateExceptionJsonResponse;
 use App\User\Domain\UserTokens;
@@ -18,6 +19,7 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 use Symfony\Component\Uid\Uuid;
 
+#[AsService]
 final class ApiTokenAuthenticator extends AbstractAuthenticator
 {
     public const TOKEN_NAME = 'X-AUTH-TOKEN';
