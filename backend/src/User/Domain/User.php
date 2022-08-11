@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace App\User\Domain;
 
+use App\ExcludeFromDI;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Uid\Uuid;
 use Webmozart\Assert\Assert;
 
+#[ExcludeFromDI]
 #[ORM\Entity]
 /** @final */
 class User implements UserInterface, PasswordAuthenticatedUserInterface

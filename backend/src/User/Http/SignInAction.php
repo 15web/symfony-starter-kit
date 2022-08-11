@@ -7,10 +7,12 @@ namespace App\User\Http;
 use App\Infrastructure\ApiException\ApiUnauthorizedException;
 use App\User\Command\CreateToken;
 use App\User\Domain\User;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 #[Route('/sign-in', name: JsonLoginAuthenticator::SIGN_IN, methods: JsonLoginAuthenticator::SIGN_IN_METHODS)]
+#[AsController]
 final class SignInAction
 {
     public function __construct(private readonly CreateToken $createToken)

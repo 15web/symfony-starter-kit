@@ -10,10 +10,12 @@ use App\Task\Command\CompleteTask;
 use App\Task\Domain\Task;
 use App\Task\Domain\TaskAlreadyIsDoneException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[IsGranted('ROLE_USER')]
 #[Route('/tasks/{id}/complete', methods: ['POST'])]
+#[AsController]
 final class CompleteTaskAction
 {
     public function __construct(private readonly CompleteTask $completeTask)

@@ -10,12 +10,14 @@ use App\Task\Command\CreateTask\CreateTask;
 use App\Task\Command\CreateTask\CreateTaskCommand;
 use App\User\Domain\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Uid\Uuid;
 
 #[IsGranted('ROLE_USER')]
 #[Route('/tasks/create', methods: ['POST'])]
+#[AsController]
 final class CreateTaskAction
 {
     public function __construct(private readonly CreateTask $createTask)

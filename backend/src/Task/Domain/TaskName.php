@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\Task\Domain;
 
+use App\ExcludeFromDI;
 use App\Infrastructure\ValueObject;
 use Doctrine\ORM\Mapping as ORM;
 use Webmozart\Assert\Assert;
 
+#[ExcludeFromDI]
 #[ORM\Embeddable]
 final class TaskName implements ValueObject
 {

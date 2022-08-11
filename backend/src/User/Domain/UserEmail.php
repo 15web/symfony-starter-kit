@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\User\Domain;
 
+use App\ExcludeFromDI;
 use Doctrine\ORM\Mapping as ORM;
 use Webmozart\Assert\Assert;
 
+#[ExcludeFromDI]
 #[ORM\Embeddable]
 final class UserEmail
 {

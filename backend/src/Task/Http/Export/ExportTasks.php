@@ -7,6 +7,7 @@ namespace App\Task\Http\Export;
 use App\Task\Query\FindAllByUserId\FindAllTasksByUserId;
 use App\Task\Query\FindAllByUserId\FindAllTasksByUserIdQuery;
 use App\User\Domain\User;
+use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 final class ExportTasks
@@ -16,7 +17,7 @@ final class ExportTasks
      */
     public function __construct(
         private readonly FindAllTasksByUserId $findAllTasksByUserId,
-        private readonly iterable $exporters,
+        #[TaggedIterator(tag: 'app.task.exporter')] private readonly iterable $exporters,
     ) {
     }
 

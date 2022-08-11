@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Task\Domain;
 
+use App\ExcludeFromDI;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 
+#[ExcludeFromDI]
 #[ORM\Entity]
 /** @final */
 class Task
