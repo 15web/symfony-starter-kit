@@ -25,6 +25,13 @@ cd ./your-folder-name/docker
 
 ## Запуск проверок исходного кода
 
+Предварительно нужно выполнить настройку тестового окружения:
+```shell
+cd ./your-folder-name/docker
+
+./manage.bash install-test
+```
+Запуск проверок:
 ```shell
 cd ./your-folder-name/docker
 
