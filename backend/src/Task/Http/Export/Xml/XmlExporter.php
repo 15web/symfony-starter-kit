@@ -6,7 +6,7 @@ namespace App\Task\Http\Export\Xml;
 
 use App\Task\Http\Export\Exporter;
 use App\Task\Http\Export\Format;
-use App\Task\Query\Task\TaskData;
+use App\Task\Query\FindAllByUserId\TaskData;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;

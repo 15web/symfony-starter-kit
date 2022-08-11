@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Task\Http\Export;
 
 use App\Infrastructure\ApiException\ApiUnauthorizedException;
-use App\User\Model\User;
+use App\User\Domain\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\Routing\Annotation\Route;

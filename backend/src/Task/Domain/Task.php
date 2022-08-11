@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Task\Model;
+namespace App\Task\Domain;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
@@ -52,46 +52,11 @@ class Task
     public function markAsDone(): void
     {
         if ($this->isCompleted === true) {
-            throw new \DomainException('Задача уже выполнена');
+            throw new TaskAlreadyIsDoneException('Задача уже выполнена');
         }
 
         $this->isCompleted = true;
         $this->updatedAt = new \DateTimeImmutable();
         $this->completedAt = new \DateTimeImmutable();
-    }
-
-    public function getId(): Uuid
-    {
-        return $this->id;
-    }
-
-    public function getTaskName(): TaskName
-    {
-        return $this->taskName;
-    }
-
-    public function getCreatedAt(): \DateTimeImmutable
-    {
-        return $this->createdAt;
-    }
-
-    public function getCompletedAt(): ?\DateTimeImmutable
-    {
-        return $this->completedAt;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeImmutable
-    {
-        return $this->updatedAt;
-    }
-
-    public function isCompleted(): bool
-    {
-        return $this->isCompleted;
-    }
-
-    public function getUserId(): Uuid
-    {
-        return $this->userId;
     }
 }

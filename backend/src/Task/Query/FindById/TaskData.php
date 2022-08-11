@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Task\Http\TaskInfo;
+namespace App\Task\Query\FindById;
 
 use Symfony\Component\Uid\Uuid;
 

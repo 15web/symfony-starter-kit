@@ -7,9 +7,10 @@ namespace App\Task\Http;
 use App\Infrastructure\ApiException\ApiBadRequestException;
 use App\Infrastructure\ApiException\ApiNotFoundException;
 use App\Infrastructure\ApiException\ApiUnauthorizedException;
-use App\Task\Model\Task;
-use App\Task\Model\Tasks;
-use App\User\Model\User;
+use App\Task\Domain\Task;
+use App\User\Domain\User;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
@@ -19,8 +20,16 @@ use Webmozart\Assert\Assert;
 
 final class TaskArgumentValueResolver implements ArgumentValueResolverInterface
 {
-    public function __construct(private readonly Security $security, private readonly Tasks $tasks)
-    {
+    /**
+     * @var EntityRepository<Task>
+     */
+    private readonly EntityRepository $repository;
+
+    public function __construct(
+        private readonly Security $security,
+        private readonly EntityManagerInterface $entityManager,
+    ) {
+        $this->repository = $this->entityManager->getRepository(Task::class);
     }
 
     /**
@@ -52,15 +61,17 @@ final class TaskArgumentValueResolver implements ArgumentValueResolverInterface
 
         try {
             Assert::uuid($taskId, 'Укажите валидный id');
-            $task = $this->tasks->getById(Uuid::fromString($taskId));
-        } catch (\DomainException $exception) {
-            throw new ApiNotFoundException($exception->getMessage());
+
+            $task = $this->repository->findOneBy([
+                'id' => Uuid::fromString($taskId),
+                'userId' => $user->getId(),
+            ]);
+
+            if ($task === null) {
+                throw new ApiNotFoundException('Задача не найдена');
+            }
         } catch (\InvalidArgumentException $exception) {
             throw new ApiBadRequestException($exception->getMessage());
-        }
-
-        if ($user->getId()->equals($task->getUserId()) === false) {
-            throw new ApiNotFoundException('Задача не найдена');
         }
 
         yield $task;

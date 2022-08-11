@@ -17,11 +17,11 @@ parameters:
                     type: className
                     regex: App\\.*\\Http\\.*
         -
-            name: Model
+            name: Domain
             collectors:
                 -
                     type: className
-                    regex: App\\.*\\Model\\.*
+                    regex: App\\.*\\Domain\\.*
         -
             name: Command
             collectors:
@@ -42,19 +42,19 @@ parameters:
                     regex: App\\.*\\Notification\\.*
     ruleset:
         Http:
-            - Model
+            - Domain
             - Command
             - Query
             - Infrastructure
         Notification:
-            - Model
+            - Domain
             - Infrastructure
         Command:
-            - Model
+            - Domain
             - Infrastructure
             - Notification
         Query:
             - Infrastructure
-        Model:
+        Domain:
             - Infrastructure
         Infrastructure: ~

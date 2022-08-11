@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Task\Http\Export;
 
-use App\Task\Query\Task\FindAllTasksByUserId;
-use App\Task\Query\Task\FindAllTasksByUserIdQuery;
-use App\User\Model\User;
+use App\Task\Query\FindAllByUserId\FindAllTasksByUserId;
+use App\Task\Query\FindAllByUserId\FindAllTasksByUserIdQuery;
+use App\User\Domain\User;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 final class ExportTasks

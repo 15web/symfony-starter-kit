@@ -6,7 +6,7 @@ namespace App\Task\Http;
 
 use App\Infrastructure\SuccessResponse;
 use App\Task\Command\RemoveTask;
-use App\Task\Model\Task;
+use App\Task\Domain\Task;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Routing\Annotation\Route;
 

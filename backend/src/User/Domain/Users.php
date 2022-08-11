@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\User\Model;
+namespace App\User\Domain;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
@@ -13,7 +13,7 @@ final class Users
     /**
      * @var EntityRepository<User>
      */
-    private EntityRepository $repository;
+    private readonly EntityRepository $repository;
 
     public function __construct(private readonly EntityManagerInterface $entityManager)
     {

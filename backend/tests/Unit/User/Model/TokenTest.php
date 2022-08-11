@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\User\Model;
 
-use App\User\Model\User;
-use App\User\Model\UserEmail;
-use App\User\Model\UserToken;
+use App\User\Domain\User;
+use App\User\Domain\UserEmail;
+use App\User\Domain\UserToken;
 use PHPUnit\Framework\TestCase;
 
 final class TokenTest extends TestCase

@@ -12,16 +12,13 @@ use App\Task\Http\CompleteTaskAction;
 use App\Task\Http\CreateTask\CreateTaskAction;
 use App\Task\Http\RemoveTaskAction;
 use App\Task\Http\TaskArgumentValueResolver;
-use App\Task\Http\TaskInfo\TaskInfoAction;
+use App\Task\Http\TaskInfoAction;
 use App\Task\Http\TaskListAction;
 use App\Task\Http\UpdateTaskNameAction;
-use App\Task\Model\Tasks;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $di): void {
     $services = $di->services()->defaults()->autowire()->autoconfigure();
-
-    $services->set(Tasks::class);
 
     $services->set(CreateTask::class);
     $services->set(UpdateTaskName::class);
