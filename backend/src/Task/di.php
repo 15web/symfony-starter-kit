@@ -8,6 +8,7 @@ use App\Task\Command\CompleteTask;
 use App\Task\Command\CreateTask\CreateTask;
 use App\Task\Command\RemoveTask;
 use App\Task\Command\UpdateTaskName\UpdateTaskName;
+use App\Task\Console\SendUncompletedTaskToUser;
 use App\Task\Http\CompleteTaskAction;
 use App\Task\Http\CreateTask\CreateTaskAction;
 use App\Task\Http\RemoveTaskAction;
@@ -26,6 +27,7 @@ return static function (ContainerConfigurator $di): void {
     $services->set(RemoveTask::class);
 
     $services->set(TaskArgumentValueResolver::class);
+    $services->set(SendUncompletedTaskToUser::class);
 
     $services->set(TaskInfoAction::class)->tag('controller.service_arguments');
     $services->set(TaskListAction::class)->tag('controller.service_arguments');
