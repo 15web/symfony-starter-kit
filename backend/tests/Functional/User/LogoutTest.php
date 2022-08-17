@@ -11,7 +11,7 @@ final class LogoutTest extends ApiWebTestCase
 {
     public function testSuccessUseCase(): void
     {
-        $token = User::authFirst();
+        $token = User::auth();
 
         $response = self::request('GET', '/api/logout', token: $token);
         self::assertSuccessResponse($response);

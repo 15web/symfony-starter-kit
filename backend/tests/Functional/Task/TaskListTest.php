@@ -12,7 +12,7 @@ final class TaskListTest extends ApiWebTestCase
 {
     public function testSuccess(): void
     {
-        $token = User::authFirst();
+        $token = User::auth();
 
         Task::create('Тестовая задача 1', $token);
         Task::create('Тестовая задача 2', $token);

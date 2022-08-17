@@ -12,7 +12,7 @@ final class CreateTaskTest extends ApiWebTestCase
 {
     public function testSuccess(): void
     {
-        $token = User::authFirst();
+        $token = User::auth();
         $response = Task::create($taskName = 'Тестовая задача', $token);
 
         self::assertSuccessResponse($response);
@@ -30,7 +30,7 @@ final class CreateTaskTest extends ApiWebTestCase
 
     public function testBadRequests(): void
     {
-        $token = User::authFirst();
+        $token = User::auth();
 
         $this->assertBadRequests([], $token);
         $this->assertBadRequests(['badKey'], $token);

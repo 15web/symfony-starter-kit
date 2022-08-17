@@ -9,12 +9,14 @@ use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 final class User extends ApiWebTestCase
 {
     /**
+     * Регистрация пользователя по емейл, аутентификация.
+     *
      * @return string api token
      */
-    public static function authFirst(): string
+    public static function auth(string $userEmail = 'first@example.com'): string
     {
         $body = [];
-        $body['email'] = 'first@example.com';
+        $body['email'] = $userEmail;
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
         self::request('POST', '/api/sign-up', $body, newClient: true);
@@ -25,12 +27,12 @@ final class User extends ApiWebTestCase
         $password = $context['password'];
 
         $body = [];
-        $body['email'] = 'first@example.com';
+        $body['email'] = $userEmail;
         $body['password'] = $password;
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
         $response = self::request('POST', '/api/sign-in', $body);
 
-        return (self::jsonDecode($response->getContent()))['token'];
+        return self::jsonDecode($response->getContent())['token'];
     }
 }

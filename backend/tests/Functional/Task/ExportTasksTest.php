@@ -16,7 +16,7 @@ final class ExportTasksTest extends ApiWebTestCase
 {
     public function testCsvExport(): void
     {
-        $token = User::authFirst();
+        $token = User::auth();
         Task::create('Тестовая задача 1', $token);
         Task::create('Тестовая задача 2', $token);
 
@@ -39,7 +39,7 @@ final class ExportTasksTest extends ApiWebTestCase
 
     public function testXmlExport(): void
     {
-        $token = User::authFirst();
+        $token = User::auth();
         Task::create('Тестовая задача 1', $token);
         Task::create('Тестовая задача 2', $token);
         Task::create('Тестовая задача 3', $token);

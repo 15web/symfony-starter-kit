@@ -13,7 +13,7 @@ final class CompleteTaskTest extends ApiWebTestCase
 {
     public function testSuccess(): void
     {
-        $token = User::authFirst();
+        $token = User::auth();
 
         $taskId = Task::createAndReturnId('Тестовая задача 1', $token);
 
@@ -30,7 +30,7 @@ final class CompleteTaskTest extends ApiWebTestCase
 
     public function testTaskHasAlreadyBeenCompleted(): void
     {
-        $token = User::authFirst();
+        $token = User::auth();
 
         $taskId = Task::createAndReturnId('Тестовая задача 1', $token);
 
@@ -42,7 +42,7 @@ final class CompleteTaskTest extends ApiWebTestCase
 
     public function testTaskNotFound(): void
     {
-        $token = User::authFirst();
+        $token = User::auth();
 
         Task::create('Тестовая задача 1', $token);
 
