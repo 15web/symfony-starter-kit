@@ -13,7 +13,7 @@ final class TaskInfoTest extends ApiWebTestCase
 {
     public function testSuccess(): void
     {
-        $token = User::authFirst();
+        $token = User::auth();
 
         $taskId= Task::createAndReturnId($taskName = 'Тестовая задача 1', $token);
 
@@ -36,7 +36,7 @@ final class TaskInfoTest extends ApiWebTestCase
 
     public function testNotFound(): void
     {
-        $token = User::authFirst();
+        $token = User::auth();
 
         Task::create('Тестовая задача 1', $token);
 

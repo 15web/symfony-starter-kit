@@ -13,7 +13,7 @@ final class RemoveTaskTest extends ApiWebTestCase
 {
     public function testSuccess(): void
     {
-        $token = User::authFirst();
+        $token = User::auth();
 
         $task1Id = Task::createAndReturnId('Тестовая задача 1', $token);
         $task2Id = Task::createAndReturnId('Тестовая задача 2', $token);
@@ -29,7 +29,7 @@ final class RemoveTaskTest extends ApiWebTestCase
 
     public function testNotFound(): void
     {
-        $token = User::authFirst();
+        $token = User::auth();
 
         Task::create('Тестовая задача 1', $token);
 

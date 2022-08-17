@@ -13,7 +13,7 @@ final class ChangeTaskNameTest extends ApiWebTestCase
 {
     public function testSuccess(): void
     {
-        $token = User::authFirst();
+        $token = User::auth();
         $taskId = Task::createAndReturnId('Тестовая задача 1', $token);
 
         $body = [];
@@ -32,7 +32,7 @@ final class ChangeTaskNameTest extends ApiWebTestCase
 
     public function testNotFound(): void
     {
-        $token = User::authFirst();
+        $token = User::auth();
         Task::create('Тестовая задача 1', $token);
 
         $body = [];
@@ -46,7 +46,7 @@ final class ChangeTaskNameTest extends ApiWebTestCase
 
     public function testBadRequests(): void
     {
-        $token = User::authFirst();
+        $token = User::auth();
         $this->assertBadRequests([], $token);
         $this->assertBadRequests(['badKey'], $token);
         $this->assertBadRequests(['taskName' => ''], $token);
