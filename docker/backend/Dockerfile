@@ -36,3 +36,17 @@ COPY messenger/messenger-worker.conf /etc/supervisor/conf.d/messenger-worker.con
 COPY messenger/supervisord.conf /etc/supervisor/supervisord.conf
 
 CMD ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]
+
+FROM base as cron
+
+USER root
+
+RUN apt-get update; \
+    apt-get install -y --no-install-recommends cron;
+
+COPY cron/crontab /root/crontab
+
+RUN crontab < /root/crontab
+
+COPY cron/start.bash /root/cron/start.bash
+CMD ["/root/cron/start.bash"]
