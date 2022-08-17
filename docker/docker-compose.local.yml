@@ -21,6 +21,15 @@ services:
             - ../backend:/app/
         env_file: backend/.env
         depends_on: [ mysql ]
+    cron:
+        build:
+            context: ./backend/
+            target: cron
+            args:
+                USER_ID: ${USER_ID}
+        volumes:
+            - ../backend:/app/
+        env_file: backend/.env
     nginx:
         build:
             context: ./nginx/

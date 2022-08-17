@@ -61,9 +61,7 @@ final class SendUncompletedTaskToUser extends Command
             ++$emailSent;
         }
 
-        if ($emailSent !== 0) {
-            $this->logger->info("Отправленно {$emailSent} писем о невыполненных задачах");
-        }
+        $this->logger->info("Отправленно {$emailSent} писем о невыполненных задачах");
 
         $this->release();
 
