@@ -120,6 +120,17 @@ cleanup-mutagen() {
     exit 0;
 }
 
+cleanup-examples() {
+  rm ../backend/migrations/Version20220608134159.php
+  rm ../backend/migrations/Version20220712121206.php
+  rm -r ../backend/src/Task
+  rm ../backend/templates/emails/uncompleted-tasks.html.twig
+  rm ../backend/tests/Command/SendUncompletedTaskCommandTest.php
+  rm ../backend/tests/Functional/SDK/Task.php
+  rm -r ../backend/tests/Functional/Task
+  rm -r ../backend/tests/Unit/Task
+}
+
 COMMAND=$1
 case $COMMAND in
     install | i)
@@ -190,6 +201,9 @@ case $COMMAND in
     cleanup-mutagen | cm)
         cleanup-mutagen
         ;;
+    cleanup-examples)
+        cleanup-examples
+        ;;
     setup-envs | se)
         setupEnvs;
         ;;
@@ -208,6 +222,7 @@ case $COMMAND in
             fix[f],
             hooks-install[hi],
             cleanup-mutagen[cm],
+            cleanup-examples,
             setup-envs[se].'
         ;;
 esac

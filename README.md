@@ -38,6 +38,28 @@ cd ./your-folder-name/docker
 ./manage.bash c
 ```
 
+### Очистка проекта от примеров кода
+
+Автоматически:
+```shell
+cd ./your-folder-name/docker
+
+./manage.bash cleanup-examples
+```
+Это включает в себя:
+1. Удаляет миграции, выборочно:
+- backend/migrations/Version20220608134159.php (таблица задач)
+- backend/migrations/Version20220712121206.php (Добавляет пользователя к задачам)
+2. Удаляет директорию backend/src/Task
+3. Удаляет файл backend/templates/emails/uncompleted-tasks.html.twig
+4. Удаляет тесты:
+- файл backend/tests/Command/SendUncompletedTaskCommandTest.php
+- файл backend/tests/Functional/SDK/Task.php
+- директорию backend/tests/Functional/Task
+- директорию backend/tests/Unit/Task
+
+**Также необходимо вручную** удалить пути из документации backend/openapi.yaml, которые тегированы tags: [ 'Задачи' ]
+
 ### Copyright and license
 
 Copyright © [Studio 15](http://15web.ru), 2012 - Present.   
