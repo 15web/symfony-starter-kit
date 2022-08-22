@@ -4,25 +4,15 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional\SDK;
 
-use League\OpenAPIValidation\PSR7\OperationAddress;
-use League\OpenAPIValidation\PSR7\RequestValidator;
-use League\OpenAPIValidation\PSR7\ResponseValidator;
-use League\OpenAPIValidation\PSR7\ValidatorBuilder;
-use Nyholm\Psr7\Factory\Psr17Factory;
-use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
+use App\Infrastructure\OpenApiValidateSubscriber;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Webmozart\Assert\Assert;
 
 class ApiWebTestCase extends WebTestCase
 {
-    private const OPENAPI_YAML_FILE = './openapi.yaml';
-
     private static ?KernelBrowser $client = null;
-    private static ?RequestValidator $requestValidator = null;
-    private static ?ResponseValidator $responseValidator = null;
 
     public static function request(
         string $method,
@@ -30,8 +20,8 @@ class ApiWebTestCase extends WebTestCase
         ?string $body = null,
         bool $newClient = false,
         ?string $token = null,
-        bool $validateRequestSchema = true,
-        bool $validateResponseSchema = true,
+        bool $disableValidateRequestSchema = false,
+        bool $disableValidateResponseSchema = false,
     ): Response {
 
         Assert::notEmpty($method);
@@ -39,10 +29,6 @@ class ApiWebTestCase extends WebTestCase
 
         if (self::$client === null || $newClient === true) {
             self::$client = self::createClient();
-        }
-
-        if (self::$requestValidator === null || self::$responseValidator === null) {
-            self::createValidators();
         }
 
         $headers = [
@@ -54,18 +40,14 @@ class ApiWebTestCase extends WebTestCase
             $headers['HTTP_X_AUTH_TOKEN'] = $token;
         }
 
-        self::$client->xmlHttpRequest($method, $uri, [], [], $headers, $body);
+        self::$client->xmlHttpRequest($method, $uri, [
+            // передаем признак в OpenApiValidateSubscriber что не нужно проверять запрос
+            OpenApiValidateSubscriber::DISABLE_VALIDATE_REQUEST_KEY => $disableValidateRequestSchema,
+            // передаем признак в OpenApiValidateSubscriber что не нужно проверять ответ
+            OpenApiValidateSubscriber::DISABLE_VALIDATE_RESPONSE_KEY => $disableValidateResponseSchema,
+        ], [], $headers, $body);
 
-        if ($validateRequestSchema === true) {
-            self::validateRequestSchema(self::$client->getRequest());
-        }
-
-        $response = self::$client->getResponse();
-        if ($validateResponseSchema === true) {
-            self::validateResponseSchema($method, $uri, $response);
-        }
-
-        return $response;
+        return self::$client->getResponse();
     }
 
     public static function jsonDecode(string|bool $content): array
@@ -118,31 +100,5 @@ class ApiWebTestCase extends WebTestCase
     public static function assertForbidden(Response $response): void
     {
         self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
-    }
-
-    private static function createValidators(): void
-    {
-        $validatorBuilder = (new ValidatorBuilder())->fromYamlFile(self::OPENAPI_YAML_FILE);
-
-        self::$requestValidator = $validatorBuilder->getRequestValidator();
-        self::$responseValidator = $validatorBuilder->getResponseValidator();
-    }
-
-    private static function validateRequestSchema(Request $request): void
-    {
-        $psr17Factory = new Psr17Factory();
-        $psrHttpFactory = new PsrHttpFactory($psr17Factory, $psr17Factory, $psr17Factory, $psr17Factory);
-        $psrRequest = $psrHttpFactory->createRequest($request);
-
-        self::$requestValidator->validate($psrRequest);
-    }
-
-    private static function validateResponseSchema(string $method, string $uri, Response $response): void
-    {
-        $psr17Factory = new Psr17Factory();
-        $psrHttpFactory = new PsrHttpFactory($psr17Factory, $psr17Factory, $psr17Factory, $psr17Factory);
-        $psrResponse = $psrHttpFactory->createResponse($response);
-
-        self::$responseValidator->validate(new OperationAddress($uri, strtolower($method)), $psrResponse);
     }
 }
