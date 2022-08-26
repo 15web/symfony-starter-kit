@@ -363,6 +363,73 @@ paths:
                                 code: 401
                                 errorMessage: 'Необходимо пройти аутентификацию'
 
+    /tasks/{id}/add-comment:
+        post:
+            summary: 'Добавление комментария к задаче'
+            tags: [ 'Задачи' ]
+            parameters:
+                -   $ref: '#/components/parameters/taskId'
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            properties:
+                                commentBody:
+                                    type: string
+                                    description: 'Текст комментария'
+                                    example: 'Мой первый комментарий'
+                            required:
+                                - commentBody
+            responses:
+                200:
+                    description: 'Комментарий успешно добавлен'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/successResponse'
+                400:
+                    description: 'Нельзя добавлять комментарий в выполненную задачу'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/errorResponse'
+                            example:
+                                error: true
+                                code: 400
+                                errorMessage: 'Неверный формат запроса'
+                404:
+                    description: 'Задача не найдена'
+    /tasks/{id}/comments:
+        get:
+            summary: 'Получить список комментариев к задаче'
+            tags: [ 'Задачи' ]
+            parameters:
+                -   $ref: '#/components/parameters/taskId'
+            responses:
+                200:
+                    description: 'Список'
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    id:
+                                        type: string
+                                        format: uuid
+                                        description: 'ID комментария'
+                                        example: 'dc8dbada-b154-4ffb-b21c-da70162e2704'
+                                    body:
+                                        type: string
+                                        description: 'Текст комментария'
+                                        example: 'Мой первый комментарий'
+                                    createdAt:
+                                        type: string
+                                        description: 'Дата создания'
+                                        example: '2021-10-28T16:19:44+00:00'
+                                    updatedAt:
+                                        type: string
+                                        description: 'Дата обновления'
+                                        example: '2021-10-28T16:19:44+00:00'
+                                        nullable: true
     /export/tasks.{format}:
         get:
             summary: 'Экспорт задач в нужном формате'

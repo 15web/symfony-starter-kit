@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Task\Http;
 
 use App\Infrastructure\ApiException\ApiUnauthorizedException;
-use App\Task\Query\FindAllByUserId\FindAllTasksByUserId;
-use App\Task\Query\FindAllByUserId\FindAllTasksByUserIdQuery;
-use App\Task\Query\FindAllByUserId\TaskData;
+use App\Task\Query\Task\FindAllByUserId\FindAllTasksByUserId;
+use App\Task\Query\Task\FindAllByUserId\FindAllTasksByUserIdQuery;
+use App\Task\Query\Task\FindAllByUserId\TaskData;
 use App\User\Domain\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpKernel\Attribute\AsController;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Task\Query\FindAllByUserId;
+namespace App\Task\Query\Task\FindAllByUserId;
 
 use App\AsService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -21,7 +21,7 @@ final class FindAllTasksByUserId
     {
         $dql = <<<'DQL'
                 SELECT
-                NEW App\Task\Query\FindAllByUserId\TaskData(t.id, t.taskName.value, t.isCompleted, t.createdAt)
+                NEW App\Task\Query\Task\FindAllByUserId\TaskData(t.id, t.taskName.value, t.isCompleted, t.createdAt)
                 FROM App\Task\Domain\Task AS t
                 WHERE t.userId = :userId
                 ORDER BY t.isCompleted, t.createdAt DESC
