@@ -10,11 +10,13 @@ use App\Task\Query\FindAllByUserId\FindAllTasksByUserIdQuery;
 use App\Task\Query\FindAllByUserId\TaskData;
 use App\User\Domain\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 #[IsGranted('ROLE_USER')]
 #[Route('/tasks', methods: ['GET'])]
+#[AsController]
 final class TaskListAction
 {
     public function __construct(private readonly FindAllTasksByUserId $findAllTasksByUserId)

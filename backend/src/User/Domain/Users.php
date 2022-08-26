@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\User\Domain;
 
+use App\AsService;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Webmozart\Assert\Assert;
 
+#[AsService]
 final class Users
 {
     /**

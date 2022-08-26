@@ -10,10 +10,12 @@ use App\Task\Command\UpdateTaskName\UpdateTaskName;
 use App\Task\Command\UpdateTaskName\UpdateTaskNameCommand;
 use App\Task\Domain\Task;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[IsGranted('ROLE_USER')]
 #[Route('/tasks/{id}/update-task-name', methods: ['POST'])]
+#[AsController]
 final class UpdateTaskNameAction
 {
     public function __construct(private readonly UpdateTaskName $updateTaskName)

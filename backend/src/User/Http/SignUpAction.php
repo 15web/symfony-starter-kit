@@ -11,9 +11,11 @@ use App\Infrastructure\SuccessResponse;
 use App\User\Command\SingUp\SignUp;
 use App\User\Command\SingUp\SignUpCommand;
 use App\User\Command\SingUp\UserAlreadyExistException;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/sign-up', methods: ['POST'])]
+#[AsController]
 final class SignUpAction
 {
     public function __construct(private readonly SignUp $signUp)

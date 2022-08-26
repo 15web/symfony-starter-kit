@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Task\Query\FindAllByUserId;
 
+use App\AsService;
 use Doctrine\ORM\EntityManagerInterface;
 
+#[AsService]
 final class FindAllTasksByUserId
 {
     public function __construct(private readonly EntityManagerInterface $entityManager)

@@ -8,10 +8,12 @@ use App\Infrastructure\SuccessResponse;
 use App\Task\Command\RemoveTask;
 use App\Task\Domain\Task;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[IsGranted('ROLE_USER')]
 #[Route('/tasks/{id}/remove', methods: ['POST'])]
+#[AsController]
 final class RemoveTaskAction
 {
     public function __construct(private readonly RemoveTask $removeTask)

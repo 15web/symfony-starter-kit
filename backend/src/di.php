@@ -2,13 +2,18 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\ApiException;
+namespace App;
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $di): void {
     $services = $di->services()->defaults()->autowire()->autoconfigure();
 
-    $services->set(ExceptionEventSubscriber::class);
-    $services->set(CreateExceptionJsonResponse::class);
+    $services
+        ->load('App\\', './*')
+        ->exclude([
+            './{di.php}',
+            './**/{di.php}',
+            './**/{config.php}',
+        ]);
 };

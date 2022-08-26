@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\User\Http;
 
+use App\AsService;
 use App\Infrastructure\ApiException\ApiUnauthorizedException;
 use App\Infrastructure\ApiException\CreateExceptionJsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,6 +17,7 @@ use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface
  *
  * @see https://symfony.com/doc/current/security/access_denied_handler.html#customize-the-unauthorized-response
  */
+#[AsService]
 final class AuthenticationEntryPoint implements AuthenticationEntryPointInterface
 {
     public function __construct(private readonly CreateExceptionJsonResponse $createExceptionJsonResponse)

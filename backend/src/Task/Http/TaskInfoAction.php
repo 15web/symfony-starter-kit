@@ -12,12 +12,14 @@ use App\Task\Query\FindById\TaskData;
 use App\Task\Query\FindById\TaskNotFoundException;
 use App\User\Domain\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Uid\Uuid;
 
 #[IsGranted('ROLE_USER')]
 #[Route('/tasks/{id}', methods: ['GET'])]
+#[AsController]
 final class TaskInfoAction
 {
     public function __construct(private readonly FindTaskById $findTaskById)

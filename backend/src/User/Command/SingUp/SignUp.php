@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\User\Command\SingUp;
 
+use App\AsService;
 use App\User\Domain\User;
 use App\User\Domain\UserEmail;
 use App\User\Domain\Users;
@@ -13,6 +14,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\String\ByteString;
 
+#[AsService]
 final class SignUp
 {
     public function __construct(

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Task\Http\Export\Xml;
 
+use App\AsService;
 use App\Task\Http\Export\Exporter;
 use App\Task\Http\Export\Format;
 use App\Task\Query\FindAllByUserId\TaskData;
@@ -13,6 +14,7 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\SerializerInterface;
 
+#[AsService]
 final class XmlExporter implements Exporter
 {
     public function __construct(

@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\ApiException;
 
+use App\AsService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\SerializerInterface;
 
+#[AsService]
 final class CreateExceptionJsonResponse
 {
     public function __construct(private readonly SerializerInterface $serializer)

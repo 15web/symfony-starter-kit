@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace App\User\Command;
 
+use App\AsService;
 use App\User\Domain\User;
 use App\User\Domain\UserToken;
 use App\User\Domain\UserTokens;
 use Doctrine\ORM\EntityManagerInterface;
 
+#[AsService]
 final class CreateToken
 {
     public function __construct(
