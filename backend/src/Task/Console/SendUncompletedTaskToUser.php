@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Task\Console;
 
-use App\Task\Query\FindUncompletedTasksByUserId\FindUncompletedTasksByUserId;
-use App\Task\Query\FindUncompletedTasksByUserId\FindUncompletedTasksByUserIdQuery;
+use App\Task\Query\Task\FindUncompletedTasksByUserId\FindUncompletedTasksByUserId;
+use App\Task\Query\Task\FindUncompletedTasksByUserId\FindUncompletedTasksByUserIdQuery;
 use App\User\Domain\Users;
 use Psr\Log\LoggerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;

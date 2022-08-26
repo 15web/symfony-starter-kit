@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Task\Query\FindUncompletedTasksByUserId;
+namespace App\Task\Query\Task\FindUncompletedTasksByUserId;
 
 use App\AsService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -21,7 +21,7 @@ final class FindUncompletedTasksByUserId
     {
         $dql = <<<'DQL'
                 SELECT
-                NEW App\Task\Query\FindUncompletedTasksByUserId\TaskData(t.taskName.value, t.createdAt)
+                NEW App\Task\Query\Task\FindUncompletedTasksByUserId\TaskData(t.taskName.value, t.createdAt)
                 FROM App\Task\Domain\Task AS t
                 WHERE t.userId = :userId AND t.isCompleted = false
                 ORDER BY t.createdAt DESC

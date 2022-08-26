@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Task\Domain;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 
@@ -23,6 +25,12 @@ class Task
     #[ORM\Column]
     private bool $isCompleted;
 
+    /**
+     * @var Collection<int, TaskComment>
+     */
+    #[ORM\OneToMany(mappedBy: 'task', targetEntity: TaskComment::class, cascade: ['all'], orphanRemoval: true)]
+    private Collection $comments;
+
     #[ORM\Column]
     private readonly \DateTimeImmutable $createdAt;
 
@@ -41,6 +49,7 @@ class Task
         $this->completedAt = null;
         $this->updatedAt = null;
         $this->isCompleted = false;
+        $this->comments = new ArrayCollection();
     }
 
     public function changeTaskName(TaskName $taskName): void
@@ -58,5 +67,14 @@ class Task
         $this->isCompleted = true;
         $this->updatedAt = new \DateTimeImmutable();
         $this->completedAt = new \DateTimeImmutable();
+    }
+
+    public function addComment(TaskComment $taskComment): void
+    {
+        if ($this->isCompleted === true) {
+            throw new AddCommentToCompletedTaskException('Нельзя добавлять комментарии в выполненную задачу');
+        }
+
+        $this->comments->add($taskComment);
     }
 }

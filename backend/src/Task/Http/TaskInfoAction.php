@@ -6,10 +6,10 @@ namespace App\Task\Http;
 
 use App\Infrastructure\ApiException\ApiNotFoundException;
 use App\Infrastructure\ApiException\ApiUnauthorizedException;
-use App\Task\Query\FindById\FindTaskById;
-use App\Task\Query\FindById\FindTaskByIdQuery;
-use App\Task\Query\FindById\TaskData;
-use App\Task\Query\FindById\TaskNotFoundException;
+use App\Task\Query\Task\FindById\FindTaskById;
+use App\Task\Query\Task\FindById\FindTaskByIdQuery;
+use App\Task\Query\Task\FindById\TaskData;
+use App\Task\Query\Task\FindById\TaskNotFoundException;
 use App\User\Domain\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpKernel\Attribute\AsController;
