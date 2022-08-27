@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Command;
 
-use App\Task\Query\FindUncompletedTasksByUserId\TaskData;
+use App\Task\Query\Task\FindUncompletedTasksByUserId\TaskData;
 use App\Tests\Functional\SDK\ApiWebTestCase;
 use App\Tests\Functional\SDK\Task;
 use App\Tests\Functional\SDK\User;
