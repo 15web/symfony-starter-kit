@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\ApiException;
 
-use App\AsService;
+use App\Infrastructure\AsService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\SerializerInterface;

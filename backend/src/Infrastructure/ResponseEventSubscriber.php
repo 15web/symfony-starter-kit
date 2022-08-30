@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Infrastructure;
 
-use App\AsService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;

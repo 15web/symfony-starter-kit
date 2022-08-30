@@ -2,8 +2,20 @@ parameters:
     paths:
         - ./src
     exclude_files:
-        - '#.*test.*#'
+        - '#.*test.*#i'
     layers:
+        -
+            name: Vendor
+            collectors:
+                -
+                    type: className
+                    regex: (Symfony|Sensio|Doctrine|Webmozart|Psr)\\.*
+        -
+            name: Kernel
+            collectors:
+                -
+                    type: class
+                    value: App\\Kernel
         -
             name: Infrastructure
             collectors:
@@ -16,6 +28,12 @@ parameters:
                 -
                     type: className
                     regex: App\\.*\\Http\\.*
+        -
+            name: Console
+            collectors:
+                -
+                    type: className
+                    regex: App\\.*\\Console\\.*
         -
             name: Domain
             collectors:
@@ -46,15 +64,31 @@ parameters:
             - Command
             - Query
             - Infrastructure
+            - Vendor
+        Console:
+            - Domain
+            - Command
+            - Query
+            - Infrastructure
+            - Vendor
         Notification:
             - Domain
             - Infrastructure
+            - Vendor
         Command:
             - Domain
             - Infrastructure
             - Notification
+            - Vendor
         Query:
             - Infrastructure
+            - Vendor
         Domain:
             - Infrastructure
-        Infrastructure: ~
+            - Vendor
+        Infrastructure:
+            - Vendor
+        Kernel:
+            - Infrastructure
+            - Vendor
+        Vendor: ~

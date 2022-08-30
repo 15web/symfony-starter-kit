@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\ApiException;
 
-use App\AsService;
+use App\Infrastructure\AsService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\KernelEvents;

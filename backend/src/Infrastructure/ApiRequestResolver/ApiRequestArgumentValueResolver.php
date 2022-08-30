@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\ApiRequestResolver;
 
-use App\AsService;
 use App\Infrastructure\ApiException\ApiBadRequestException;
+use App\Infrastructure\AsService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;

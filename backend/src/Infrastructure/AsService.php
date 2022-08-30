@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App;
+namespace App\Infrastructure;
 
 #[\Attribute(\Attribute::TARGET_CLASS)]
 final class AsService

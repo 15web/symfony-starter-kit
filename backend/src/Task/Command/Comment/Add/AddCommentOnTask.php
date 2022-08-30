@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Task\Command\Comment\Add;
 
-use App\AsService;
+use App\Infrastructure\AsService;
 use App\Task\Domain\Task;
 use App\Task\Domain\TaskComment;
 use App\Task\Domain\TaskCommentBody;
