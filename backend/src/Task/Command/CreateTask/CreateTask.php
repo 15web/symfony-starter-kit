@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Task\Command\CreateTask;
 
-use App\AsService;
+use App\Infrastructure\AsService;
 use App\Task\Domain\Task;
 use App\Task\Domain\TaskId;
 use App\Task\Domain\TaskName;

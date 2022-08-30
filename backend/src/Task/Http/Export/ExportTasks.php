@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Task\Http\Export;
 
-use App\AsService;
+use App\Infrastructure\AsService;
 use App\Task\Query\Task\FindAllByUserId\FindAllTasksByUserId;
 use App\Task\Query\Task\FindAllByUserId\FindAllTasksByUserIdQuery;
 use App\User\Domain\User;

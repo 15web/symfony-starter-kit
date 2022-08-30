@@ -9,7 +9,13 @@ parameters:
             collectors:
                 -
                     type: className
-                    regex: (Symfony|Sensio|Doctrine|Webmozart)\\.*
+                    regex: (Symfony|Sensio|Doctrine|Webmozart|Psr)\\.*
+        -
+            name: Kernel
+            collectors:
+                -
+                    type: class
+                    value: App\\Kernel
         -
             name: Infrastructure
             collectors:
@@ -22,6 +28,12 @@ parameters:
                 -
                     type: className
                     regex: App\\.*\\Http\\.*
+        -
+            name: Console
+            collectors:
+                -
+                    type: className
+                    regex: App\\.*\\Console\\.*
         -
             name: Domain
             collectors:
@@ -53,6 +65,12 @@ parameters:
             - Query
             - Infrastructure
             - Vendor
+        Console:
+            - Domain
+            - Command
+            - Query
+            - Infrastructure
+            - Vendor
         Notification:
             - Domain
             - Infrastructure
@@ -70,5 +88,7 @@ parameters:
             - Vendor
         Infrastructure:
             - Vendor
-        Vendor:
+        Kernel:
+            - Infrastructure
             - Vendor
+        Vendor: ~

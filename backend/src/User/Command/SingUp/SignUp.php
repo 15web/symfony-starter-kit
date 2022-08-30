@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\User\Command\SingUp;
 
-use App\AsService;
+use App\Infrastructure\AsService;
 use App\User\Domain\User;
 use App\User\Domain\UserEmail;
 use App\User\Domain\Users;

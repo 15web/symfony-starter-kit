@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Task\Http;
 
-use App\AsService;
+use App\Infrastructure\AsService;
 use App\Infrastructure\ApiException\ApiBadRequestException;
 use App\Infrastructure\ApiException\ApiNotFoundException;
 use App\Infrastructure\ApiException\ApiUnauthorizedException;

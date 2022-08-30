@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Task\Query\Task\FindById;
 
-use App\AsService;
+use App\Infrastructure\AsService;
 use Doctrine\ORM\EntityManagerInterface;
 
 #[AsService]
