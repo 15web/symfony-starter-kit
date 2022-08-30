@@ -115,9 +115,10 @@
         "validate-doctrine-schema": "bin/console doctrine:schema:validate -v",
         "cache-prod-check": "bin/console cache:warmup --env=prod",
         "validate-openapi-schema": "vendor/bin/php-openapi validate ./openapi.yaml",
-        "deptrac-check": "vendor/bin/deptrac analyse --config-file=deptrac.yaml --cache-file=var/cache/.deptrac.cache",
-        "deprications-check": "bin/console debug:container --deprecations",
-        "check": "@parallel container-lint validate-doctrine-schema twig-lint stan fixer-check sniffer-check cache-prod-check validate-openapi-schema deptrac-check",
+        "deptrac-check": "vendor/bin/deptrac analyse --fail-on-uncovered --report-uncovered --config-file=deptrac.yaml --cache-file=var/cache/.deptrac.cache",
+        "deptrac-check-unassigned": "vendor/bin/deptrac debug:unassigned --config-file=deptrac.yaml --cache-file=var/cache/.deptrac.cache | tee /dev/stderr | grep 'There are no unassigned tokens'",
+        "deprecations-check": "bin/console debug:container --deprecations",
+        "check": "@parallel container-lint validate-doctrine-schema twig-lint stan fixer-check sniffer-check cache-prod-check validate-openapi-schema deptrac-check deptrac-check-unassigned",
         "fix": ["@fixer-fix", "@sniffer-fix"]
     },
     "conflict": {
