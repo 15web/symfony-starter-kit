@@ -2,8 +2,14 @@ parameters:
     paths:
         - ./src
     exclude_files:
-        - '#.*test.*#'
+        - '#.*test.*#i'
     layers:
+        -
+            name: Vendor
+            collectors:
+                -
+                    type: className
+                    regex: (Symfony|Sensio|Doctrine|Webmozart)\\.*
         -
             name: Infrastructure
             collectors:
@@ -46,15 +52,23 @@ parameters:
             - Command
             - Query
             - Infrastructure
+            - Vendor
         Notification:
             - Domain
             - Infrastructure
+            - Vendor
         Command:
             - Domain
             - Infrastructure
             - Notification
+            - Vendor
         Query:
             - Infrastructure
+            - Vendor
         Domain:
             - Infrastructure
-        Infrastructure: ~
+            - Vendor
+        Infrastructure:
+            - Vendor
+        Vendor:
+            - Vendor
