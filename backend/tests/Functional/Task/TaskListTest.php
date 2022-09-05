@@ -27,4 +27,24 @@ final class TaskListTest extends ApiWebTestCase
             self::assertNotNull($task['taskName']);
         }
     }
+
+    public function testNoAccessAnotherUser(): void {
+        $token = User::auth();
+        Task::create('Тестовая задача 1', $token);
+        Task::create('Тестовая задача 2', $token);
+
+        $this->tearDown();
+        $tokenSecond = User::auth('second@example.com');
+        $taskId3 = Task::createAndReturnId($taskName3 = 'Тестовая задача 3', $tokenSecond);
+        $taskId4 = Task::createAndReturnId($taskName4 = 'Тестовая задача 4', $tokenSecond);
+
+        $tasks = Task::list($token);
+
+        foreach ($tasks as $task) {
+            self::assertNotEquals($task['id'], $taskId3);
+            self::assertNotEquals($task['id'], $taskId4);
+            self::assertNotEquals($task['taskName'], $taskName3);
+            self::assertNotEquals($task['taskName'], $taskName4);
+        }
+    }
 }

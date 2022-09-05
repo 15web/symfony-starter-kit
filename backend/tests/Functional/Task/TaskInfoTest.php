@@ -44,4 +44,16 @@ final class TaskInfoTest extends ApiWebTestCase
         $response = self::request('GET', "/api/tasks/{$taskId}", token: $token);
         self::assertNotFound($response);
     }
+
+    public function testNoAccessAnotherUser(): void {
+        $token = User::auth();
+        Task::create('Тестовая задача №1', $token);
+
+        $this->tearDown();
+        $tokenSecond = User::auth('second@example.com');
+        $taskId = Task::createAndReturnId('Тестовая задача №2 ', $tokenSecond);
+
+        $response = self::request('GET', "/api/tasks/{$taskId}", token: $token);
+        self::assertNotFound($response);
+    }
 }
