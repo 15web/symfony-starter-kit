@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional\User;
 
+use App\Infrastructure\ApiException\ApiErrorCode;
 use App\Tests\Functional\SDK\ApiWebTestCase;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 
@@ -37,7 +38,7 @@ final class SignUpTest extends ApiWebTestCase
         self::request('POST', '/api/sign-up', $body);
         $response = self::request('POST', '/api/sign-up', $body);
 
-        self::assertApiError($response, 1);
+        self::assertApiError($response, ApiErrorCode::UserAlreadyExist->value);
     }
 
     public function testBadRequest(): void

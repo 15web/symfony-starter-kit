@@ -55,12 +55,14 @@ installTest() {
     runBackend ./bin/console doctrine:migrations:migrate --no-interaction
     runBackend ./bin/console messenger:setup-transports
 
-    compose exec -T mysql mysql -proot -e "drop database if exists db_name_test;";
-    compose exec -T mysql mysql -proot -e "create database if not exists db_name_test;";
-    compose exec -T mysql mysql -proot -e "GRANT ALL PRIVILEGES ON db_name_test.* TO 'db_user'@'%';";
+    for (( i=1; i<=4; i++ ))
+    do
+        compose exec -T mysql mysql -proot -e "drop database if exists db_name_test$i;";
+        compose exec -T mysql mysql -proot -e "create database if not exists db_name_test$i;";
+        compose exec -T mysql mysql -proot -e "GRANT ALL PRIVILEGES ON db_name_test$i.* TO 'db_user'@'%';";
 
-    runBackend bin/console --env=test doctrine:migrations:migrate --no-interaction
-    runBackend bin/console --env=test cache:clear
+        compose run -e TEST_TOKEN=$i --rm backend bin/console --env=test doctrine:migrations:migrate --no-interaction
+    done
 }
 
 install() {
@@ -155,7 +157,7 @@ case $COMMAND in
         runBackend composer check
 
         runBackend bin/console --env=test cache:clear
-        compose run --rm -e APP_ENV=test backend bin/phpunit
+        compose run --rm -e APP_ENV=test backend vendor/bin/paratest -p4
 
         runBackend bin/console app:openapi-routes-diff ./openapi.yaml
 
@@ -169,7 +171,7 @@ case $COMMAND in
         setupEnvs;
 
         runBackend bin/console --env=test cache:clear
-        compose run --rm -e APP_ENV=test backend bin/phpunit -v
+        compose run --rm -e APP_ENV=test backend vendor/bin/paratest -p4
         ;;
     fix | f)
         setupEnvs;

@@ -39,6 +39,7 @@
         "webmozart/assert": "^1.10"
     },
     "require-dev": {
+        "brianium/paratest": "^6.6",
         "cebe/php-openapi": "^1.7",
         "dama/doctrine-test-bundle": "^7.1",
         "friendsofphp/php-cs-fixer": "^3.8",
