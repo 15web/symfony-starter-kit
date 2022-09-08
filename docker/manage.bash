@@ -157,7 +157,7 @@ case $COMMAND in
         runBackend composer check
 
         runBackend bin/console --env=test cache:clear
-        compose run --rm -e APP_ENV=test backend bin/phpunit
+        compose run --rm -e APP_ENV=test backend vendor/bin/paratest -p4
 
         runBackend bin/console app:openapi-routes-diff ./openapi.yaml
 
