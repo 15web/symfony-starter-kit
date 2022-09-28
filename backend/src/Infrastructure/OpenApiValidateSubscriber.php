@@ -16,6 +16,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 
+#[AsService]
 #[When('dev')]
 #[When('test')]
 final class OpenApiValidateSubscriber implements EventSubscriberInterface
@@ -38,12 +39,12 @@ final class OpenApiValidateSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @return array<class-string, string>
+     * {@inheritDoc}
      */
     public static function getSubscribedEvents(): array
     {
         return [
-            RequestEvent::class => 'onKernelRequest',
+            RequestEvent::class => ['onKernelRequest', 9], // запускать после TraceableFirewallListener, иначе первой будет ошибка аутентификации
             ResponseEvent::class => 'onKernelResponse',
         ];
     }
