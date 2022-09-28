@@ -20,6 +20,7 @@ paths:
                                     format: email
                                     description: 'Email пользователя'
                                     example: 'test@test.ru'
+                            additionalProperties: false
                             required:
                                 - email
             responses:
@@ -28,7 +29,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                anyOf:
+                                oneOf:
                                     -   $ref: '#/components/schemas/successResponse'
                                     -   $ref: '#/components/schemas/errorResponse'
                 400:
@@ -60,6 +61,7 @@ paths:
                                     type: string
                                     description: 'Пароль пользователя'
                                     example: 'qwer1234'
+                            additionalProperties: false
                             required:
                                 - email
                                 - password
@@ -69,9 +71,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                anyOf:
-                                    -   $ref: '#/components/schemas/authResponse'
-                                    -   $ref: '#/components/schemas/errorResponse'
+                                $ref: '#/components/schemas/authResponse'
                 400:
                     description: 'Ошибка запроса'
                     content:
@@ -126,6 +126,12 @@ paths:
                                 type: array
                                 items:
                                     type: object
+                                    required:
+                                        - id
+                                        - taskName
+                                        - isCompleted
+                                        - createdAt
+                                    additionalProperties: false
                                     properties:
                                         id:
                                             type: string
@@ -140,6 +146,10 @@ paths:
                                             type: boolean
                                             description: 'Выполнена ли задача'
                                             example: true
+                                        createdAt:
+                                            type: string
+                                            description: 'Дата создания'
+                                            example: '2021-10-28T16:19:44+00:00'
                 401:
                     description: 'Доступ запрещен'
                     content:
@@ -164,6 +174,14 @@ paths:
                         application/json:
                             schema:
                                 type: object
+                                required:
+                                    - id
+                                    - taskName
+                                    - isCompleted
+                                    - createdAt
+                                    - completedAt
+                                    - updatedAt
+                                additionalProperties: false
                                 properties:
                                     id:
                                         type: string
@@ -218,6 +236,7 @@ paths:
                                     type: string
                                     description: 'Наименование задачи'
                                     example: 'Моя первая задача'
+                            additionalProperties: false
                             required:
                                 - taskName
             responses:
@@ -227,6 +246,9 @@ paths:
                         application/json:
                             schema:
                                 type: object
+                                required:
+                                    - id
+                                additionalProperties: false
                                 properties:
                                     id:
                                         type: string
@@ -269,6 +291,7 @@ paths:
                                     type: string
                                     description: 'Наименование задачи'
                                     example: 'Моя вторая задача'
+                            additionalProperties: false
                             required:
                                 - taskName
             responses:
@@ -477,6 +500,9 @@ components:
     schemas:
         successResponse:
             type: object
+            required:
+                - success # Указываем что параметр success обязателен
+            additionalProperties: false
             properties:
                 success:
                     enum: [ true ]
@@ -484,6 +510,11 @@ components:
                     default: true
         errorResponse:
             type: object
+            required:
+                - error
+                - code
+                - errorMessage
+            additionalProperties: false
             properties:
                 error:
                     type: boolean
@@ -499,6 +530,10 @@ components:
                 errorMessage: 'Ошибка валидации'
         authResponse:
             type: object
+            required:
+                - token
+                - email
+            additionalProperties: false
             properties:
                 token:
                     type: string
