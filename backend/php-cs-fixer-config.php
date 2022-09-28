@@ -2,7 +2,14 @@
 
 declare(strict_types=1);
 
-$finder = (new PhpCsFixer\Finder())->in([__DIR__.'/src']);
+use App\Tests\Functional\SDK\ApiWebTestCase;
+
+$finder = (new PhpCsFixer\Finder())
+    ->notPath('Functional/SDK/ApiWebTestCase.php')
+    ->in([
+    __DIR__.'/src',
+    __DIR__.'/tests',
+]);
 
 return (new PhpCsFixer\Config())
     ->setCacheFile(__DIR__.'/var/cache/.php-cs-fixer-cache')

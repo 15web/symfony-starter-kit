@@ -20,7 +20,7 @@ final class UserTest extends TestCase
         self::assertNotNull($user->getCreatedAt());
 
         self::assertCount(1, $user->getRoles());
-        self::assertSame('ROLE_USER', ($user->getRoles())[0]);
+        self::assertSame('ROLE_USER', $user->getRoles()[0]);
     }
 
     public function testCorrectPasswordStore(): void

@@ -8,6 +8,7 @@ use App\Infrastructure\OpenApiValidateSubscriber;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Uid\Uuid;
 use Webmozart\Assert\Assert;
 
 class ApiWebTestCase extends WebTestCase
@@ -23,7 +24,6 @@ class ApiWebTestCase extends WebTestCase
         bool $disableValidateRequestSchema = false,
         bool $disableValidateResponseSchema = false,
     ): Response {
-
         Assert::notEmpty($method);
         Assert::notEmpty($uri);
 
@@ -100,5 +100,17 @@ class ApiWebTestCase extends WebTestCase
     public static function assertForbidden(Response $response): void
     {
         self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+    }
+
+    /**
+     * @return iterable<array<string>>
+     */
+    private function notValidTokenDataProvider(): iterable
+    {
+        yield [''];
+
+        yield ['просто не пустая строка'];
+
+        yield [(string) Uuid::v4()];
     }
 }
