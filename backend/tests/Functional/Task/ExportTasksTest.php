@@ -61,4 +61,37 @@ final class ExportTasksTest extends ApiWebTestCase
             self::assertFalse((bool) $task['isCompleted']);
         }
     }
+
+    public function testEmptyCsvExport(): void
+    {
+        $token = User::auth();
+
+        /** @var BinaryFileResponse $response */
+        $response = self::request('GET', '/api/export/tasks.csv', token: $token);
+        self::assertSuccessResponse($response);
+
+        $file = $response->getFile();
+        $csvEncoder = new CsvEncoder();
+
+        $tasks = $csvEncoder->decode($file->getContent(), CsvEncoder::FORMAT);
+
+        self::assertSame("\n\n", $file->getContent()); // пустой файл содержит "\n\n"
+        self::assertSame([['' => null]], $tasks); // [['' => null]] такой формат выдается при decode пустого файла
+    }
+
+    public function testEmptyXmlExport(): void
+    {
+        $token = User::auth();
+
+        /** @var BinaryFileResponse $response */
+        $response = self::request('GET', '/api/export/tasks.xml', token: $token);
+        self::assertSuccessResponse($response);
+
+        $file = $response->getFile();
+        $xmlEncoder = new XmlEncoder();
+
+        $tasks = $xmlEncoder->decode($file->getContent(), XmlEncoder::FORMAT);
+
+        self::assertEmpty($tasks);
+    }
 }

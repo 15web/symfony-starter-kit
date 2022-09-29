@@ -33,12 +33,13 @@ final class XmlExporter implements Exporter
      */
     public function export(array $tasks): BinaryFileResponse
     {
-        $csvTaskData = $this->serializer->serialize($this->adaptData($tasks), XmlEncoder::FORMAT);
+        $xmlTaskData = $this->serializer->serialize($this->adaptData($tasks), XmlEncoder::FORMAT);
 
         $file = $this->filesystem->tempnam('/tmp', 'user_');
-        file_put_contents($file, $csvTaskData);
+        file_put_contents($file, $xmlTaskData);
 
         $response = new BinaryFileResponse($file);
+        $response->headers->set('Content-Type', $response->getFile()->getMimeType());
         $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, 'tasks.xml');
 
         return $response;

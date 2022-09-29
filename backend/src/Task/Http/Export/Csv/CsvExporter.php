@@ -39,6 +39,7 @@ final class CsvExporter implements Exporter
         file_put_contents($file, $csvTaskData);
 
         $response = new BinaryFileResponse($file);
+        $response->headers->set('Content-Type', 'text/csv');
         $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, 'tasks.csv');
 
         return $response;
