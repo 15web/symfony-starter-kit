@@ -9,7 +9,7 @@ parameters:
             collectors:
                 -
                     type: className
-                    regex: (Symfony|Sensio|Doctrine|Webmozart|Psr)\\.*
+                    regex: (Symfony|Sensio|Doctrine|Webmozart|Psr|League|Nyholm)\\.*
         -
             name: Kernel
             collectors:
