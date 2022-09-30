@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional\Task;
 
-use App\Task\Http\Export\Csv\CsvTaskData;
 use App\Tests\Functional\SDK\ApiWebTestCase;
 use App\Tests\Functional\SDK\Task;
 use App\Tests\Functional\SDK\User;
@@ -93,5 +92,50 @@ final class ExportTasksTest extends ApiWebTestCase
         $tasks = $xmlEncoder->decode($file->getContent(), XmlEncoder::FORMAT);
 
         self::assertEmpty($tasks);
+    }
+
+    /**
+     * @dataProvider notValidTokenDataProvider
+     */
+    public function testAccessDenied(string $notValidToken): void
+    {
+        $token = User::auth();
+        Task::create('Тестовая задача 1', $token);
+
+        $response = self::request('GET', '/api/export/tasks.xml', token: $notValidToken);
+
+        self::assertAccessDenied($response);
+
+        $response = self::request('GET', '/api/export/tasks.csv', token: $notValidToken);
+
+        self::assertAccessDenied($response);
+    }
+
+    public function testNoAccessAnotherUser(): void
+    {
+        $token = User::auth();
+        Task::create('Тестовая задача 1', $token);
+        Task::create('Тестовая задача 2', $token);
+
+        $this->tearDown();
+        $tokenSecond = User::auth('second@example.com');
+        $taskId3 = Task::createAndReturnId($taskName3 = 'Тестовая задача 3', $tokenSecond);
+        $taskId4 = Task::createAndReturnId($taskName4 = 'Тестовая задача 4', $tokenSecond);
+
+        /** @var BinaryFileResponse $response */
+        $response = self::request('GET', '/api/export/tasks.csv', token: $token);
+        self::assertSuccessResponse($response);
+
+        $file = $response->getFile();
+        $csvEncoder = new CsvEncoder();
+
+        $tasks = $csvEncoder->decode($file->getContent(), CsvEncoder::FORMAT);
+
+        foreach ($tasks as $task) {
+            self::assertNotSame($task['id'], $taskId3);
+            self::assertNotSame($task['id'], $taskId4);
+            self::assertNotSame($task['taskName'], $taskName3);
+            self::assertNotSame($task['taskName'], $taskName4);
+        }
     }
 }

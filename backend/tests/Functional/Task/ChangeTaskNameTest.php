@@ -52,6 +52,51 @@ final class ChangeTaskNameTest extends ApiWebTestCase
         $this->assertBadRequests(['taskName' => ''], $token);
     }
 
+    /**
+     * @dataProvider notValidTokenDataProvider
+     */
+    public function testAccessDenied(string $notValidToken): void
+    {
+        $token = User::auth();
+        $taskId = Task::createAndReturnId('Тестовая задача 1', $token);
+
+        $body = [];
+        $body['taskName'] = 'Тестовая задача 2';
+        $body = json_encode($body, JSON_THROW_ON_ERROR);
+
+        $response = self::request(
+            'POST',
+            "/api/tasks/{$taskId}/update-task-name",
+            $body,
+            token: $notValidToken
+        );
+
+        self::assertAccessDenied($response);
+    }
+
+    public function testNoAccessAnotherUser(): void
+    {
+        $token = User::auth();
+        Task::create('Тестовая задача №1', $token);
+
+        $this->tearDown();
+        $tokenSecond = User::auth('second@example.com');
+        $taskId = Task::createAndReturnId('Тестовая задача №2 ', $tokenSecond);
+
+        $body = [];
+        $body['taskName'] = 'Тестовая задача 2';
+        $body = json_encode($body, JSON_THROW_ON_ERROR);
+
+        $response = self::request(
+            'POST',
+            "/api/tasks/{$taskId}/update-task-name",
+            $body,
+            token: $token
+        );
+
+        self::assertNotFound($response);
+    }
+
     private function assertBadRequests(array $body, string $token): void
     {
         $taskId = Task::createAndReturnId('Тестовая задача 1', $token);

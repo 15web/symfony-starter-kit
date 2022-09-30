@@ -15,7 +15,6 @@ use App\Task\Domain\TaskName;
 use App\User\Domain\User;
 use App\User\Domain\UserEmail;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Uid\Uuid;
 
 final class TaskTest extends TestCase
 {

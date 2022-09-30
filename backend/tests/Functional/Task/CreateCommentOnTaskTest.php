@@ -63,4 +63,39 @@ final class CreateCommentOnTaskTest extends ApiWebTestCase
         $response = self::request('POST', "/api/tasks/{$taskId}/add-comment", $body, token: $token);
         self::assertBadRequest($response);
     }
+
+    /**
+     * @dataProvider notValidTokenDataProvider
+     */
+    public function testAccessDenied(string $notValidToken): void
+    {
+        $token = User::auth();
+        $taskId = Task::createAndReturnId('Тестовая задача 1', $token);
+
+        $body = [];
+        $body['commentBody'] = $commentText = 'First comment';
+        $body = json_encode($body, JSON_THROW_ON_ERROR);
+
+        $response = self::request('POST', "/api/tasks/{$taskId}/add-comment", $body, token: $notValidToken);
+
+        self::assertAccessDenied($response);
+    }
+
+    public function testNoAccessAnotherUser(): void
+    {
+        $token = User::auth();
+        Task::create('Тестовая задача №1', $token);
+
+        $this->tearDown();
+        $tokenSecond = User::auth('second@example.com');
+        $taskId = Task::createAndReturnId('Тестовая задача №2 ', $tokenSecond);
+
+        $body = [];
+        $body['commentBody'] = $commentText = 'First comment';
+        $body = json_encode($body, JSON_THROW_ON_ERROR);
+
+        $response = self::request('POST', "/api/tasks/{$taskId}/add-comment", $body, token: $token);
+
+        self::assertNotFound($response);
+    }
 }

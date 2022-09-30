@@ -28,6 +28,16 @@ final class CreateTaskTest extends ApiWebTestCase
         self::assertFalse($tasks[0]['isCompleted']);
     }
 
+    /**
+     * @dataProvider notValidTokenDataProvider
+     */
+    public function testAccessDenied(string $notValidToken): void
+    {
+        $response = Task::create('Тестовая задача', $notValidToken);
+
+        self::assertAccessDenied($response);
+    }
+
     public function testBadRequests(): void
     {
         $token = User::auth();

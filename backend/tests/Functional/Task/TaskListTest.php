@@ -28,7 +28,8 @@ final class TaskListTest extends ApiWebTestCase
         }
     }
 
-    public function testNoAccessAnotherUser(): void {
+    public function testNoAccessAnotherUser(): void
+    {
         $token = User::auth();
         Task::create('Тестовая задача 1', $token);
         Task::create('Тестовая задача 2', $token);
@@ -41,10 +42,20 @@ final class TaskListTest extends ApiWebTestCase
         $tasks = Task::list($token);
 
         foreach ($tasks as $task) {
-            self::assertNotEquals($task['id'], $taskId3);
-            self::assertNotEquals($task['id'], $taskId4);
-            self::assertNotEquals($task['taskName'], $taskName3);
-            self::assertNotEquals($task['taskName'], $taskName4);
+            self::assertNotSame($task['id'], $taskId3);
+            self::assertNotSame($task['id'], $taskId4);
+            self::assertNotSame($task['taskName'], $taskName3);
+            self::assertNotSame($task['taskName'], $taskName4);
         }
+    }
+
+    /**
+     * @dataProvider notValidTokenDataProvider
+     */
+    public function testAccessDenied(string $notValidToken): void
+    {
+        $response = self::request('GET', '/api/tasks', token: $notValidToken);
+
+        self::assertAccessDenied($response);
     }
 }

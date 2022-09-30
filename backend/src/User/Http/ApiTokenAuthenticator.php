@@ -42,6 +42,10 @@ final class ApiTokenAuthenticator extends AbstractAuthenticator
             throw new CustomUserMessageAuthenticationException('Не передан токен');
         }
 
+        if (Uuid::isValid($apiToken) === false) {
+            throw new CustomUserMessageAuthenticationException('Невалидный токен');
+        }
+
         $userToken = $this->userTokens->findById(Uuid::fromString($apiToken));
         if ($userToken === null) {
             throw new CustomUserMessageAuthenticationException('Токен не найден');

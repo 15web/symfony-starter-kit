@@ -422,6 +422,16 @@ paths:
                                 errorMessage: 'Неверный формат запроса'
                 404:
                     description: 'Задача не найдена'
+                401:
+                    description: 'Доступ запрещен'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/errorResponse'
+                            example:
+                                error: true
+                                code: 401
+                                errorMessage: 'Необходимо пройти аутентификацию'
     /tasks/{id}/comments:
         get:
             summary: 'Получить список комментариев к задаче'
