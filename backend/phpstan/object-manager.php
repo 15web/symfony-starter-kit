@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Kernel;
+use App\Infrastructure\Kernel;
 use Symfony\Component\Dotenv\Dotenv;
 
 require __DIR__.'/../vendor/autoload.php';

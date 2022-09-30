@@ -10,8 +10,6 @@
 
     <file>src/</file>
 
-    <exclude-pattern>Kernel.php</exclude-pattern>
-
     <config name="installed_paths" value="vendor/slevomat/coding-standard"/><!-- relative path from PHPCS source location -->
 
     <!-- Looks for unused inherited variables passed to closure via use. -->

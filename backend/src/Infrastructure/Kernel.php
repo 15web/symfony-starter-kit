@@ -2,9 +2,8 @@
 
 declare(strict_types=1);
 
-namespace App;
+namespace App\Infrastructure;
 
-use App\Infrastructure\AsService;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
@@ -29,21 +28,21 @@ final class Kernel extends BaseKernel implements CompilerPassInterface
 
     protected function configureContainer(ContainerConfigurator $container): void
     {
-        $container->import('../config/{packages}/*.yaml');
-        $container->import('../config/{packages}/'.$this->environment.'/*.yaml');
+        $container->import('../../config/{packages}/*.yaml');
+        $container->import('../../config/{packages}/'.$this->environment.'/*.yaml');
 
-        $container->import('./**/{config}.php');
+        $container->import('../**/{config}.php');
 
-        $container->import('./**/{di}.php');
-        $container->import("./**/{di}_{$this->environment}.php");
+        $container->import('../**/{di}.php');
+        $container->import("../**/{di}_{$this->environment}.php");
 
         $container->import('./{di}.php');
     }
 
     protected function configureRoutes(RoutingConfigurator $routes): void
     {
-        $routes->import('../config/{routes}/'.$this->environment.'/*.yaml');
-        $routes->import('../config/{routes}/*.yaml');
+        $routes->import('../../config/{routes}/'.$this->environment.'/*.yaml');
+        $routes->import('../../config/{routes}/*.yaml');
     }
 
     private function processClass(ContainerBuilder $container, Definition $definition, string $id): void
