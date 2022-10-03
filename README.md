@@ -38,6 +38,21 @@ cd ./your-folder-name/docker
 ./manage.bash c
 ```
 
+## Инструкция по очистке, для старта проектов
+
+Для старта проекта необходимо удалить ненужные:
+- Модули, т.е. все директории в `backend/src`, кроме `Infrastructure`
+- Тесты из директорий:
+  - `backend/tests/Command`
+  - `backend/tests/Functional`, кроме `backend/tests/Functional/SDK/ApiWebTestCase.php`
+  - `backend/tests/Unit`
+- После удаления модулей сожно удалить все миграции из директории `backend/migrations` и сгенерировать новые.
+- Шаблоны из директории `backend/templates`
+- Переменные окружения из файла `docker/backend/.env.dist`
+- Задания `cron` из файла `docker/backend/cron/crontab`
+- Разделы документации из файла `backend/openapi.yaml`
+- Слои и правила `deptrac` из файла `backend/deptrac.yaml`
+
 ### Copyright and license
 
 Copyright © [Studio 15](http://15web.ru), 2012 - Present.   
