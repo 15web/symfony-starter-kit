@@ -60,6 +60,10 @@ final class OpenApiValidateSubscriber implements EventSubscriberInterface
 
         $request = $event->getRequest();
 
+        if (str_starts_with($request->getPathInfo(), '/_profiler') === true) {
+            return;
+        }
+
         if ($this->appEnv === 'test' && $request->request->get(self::DISABLE_VALIDATE_REQUEST_KEY) === '1') {
             return;
         }
@@ -78,6 +82,10 @@ final class OpenApiValidateSubscriber implements EventSubscriberInterface
         }
 
         $request = $event->getRequest();
+
+        if (str_starts_with($request->getPathInfo(), '/_profiler') === true) {
+            return;
+        }
 
         if ($this->appEnv === 'test' && $request->request->get(self::DISABLE_VALIDATE_RESPONSE_KEY) === '1') {
             return;
