@@ -46,7 +46,7 @@ cd ./your-folder-name/docker
   - `backend/tests/Command`
   - `backend/tests/Functional`, кроме `backend/tests/Functional/SDK/ApiWebTestCase.php`
   - `backend/tests/Unit`
-- После удаления модулей можно удалить все миграции из директории `backend/migrations` и сгенерировать новые.
+- Все миграции из директории `backend/migrations` и сгенерировать новые.
 - Шаблоны из директории `backend/templates`
 - Переменные окружения из файла `docker/backend/.env.dist`
 - Задания `cron` из файла `docker/backend/cron/crontab`
