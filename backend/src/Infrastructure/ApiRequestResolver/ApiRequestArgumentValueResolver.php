@@ -32,9 +32,9 @@ final class ApiRequestArgumentValueResolver implements ArgumentValueResolverInte
     }
 
     /**
-     * @throws ApiBadRequestException
-     *
      * @return iterable<ApiRequest>
+     *
+     * @throws ApiBadRequestException
      */
     public function resolve(Request $request, ArgumentMetadata $argument): iterable
     {
