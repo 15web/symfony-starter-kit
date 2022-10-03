@@ -7,8 +7,6 @@
 
     <file>../src/</file>
 
-    <exclude-pattern>Kernel.php</exclude-pattern>
-
     <!-- Rule: There is no "else" -->
     <rule ref="phpcs.ControlStructures.NoElse"/>
 </ruleset>
