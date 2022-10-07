@@ -54,9 +54,9 @@ final class ApiRequestArgumentValueResolver implements ArgumentValueResolverInte
                 JsonEncoder::FORMAT
             );
         } catch (\InvalidArgumentException $e) {
-            throw new ApiBadRequestException($e->getMessage());
-        } catch (\Exception) {
-            throw new ApiBadRequestException('Неверный формат запроса');
+            throw new ApiBadRequestException($e->getMessage(), $e);
+        } catch (\Throwable $e) {
+            throw new ApiBadRequestException('Неверный формат запроса', $e);
         }
 
         yield $requestObject;

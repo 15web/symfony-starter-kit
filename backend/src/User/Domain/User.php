@@ -4,24 +4,24 @@ declare(strict_types=1);
 
 namespace App\User\Domain;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Uid\Uuid;
 use Webmozart\Assert\Assert;
 
 #[ORM\Entity]
 /** @final */
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+class User
 {
     #[ORM\Id, ORM\Column(type: 'uuid', unique: true)]
-    private Uuid $id;
+    private readonly Uuid $id;
 
     /**
      * Захешированный пароль
      */
-    #[ORM\Column]
-    private ?string $password;
+    #[ORM\Embedded]
+    private UserPassword $userPassword;
 
     #[ORM\Embedded]
     private UserEmail $userEmail;
@@ -30,62 +30,39 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private UserRole $userRole;
 
     #[ORM\Column]
-    private \DateTimeImmutable $createdAt;
-
-    public function __construct(UserEmail $userEmail)
-    {
-        $this->id = Uuid::v4();
-        $this->userEmail = $userEmail;
-        $this->password = null;
-        $this->userRole = UserRole::User;
-        $this->createdAt = new \DateTimeImmutable();
-    }
-
-    public function getRoles(): array
-    {
-        return [$this->userRole->value];
-    }
+    private readonly \DateTimeImmutable $createdAt;
 
     /**
-     * Записать захешированный пароль
+     * @var Collection<int, UserToken>
      */
-    public function applyPassword(string $password): void
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserToken::class, cascade: ['persist'], orphanRemoval: true)]
+    private Collection $userTokens;
+
+    public function __construct(Uuid $id, UserEmail $userEmail, UserRole $userRole, UserPassword $userPassword)
     {
-        Assert::notEmpty($password);
-        $this->password = $password;
+        $this->id = $id;
+        $this->userEmail = $userEmail;
+        $this->userRole = $userRole;
+        $this->userPassword = $userPassword;
+
+        $this->createdAt = new \DateTimeImmutable();
+        $this->userTokens = new ArrayCollection();
     }
 
-    public function eraseCredentials(): void
+    public function applyPassword(UserPassword $userPassword): void
     {
+        Assert::false($this->userPassword->equalTo($userPassword));
+
+        $this->userPassword = $userPassword;
     }
 
-    public function getUserIdentifier(): string
+    public function addToken(UserToken $token): void
     {
-        return $this->userEmail->getValue();
+        $this->userTokens->add($token);
     }
 
-    public function getPassword(): ?string
+    public function removeToken(UserToken $token): void
     {
-        return $this->password;
-    }
-
-    public function getId(): Uuid
-    {
-        return $this->id;
-    }
-
-    public function getUserEmail(): UserEmail
-    {
-        return $this->userEmail;
-    }
-
-    public function getUserRole(): UserRole
-    {
-        return $this->userRole;
-    }
-
-    public function getCreatedAt(): \DateTimeImmutable
-    {
-        return $this->createdAt;
+        $this->userTokens->removeElement($token);
     }
 }

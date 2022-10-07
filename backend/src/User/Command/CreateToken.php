@@ -5,28 +5,27 @@ declare(strict_types=1);
 namespace App\User\Command;
 
 use App\Infrastructure\AsService;
-use App\User\Domain\User;
+use App\Infrastructure\Flush;
+use App\User\Domain\Users;
 use App\User\Domain\UserToken;
-use App\User\Domain\UserTokens;
-use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Uid\Uuid;
 
 #[AsService]
 final class CreateToken
 {
-    public function __construct(
-        private readonly UserTokens $userTokens,
-        private readonly EntityManagerInterface $entityManager,
-    ) {
+    public function __construct(private readonly Users $users, private readonly Flush $flush)
+    {
     }
 
-    public function __invoke(User $user): UserToken
+    public function __invoke(Uuid $userId): Uuid
     {
-        $token = new UserToken($user);
+        $user = $this->users->getById($userId);
 
-        $this->userTokens->add($token);
+        $userTokenId = Uuid::v4();
+        $user->addToken(new UserToken($userTokenId, $user));
 
-        $this->entityManager->flush();
+        ($this->flush)();
 
-        return $token;
+        return $userTokenId;
     }
 }

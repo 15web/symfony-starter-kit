@@ -2,12 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\User\Http;
+namespace App\Infrastructure\Security\Authenticator\ApiToken;
 
 use App\Infrastructure\ApiException\ApiUnauthorizedException;
 use App\Infrastructure\ApiException\CreateExceptionJsonResponse;
 use App\Infrastructure\AsService;
-use App\User\Domain\UserTokens;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -25,7 +24,8 @@ final class ApiTokenAuthenticator extends AbstractAuthenticator
     public const TOKEN_NAME = 'X-AUTH-TOKEN';
 
     public function __construct(
-        private readonly UserTokens $userTokens,
+        private readonly IsTokenExists $isTokenExists,
+        private readonly GetEmailByTokenId $getEmailByTokenId,
         private readonly CreateExceptionJsonResponse $createExceptionJsonResponse,
     ) {
     }
@@ -46,12 +46,18 @@ final class ApiTokenAuthenticator extends AbstractAuthenticator
             throw new CustomUserMessageAuthenticationException('Невалидный токен');
         }
 
-        $userToken = $this->userTokens->findById(Uuid::fromString($apiToken));
-        if ($userToken === null) {
+        $apiTokenUuid = Uuid::fromString($apiToken);
+
+        $isTokenExists = ($this->isTokenExists)($apiTokenUuid);
+        if (!$isTokenExists) {
             throw new CustomUserMessageAuthenticationException('Токен не найден');
         }
 
-        return new SelfValidatingPassport(new UserBadge($userToken->getUser()->getUserEmail()->getValue()));
+        $email = ($this->getEmailByTokenId)($apiTokenUuid);
+
+        return new SelfValidatingPassport(
+            new UserBadge($email)
+        );
     }
 
     /**

@@ -6,7 +6,7 @@ namespace App\Task\Console;
 
 use App\Task\Query\Task\FindUncompletedTasksByUserId\FindUncompletedTasksByUserId;
 use App\Task\Query\Task\FindUncompletedTasksByUserId\FindUncompletedTasksByUserIdQuery;
-use App\User\Domain\Users;
+use App\User\Query\User\FindAllUsers;
 use Psr\Log\LoggerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -23,7 +23,7 @@ final class SendUncompletedTaskToUser extends Command
 
     public function __construct(
         private readonly FindUncompletedTasksByUserId $findUncompletedTasksByUserId,
-        private readonly Users $users,
+        private readonly FindAllUsers $findAllUsers,
         private readonly LoggerInterface $logger,
         private readonly MailerInterface $mailer,
     ) {
@@ -41,16 +41,16 @@ final class SendUncompletedTaskToUser extends Command
             return Command::SUCCESS;
         }
 
-        $users = $this->users->getAll();
+        $users = ($this->findAllUsers)();
         $emailSent = 0;
         foreach ($users as $user) {
-            $uncompletedTasks = ($this->findUncompletedTasksByUserId)(new FindUncompletedTasksByUserIdQuery($user->getId()));
+            $uncompletedTasks = ($this->findUncompletedTasksByUserId)(new FindUncompletedTasksByUserIdQuery($user->id->value));
             if (\count($uncompletedTasks) === 0) {
                 continue;
             }
 
             $email = (new TemplatedEmail())
-                ->to($user->getUserEmail()->getValue())
+                ->to($user->email)
                 ->subject('Невыполненные задачи')
                 ->htmlTemplate('emails/uncompleted-tasks.html.twig')
                 ->context([

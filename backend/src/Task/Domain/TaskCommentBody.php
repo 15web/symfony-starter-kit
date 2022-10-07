@@ -21,7 +21,10 @@ final class TaskCommentBody implements ValueObject
         $this->value = $value;
     }
 
-    public function equalTo(ValueObject $other): bool
+    /**
+     * @param object $other
+     */
+    public function equalTo(mixed $other): bool
     {
         return $other::class === self::class && $this->value === $other->value;
     }

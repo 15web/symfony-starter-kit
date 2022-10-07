@@ -6,34 +6,22 @@ namespace App\User\Domain;
 
 use App\Infrastructure\AsService;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Uid\Uuid;
 
 #[AsService]
 final class UserTokens
 {
-    /**
-     * @var EntityRepository<UserToken>
-     */
-    private readonly EntityRepository $repository;
-
     public function __construct(private readonly EntityManagerInterface $entityManager)
     {
-        $this->repository = $this->entityManager->getRepository(UserToken::class);
     }
 
-    public function add(UserToken $userToken): void
+    public function getById(Uuid $userTokenId): UserToken
     {
-        $this->entityManager->persist($userToken);
-    }
+        $userToken = $this->entityManager->getRepository(UserToken::class)->find($userTokenId);
+        if (!$userToken instanceof UserToken) {
+            throw new \DomainException('Токен пользователя не найден.');
+        }
 
-    public function findById(Uuid $id): ?UserToken
-    {
-        return $this->repository->find($id);
-    }
-
-    public function remove(UserToken $userToken): void
-    {
-        $this->entityManager->remove($userToken);
+        return $userToken;
     }
 }

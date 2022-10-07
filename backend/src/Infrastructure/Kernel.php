@@ -31,12 +31,9 @@ final class Kernel extends BaseKernel implements CompilerPassInterface
         $container->import('../../config/{packages}/*.yaml');
         $container->import('../../config/{packages}/'.$this->environment.'/*.yaml');
 
-        $container->import('../**/{config}.php');
+        $container->import('../**/config.php');
 
-        $container->import('../**/{di}.php');
-        $container->import("../**/{di}_{$this->environment}.php");
-
-        $container->import('./{di}.php');
+        $container->import('./di.php');
     }
 
     protected function configureRoutes(RoutingConfigurator $routes): void

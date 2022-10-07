@@ -9,17 +9,20 @@ use Doctrine\ORM\Mapping as ORM;
 use Webmozart\Assert\Assert;
 
 #[ORM\Embeddable]
-final class UserEmail implements ValueObject
+final class UserPassword implements ValueObject
 {
     #[ORM\Column]
     public readonly string $value;
 
-    public function __construct(string $value)
+    public function __construct(string $plaintextPassword, callable $hasher)
     {
-        Assert::notEmpty($value);
-        Assert::email($value);
+        Assert::notEmpty($plaintextPassword);
 
-        $this->value = $value;
+        $hashedPassword = $hasher($plaintextPassword);
+
+        Assert::notEq($plaintextPassword, $hashedPassword);
+
+        $this->value = $hashedPassword;
     }
 
     /**

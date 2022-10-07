@@ -6,40 +6,37 @@ namespace App\User\Domain;
 
 use App\Infrastructure\AsService;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
-use Webmozart\Assert\Assert;
+use Symfony\Component\Uid\Uuid;
 
 #[AsService]
 final class Users
 {
-    /**
-     * @var EntityRepository<User>
-     */
-    private readonly EntityRepository $repository;
-
     public function __construct(private readonly EntityManagerInterface $entityManager)
     {
-        $this->repository = $this->entityManager->getRepository(User::class);
+    }
+
+    /**
+     * @throws \DomainException
+     */
+    public function getById(Uuid $userId): User
+    {
+        $user = $this->entityManager->getRepository(User::class)->find($userId);
+        if (!$user instanceof User) {
+            throw new \DomainException('Пользователь не найден.');
+        }
+
+        return $user;
+    }
+
+    public function findByEmail(string $email): ?User
+    {
+        return $this->entityManager->getRepository(User::class)->findOneBy([
+            'userEmail.value' => $email,
+        ]);
     }
 
     public function add(User $user): void
     {
         $this->entityManager->persist($user);
-    }
-
-    public function findByEmail(string $email): ?User
-    {
-        Assert::notEmpty($email);
-        Assert::email($email);
-
-        return $this->repository->findOneBy(['userEmail.value' => $email]);
-    }
-
-    /**
-     * @return User[]
-     */
-    public function getAll(): array
-    {
-        return $this->repository->findAll();
     }
 }

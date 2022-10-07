@@ -11,9 +11,9 @@ final class UserEmailTest extends TestCase
 {
     public function testCorrectValue(): void
     {
-        $email = new UserEmail($expectedEmail = 'test@example.com');
+        $userEmail = new UserEmail($expectedEmail = 'test@example.com');
 
-        self::assertSame($expectedEmail, $email->getValue());
+        self::assertSame($expectedEmail, $userEmail->value);
     }
 
     public function testEmptyEmail(): void

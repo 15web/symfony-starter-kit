@@ -16,7 +16,10 @@ final class TaskCommentId implements ValueObject
         $this->value = Uuid::v4();
     }
 
-    public function equalTo(ValueObject $other): bool
+    /**
+     * @param object $other
+     */
+    public function equalTo(mixed $other): bool
     {
         return $other::class === self::class && $this->value->equals($other->value);
     }

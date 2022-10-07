@@ -5,15 +5,13 @@ declare(strict_types=1);
 namespace App\Task\Http\CreateTask;
 
 use App\Infrastructure\ApiException\ApiBadRequestException;
-use App\Infrastructure\ApiException\ApiUnauthorizedException;
+use App\Infrastructure\Security\UserProvider\SecurityUser;
 use App\Task\Command\CreateTask\CreateTask;
 use App\Task\Command\CreateTask\CreateTaskCommand;
 use App\Task\Domain\TaskId;
-use App\User\Domain\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 #[IsGranted('ROLE_USER')]
 #[Route('/tasks/create', methods: ['POST'])]
@@ -24,15 +22,11 @@ final class CreateTaskAction
     {
     }
 
-    public function __invoke(CreateTaskCommand $createTaskCommand, #[CurrentUser] ?User $user): TaskData
+    public function __invoke(CreateTaskCommand $createTaskCommand, SecurityUser $securityUser): TaskData
     {
-        if ($user === null) {
-            throw new ApiUnauthorizedException();
-        }
-
         try {
             $taskId = new TaskId();
-            ($this->createTask)($createTaskCommand, $taskId, $user->getId());
+            ($this->createTask)($createTaskCommand, $taskId, $securityUser->getId());
         } catch (\InvalidArgumentException $e) {
             throw new ApiBadRequestException($e->getMessage());
         }
