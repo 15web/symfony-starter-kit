@@ -5,15 +5,14 @@ declare(strict_types=1);
 namespace App\User\Http;
 
 use App\Infrastructure\ApiException\ApiUnauthorizedException;
+use App\Infrastructure\Security\Authenticator\ApiToken\ApiTokenAuthenticator;
+use App\Infrastructure\Security\UserProvider\SecurityUser;
 use App\Infrastructure\SuccessResponse;
-use App\User\Domain\User;
-use App\User\Domain\UserTokens;
-use Doctrine\ORM\EntityManagerInterface;
+use App\User\Command\DeleteToken;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Uid\Uuid;
 
 #[IsGranted('ROLE_USER')]
@@ -21,30 +20,18 @@ use Symfony\Component\Uid\Uuid;
 #[AsController]
 final class LogoutAction
 {
-    public function __construct(
-        private readonly UserTokens $userTokens,
-        private readonly EntityManagerInterface $entityManager,
-    ) {
+    public function __construct(private readonly DeleteToken $deleteToken)
+    {
     }
 
-    public function __invoke(#[CurrentUser] ?User $user, Request $request): SuccessResponse
+    public function __invoke(SecurityUser $securityUser, Request $request): SuccessResponse
     {
-        if ($user === null) {
-            throw new ApiUnauthorizedException();
-        }
-
         $apiToken = $request->headers->get(ApiTokenAuthenticator::TOKEN_NAME);
         if ($apiToken === null) {
             throw new ApiUnauthorizedException('Отсутствует токен в заголовках');
         }
 
-        $userToken = $this->userTokens->findById(Uuid::fromString($apiToken));
-        if ($userToken === null) {
-            throw new ApiUnauthorizedException('Токен не найден');
-        }
-
-        $this->userTokens->remove($userToken);
-        $this->entityManager->flush();
+        ($this->deleteToken)($securityUser->getId(), Uuid::fromString($apiToken));
 
         return new SuccessResponse();
     }

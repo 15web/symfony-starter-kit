@@ -8,14 +8,15 @@ use App\Infrastructure\ApiException\ApiBadRequestException;
 use App\Infrastructure\ApiException\ApiNotFoundException;
 use App\Infrastructure\ApiException\ApiUnauthorizedException;
 use App\Infrastructure\AsService;
+use App\Infrastructure\Security\UserProvider\SecurityUser;
 use App\Task\Domain\Task;
-use App\User\Domain\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Uid\Uuid;
 use Webmozart\Assert\Assert;
 
@@ -49,11 +50,18 @@ final class TaskArgumentValueResolver implements ArgumentValueResolverInterface
      */
     public function resolve(Request $request, ArgumentMetadata $argument): iterable
     {
-        /** @var User|null $user */
+        /** @var UserInterface|null $user */
         $user = $this->security->getUser();
+
         if ($user === null) {
             throw new ApiUnauthorizedException();
         }
+
+        if ($user instanceof SecurityUser === false) {
+            throw new \DomainException();
+        }
+
+        /** @var SecurityUser $user */
 
         /** @var string|null $taskId */
         $taskId = $request->attributes->get('id');

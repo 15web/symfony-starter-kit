@@ -106,7 +106,7 @@
         "post-update-cmd": [
             "@auto-scripts"
         ],
-        "stan": "vendor/bin/phpstan analyse -c phpstan-config.neon --ansi",
+        "stan": "vendor/bin/phpstan analyse -c phpstan-config.neon --ansi --memory-limit 2G",
         "fixer-check": "php-cs-fixer --config=php-cs-fixer-config.php fix --dry-run --diff --ansi -v",
         "fixer-fix": "php-cs-fixer --config=php-cs-fixer-config.php fix --ansi -v",
         "sniffer-check": "phpcs --standard=phpcs.xml,phpcs/ruleset.xml --colors -p",

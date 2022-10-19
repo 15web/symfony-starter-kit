@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\User\Http;
+namespace App\Infrastructure\Security\Authenticator;
 
 use App\Infrastructure\ApiException\ApiBadRequestException;
 use App\Infrastructure\ApiException\ApiUnauthorizedException;
@@ -50,8 +50,8 @@ final class JsonLoginAuthenticator extends AbstractAuthenticator
             Assert::email($email);
 
             $password = $data[self::PASSWORD_KEY];
-        } catch (\Throwable) {
-            throw new ApiBadRequestException();
+        } catch (\Throwable $e) {
+            throw new ApiBadRequestException(previous: $e);
         }
 
         return new Passport(

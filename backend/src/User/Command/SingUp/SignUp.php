@@ -5,23 +5,26 @@ declare(strict_types=1);
 namespace App\User\Command\SingUp;
 
 use App\Infrastructure\AsService;
+use App\Infrastructure\Flush;
+use App\Infrastructure\Security\CreatePasswordHasher;
 use App\User\Domain\User;
 use App\User\Domain\UserEmail;
+use App\User\Domain\UserPassword;
+use App\User\Domain\UserRole;
 use App\User\Domain\Users;
 use App\User\Notification\NewPasswordMessage;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\String\ByteString;
+use Symfony\Component\Uid\Uuid;
 
 #[AsService]
 final class SignUp
 {
     public function __construct(
-        private readonly UserPasswordHasherInterface $passwordHasher,
-        private readonly EntityManagerInterface $entityManager,
         private readonly Users $users,
+        private readonly Flush $flush,
         private readonly MessageBusInterface $messageBus,
+        private readonly CreatePasswordHasher $createPasswordHasher,
     ) {
     }
 
@@ -32,21 +35,19 @@ final class SignUp
             throw new UserAlreadyExistException('Пользователь с таким email уже существует');
         }
 
+        $userId = Uuid::v4();
         $userEmail = new UserEmail($signUpCommand->email);
-
-        $user = new User($userEmail);
+        $userRole = UserRole::User;
 
         $plaintextPassword = ByteString::fromRandom(10)->toString();
-        $hashedPassword = $this->passwordHasher->hashPassword(
-            $user,
-            $plaintextPassword
-        );
+        $password = new UserPassword($plaintextPassword, $this->createPasswordHasher);
 
-        $user->applyPassword($hashedPassword);
+        $user = new User($userId, $userEmail, $userRole, $password);
 
         $this->users->add($user);
-        $this->entityManager->flush();
 
-        $this->messageBus->dispatch(new NewPasswordMessage($plaintextPassword, $userEmail->getValue()));
+        ($this->flush)();
+
+        $this->messageBus->dispatch(new NewPasswordMessage($plaintextPassword, $userEmail->value));
     }
 }

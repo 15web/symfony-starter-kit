@@ -12,33 +12,20 @@ use Symfony\Component\Uid\Uuid;
 class UserToken
 {
     #[ORM\Id, ORM\Column(type: 'uuid', unique: true)]
-    private Uuid $id;
+    private readonly Uuid $id;
 
-    #[ORM\ManyToOne(fetch: 'EAGER'), ORM\JoinColumn(nullable: false)]
-    private User $user;
+    #[ORM\ManyToOne(fetch: 'EAGER', inversedBy: 'userTokens')]
+    #[ORM\JoinColumn(nullable: false)]
+    private readonly User $user;
 
     #[ORM\Column]
-    private \DateTimeImmutable $createdAt;
+    private readonly \DateTimeImmutable $createdAt;
 
-    public function __construct(User $user)
+    public function __construct(Uuid $id, User $user)
     {
-        $this->id = Uuid::v4();
+        $this->id = $id;
         $this->user = $user;
+
         $this->createdAt = new \DateTimeImmutable();
-    }
-
-    public function getId(): Uuid
-    {
-        return $this->id;
-    }
-
-    public function getUser(): User
-    {
-        return $this->user;
-    }
-
-    public function getCreatedAt(): \DateTimeImmutable
-    {
-        return $this->createdAt;
     }
 }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\User\Http;
+namespace App\Infrastructure\Security\Authenticator;
 
 use App\Infrastructure\ApiException\ApiUnauthorizedException;
 use App\Infrastructure\ApiException\CreateExceptionJsonResponse;

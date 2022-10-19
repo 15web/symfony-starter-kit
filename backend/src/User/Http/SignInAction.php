@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace App\User\Http;
 
-use App\Infrastructure\ApiException\ApiUnauthorizedException;
+use App\Infrastructure\Security\Authenticator\JsonLoginAuthenticator;
+use App\Infrastructure\Security\UserProvider\SecurityUser;
 use App\User\Command\CreateToken;
-use App\User\Domain\User;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 #[Route('/sign-in', name: JsonLoginAuthenticator::SIGN_IN, methods: JsonLoginAuthenticator::SIGN_IN_METHODS)]
 #[AsController]
@@ -19,14 +18,10 @@ final class SignInAction
     {
     }
 
-    public function __invoke(#[CurrentUser] ?User $user): UserResponse
+    public function __invoke(SecurityUser $securityUser): UserResponse
     {
-        if ($user === null) {
-            throw new ApiUnauthorizedException();
-        }
+        $token = ($this->createToken)($securityUser->getId());
 
-        $token = ($this->createToken)($user);
-
-        return new UserResponse($token->getId(), $user->getUserEmail()->getValue());
+        return new UserResponse($token, $securityUser->getUserIdentifier());
     }
 }

@@ -8,9 +8,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class ApiBadRequestException extends \Exception implements ApiException
 {
-    public function __construct(private readonly string $errorMessage = 'Укажите корректный запрос')
-    {
-        parent::__construct();
+    public function __construct(
+        private readonly string $errorMessage = 'Укажите корректный запрос',
+        ?\Throwable $previous = null,
+    ) {
+        parent::__construct(previous: $previous);
     }
 
     public function getErrorMessage(): string
