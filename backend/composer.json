@@ -114,7 +114,7 @@
         "twig-lint": "bin/console lint:twig templates",
         "container-lint": "bin/console lint:container",
         "validate-doctrine-schema": "bin/console doctrine:schema:validate -v",
-        "cache-prod-check": "bin/console cache:warmup --env=prod",
+        "cache-prod-check": "bin/console cache:clear --env=prod && bin/console cache:warmup --env=prod",
         "validate-openapi-schema": "vendor/bin/php-openapi validate ./openapi.yaml",
         "deptrac-check": "vendor/bin/deptrac analyse --fail-on-uncovered --report-uncovered --config-file=deptrac.yaml --cache-file=var/cache/.deptrac.cache",
         "deptrac-check-unassigned": "vendor/bin/deptrac debug:unassigned --config-file=deptrac.yaml --cache-file=var/cache/.deptrac.cache | tee /dev/stderr | grep 'There are no unassigned tokens'",
