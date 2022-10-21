@@ -154,6 +154,7 @@ case $COMMAND in
         setupEnvs;
 
         runBackend composer validate --strict
+        runBackend composer audit --format=plain
         runBackend composer check
 
         runBackend bin/console --env=test cache:clear

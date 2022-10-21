@@ -223,9 +223,6 @@
             "deptrac.yaml"
         ]
     },
-    "roave/security-advisories": {
-        "version": "dev-latest"
-    },
     "sebastian/cli-parser": {
         "version": "1.0.1"
     },

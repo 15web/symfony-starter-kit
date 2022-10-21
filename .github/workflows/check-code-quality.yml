@@ -26,6 +26,9 @@ jobs:
       - name: Install services
         run: cd ./docker && ./manage.bash install-test
 
+      - name: Check packages for known security vulnerabilities
+        run: cd ./docker && ./manage.bash run-backend composer audit --format=plain
+
       - name: Check code quality
         run: cd ./docker && ./manage.bash run-backend composer check
 
