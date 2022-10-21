@@ -12,21 +12,13 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 #[AsService]
 final class SecurityUserProvider implements UserProviderInterface
 {
-    private readonly GetSecurityUserRoles $getSecurityUserRoles;
-    private readonly GetSecurityUserPassword $getSecurityUserPassword;
-    private readonly GetSecurityUserId $getSecurityUserId;
-
     private ?SecurityUser $securityUser;
 
     public function __construct(
-        GetSecurityUserRoles $getSecurityUserRoles,
-        GetSecurityUserPassword $getSecurityUserPassword,
-        GetSecurityUserId $getSecurityUserId,
+        private readonly GetSecurityUserRoles $getSecurityUserRoles,
+        private readonly GetSecurityUserPassword $getSecurityUserPassword,
+        private readonly GetSecurityUserId $getSecurityUserId,
     ) {
-        $this->getSecurityUserRoles = $getSecurityUserRoles;
-        $this->getSecurityUserPassword = $getSecurityUserPassword;
-        $this->getSecurityUserId = $getSecurityUserId;
-
         $this->securityUser = null;
     }
 

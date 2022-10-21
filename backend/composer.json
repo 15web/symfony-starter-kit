@@ -50,6 +50,7 @@
         "phpstan/phpstan-strict-rules": "^1.2",
         "phpunit/phpunit": "^9.5",
         "qossmic/deptrac-shim": "^0.23.0",
+        "rector/rector": "^0.14.6",
         "slevomat/coding-standard": "^7.2",
         "squizlabs/php_codesniffer": "^3.6",
         "symfony/browser-kit": "6.1.*",
@@ -118,7 +119,9 @@
         "deptrac-check": "vendor/bin/deptrac analyse --fail-on-uncovered --report-uncovered --config-file=deptrac.yaml --cache-file=var/cache/.deptrac.cache",
         "deptrac-check-unassigned": "vendor/bin/deptrac debug:unassigned --config-file=deptrac.yaml --cache-file=var/cache/.deptrac.cache | tee /dev/stderr | grep 'There are no unassigned tokens'",
         "deprecations-check": "bin/console debug:container --deprecations",
-        "check": "@parallel container-lint validate-doctrine-schema twig-lint stan fixer-check sniffer-check cache-prod-check validate-openapi-schema deptrac-check deptrac-check-unassigned",
+        "rector-check": "vendor/bin/rector process src --dry-run",
+        "rector-fix": "vendor/bin/rector process src --cache-clear",
+        "check": "@parallel container-lint validate-doctrine-schema twig-lint stan fixer-check rector-check sniffer-check cache-prod-check validate-openapi-schema deptrac-check deptrac-check-unassigned",
         "fix": ["@fixer-fix", "@sniffer-fix"]
     },
     "conflict": {

@@ -9,11 +9,9 @@ use Symfony\Component\Uid\Uuid;
 final class User
 {
     public readonly UserId $id;
-    public readonly string $email;
 
-    public function __construct(Uuid $id, string $email)
+    public function __construct(Uuid $id, public readonly string $email)
     {
         $this->id = new UserId($id);
-        $this->email = $email;
     }
 }

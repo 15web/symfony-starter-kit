@@ -3,7 +3,7 @@ parameters:
         - var/cache
     checkUninitializedProperties: true
     level: 9
-    tmpDir: ./var/cache
+    tmpDir: ./var/cache/phpstan
     paths:
         - src
     excludePaths:

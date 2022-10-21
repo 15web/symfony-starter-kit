@@ -24,8 +24,8 @@ final class OpenApiValidateSubscriber implements EventSubscriberInterface
     public const DISABLE_VALIDATE_REQUEST_KEY = 'disable_request_validate';
     public const DISABLE_VALIDATE_RESPONSE_KEY = 'disable_response_validate';
 
-    private RequestValidator $requestValidator;
-    private ResponseValidator $responseValidator;
+    private readonly RequestValidator $requestValidator;
+    private readonly ResponseValidator $responseValidator;
 
     public function __construct(
         #[Autowire('%env(string:APP_ENV)%')]
