@@ -1,0 +1,14 @@
+version: '3.8'
+services:
+    nginx:
+        build:
+            context: ./nginx/prod/
+        ports:
+        - '80:80'
+        - '443:443'
+        volumes:
+        - letsencrypt:/etc/letsencrypt
+        - letsencrypt:/var/lib/letsencrypt
+volumes:
+    letsencrypt_etc:
+    letsencrypt_lib:

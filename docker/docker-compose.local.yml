@@ -32,7 +32,7 @@ services:
         env_file: backend/.env
     nginx:
         build:
-            context: ./nginx/
+            context: ./nginx/dev/
         ports:
             - ${NGINX_PORT}:80
         depends_on: [ backend ]

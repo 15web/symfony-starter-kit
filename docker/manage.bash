@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 set -Eeuo pipefail
+#set -x # uncomment for debug
 
 os-depend-sed-in-place() {
     if [ "$(uname -s)" == 'Darwin' ]; then
@@ -45,6 +46,30 @@ setupEnvs() {
     echo 'Envs set up!';
 }
 
+setupEnvsProd() {
+    [ ! -f ./.env ] && cp ./.env.dist ./.env
+
+    compose() {
+        docker-compose "$@"
+    }
+
+    COMPOSE_FILE_ENV="COMPOSE_FILE='docker-compose.prod.yml'";
+    if [ "$(grep 'COMPOSE_FILE' ./.env)" != '' ]; then
+        os-depend-sed-in-place -E "s|^.*COMPOSE_FILE=.*$|$COMPOSE_FILE_ENV|" ./.env;
+    else
+        echo "$COMPOSE_FILE_ENV" >> ./.env;
+    fi
+
+    COMPOSE_PROJECT_NAME="COMPOSE_PROJECT_NAME='symfony-starter-kit-prod'";
+    if [ "$(grep 'COMPOSE_PROJECT_NAME' ./.env)" != '' ]; then
+        os-depend-sed-in-place -E "s|^.*COMPOSE_PROJECT_NAME.*$|$COMPOSE_PROJECT_NAME|" ./.env;
+    else
+        echo "$COMPOSE_FILE_ENV" >> ./.env;
+    fi
+
+    echo 'Envs set up!';
+}
+
 installTest() {
     compose build backend mysql
 
@@ -84,6 +109,28 @@ install() {
     runBackend ./bin/console messenger:setup-transports
 
     echo "Done!"
+}
+
+# ARGS:
+# ${1} - SERVER_NAME
+# ${2} - ADMIN_EMAIL
+installProd() {
+    compose down;
+
+    SERVER_NAME="${1}";
+    compose build \
+            --build-arg SERVER_NAME="${SERVER_NAME}" \
+        nginx;
+
+    compose up --detach --force-recreate --remove-orphans nginx;
+
+    # TODO: REMOVE DEBUG STATEMENT
+    compose exec nginx bash -c 'mkdir /app/; echo hello > /app/index.html;';
+
+    ADMIN_EMAIL="${2}";
+    compose exec nginx bash -c "/root/get_cert.bash ${ADMIN_EMAIL} ${SERVER_NAME}"
+
+    echo "Done!";
 }
 
 up() {
@@ -196,6 +243,12 @@ case $COMMAND in
     setup-envs | se)
         setupEnvs;
         ;;
+    install-prod | ip)
+        setupEnvsProd;
+
+        ARGS_WITHOUT_FIRST=${@:2}
+        installProd ${ARGS_WITHOUT_FIRST}
+        ;;
     *)
         echo 'Unknown command. Available:
             install[i],
@@ -211,6 +264,8 @@ case $COMMAND in
             fix[f],
             hooks-install[hi],
             cleanup-mutagen[cm],
-            setup-envs[se].'
+            setup-envs[se],
+            install-prod[ip] SERVER_NAME ADMIN_EMAIL,
+        '
         ;;
 esac
