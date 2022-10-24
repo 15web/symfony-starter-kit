@@ -20,6 +20,11 @@ paths:
                                     format: email
                                     description: 'Email пользователя'
                                     example: 'test@test.ru'
+                                password:
+                                    type: string
+                                    description: 'Пароль пользователя'
+                                    minLength: 6
+                                    example: '123456'
                             additionalProperties: false
                             required:
                                 - email
@@ -42,6 +47,33 @@ paths:
                                 error: true
                                 code: 400
                                 errorMessage: 'Неверный формат запроса'
+
+    /confirm-email/{confirmToken}:
+        get:
+            summary: 'Подтверждение email'
+            tags: [ 'Аутентификация' ]
+            security: [ ]
+            parameters:
+                - $ref: '#/components/parameters/confirmToken'
+            responses:
+                200:
+                    description: 'Email подтвержден'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/successResponse'
+                400:
+                    description: 'Email уже подтвержден'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/errorResponse'
+                            example:
+                                error: true
+                                code: 400
+                                errorMessage: 'Неверный формат запроса'
+                404:
+                    description: 'Email с таким токеном не найден'
     /sign-in:
         post:
             summary: 'Аутентификация пользователя'
@@ -864,6 +896,15 @@ components:
             in: path
             required: true
             description: 'ID статьи'
+            example: '123e4567-e89b-12d3-a456-426614174000'
+            schema:
+                type: string
+                format: uuid
+        confirmToken:
+            name: confirmToken
+            in: path
+            required: true
+            description: 'Токен подтверждения'
             example: '123e4567-e89b-12d3-a456-426614174000'
             schema:
                 type: string

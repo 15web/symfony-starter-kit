@@ -17,6 +17,7 @@ final class SignUpTest extends ApiWebTestCase
     {
         $body = [];
         $body['email'] = 'first@example.com';
+        $body['password'] = '123456';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
         $response = self::request('POST', '/api/sign-up', $body, newClient: true);
@@ -27,15 +28,16 @@ final class SignUpTest extends ApiWebTestCase
         /** @var TemplatedEmail $email */
         $email = self::getMailerMessage();
         $context = $email->getContext();
-        $password = $context['password'];
+        $confirmToken = $context['confirmToken'];
 
-        self::assertNotEmpty($password);
+        self::assertNotEmpty($confirmToken);
     }
 
     public function testCreationUserWithSameEmail(): void
     {
         $body = [];
         $body['email'] = 'first@example.com';
+        $body['password'] = '123456';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
         self::request('POST', '/api/sign-up', $body);
@@ -46,7 +48,7 @@ final class SignUpTest extends ApiWebTestCase
 
     public function testBadRequest(): void
     {
-        $body = json_encode(['email' => 'test'], JSON_THROW_ON_ERROR);
+        $body = json_encode(['email' => 'test', 'password' => '123456'], JSON_THROW_ON_ERROR);
         $response = self::request('POST', '/api/sign-up', $body, newClient: true, disableValidateRequestSchema: true);
         self::assertBadRequest($response);
     }

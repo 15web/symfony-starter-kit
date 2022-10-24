@@ -9,4 +9,6 @@ enum ApiErrorCode: int
     case UserAlreadyExist = 1;
 
     case ArticleAlreadyExist = 2;
+
+    case EmailAlreadyIsConfirmed = 3;
 }

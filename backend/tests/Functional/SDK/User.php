@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional\SDK;
 
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-
 /**
  * @internal
  */
@@ -18,16 +16,13 @@ final class User extends ApiWebTestCase
      */
     public static function auth(string $userEmail = 'first@example.com'): string
     {
+        $password = '123456';
         $body = [];
         $body['email'] = $userEmail;
+        $body['password'] = $password;
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
         self::request('POST', '/api/sign-up', $body, newClient: true);
-
-        /** @var TemplatedEmail $email */
-        $email = self::getMailerMessage();
-        $context = $email->getContext();
-        $password = $context['password'];
 
         $body = [];
         $body['email'] = $userEmail;

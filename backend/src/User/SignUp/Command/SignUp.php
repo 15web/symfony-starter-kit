@@ -12,10 +12,10 @@ use App\User\SignUp\Domain\UserId;
 use App\User\SignUp\Domain\UserPassword;
 use App\User\SignUp\Domain\UserRole;
 use App\User\SignUp\Domain\Users;
-use App\User\SignUp\Notification\NewPasswordMessage;
+use App\User\SignUp\Notification\ConfirmEmailMessage;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\String\ByteString;
+use Symfony\Component\Uid\Uuid;
 
 #[AsService]
 final class SignUp
@@ -35,13 +35,13 @@ final class SignUp
             throw new UserAlreadyExistException('Пользователь с таким email уже существует');
         }
 
-        $userEmail = new UserEmail($signUpCommand->email);
+        $confirmToken = Uuid::v4();
+        $userEmail = new UserEmail($signUpCommand->email, $confirmToken);
         $user = new User(new UserId(), $userEmail, UserRole::User);
 
-        $plaintextPassword = ByteString::fromRandom(10)->toString();
         $hashedPassword = $this->passwordHasher->hashPassword(
             $user,
-            $plaintextPassword
+            $signUpCommand->password
         );
 
         $user->applyHashedPassword(new UserPassword($hashedPassword));
@@ -49,6 +49,6 @@ final class SignUp
         $this->users->add($user);
         ($this->flush)();
 
-        $this->messageBus->dispatch(new NewPasswordMessage($plaintextPassword, $userEmail->value));
+        $this->messageBus->dispatch(new ConfirmEmailMessage($confirmToken, $userEmail->value));
     }
 }

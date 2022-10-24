@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Tests\Functional\User;
 
 use App\Tests\Functional\SDK\ApiWebTestCase;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 
 /**
  * @internal
@@ -16,14 +15,10 @@ final class SignInTest extends ApiWebTestCase
     {
         $body = [];
         $userEmail = $body['email'] = 'first@example.com';
+        $password = $body['password'] = 'password';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
         self::request('POST', '/api/sign-up', $body, newClient: true);
-
-        /** @var TemplatedEmail $emailMessage */
-        $emailMessage = self::getMailerMessage();
-        $context = $emailMessage->getContext();
-        $password = $context['password'];
 
         $body = [];
         $body['email'] = $userEmail;
@@ -42,6 +37,7 @@ final class SignInTest extends ApiWebTestCase
     {
         $body = [];
         $userEmail = $body['email'] = 'first@example.com';
+        $body['password'] = '123456';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
         self::request('POST', '/api/sign-up', $body, true);
@@ -59,14 +55,10 @@ final class SignInTest extends ApiWebTestCase
     {
         $body = [];
         $body['email'] = 'first@example.com';
+        $password = $body['password'] = 'password';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
         self::request('POST', '/api/sign-up', $body, newClient: true);
-
-        /** @var TemplatedEmail $emailMessage */
-        $emailMessage = self::getMailerMessage();
-        $context = $emailMessage->getContext();
-        $password = $context['password'];
 
         $body = [];
         $body['email'] = 'invalid@example.com';
