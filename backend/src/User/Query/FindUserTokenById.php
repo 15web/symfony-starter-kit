@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\User\Query\Token;
+namespace App\User\Query;
 
 use App\Infrastructure\AsService;
 use App\Infrastructure\Security\Authenticator\ApiToken\IsTokenExists;
@@ -19,7 +19,7 @@ final class FindUserTokenById implements IsTokenExists
     public function __invoke(Uuid $userTokenId): bool
     {
         $dql = <<<'DQL'
-                SELECT NEW App\User\Query\Token\Model\UserToken(ut.id)
+                SELECT ut.id
                 FROM App\User\Domain\UserToken AS ut
                 WHERE ut.id = :userTokenId
             DQL;

@@ -155,6 +155,8 @@ case $COMMAND in
 
         runBackend composer validate --strict
         runBackend composer audit --format=plain
+
+        runBackend bin/console cache:clear
         runBackend composer check
 
         runBackend bin/console --env=test cache:clear

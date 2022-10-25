@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\User\Query\User;
+namespace App\User\Query;
 
 use App\Infrastructure\AsService;
 use App\Infrastructure\Security\Authenticator\ApiToken\GetEmailByTokenId;

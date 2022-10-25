@@ -6,7 +6,7 @@ namespace App\Task\Console;
 
 use App\Task\Query\Task\FindUncompletedTasksByUserId\FindUncompletedTasksByUserId;
 use App\Task\Query\Task\FindUncompletedTasksByUserId\FindUncompletedTasksByUserIdQuery;
-use App\User\Query\User\FindAllUsers;
+use App\User\Query\FindAllUsers\FindAllUsers;
 use Psr\Log\LoggerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -44,7 +44,7 @@ final class SendUncompletedTaskToUser extends Command
         $users = ($this->findAllUsers)();
         $emailSent = 0;
         foreach ($users as $user) {
-            $uncompletedTasks = ($this->findUncompletedTasksByUserId)(new FindUncompletedTasksByUserIdQuery($user->id->value));
+            $uncompletedTasks = ($this->findUncompletedTasksByUserId)(new FindUncompletedTasksByUserIdQuery($user->id));
             if (\count($uncompletedTasks) === 0) {
                 continue;
             }
@@ -61,7 +61,7 @@ final class SendUncompletedTaskToUser extends Command
             ++$emailSent;
         }
 
-        $this->logger->info("Отправленно {$emailSent} писем о невыполненных задачах");
+        $this->logger->info("Отправлено {$emailSent} писем о невыполненных задачах");
 
         $this->release();
 

@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\User\Query\User;
+namespace App\User\Query\FindAllUsers;
 
 use App\Infrastructure\AsService;
-use App\User\Query\User\Model\User;
 use Doctrine\ORM\EntityManagerInterface;
 
 #[AsService]
@@ -16,18 +15,18 @@ final class FindAllUsers
     }
 
     /**
-     * @return array<User>
+     * @return array<UserData>
      */
     public function __invoke(): array
     {
         $dql = <<<'DQL'
                 SELECT
-                NEW App\User\Query\User\Model\User(u.id, u.userEmail.value)
+                NEW App\User\Query\FindAllUsers\UserData(u.id, u.userEmail.value)
                 FROM App\User\Domain\User as u
             DQL;
 
         /**
-         * @var array<User> $allUsers
+         * @var array<UserData> $allUsers
          */
         $allUsers = $this->entityManager->createQuery($dql)->getResult();
 

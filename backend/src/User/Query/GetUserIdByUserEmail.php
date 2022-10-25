@@ -2,30 +2,28 @@
 
 declare(strict_types=1);
 
-namespace App\User\Query\User;
+namespace App\User\Query;
 
 use App\Infrastructure\AsService;
-use App\Infrastructure\Security\UserProvider\GetSecurityUserRoles;
+use App\Infrastructure\Security\UserProvider\GetSecurityUserId;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Uid\Uuid;
 use Webmozart\Assert\Assert;
 
 #[AsService]
-final class GetUserRolesByUserEmail implements GetSecurityUserRoles
+final class GetUserIdByUserEmail implements GetSecurityUserId
 {
     public function __construct(private readonly EntityManagerInterface $entityManager)
     {
     }
 
-    /**
-     * @return array<string>
-     */
-    public function __invoke(string $userEmail): array
+    public function __invoke(string $userEmail): Uuid
     {
         Assert::notEmpty($userEmail);
         Assert::email($userEmail);
 
         $dql = <<<'DQL'
-                SELECT u.userRole
+                SELECT u.id
                 FROM App\User\Domain\User AS u
                 WHERE u.userEmail.value = :userEmail
             DQL;
@@ -33,11 +31,9 @@ final class GetUserRolesByUserEmail implements GetSecurityUserRoles
         $dqlQuery = $this->entityManager->createQuery($dql);
         $dqlQuery->setParameter('userEmail', $userEmail);
 
-        /** @var array<string> $roles */
-        $roles = [$dqlQuery->getSingleScalarResult()];
+        /** @var string $userId */
+        $userId = $dqlQuery->getSingleScalarResult();
 
-        Assert::allString($roles);
-
-        return $roles;
+        return Uuid::fromString($userId);
     }
 }
