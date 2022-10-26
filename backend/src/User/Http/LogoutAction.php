@@ -6,9 +6,9 @@ namespace App\User\Http;
 
 use App\Infrastructure\ApiException\ApiUnauthorizedException;
 use App\Infrastructure\Security\Authenticator\ApiToken\ApiTokenAuthenticator;
-use App\Infrastructure\Security\UserProvider\SecurityUser;
 use App\Infrastructure\SuccessResponse;
 use App\User\Command\DeleteToken;
+use App\User\Domain\UserId;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -24,14 +24,14 @@ final class LogoutAction
     {
     }
 
-    public function __invoke(SecurityUser $securityUser, Request $request): SuccessResponse
+    public function __invoke(UserId $userId, Request $request): SuccessResponse
     {
         $apiToken = $request->headers->get(ApiTokenAuthenticator::TOKEN_NAME);
         if ($apiToken === null) {
             throw new ApiUnauthorizedException('Отсутствует токен в заголовках');
         }
 
-        ($this->deleteToken)($securityUser->getId(), Uuid::fromString($apiToken));
+        ($this->deleteToken)($userId, Uuid::fromString($apiToken));
 
         return new SuccessResponse();
     }

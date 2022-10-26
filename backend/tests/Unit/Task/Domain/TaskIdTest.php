@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Task\Model;
+namespace App\Tests\Unit\Task\Domain;
 
 use App\Task\Domain\TaskId;
 use PHPUnit\Framework\TestCase;

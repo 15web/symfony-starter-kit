@@ -6,7 +6,6 @@ namespace App\User\Domain;
 
 use App\Infrastructure\AsService;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Uid\Uuid;
 
 #[AsService]
 final class Users
@@ -18,9 +17,9 @@ final class Users
     /**
      * @throws \DomainException
      */
-    public function getById(Uuid $userId): User
+    public function getById(UserId $userId): User
     {
-        $user = $this->entityManager->getRepository(User::class)->find($userId);
+        $user = $this->entityManager->getRepository(User::class)->find($userId->value);
         if (!$user instanceof User) {
             throw new \DomainException('Пользователь не найден.');
         }

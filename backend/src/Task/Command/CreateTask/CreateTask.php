@@ -8,8 +8,8 @@ use App\Infrastructure\AsService;
 use App\Task\Domain\Task;
 use App\Task\Domain\TaskId;
 use App\Task\Domain\TaskName;
+use App\User\Domain\UserId;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Uid\Uuid;
 
 #[AsService]
 final class CreateTask
@@ -18,7 +18,7 @@ final class CreateTask
     {
     }
 
-    public function __invoke(CreateTaskCommand $createTaskCommand, TaskId $taskId, Uuid $userId): void
+    public function __invoke(CreateTaskCommand $createTaskCommand, TaskId $taskId, UserId $userId): void
     {
         $task = new Task($taskId, new TaskName($createTaskCommand->taskName), $userId);
 

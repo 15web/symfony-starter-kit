@@ -2,18 +2,19 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Security;
+namespace App\User\Http;
 
 use App\Infrastructure\ApiException\ApiUnauthorizedException;
 use App\Infrastructure\AsService;
 use App\Infrastructure\Security\UserProvider\SecurityUser;
+use App\User\Domain\UserId;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Symfony\Component\Security\Core\Security;
 
 #[AsService]
-final class SecurityUserArgumentValueResolver implements ArgumentValueResolverInterface
+final class UserIdArgumentValueResolver implements ArgumentValueResolverInterface
 {
     public function __construct(private readonly Security $security)
     {
@@ -24,11 +25,11 @@ final class SecurityUserArgumentValueResolver implements ArgumentValueResolverIn
      */
     public function supports(Request $request, ArgumentMetadata $argument): bool
     {
-        return $argument->getType() === SecurityUser::class;
+        return $argument->getType() === UserId::class;
     }
 
     /**
-     * @return iterable<SecurityUser>
+     * @return iterable<UserId>
      *
      * @throws ApiUnauthorizedException
      *
@@ -41,6 +42,6 @@ final class SecurityUserArgumentValueResolver implements ArgumentValueResolverIn
             throw new ApiUnauthorizedException();
         }
 
-        yield $user;
+        yield new UserId($user->getId());
     }
 }

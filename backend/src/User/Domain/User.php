@@ -38,9 +38,9 @@ class User
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserToken::class, cascade: ['persist'], orphanRemoval: true)]
     private Collection $userTokens;
 
-    public function __construct(Uuid $id, UserEmail $userEmail, UserRole $userRole, UserPassword $userPassword)
+    public function __construct(UserId $userId, UserEmail $userEmail, UserRole $userRole, UserPassword $userPassword)
     {
-        $this->id = $id;
+        $this->id = $userId->value;
         $this->userEmail = $userEmail;
         $this->userRole = $userRole;
         $this->userPassword = $userPassword;

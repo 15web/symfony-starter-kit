@@ -33,7 +33,6 @@ final class SignInTest extends ApiWebTestCase
         $response = self::jsonDecode($response->getContent());
 
         self::assertNotEmpty($response['token']);
-        self::assertSame($userEmail, $response['email']);
     }
 
     public function testInvalidPassword(): void

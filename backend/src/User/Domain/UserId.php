@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Task\Domain;
+namespace App\User\Domain;
 
 use App\Infrastructure\ValueObject;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV4;
 
-final class TaskId implements ValueObject
+final class UserId implements ValueObject
 {
     public function __construct(public readonly Uuid $value = new UuidV4())
     {

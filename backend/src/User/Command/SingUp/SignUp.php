@@ -9,13 +9,13 @@ use App\Infrastructure\Flush;
 use App\Infrastructure\Security\CreatePasswordHasher;
 use App\User\Domain\User;
 use App\User\Domain\UserEmail;
+use App\User\Domain\UserId;
 use App\User\Domain\UserPassword;
 use App\User\Domain\UserRole;
 use App\User\Domain\Users;
 use App\User\Notification\NewPasswordMessage;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\String\ByteString;
-use Symfony\Component\Uid\Uuid;
 
 #[AsService]
 final class SignUp
@@ -35,14 +35,12 @@ final class SignUp
             throw new UserAlreadyExistException('Пользователь с таким email уже существует');
         }
 
-        $userId = Uuid::v4();
         $userEmail = new UserEmail($signUpCommand->email);
-        $userRole = UserRole::User;
 
         $plaintextPassword = ByteString::fromRandom(10)->toString();
         $password = new UserPassword($plaintextPassword, $this->createPasswordHasher);
 
-        $user = new User($userId, $userEmail, $userRole, $password);
+        $user = new User(new UserId(), $userEmail, UserRole::User, $password);
 
         $this->users->add($user);
 

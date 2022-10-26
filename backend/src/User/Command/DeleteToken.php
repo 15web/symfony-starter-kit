@@ -6,6 +6,7 @@ namespace App\User\Command;
 
 use App\Infrastructure\AsService;
 use App\Infrastructure\Flush;
+use App\User\Domain\UserId;
 use App\User\Domain\Users;
 use App\User\Domain\UserTokens;
 use Symfony\Component\Uid\Uuid;
@@ -20,7 +21,7 @@ final class DeleteToken
     ) {
     }
 
-    public function __invoke(Uuid $userId, Uuid $userTokenId): void
+    public function __invoke(UserId $userId, Uuid $userTokenId): void
     {
         $user = $this->users->getById($userId);
         $userToken = $this->userTokens->getById($userTokenId);

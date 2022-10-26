@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Task\Domain;
 
+use App\User\Domain\UserId;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -40,11 +41,11 @@ class Task
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updatedAt;
 
-    public function __construct(TaskId $taskId, TaskName $taskName, Uuid $userId)
+    public function __construct(TaskId $taskId, TaskName $taskName, UserId $userId)
     {
-        $this->id = $taskId->getValue();
+        $this->id = $taskId->value;
         $this->taskName = $taskName;
-        $this->userId = $userId;
+        $this->userId = $userId->value;
         $this->createdAt = new \DateTimeImmutable();
         $this->completedAt = null;
         $this->updatedAt = null;

@@ -10,7 +10,6 @@ final class UserResponse
 {
     public function __construct(
         public readonly Uuid $token,
-        public readonly string $email,
     ) {
     }
 }

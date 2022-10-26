@@ -7,9 +7,9 @@ namespace App\Task\Http\Export;
 use App\Infrastructure\AsService;
 use App\Task\Query\Task\FindAllByUserId\FindAllTasksByUserId;
 use App\Task\Query\Task\FindAllByUserId\FindAllTasksByUserIdQuery;
+use App\User\Domain\UserId;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use Symfony\Component\Uid\Uuid;
 
 #[AsService]
 final class ExportTasks
@@ -23,9 +23,9 @@ final class ExportTasks
     ) {
     }
 
-    public function __invoke(Format $format, Uuid $userId): BinaryFileResponse
+    public function __invoke(Format $format, UserId $userId): BinaryFileResponse
     {
-        $tasks = ($this->findAllTasksByUserId)(new FindAllTasksByUserIdQuery($userId));
+        $tasks = ($this->findAllTasksByUserId)(new FindAllTasksByUserIdQuery($userId->value));
 
         foreach ($this->exporters as $exporter) {
             if ($exporter->support($format) === true) {

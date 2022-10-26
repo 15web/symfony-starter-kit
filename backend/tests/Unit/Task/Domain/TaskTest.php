@@ -12,15 +12,14 @@ use App\Task\Domain\TaskCommentBody;
 use App\Task\Domain\TaskCommentId;
 use App\Task\Domain\TaskId;
 use App\Task\Domain\TaskName;
+use App\User\Domain\UserId;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Uid\Uuid;
 
 final class TaskTest extends TestCase
 {
     public function testAlreadyCompletedTask(): void
     {
-        $userId = Uuid::v4();
-        $task = new Task(new TaskId(), new TaskName('new task'), $userId);
+        $task = new Task(new TaskId(), new TaskName('new task'), new UserId());
         $task->markAsDone();
 
         $this->expectException(TaskAlreadyIsDoneException::class);
@@ -29,8 +28,7 @@ final class TaskTest extends TestCase
 
     public function testAddCommentToCompletedTask(): void
     {
-        $userId = Uuid::v4();
-        $task = new Task(new TaskId(), new TaskName('new task'), $userId);
+        $task = new Task(new TaskId(), new TaskName('new task'), new UserId());
         $task->markAsDone();
 
         $comment = new TaskComment($task, new TaskCommentId(), new TaskCommentBody('Комментарий'));

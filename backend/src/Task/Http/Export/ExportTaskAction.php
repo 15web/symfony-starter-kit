@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Task\Http\Export;
 
-use App\Infrastructure\Security\UserProvider\SecurityUser;
+use App\User\Domain\UserId;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -19,8 +19,8 @@ final class ExportTaskAction
     {
     }
 
-    public function __invoke(Format $format, SecurityUser $securityUser): BinaryFileResponse
+    public function __invoke(Format $format, UserId $userId): BinaryFileResponse
     {
-        return ($this->exportTasks)($format, $securityUser->getId());
+        return ($this->exportTasks)($format, $userId);
     }
 }

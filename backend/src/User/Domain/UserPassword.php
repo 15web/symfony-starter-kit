@@ -14,6 +14,7 @@ final class UserPassword implements ValueObject
     #[ORM\Column]
     public readonly string $value;
 
+    // указать тип для callable
     public function __construct(string $plaintextPassword, callable $hasher)
     {
         Assert::notEmpty($plaintextPassword);

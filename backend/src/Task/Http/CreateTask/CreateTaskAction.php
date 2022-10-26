@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Task\Http\CreateTask;
 
 use App\Infrastructure\ApiException\ApiBadRequestException;
-use App\Infrastructure\Security\UserProvider\SecurityUser;
 use App\Task\Command\CreateTask\CreateTask;
 use App\Task\Command\CreateTask\CreateTaskCommand;
 use App\Task\Domain\TaskId;
+use App\User\Domain\UserId;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -22,15 +22,15 @@ final class CreateTaskAction
     {
     }
 
-    public function __invoke(CreateTaskCommand $createTaskCommand, SecurityUser $securityUser): TaskData
+    public function __invoke(CreateTaskCommand $createTaskCommand, UserId $userId): TaskData
     {
         try {
             $taskId = new TaskId();
-            ($this->createTask)($createTaskCommand, $taskId, $securityUser->getId());
+            ($this->createTask)($createTaskCommand, $taskId, $userId);
         } catch (\InvalidArgumentException $e) {
             throw new ApiBadRequestException($e->getMessage());
         }
 
-        return new TaskData($taskId->getValue());
+        return new TaskData($taskId->value);
     }
 }
