@@ -5,23 +5,24 @@ declare(strict_types=1);
 namespace App\Task\Command;
 
 use App\Infrastructure\AsService;
+use App\Infrastructure\Flush;
 use App\Task\Domain\Task;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Task\Domain\TaskAlreadyIsDoneException;
 
 #[AsService]
 final class CompleteTask
 {
-    public function __construct(private readonly EntityManagerInterface $entityManager)
+    public function __construct(private readonly Flush $flush)
     {
     }
 
     /**
-     * @throws \App\Task\Domain\TaskAlreadyIsDoneException
+     * @throws TaskAlreadyIsDoneException
      */
     public function __invoke(Task $task): void
     {
         $task->markAsDone();
 
-        $this->entityManager->flush();
+        ($this->flush)();
     }
 }

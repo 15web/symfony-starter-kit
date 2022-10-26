@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace App\Task\Command\UpdateTaskName;
 
 use App\Infrastructure\AsService;
+use App\Infrastructure\Flush;
 use App\Task\Domain\Task;
 use App\Task\Domain\TaskName;
-use Doctrine\ORM\EntityManagerInterface;
 
 #[AsService]
 final class UpdateTaskName
 {
-    public function __construct(private readonly EntityManagerInterface $entityManager)
+    public function __construct(private readonly Flush $flush)
     {
     }
 
@@ -20,6 +20,6 @@ final class UpdateTaskName
     {
         $task->changeTaskName(new TaskName($command->taskName));
 
-        $this->entityManager->flush();
+        ($this->flush)();
     }
 }

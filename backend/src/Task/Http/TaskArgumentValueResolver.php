@@ -10,8 +10,9 @@ use App\Infrastructure\ApiException\ApiUnauthorizedException;
 use App\Infrastructure\AsService;
 use App\Infrastructure\Security\UserProvider\SecurityUser;
 use App\Task\Domain\Task;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
+use App\Task\Domain\TaskId;
+use App\Task\Domain\Tasks;
+use App\User\Domain\UserId;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
@@ -23,16 +24,10 @@ use Webmozart\Assert\Assert;
 #[AsService]
 final class TaskArgumentValueResolver implements ArgumentValueResolverInterface
 {
-    /**
-     * @var EntityRepository<Task>
-     */
-    private readonly EntityRepository $repository;
-
     public function __construct(
         private readonly Security $security,
-        private readonly EntityManagerInterface $entityManager,
+        private readonly Tasks $tasks,
     ) {
-        $this->repository = $this->entityManager->getRepository(Task::class);
     }
 
     /**
@@ -72,10 +67,7 @@ final class TaskArgumentValueResolver implements ArgumentValueResolverInterface
         try {
             Assert::uuid($taskId, 'Укажите валидный id');
 
-            $task = $this->repository->findOneBy([
-                'id' => Uuid::fromString($taskId),
-                'userId' => $user->getId(),
-            ]);
+            $task = $this->tasks->findByIdAndUserId(new TaskId(Uuid::fromString($taskId)), new UserId($user->getId()));
 
             if ($task === null) {
                 throw new ApiNotFoundException('Задача не найдена');
