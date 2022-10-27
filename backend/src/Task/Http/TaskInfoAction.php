@@ -9,7 +9,7 @@ use App\Task\Query\Task\FindById\FindTaskById;
 use App\Task\Query\Task\FindById\FindTaskByIdQuery;
 use App\Task\Query\Task\FindById\TaskData;
 use App\Task\Query\Task\FindById\TaskNotFoundException;
-use App\User\Domain\UserId;
+use App\User\SignUp\Domain\UserId;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;

@@ -8,7 +8,7 @@ use App\Infrastructure\ApiException\ApiBadRequestException;
 use App\Task\Command\CreateTask\CreateTask;
 use App\Task\Command\CreateTask\CreateTaskCommand;
 use App\Task\Domain\TaskId;
-use App\User\Domain\UserId;
+use App\User\SignUp\Domain\UserId;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;

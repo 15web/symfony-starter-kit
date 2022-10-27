@@ -7,7 +7,7 @@ namespace App\Task\Http;
 use App\Task\Query\Task\FindAllByUserId\FindAllTasksByUserId;
 use App\Task\Query\Task\FindAllByUserId\FindAllTasksByUserIdQuery;
 use App\Task\Query\Task\FindAllByUserId\TaskData;
-use App\User\Domain\UserId;
+use App\User\SignUp\Domain\UserId;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;

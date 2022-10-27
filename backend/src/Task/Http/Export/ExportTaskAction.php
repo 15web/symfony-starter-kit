@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Task\Http\Export;
 
-use App\User\Domain\UserId;
+use App\User\SignUp\Domain\UserId;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpKernel\Attribute\AsController;

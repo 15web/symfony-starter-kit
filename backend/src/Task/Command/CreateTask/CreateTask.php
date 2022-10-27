@@ -10,7 +10,7 @@ use App\Task\Domain\Task;
 use App\Task\Domain\TaskId;
 use App\Task\Domain\TaskName;
 use App\Task\Domain\Tasks;
-use App\User\Domain\UserId;
+use App\User\SignUp\Domain\UserId;
 
 #[AsService]
 final class CreateTask

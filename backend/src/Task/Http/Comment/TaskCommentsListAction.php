@@ -7,7 +7,7 @@ namespace App\Task\Http\Comment;
 use App\Task\Query\Comment\FindAll\CommentData;
 use App\Task\Query\Comment\FindAll\FindAllCommentQuery;
 use App\Task\Query\Comment\FindAll\FindAllCommentsByTaskIdAndUserId;
-use App\User\Domain\UserId;
+use App\User\SignUp\Domain\UserId;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
