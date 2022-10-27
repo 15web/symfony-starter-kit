@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Tests\Command;
 
 use App\Task\Query\Task\FindUncompletedTasksByUserId\TaskData;
+use App\Tests\DataFixtures\UserFixtures;
 use App\Tests\Functional\SDK\ApiWebTestCase;
 use App\Tests\Functional\SDK\Task;
-use App\Tests\Functional\SDK\User;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -17,14 +17,14 @@ final class SendUncompletedTaskCommandTest extends KernelTestCase
 {
     public function testExecute(): void
     {
-        $token = User::auth();
+        $token = UserFixtures::FIST_USER_TOKEN;
         Task::create($taskName1 = 'Тестовая задача для отправки писем №1', $token);
 
         $taskId2 = Task::createAndReturnId('Тестовая задача для отправки писем №2', $token);
         ApiWebTestCase::request('POST', "/api/tasks/{$taskId2}/complete", token: $token);
 
         $this->tearDown();
-        $token = User::auth('second@example.com');
+        $token = UserFixtures::SECOND_USER_TOKEN;
         Task::create($taskName3 = 'Тестовая задача для отправки писем №3', $token);
 
         $kernel = self::bootKernel();

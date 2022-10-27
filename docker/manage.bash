@@ -62,11 +62,12 @@ installTest() {
         compose exec -T mysql mysql -proot -e "GRANT ALL PRIVILEGES ON db_name_test$i.* TO 'db_user'@'%';";
 
         compose run -e TEST_TOKEN=$i --rm backend bin/console --env=test doctrine:migrations:migrate --no-interaction
+        compose run -e TEST_TOKEN=$i --rm backend bin/console --env=test doctrine:fixtures:load -n
     done
 }
 
 install() {
-    compose build
+    compose build --pull
 
     runBackend composer install --no-scripts --prefer-dist
 

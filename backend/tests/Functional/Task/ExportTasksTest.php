@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional\Task;
 
+use App\Tests\DataFixtures\UserFixtures;
 use App\Tests\Functional\SDK\ApiWebTestCase;
 use App\Tests\Functional\SDK\Task;
-use App\Tests\Functional\SDK\User;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\Serializer\Encoder\CsvEncoder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
@@ -15,7 +15,7 @@ final class ExportTasksTest extends ApiWebTestCase
 {
     public function testCsvExport(): void
     {
-        $token = User::auth();
+        $token = UserFixtures::FIST_USER_TOKEN;
         Task::create('Тестовая задача 1', $token);
         Task::create('Тестовая задача 2', $token);
 
@@ -38,7 +38,7 @@ final class ExportTasksTest extends ApiWebTestCase
 
     public function testXmlExport(): void
     {
-        $token = User::auth();
+        $token = UserFixtures::FIST_USER_TOKEN;
         Task::create('Тестовая задача 1', $token);
         Task::create('Тестовая задача 2', $token);
         Task::create('Тестовая задача 3', $token);
@@ -63,7 +63,7 @@ final class ExportTasksTest extends ApiWebTestCase
 
     public function testEmptyCsvExport(): void
     {
-        $token = User::auth();
+        $token = UserFixtures::FIST_USER_TOKEN;
 
         /** @var BinaryFileResponse $response */
         $response = self::request('GET', '/api/export/tasks.csv', token: $token);
@@ -80,7 +80,7 @@ final class ExportTasksTest extends ApiWebTestCase
 
     public function testEmptyXmlExport(): void
     {
-        $token = User::auth();
+        $token = UserFixtures::FIST_USER_TOKEN;
 
         /** @var BinaryFileResponse $response */
         $response = self::request('GET', '/api/export/tasks.xml', token: $token);
@@ -99,7 +99,7 @@ final class ExportTasksTest extends ApiWebTestCase
      */
     public function testAccessDenied(string $notValidToken): void
     {
-        $token = User::auth();
+        $token = UserFixtures::FIST_USER_TOKEN;
         Task::create('Тестовая задача 1', $token);
 
         $response = self::request('GET', '/api/export/tasks.xml', token: $notValidToken);
@@ -113,12 +113,12 @@ final class ExportTasksTest extends ApiWebTestCase
 
     public function testNoAccessAnotherUser(): void
     {
-        $token = User::auth();
+        $token = UserFixtures::FIST_USER_TOKEN;
         Task::create('Тестовая задача 1', $token);
         Task::create('Тестовая задача 2', $token);
 
         $this->tearDown();
-        $tokenSecond = User::auth('second@example.com');
+        $tokenSecond = UserFixtures::SECOND_USER_TOKEN;
         $taskId3 = Task::createAndReturnId($taskName3 = 'Тестовая задача 3', $tokenSecond);
         $taskId4 = Task::createAndReturnId($taskName4 = 'Тестовая задача 4', $tokenSecond);
 

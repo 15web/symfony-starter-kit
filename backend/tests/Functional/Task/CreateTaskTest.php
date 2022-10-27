@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional\Task;
 
+use App\Tests\DataFixtures\UserFixtures;
 use App\Tests\Functional\SDK\ApiWebTestCase;
 use App\Tests\Functional\SDK\Task;
-use App\Tests\Functional\SDK\User;
 
 final class CreateTaskTest extends ApiWebTestCase
 {
     public function testSuccess(): void
     {
-        $token = User::auth();
+        $token = UserFixtures::FIST_USER_TOKEN;
         $response = Task::create($taskName = 'Тестовая задача', $token);
 
         self::assertSuccessResponse($response);
@@ -40,7 +40,7 @@ final class CreateTaskTest extends ApiWebTestCase
 
     public function testBadRequests(): void
     {
-        $token = User::auth();
+        $token = UserFixtures::FIST_USER_TOKEN;
 
         $this->assertBadRequests([], $token);
         $this->assertBadRequests(['badKey'], $token);

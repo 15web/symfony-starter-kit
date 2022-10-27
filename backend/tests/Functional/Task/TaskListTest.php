@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional\Task;
 
+use App\Tests\DataFixtures\UserFixtures;
 use App\Tests\Functional\SDK\ApiWebTestCase;
 use App\Tests\Functional\SDK\Task;
-use App\Tests\Functional\SDK\User;
 
 final class TaskListTest extends ApiWebTestCase
 {
     public function testSuccess(): void
     {
-        $token = User::auth();
+        $token = UserFixtures::FIST_USER_TOKEN;
 
         Task::create('Тестовая задача 1', $token);
         Task::create('Тестовая задача 2', $token);
@@ -30,12 +30,12 @@ final class TaskListTest extends ApiWebTestCase
 
     public function testNoAccessAnotherUser(): void
     {
-        $token = User::auth();
+        $token = UserFixtures::FIST_USER_TOKEN;
         Task::create('Тестовая задача 1', $token);
         Task::create('Тестовая задача 2', $token);
 
         $this->tearDown();
-        $tokenSecond = User::auth('second@example.com');
+        $tokenSecond = UserFixtures::SECOND_USER_TOKEN;
         $taskId3 = Task::createAndReturnId($taskName3 = 'Тестовая задача 3', $tokenSecond);
         $taskId4 = Task::createAndReturnId($taskName4 = 'Тестовая задача 4', $tokenSecond);
 

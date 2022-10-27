@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional\Task;
 
+use App\Tests\DataFixtures\UserFixtures;
 use App\Tests\Functional\SDK\ApiWebTestCase;
 use App\Tests\Functional\SDK\Task;
-use App\Tests\Functional\SDK\User;
 use Symfony\Component\Uid\Uuid;
 
 final class CreateCommentOnTaskTest extends ApiWebTestCase
 {
     public function testSuccessfulCreationTask(): void
     {
-        $token = User::auth();
+        $token = UserFixtures::FIST_USER_TOKEN;
 
         $taskId = Task::createAndReturnId('First task', $token);
 
@@ -36,7 +36,7 @@ final class CreateCommentOnTaskTest extends ApiWebTestCase
 
     public function testNotFound(): void
     {
-        $token = User::auth();
+        $token = UserFixtures::FIST_USER_TOKEN;
 
         Task::create('Тестовая задача 1', $token);
 
@@ -51,7 +51,7 @@ final class CreateCommentOnTaskTest extends ApiWebTestCase
 
     public function testAddCommentToCompletedTask(): void
     {
-        $token = User::auth();
+        $token = UserFixtures::FIST_USER_TOKEN;
         $taskId = Task::createAndReturnId('First task', $token);
 
         self::request('POST', "/api/tasks/{$taskId}/complete", token: $token);
@@ -69,7 +69,7 @@ final class CreateCommentOnTaskTest extends ApiWebTestCase
      */
     public function testAccessDenied(string $notValidToken): void
     {
-        $token = User::auth();
+        $token = UserFixtures::FIST_USER_TOKEN;
         $taskId = Task::createAndReturnId('Тестовая задача 1', $token);
 
         $body = [];
@@ -83,11 +83,11 @@ final class CreateCommentOnTaskTest extends ApiWebTestCase
 
     public function testNoAccessAnotherUser(): void
     {
-        $token = User::auth();
+        $token = UserFixtures::FIST_USER_TOKEN;
         Task::create('Тестовая задача №1', $token);
 
         $this->tearDown();
-        $tokenSecond = User::auth('second@example.com');
+        $tokenSecond = UserFixtures::SECOND_USER_TOKEN;
         $taskId = Task::createAndReturnId('Тестовая задача №2 ', $tokenSecond);
 
         $body = [];

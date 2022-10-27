@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional\Task;
 
+use App\Tests\DataFixtures\UserFixtures;
 use App\Tests\Functional\SDK\ApiWebTestCase;
 use App\Tests\Functional\SDK\Task;
-use App\Tests\Functional\SDK\User;
 use Symfony\Component\Uid\Uuid;
 
 final class RemoveTaskTest extends ApiWebTestCase
 {
     public function testSuccess(): void
     {
-        $token = User::auth();
+        $token = UserFixtures::FIST_USER_TOKEN;
 
         $task1Id = Task::createAndReturnId('Тестовая задача 1', $token);
         $task2Id = Task::createAndReturnId('Тестовая задача 2', $token);
@@ -29,7 +29,7 @@ final class RemoveTaskTest extends ApiWebTestCase
 
     public function testNotFound(): void
     {
-        $token = User::auth();
+        $token = UserFixtures::FIST_USER_TOKEN;
 
         Task::create('Тестовая задача 1', $token);
 
@@ -43,7 +43,7 @@ final class RemoveTaskTest extends ApiWebTestCase
      */
     public function testAccessDenied(string $notValidToken): void
     {
-        $token = User::auth();
+        $token = UserFixtures::FIST_USER_TOKEN;
         $taskId = Task::createAndReturnId('Тестовая задача 1', $token);
 
         $response = self::request('POST', "/api/tasks/{$taskId}/remove", token: $notValidToken);
@@ -53,11 +53,11 @@ final class RemoveTaskTest extends ApiWebTestCase
 
     public function testNoAccessAnotherUser(): void
     {
-        $token = User::auth();
+        $token = UserFixtures::FIST_USER_TOKEN;
         Task::create('Тестовая задача №1', $token);
 
         $this->tearDown();
-        $tokenSecond = User::auth('second@example.com');
+        $tokenSecond = UserFixtures::SECOND_USER_TOKEN;
         $taskId = Task::createAndReturnId('Тестовая задача №2 ', $tokenSecond);
 
         $response = self::request('POST', "/api/tasks/{$taskId}/remove", token: $token);

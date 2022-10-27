@@ -42,6 +42,7 @@
         "brianium/paratest": "^6.6",
         "cebe/php-openapi": "^1.7",
         "dama/doctrine-test-bundle": "^7.1",
+        "doctrine/doctrine-fixtures-bundle": "^3.4",
         "friendsofphp/php-cs-fixer": "^3.8",
         "league/openapi-psr7-validator": "^0.18.0",
         "nyholm/psr7": "^1.5",

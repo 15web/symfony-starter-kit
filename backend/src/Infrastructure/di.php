@@ -16,4 +16,6 @@ return static function (ContainerConfigurator $di): void {
             '../**/{di.php}',
             '../**/{config.php}',
         ]);
+
+    $services->load('App\\Tests\\DataFixtures\\', '../../tests/DataFixtures/*');
 };
