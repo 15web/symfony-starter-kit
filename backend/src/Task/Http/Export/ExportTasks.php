@@ -15,24 +15,31 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 final class ExportTasks
 {
     /**
+     * @var array<string, Exporter>
+     */
+    private array $exporters;
+
+    /**
      * @param Exporter[] $exporters
      */
     public function __construct(
         private readonly FindAllTasksByUserId $findAllTasksByUserId,
-        #[TaggedIterator(tag: 'app.task.exporter')] private readonly iterable $exporters,
+        #[TaggedIterator(tag: 'app.task.exporter')]
+        iterable $exporters,
     ) {
+        foreach ($exporters as $exporter) {
+            $this->exporters[$exporter->getFormat()->value] = $exporter;
+        }
     }
 
     public function __invoke(Format $format, UserId $userId): BinaryFileResponse
     {
-        $tasks = ($this->findAllTasksByUserId)(new FindAllTasksByUserIdQuery($userId->value));
-
-        foreach ($this->exporters as $exporter) {
-            if ($exporter->support($format) === true) {
-                return $exporter->export($tasks);
-            }
+        if (\array_key_exists($format->value, $this->exporters) === false) {
+            throw new \RuntimeException('Не найден обработчик');
         }
 
-        throw new \RuntimeException('Не найден обработчик');
+        $tasks = ($this->findAllTasksByUserId)(new FindAllTasksByUserIdQuery($userId->value));
+
+        return $this->exporters[$format->value]->export($tasks);
     }
 }

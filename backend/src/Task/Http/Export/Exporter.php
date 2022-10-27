@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 #[Autoconfigure(tags: ['app.task.exporter'])]
 interface Exporter
 {
-    public function support(Format $format): bool;
+    public function getFormat(): Format;
 
     /**
      * @param TaskData[] $tasks

@@ -23,9 +23,9 @@ final class CsvExporter implements Exporter
     ) {
     }
 
-    public function support(Format $format): bool
+    public function getFormat(): Format
     {
-        return $format === Format::CSV;
+        return Format::CSV;
     }
 
     /**
