@@ -12,7 +12,7 @@ use App\Infrastructure\Security\UserProvider\SecurityUser;
 use App\Task\Domain\Task;
 use App\Task\Domain\TaskId;
 use App\Task\Domain\Tasks;
-use App\User\Domain\UserId;
+use App\User\SignUp\Domain\UserId;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
@@ -67,7 +67,10 @@ final class TaskArgumentValueResolver implements ArgumentValueResolverInterface
         try {
             Assert::uuid($taskId, 'Укажите валидный id');
 
-            $task = $this->tasks->findByIdAndUserId(new TaskId(Uuid::fromString($taskId)), new UserId($user->getId()));
+            $task = $this->tasks->findByIdAndUserId(
+                new TaskId(Uuid::fromString($taskId)),
+                new UserId($user->getId()),
+            );
 
             if ($task === null) {
                 throw new ApiNotFoundException('Задача не найдена');

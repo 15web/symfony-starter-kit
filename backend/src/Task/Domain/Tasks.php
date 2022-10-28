@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Task\Domain;
 
 use App\Infrastructure\AsService;
-use App\User\Domain\UserId;
+use App\User\SignUp\Domain\UserId;
 use Doctrine\ORM\EntityManagerInterface;
 
 #[AsService]

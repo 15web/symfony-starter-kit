@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace App\Task\Domain;
 
-use App\User\Domain\UserId;
+use App\User\SignUp\Domain\UserId;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity]
+#[ORM\Index(fields: ['userId'], name: 'user_id_idx')]
 /** @final */
 class Task
 {

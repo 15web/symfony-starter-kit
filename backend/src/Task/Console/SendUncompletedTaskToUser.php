@@ -6,7 +6,7 @@ namespace App\Task\Console;
 
 use App\Task\Query\Task\FindUncompletedTasksByUserId\FindUncompletedTasksByUserId;
 use App\Task\Query\Task\FindUncompletedTasksByUserId\FindUncompletedTasksByUserIdQuery;
-use App\User\Query\FindAllUsers\FindAllUsers;
+use App\User\SignUp\Query\FindAllUsers;
 use Psr\Log\LoggerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Console\Attribute\AsCommand;
