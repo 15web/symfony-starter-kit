@@ -29,4 +29,9 @@ class UserToken
 
         $this->createdAt = new \DateTimeImmutable();
     }
+
+    public function getUserId(): UserId
+    {
+        return new UserId($this->userId);
+    }
 }

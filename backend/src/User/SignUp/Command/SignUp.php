@@ -6,7 +6,6 @@ namespace App\User\SignUp\Command;
 
 use App\Infrastructure\AsService;
 use App\Infrastructure\Flush;
-use App\Infrastructure\Security\CreatePasswordHasher;
 use App\User\SignUp\Domain\User;
 use App\User\SignUp\Domain\UserEmail;
 use App\User\SignUp\Domain\UserId;
@@ -15,6 +14,7 @@ use App\User\SignUp\Domain\UserRole;
 use App\User\SignUp\Domain\Users;
 use App\User\SignUp\Notification\NewPasswordMessage;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\String\ByteString;
 
 #[AsService]
@@ -24,7 +24,7 @@ final class SignUp
         private readonly Users $users,
         private readonly Flush $flush,
         private readonly MessageBusInterface $messageBus,
-        private readonly CreatePasswordHasher $createPasswordHasher,
+        private readonly UserPasswordHasherInterface $passwordHasher,
     ) {
     }
 
@@ -36,14 +36,17 @@ final class SignUp
         }
 
         $userEmail = new UserEmail($signUpCommand->email);
+        $user = new User(new UserId(), $userEmail, UserRole::User);
 
         $plaintextPassword = ByteString::fromRandom(10)->toString();
-        $password = new UserPassword($plaintextPassword, $this->createPasswordHasher);
+        $hashedPassword = $this->passwordHasher->hashPassword(
+            $user,
+            $plaintextPassword
+        );
 
-        $user = new User(new UserId(), $userEmail, UserRole::User, $password);
+        $user->applyHashedPassword(new UserPassword($hashedPassword));
 
         $this->users->add($user);
-
         ($this->flush)();
 
         $this->messageBus->dispatch(new NewPasswordMessage($plaintextPassword, $userEmail->value));

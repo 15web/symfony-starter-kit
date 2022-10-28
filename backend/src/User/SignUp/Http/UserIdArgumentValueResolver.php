@@ -6,7 +6,7 @@ namespace App\User\SignUp\Http;
 
 use App\Infrastructure\ApiException\ApiUnauthorizedException;
 use App\Infrastructure\AsService;
-use App\Infrastructure\Security\UserProvider\SecurityUser;
+use App\User\SignUp\Domain\User;
 use App\User\SignUp\Domain\UserId;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
@@ -38,10 +38,15 @@ final class UserIdArgumentValueResolver implements ArgumentValueResolverInterfac
     public function resolve(Request $request, ArgumentMetadata $argument): iterable
     {
         $user = $this->security->getUser();
-        if (!$user instanceof SecurityUser) {
+
+        if ($user === null) {
             throw new ApiUnauthorizedException();
         }
 
-        yield new UserId($user->getId());
+        if ($user instanceof User === false) {
+            throw new ApiUnauthorizedException();
+        }
+
+        yield $user->getUserId();
     }
 }
