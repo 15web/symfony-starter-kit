@@ -54,45 +54,32 @@ final class OpenApiValidateSubscriber implements EventSubscriberInterface
      */
     public function onKernelRequest(RequestEvent $event): void
     {
-        if ($event->isMainRequest() === false) {
+        if ($this->needValidate($event) === false) {
             return;
         }
 
         $request = $event->getRequest();
-
-        if (str_starts_with($request->getPathInfo(), '/_profiler') === true) {
-            return;
-        }
-
         if ($this->appEnv === 'test' && $request->request->get(self::DISABLE_VALIDATE_REQUEST_KEY) === '1') {
             return;
         }
 
-        $psr17Factory = new Psr17Factory();
-
-        $psrHttpFactory = new PsrHttpFactory($psr17Factory, $psr17Factory, $psr17Factory, $psr17Factory);
+        $psrHttpFactory = $this->buildPsrHttpFactory();
         $psrRequest = $psrHttpFactory->createRequest($request);
         $this->requestValidator->validate($psrRequest);
     }
 
     public function onKernelResponse(ResponseEvent $event): void
     {
-        if ($event->isMainRequest() === false) {
+        if ($this->needValidate($event) === false) {
             return;
         }
 
         $request = $event->getRequest();
-
-        if (str_starts_with($request->getPathInfo(), '/_profiler') === true) {
-            return;
-        }
-
         if ($this->appEnv === 'test' && $request->request->get(self::DISABLE_VALIDATE_RESPONSE_KEY) === '1') {
             return;
         }
 
-        $psr17Factory = new Psr17Factory();
-        $psrHttpFactory = new PsrHttpFactory($psr17Factory, $psr17Factory, $psr17Factory, $psr17Factory);
+        $psrHttpFactory = $this->buildPsrHttpFactory();
         $psrResponse = $psrHttpFactory->createResponse($event->getResponse());
 
         $this->responseValidator->validate(
@@ -102,5 +89,25 @@ final class OpenApiValidateSubscriber implements EventSubscriberInterface
             ),
             $psrResponse
         );
+    }
+
+    private function needValidate(ResponseEvent|RequestEvent $event): bool
+    {
+        if ($event->isMainRequest() === false) {
+            return false;
+        }
+
+        if (str_starts_with($event->getRequest()->getPathInfo(), '/_profiler') === true) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private function buildPsrHttpFactory(): PsrHttpFactory
+    {
+        $psr17Factory = new Psr17Factory();
+
+        return new PsrHttpFactory($psr17Factory, $psr17Factory, $psr17Factory, $psr17Factory);
     }
 }
