@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\User\SignIn\Http;
 
-use App\Infrastructure\Security\Authenticator\JsonLoginAuthenticator;
 use App\User\SignIn\Command\CreateToken;
+use App\User\SignIn\Http\Authenticator\JsonLoginAuthenticator;
 use App\User\SignUp\Domain\UserId;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;

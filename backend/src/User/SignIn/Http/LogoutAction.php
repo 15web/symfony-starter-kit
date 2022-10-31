@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\User\SignIn\Http;
 
 use App\Infrastructure\ApiException\ApiUnauthorizedException;
-use App\Infrastructure\Security\Authenticator\ApiToken\ApiTokenAuthenticator;
 use App\Infrastructure\SuccessResponse;
 use App\User\SignIn\Command\DeleteToken;
+use App\User\SignIn\Http\Authenticator\ApiTokenAuthenticator;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;

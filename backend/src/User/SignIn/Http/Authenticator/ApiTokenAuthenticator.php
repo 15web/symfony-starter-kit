@@ -2,11 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Security\Authenticator\ApiToken;
+namespace App\User\SignIn\Http\Authenticator;
 
 use App\Infrastructure\ApiException\ApiUnauthorizedException;
 use App\Infrastructure\ApiException\CreateExceptionJsonResponse;
 use App\Infrastructure\AsService;
+use App\User\SignIn\Domain\UserTokens;
+use App\User\SignUp\Domain\Users;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -24,8 +26,8 @@ final class ApiTokenAuthenticator extends AbstractAuthenticator
     public const TOKEN_NAME = 'X-AUTH-TOKEN';
 
     public function __construct(
-        private readonly IsTokenExists $isTokenExists,
-        private readonly GetEmailByTokenId $getEmailByTokenId,
+        private readonly UserTokens $userTokens,
+        private readonly Users $users,
         private readonly CreateExceptionJsonResponse $createExceptionJsonResponse,
     ) {
     }
@@ -46,18 +48,19 @@ final class ApiTokenAuthenticator extends AbstractAuthenticator
             throw new CustomUserMessageAuthenticationException('Невалидный токен');
         }
 
-        $apiTokenUuid = Uuid::fromString($apiToken);
-
-        $isTokenExists = ($this->isTokenExists)($apiTokenUuid);
-        if (!$isTokenExists) {
+        try {
+            $userToken = $this->userTokens->getById(Uuid::fromString($apiToken));
+        } catch (\DomainException) {
             throw new CustomUserMessageAuthenticationException('Токен не найден');
         }
 
-        $email = ($this->getEmailByTokenId)($apiTokenUuid);
+        try {
+            $user = $this->users->getById($userToken->getUserId());
+        } catch (\DomainException) {
+            throw new CustomUserMessageAuthenticationException('Пользователь не найден');
+        }
 
-        return new SelfValidatingPassport(
-            new UserBadge($email)
-        );
+        return new SelfValidatingPassport(new UserBadge($user->getUserIdentifier()));
     }
 
     /**

@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace App\User\SignUp\Domain;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Uid\Uuid;
 use Webmozart\Assert\Assert;
 
 #[ORM\Entity]
 /** @final */
-class User
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id, ORM\Column(type: 'uuid', unique: true)]
     private readonly Uuid $id;
@@ -30,20 +32,44 @@ class User
     #[ORM\Column]
     private readonly \DateTimeImmutable $createdAt;
 
-    public function __construct(UserId $userId, UserEmail $userEmail, UserRole $userRole, UserPassword $userPassword)
+    public function __construct(UserId $userId, UserEmail $userEmail, UserRole $userRole)
     {
         $this->id = $userId->value;
         $this->userEmail = $userEmail;
         $this->userRole = $userRole;
-        $this->userPassword = $userPassword;
+        $this->userPassword = new UserPassword('empty');
 
         $this->createdAt = new \DateTimeImmutable();
     }
 
-    public function applyPassword(UserPassword $userPassword): void
+    public function applyHashedPassword(UserPassword $userPassword): void
     {
         Assert::false($this->userPassword->equalTo($userPassword));
 
         $this->userPassword = $userPassword;
+    }
+
+    public function getPassword(): ?string
+    {
+        return $this->userPassword->value;
+    }
+
+    public function getRoles(): array
+    {
+        return [$this->userRole->value];
+    }
+
+    public function eraseCredentials(): void
+    {
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return $this->userEmail->value;
+    }
+
+    public function getUserId(): UserId
+    {
+        return new UserId($this->id);
     }
 }

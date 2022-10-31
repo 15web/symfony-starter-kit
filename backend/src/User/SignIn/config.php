@@ -4,15 +4,17 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Security;
 
-use App\Infrastructure\Security\Authenticator\ApiToken\ApiTokenAuthenticator;
-use App\Infrastructure\Security\Authenticator\AuthenticationEntryPoint;
-use App\Infrastructure\Security\Authenticator\JsonLoginAuthenticator;
-use App\Infrastructure\Security\UserProvider\SecurityUserProvider;
+use App\User\SignIn\Http\Authenticator\ApiTokenAuthenticator;
+use App\User\SignIn\Http\Authenticator\AuthenticationEntryPoint;
+use App\User\SignIn\Http\Authenticator\JsonLoginAuthenticator;
+use App\User\SignUp\Domain\User;
 use Symfony\Config\SecurityConfig;
 
 return static function (SecurityConfig $security): void {
     $security->provider('app_user_provider')
-        ->id(SecurityUserProvider::class);
+        ->entity()
+        ->class(User::class)
+        ->property('userEmail.value');
 
     $security->enableAuthenticatorManager(true);
     $security->firewall('main')
