@@ -9,6 +9,9 @@ use App\Tests\Functional\SDK\Task;
 use App\Tests\Functional\SDK\User;
 use Symfony\Component\Uid\Uuid;
 
+/**
+ * @internal
+ */
 final class RemoveTaskTest extends ApiWebTestCase
 {
     public function testSuccess(): void

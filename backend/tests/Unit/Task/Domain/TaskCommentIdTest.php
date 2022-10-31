@@ -7,6 +7,9 @@ namespace App\Tests\Unit\Task\Domain;
 use App\Task\Domain\TaskCommentId;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 final class TaskCommentIdTest extends TestCase
 {
     public function testEquals(): void

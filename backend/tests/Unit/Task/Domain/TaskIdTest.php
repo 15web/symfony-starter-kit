@@ -7,6 +7,9 @@ namespace App\Tests\Unit\Task\Domain;
 use App\Task\Domain\TaskId;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 final class TaskIdTest extends TestCase
 {
     public function testEquals(): void

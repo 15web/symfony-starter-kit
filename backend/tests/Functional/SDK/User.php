@@ -6,6 +6,9 @@ namespace App\Tests\Functional\SDK;
 
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 
+/**
+ * @internal
+ */
 final class User extends ApiWebTestCase
 {
     /**

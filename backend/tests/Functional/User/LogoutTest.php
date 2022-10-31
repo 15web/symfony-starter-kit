@@ -7,6 +7,9 @@ namespace App\Tests\Functional\User;
 use App\Tests\Functional\SDK\ApiWebTestCase;
 use App\Tests\Functional\SDK\User;
 
+/**
+ * @internal
+ */
 final class LogoutTest extends ApiWebTestCase
 {
     public function testSuccessUseCase(): void

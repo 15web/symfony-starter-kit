@@ -15,6 +15,9 @@ use App\Task\Domain\TaskName;
 use App\User\SignUp\Domain\UserId;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 final class TaskTest extends TestCase
 {
     public function testAlreadyCompletedTask(): void

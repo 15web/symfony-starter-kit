@@ -11,11 +11,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Uid\Uuid;
 use Webmozart\Assert\Assert;
 
-class ApiWebTestCase extends WebTestCase
+abstract class ApiWebTestCase extends WebTestCase
 {
     private static ?KernelBrowser $client = null;
 
-    public static function request(
+    final public static function request(
         string $method,
         string $uri,
         ?string $body = null,
@@ -50,7 +50,7 @@ class ApiWebTestCase extends WebTestCase
         return self::$client->getResponse();
     }
 
-    public static function jsonDecode(string|bool $content): array
+    final public static function jsonDecode(string|bool $content): array
     {
         if (\is_bool($content)) {
             return [];
@@ -59,47 +59,47 @@ class ApiWebTestCase extends WebTestCase
         return (array) json_decode($content, true, 512, JSON_THROW_ON_ERROR);
     }
 
-    public static function assertSuccessResponse(Response $response): void
+    final public static function assertSuccessResponse(Response $response): void
     {
-        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        static::assertSame(Response::HTTP_OK, $response->getStatusCode());
     }
 
-    public static function assertSuccessContentResponse(Response $response): void
+    final public static function assertSuccessContentResponse(Response $response): void
     {
-        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        static::assertSame(Response::HTTP_OK, $response->getStatusCode());
 
         $response = self::jsonDecode($response->getContent());
-        self::assertTrue($response['success']);
+        static::assertTrue($response['success']);
     }
 
-    public static function assertBadRequest(Response $response): void
+    final public static function assertBadRequest(Response $response): void
     {
-        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        static::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
     }
 
-    public static function assertApiError(Response $response, int $apiErrorCode): void
+    final public static function assertApiError(Response $response, int $apiErrorCode): void
     {
-        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        static::assertSame(Response::HTTP_OK, $response->getStatusCode());
 
         $response = self::jsonDecode($response->getContent());
-        self::assertTrue($response['error']);
-        self::assertSame($response['code'], $apiErrorCode);
-        self::assertNotEmpty($response['errorMessage']);
+        static::assertTrue($response['error']);
+        static::assertSame($response['code'], $apiErrorCode);
+        static::assertNotEmpty($response['errorMessage']);
     }
 
-    public static function assertAccessDenied(Response $response): void
+    final public static function assertAccessDenied(Response $response): void
     {
-        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+        static::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
     }
 
-    public static function assertNotFound(Response $response): void
+    final public static function assertNotFound(Response $response): void
     {
-        self::assertSame(Response::HTTP_NOT_FOUND, $response->getStatusCode());
+        static::assertSame(Response::HTTP_NOT_FOUND, $response->getStatusCode());
     }
 
-    public static function assertForbidden(Response $response): void
+    final public static function assertForbidden(Response $response): void
     {
-        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        static::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
     }
 
     /**

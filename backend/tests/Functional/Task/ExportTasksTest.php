@@ -11,6 +11,9 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\Serializer\Encoder\CsvEncoder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 
+/**
+ * @internal
+ */
 final class ExportTasksTest extends ApiWebTestCase
 {
     public function testCsvExport(): void
