@@ -7,6 +7,9 @@ namespace App\Tests\Functional\User;
 use App\Tests\Functional\SDK\ApiWebTestCase;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 
+/**
+ * @internal
+ */
 final class SignInTest extends ApiWebTestCase
 {
     public function testCorrectCredentials(): void

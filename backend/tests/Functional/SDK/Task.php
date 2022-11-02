@@ -6,6 +6,9 @@ namespace App\Tests\Functional\SDK;
 
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @internal
+ */
 final class Task extends ApiWebTestCase
 {
     public static function create(string $taskName, string $token): Response

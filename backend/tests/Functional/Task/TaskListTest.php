@@ -8,6 +8,9 @@ use App\Tests\Functional\SDK\ApiWebTestCase;
 use App\Tests\Functional\SDK\Task;
 use App\Tests\Functional\SDK\User;
 
+/**
+ * @internal
+ */
 final class TaskListTest extends ApiWebTestCase
 {
     public function testSuccess(): void

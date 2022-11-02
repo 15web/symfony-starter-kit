@@ -8,6 +8,9 @@ use App\Infrastructure\ApiException\ApiErrorCode;
 use App\Tests\Functional\SDK\ApiWebTestCase;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 
+/**
+ * @internal
+ */
 final class SignUpTest extends ApiWebTestCase
 {
     public function testCorrectSignUp(): void

@@ -7,6 +7,9 @@ namespace App\Tests\Unit\User\Domain;
 use App\User\SignUp\Domain\UserEmail;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 final class UserEmailTest extends TestCase
 {
     public function testCorrectValue(): void
