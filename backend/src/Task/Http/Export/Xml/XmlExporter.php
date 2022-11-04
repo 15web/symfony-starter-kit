@@ -23,9 +23,9 @@ final class XmlExporter implements Exporter
     ) {
     }
 
-    public function support(Format $format): bool
+    public function getFormat(): Format
     {
-        return $format === Format::XML;
+        return Format::XML;
     }
 
     /**
