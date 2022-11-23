@@ -501,6 +501,270 @@ paths:
                                 code: 401
                                 errorMessage: 'Необходимо пройти аутентификацию'
 
+    /article/list:
+        get:
+            summary: 'Получить список статей'
+            tags: [ 'Статьи' ]
+            security: [ ]
+            responses:
+                200:
+                    description: 'Возвращает список статей'
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    type: object
+                                    required:
+                                        - title
+                                        - alias
+                                        - body
+                                    additionalProperties: false
+                                    properties:
+                                        title:
+                                            type: string
+                                            description: 'Заголовок'
+                                            example: 'Первая статья'
+                                        alias:
+                                            type: string
+                                            description: 'Алиас'
+                                            example: 'first-article'
+                                        body:
+                                            type: string
+                                            description: 'Контент'
+                                            example: 'Контент первой статьи'
+                                            nullable: true
+
+    /article/{alias}/info:
+        get:
+            summary: 'Получить данные по статье'
+            tags: [ 'Статьи' ]
+            security: [ ]
+            parameters:
+                -   in: path
+                    name: alias
+                    required: true
+                    description: 'Алиас статьи'
+                    example: 'first-article'
+                    schema:
+                        type: string
+            responses:
+                200:
+                    description: 'Возвращает статью'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                required:
+                                    - title
+                                    - body
+                                additionalProperties: false
+                                properties:
+                                    title:
+                                        type: string
+                                        description: 'Заголовок'
+                                        example: 'Первая статья'
+                                    body:
+                                        type: string
+                                        description: 'Контент'
+                                        example: 'Контент первой статьи'
+                                        nullable: true
+                404:
+                    description: 'Статья не найдена'
+
+    /admin/article/create:
+        post:
+            summary: 'Создать статью'
+            tags: [ 'Статьи' ]
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            properties:
+                                title:
+                                    type: string
+                                    description: 'Заголовок'
+                                    example: 'Первая статья'
+                                alias:
+                                    type: string
+                                    description: 'Алиас'
+                                    example: 'first-article'
+                                body:
+                                    type: string
+                                    description: 'Контент'
+                                    example: 'Контент первой статьи'
+                                    nullable: true
+                            additionalProperties: false
+                            required:
+                                - title
+                                - alias
+            responses:
+                200:
+                    description: 'Статья создана'
+                    content:
+                        application/json:
+                            schema:
+                                oneOf:
+                                    -   $ref: '#/components/schemas/articleResponse'
+                                    -   $ref: '#/components/schemas/errorResponse'
+                400:
+                    description: 'Ошибка запроса'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/errorResponse'
+                            example:
+                                error: true
+                                code: 400
+                                errorMessage: 'Неверный формат запроса'
+                401:
+                    description: 'Доступ запрещен'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/errorResponse'
+                            example:
+                                error: true
+                                code: 401
+                                errorMessage: 'Необходимо пройти аутентификацию'
+
+
+    /admin/article/{id}/update:
+        post:
+            summary: 'Обновить статью'
+            tags: [ 'Статьи' ]
+            parameters:
+                -   $ref: '#/components/parameters/taskId'
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            properties:
+                                title:
+                                    type: string
+                                    description: 'Заголовок'
+                                    example: 'Первая статья'
+                                alias:
+                                    type: string
+                                    description: 'Алиас'
+                                    example: 'first-article'
+                                body:
+                                    type: string
+                                    description: 'Контент'
+                                    example: 'Контент первой статьи'
+                                    nullable: true
+                            additionalProperties: false
+                            required:
+                                - title
+                                - alias
+            responses:
+                200:
+                    description: 'Статья обновлена'
+                    content:
+                        application/json:
+                            schema:
+                                oneOf:
+                                    -   $ref: '#/components/schemas/articleResponse'
+                                    -   $ref: '#/components/schemas/errorResponse'
+                400:
+                    description: 'Ошибка запроса'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/errorResponse'
+                            example:
+                                error: true
+                                code: 400
+                                errorMessage: 'Неверный формат запроса'
+                404:
+                    description: 'Статья не найдена'
+                401:
+                    description: 'Доступ запрещен'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/errorResponse'
+                            example:
+                                error: true
+                                code: 401
+                                errorMessage: 'Необходимо пройти аутентификацию'
+
+    /admin/article/list:
+        get:
+            summary: 'Получить список статей'
+            tags: [ 'Статьи' ]
+            responses:
+                200:
+                    description: 'Список статей'
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/articleResponse'
+                401:
+                    description: 'Доступ запрещен'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/errorResponse'
+                            example:
+                                error: true
+                                code: 401
+                                errorMessage: 'Необходимо пройти аутентификацию'
+
+    /admin/article/{id}/info:
+        get:
+            summary: 'Получить информацию по статье'
+            tags: [ 'Статьи' ]
+            parameters:
+                -   $ref: '#/components/parameters/taskId'
+            responses:
+                200:
+                    description: 'Информация по статье'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/articleResponse'
+                404:
+                    description: 'Статья не найдена'
+                401:
+                    description: 'Доступ запрещен'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/errorResponse'
+                            example:
+                                error: true
+                                code: 401
+                                errorMessage: 'Необходимо пройти аутентификацию'
+
+
+    /admin/article/{id}/remove:
+        post:
+            summary: 'Удалить статью'
+            tags: [ 'Статьи' ]
+            parameters:
+                -   $ref: '#/components/parameters/articleId'
+            responses:
+                200:
+                    description: 'Статья удалена'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/successResponse'
+                404:
+                    description: 'Статья не найдена'
+                401:
+                    description: 'Доступ запрещен'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/errorResponse'
+                            example:
+                                error: true
+                                code: 401
+                                errorMessage: 'Необходимо пройти аутентификацию'
 components:
     securitySchemes:
         ApiTokenAuth:
@@ -548,12 +812,58 @@ components:
                     type: string
                     format: uuid
                     example: '123e4567-e89b-12d3-a456-426614174000'
+        articleResponse:
+            type: object
+            additionalProperties: false
+            required:
+                - id
+                - title
+                - alias
+                - createdAt
+            properties:
+                id:
+                    type: string
+                    format: uuid
+                    description: 'ID'
+                    example: 'dc8dbada-b154-4ffb-b21c-da70162e2704'
+                title:
+                    type: string
+                    description: 'Заголовок'
+                    example: 'Первая статья'
+                alias:
+                    type: string
+                    description: 'Алиас'
+                    example: 'first-article'
+                body:
+                    type: string
+                    description: 'Контент'
+                    example: 'Контент первой статьи'
+                    nullable: true
+                createdAt:
+                    type: string
+                    description: 'Дата создания'
+                    example: '2021-10-28T16:19:44+00:00'
+                updatedAt:
+                    type: string
+                    description: 'Дата обновления'
+                    example: '2021-10-28T16:19:44+00:00'
+                    nullable: true
+
     parameters:
         taskId:
             name: id
             in: path
             required: true
             description: 'ID задачи'
+            example: '123e4567-e89b-12d3-a456-426614174000'
+            schema:
+                type: string
+                format: uuid
+        articleId:
+            name: id
+            in: path
+            required: true
+            description: 'ID статьи'
             example: '123e4567-e89b-12d3-a456-426614174000'
             schema:
                 type: string
