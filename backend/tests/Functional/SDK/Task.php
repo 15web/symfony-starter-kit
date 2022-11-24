@@ -32,7 +32,7 @@ final class Task extends ApiWebTestCase
     {
         $response = self::request('GET', '/api/tasks', token: $token);
 
-        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSuccessResponse($response);
 
         return self::jsonDecode($response->getContent());
     }

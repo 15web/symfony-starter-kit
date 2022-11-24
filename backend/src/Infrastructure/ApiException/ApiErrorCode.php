@@ -7,4 +7,6 @@ namespace App\Infrastructure\ApiException;
 enum ApiErrorCode: int
 {
     case UserAlreadyExist = 1;
+
+    case ArticleAlreadyExist = 2;
 }
