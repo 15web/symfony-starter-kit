@@ -24,7 +24,7 @@ final class ConfirmEmail
     public function __invoke(Uuid $confirmToken): void
     {
         $user = $this->users->findByConfirmToken($confirmToken);
-        $user->confirmEmail();
+        $user->userEmail->confirm();
 
         ($this->flush)();
     }

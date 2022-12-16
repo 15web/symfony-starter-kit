@@ -47,4 +47,9 @@ final class UserEmail implements ValueObject
 
         $this->isConfirmed = true;
     }
+
+    public function isConfirmed(): bool
+    {
+        return $this->isConfirmed;
+    }
 }

@@ -14,6 +14,9 @@ use Webmozart\Assert\Assert;
 /** @final */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    #[ORM\Embedded]
+    public readonly UserEmail $userEmail;
+
     #[ORM\Id, ORM\Column(type: 'uuid', unique: true)]
     private readonly Uuid $id;
 
@@ -22,9 +25,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Embedded]
     private UserPassword $userPassword;
-
-    #[ORM\Embedded]
-    private UserEmail $userEmail;
 
     #[ORM\Column]
     private UserRole $userRole;
@@ -71,10 +71,5 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getUserId(): UserId
     {
         return new UserId($this->id);
-    }
-
-    public function confirmEmail(): void
-    {
-        $this->userEmail->confirm();
     }
 }

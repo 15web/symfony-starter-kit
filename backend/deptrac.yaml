@@ -59,12 +59,14 @@ parameters:
             - Query
             - Infrastructure
             - Vendor
+            - Notification
         Console:
             - Domain
             - Command
             - Query
             - Infrastructure
             - Vendor
+            - Notification
         Notification:
             - Domain
             - Infrastructure
