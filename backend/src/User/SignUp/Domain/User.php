@@ -72,4 +72,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return new UserId($this->id);
     }
+
+    public function confirmEmail(): void
+    {
+        $this->userEmail->confirm();
+    }
 }

@@ -6,6 +6,7 @@ namespace App\User\SignUp\Domain;
 
 use App\Infrastructure\AsService;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Uid\Uuid;
 
 #[AsService]
 final class Users
@@ -32,6 +33,19 @@ final class Users
         return $this->entityManager->getRepository(User::class)->findOneBy([
             'userEmail.value' => $email,
         ]);
+    }
+
+    public function findByConfirmToken(Uuid $confirmToken): User
+    {
+        $user = $this->entityManager->getRepository(User::class)->findOneBy([
+            'userEmail.confirmToken' => $confirmToken,
+        ]);
+
+        if ($user === null) {
+            throw new UserNotFoundException();
+        }
+
+        return $user;
     }
 
     public function add(User $user): void

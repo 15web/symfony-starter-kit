@@ -11,22 +11,22 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsService]
 #[AsMessageHandler]
-final class SendNewPassword
+final class SendConfirmEmailToken
 {
     public function __construct(private readonly MailerInterface $mailer)
     {
     }
 
-    public function __invoke(NewPasswordMessage $message): void
+    public function __invoke(ConfirmEmailMessage $message): void
     {
-        $subject = 'Ваш пароль';
+        $subject = 'Подтверждение email';
 
         $email = (new TemplatedEmail())
             ->to($message->getEmail())
             ->subject($subject)
-            ->htmlTemplate('emails/new-password.html.twig')
+            ->htmlTemplate('emails/confirm.html.twig')
             ->context([
-                'password' => $message->getPlaintextPassword(),
+                'confirmToken' => $message->getConfirmToken(),
             ]);
 
         $this->mailer->send($email);

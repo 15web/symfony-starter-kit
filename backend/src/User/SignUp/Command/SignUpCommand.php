@@ -9,9 +9,14 @@ use Webmozart\Assert\Assert;
 
 final class SignUpCommand implements ApiRequest
 {
-    public function __construct(public readonly string $email)
-    {
+    public function __construct(
+        public readonly string $email,
+        public readonly string $password
+    ) {
         Assert::notEmpty($email);
         Assert::email($email);
+
+        Assert::notEmpty($password);
+        Assert::minLength($password, 6);
     }
 }
