@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\User\SignUp\Domain;
 
 use App\Infrastructure\AsService;
+use App\User\RecoveryPassword\Domain\RecoveryToken;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Uid\Uuid;
 
@@ -39,6 +40,19 @@ final class Users
     {
         $user = $this->entityManager->getRepository(User::class)->findOneBy([
             'userEmail.confirmToken' => $confirmToken,
+        ]);
+
+        if ($user === null) {
+            throw new UserNotFoundException();
+        }
+
+        return $user;
+    }
+
+    public function findByRecoverToken(RecoveryToken $recoverToken): User
+    {
+        $user = $this->entityManager->getRepository(User::class)->findOneBy([
+            'recoveryToken.value' => $recoverToken->value,
         ]);
 
         if ($user === null) {

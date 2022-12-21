@@ -47,6 +47,78 @@ paths:
                                 error: true
                                 code: 400
                                 errorMessage: 'Неверный формат запроса'
+    /recover-password-send:
+        post:
+            summary: 'Запрос на восстановление пароля'
+            tags: [ 'Аутентификация' ]
+            security: [ ]
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            properties:
+                                email:
+                                    type: string
+                                    format: email
+                                    description: 'Email пользователя'
+                                    example: 'test@test.ru'
+                            additionalProperties: false
+                            required:
+                                - email
+            responses:
+                200:
+                    description: 'Токен отправлен'
+                    content:
+                        application/json:
+                            schema:
+                                oneOf:
+                                    -   $ref: '#/components/schemas/successResponse'
+                                    -   $ref: '#/components/schemas/errorResponse'
+                400:
+                    description: 'Ошибка запроса'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/errorResponse'
+                            example:
+                                error: true
+                                code: 400
+                                errorMessage: 'Неверный формат запроса'
+    /recover-password:
+        post:
+            summary: 'Восстановление пароля'
+            tags: [ 'Аутентификация' ]
+            security: [ ]
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            properties:
+                                recoverToken:
+                                    type: string
+                                    format: uuid
+                                    nullable: false
+                                    description: 'Токен восстановления пароля'
+                                    example: '123e4567-e89b-12d3-a456-426614174000'
+                                password:
+                                    type: string
+                                    nullable: false
+                                    description: 'Пароль пользователя'
+                                    example: 'qwer1234'
+                                    minLength: 6
+                            additionalProperties: false
+                            required:
+                                - recoverToken
+                                - password
+            responses:
+                200:
+                    description: 'Пароль восстановлен'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/successResponse'
+                404:
+                    description: 'Пользователь с таким токеном не найден'
 
     /confirm-email/{confirmToken}:
         get:

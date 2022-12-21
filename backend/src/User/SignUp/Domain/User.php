@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\User\SignUp\Domain;
 
+use App\User\RecoveryPassword\Domain\RecoveryToken;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -25,6 +26,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Embedded]
     private UserPassword $userPassword;
+
+    #[ORM\Embedded]
+    private RecoveryToken $recoveryToken;
 
     #[ORM\Column]
     private UserRole $userRole;
@@ -71,5 +75,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getUserId(): UserId
     {
         return new UserId($this->id);
+    }
+
+    public function updateRecoveryToken(RecoveryToken $recoveryToken): void
+    {
+        Assert::false($this->userPassword->equalTo($recoveryToken));
+
+        $this->recoveryToken = $recoveryToken;
     }
 }

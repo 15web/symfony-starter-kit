@@ -2,25 +2,20 @@
 
 declare(strict_types=1);
 
-namespace App\User\SignUp\Domain;
+namespace App\User\RecoveryPassword\Domain;
 
 use App\Infrastructure\ValueObject;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
-use Webmozart\Assert\Assert;
+use Symfony\Component\Uid\UuidV4;
 
 #[ORM\Embeddable]
-final class UserPassword implements ValueObject
+final class RecoveryToken implements ValueObject
 {
-    #[ORM\Column]
-    public readonly string $value;
-
-    public function __construct(string $hashedPassword)
-    {
-        Assert::notEmpty($hashedPassword);
-
-        $this->value = $hashedPassword;
-        $this->recoveryToken = null;
+    public function __construct(
+        #[ORM\Column(type: 'uuid', unique: true, nullable: true)]
+        public readonly ?Uuid $value = new UuidV4()
+    ) {
     }
 
     /**
