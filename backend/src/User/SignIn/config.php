@@ -7,6 +7,7 @@ namespace App\Infrastructure\Security;
 use App\User\SignIn\Http\Authenticator\ApiTokenAuthenticator;
 use App\User\SignIn\Http\Authenticator\AuthenticationEntryPoint;
 use App\User\SignIn\Http\Authenticator\JsonLoginAuthenticator;
+use App\User\SignIn\Http\Authenticator\UserChecker;
 use App\User\SignUp\Domain\User;
 use Symfony\Config\SecurityConfig;
 
@@ -19,5 +20,6 @@ return static function (SecurityConfig $security): void {
     $security->enableAuthenticatorManager(true);
     $security->firewall('main')
         ->customAuthenticators([ApiTokenAuthenticator::class, JsonLoginAuthenticator::class])
-        ->entryPoint(AuthenticationEntryPoint::class);
+        ->entryPoint(AuthenticationEntryPoint::class)
+        ->userChecker(UserChecker::class);
 };
