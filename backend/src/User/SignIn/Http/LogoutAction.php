@@ -8,10 +8,10 @@ use App\Infrastructure\ApiException\ApiUnauthorizedException;
 use App\Infrastructure\SuccessResponse;
 use App\User\SignIn\Command\DeleteToken;
 use App\User\SignIn\Http\Authenticator\ApiTokenAuthenticator;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Uid\Uuid;
 
 #[IsGranted('ROLE_USER')]

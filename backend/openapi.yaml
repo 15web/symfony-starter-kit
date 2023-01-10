@@ -193,7 +193,7 @@ paths:
                                 code: 401
                                 errorMessage: 'Необходимо пройти аутентификацию'
 
-    /tasks/{id}:
+    /tasks/{taskId}:
         get:
             summary: 'Подробная информация по задаче'
             tags: [ 'Задачи' ]
@@ -308,7 +308,7 @@ paths:
                                 code: 401
                                 errorMessage: 'Необходимо пройти аутентификацию'
 
-    /tasks/{id}/update-task-name:
+    /tasks/{taskId}/update-task-name:
         post:
             summary: 'Обновить наименование задачи'
             tags: [ 'Задачи' ]
@@ -356,7 +356,7 @@ paths:
                                 code: 401
                                 errorMessage: 'Необходимо пройти аутентификацию'
 
-    /tasks/{id}/remove:
+    /tasks/{taskId}/remove:
         post:
             summary: 'Удаляет задачу'
             tags: [ 'Задачи' ]
@@ -382,7 +382,7 @@ paths:
                                 code: 401
                                 errorMessage: 'Необходимо пройти аутентификацию'
 
-    /tasks/{id}/complete:
+    /tasks/{taskId}/complete:
         post:
             summary: 'Завершает задачу'
             tags: [ 'Задачи' ]
@@ -418,7 +418,7 @@ paths:
                                 code: 401
                                 errorMessage: 'Необходимо пройти аутентификацию'
 
-    /tasks/{id}/add-comment:
+    /tasks/{taskId}/add-comment:
         post:
             summary: 'Добавление комментария к задаче'
             tags: [ 'Задачи' ]
@@ -464,7 +464,7 @@ paths:
                                 error: true
                                 code: 401
                                 errorMessage: 'Необходимо пройти аутентификацию'
-    /tasks/{id}/comments:
+    /tasks/{taskId}/comments:
         get:
             summary: 'Получить список комментариев к задаче'
             tags: [ 'Задачи' ]
@@ -661,12 +661,12 @@ paths:
                                 errorMessage: 'Необходимо пройти аутентификацию'
 
 
-    /admin/article/{id}/update:
+    /admin/article/{articleId}/update:
         post:
             summary: 'Обновить статью'
             tags: [ 'Статьи' ]
             parameters:
-                -   $ref: '#/components/parameters/taskId'
+                -   $ref: '#/components/parameters/articleId'
             requestBody:
                 content:
                     application/json:
@@ -745,12 +745,12 @@ paths:
                                 code: 401
                                 errorMessage: 'Необходимо пройти аутентификацию'
 
-    /admin/article/{id}/info:
+    /admin/article/{articleId}/info:
         get:
             summary: 'Получить информацию по статье'
             tags: [ 'Статьи' ]
             parameters:
-                -   $ref: '#/components/parameters/taskId'
+                -   $ref: '#/components/parameters/articleId'
             responses:
                 200:
                     description: 'Информация по статье'
@@ -772,7 +772,7 @@ paths:
                                 errorMessage: 'Необходимо пройти аутентификацию'
 
 
-    /admin/article/{id}/remove:
+    /admin/article/{articleId}/remove:
         post:
             summary: 'Удалить статью'
             tags: [ 'Статьи' ]
@@ -883,7 +883,7 @@ components:
 
     parameters:
         taskId:
-            name: id
+            name: taskId
             in: path
             required: true
             description: 'ID задачи'
@@ -892,7 +892,7 @@ components:
                 type: string
                 format: uuid
         articleId:
-            name: id
+            name: articleId
             in: path
             required: true
             description: 'ID статьи'

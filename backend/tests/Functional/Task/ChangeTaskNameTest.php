@@ -79,12 +79,12 @@ final class ChangeTaskNameTest extends ApiWebTestCase
 
     public function testNoAccessAnotherUser(): void
     {
-        $token = User::auth();
-        Task::create('Тестовая задача №1', $token);
+        $userToken = User::auth();
+        Task::create('Тестовая задача №1', $userToken);
 
         $this->tearDown();
-        $tokenSecond = User::auth('second@example.com');
-        $taskId = Task::createAndReturnId('Тестовая задача №2 ', $tokenSecond);
+        $anotherUserToken = User::auth('second@example.com');
+        $anotherTaskId = Task::createAndReturnId('Тестовая задача №2 ', $anotherUserToken);
 
         $body = [];
         $body['taskName'] = 'Тестовая задача 2';
@@ -92,9 +92,9 @@ final class ChangeTaskNameTest extends ApiWebTestCase
 
         $response = self::request(
             'POST',
-            "/api/tasks/{$taskId}/update-task-name",
+            "/api/tasks/{$anotherTaskId}/update-task-name",
             $body,
-            token: $token
+            token: $userToken
         );
 
         self::assertNotFound($response);

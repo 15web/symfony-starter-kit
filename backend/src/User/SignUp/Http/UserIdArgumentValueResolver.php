@@ -8,13 +8,13 @@ use App\Infrastructure\ApiException\ApiUnauthorizedException;
 use App\Infrastructure\AsService;
 use App\User\SignUp\Domain\User;
 use App\User\SignUp\Domain\UserId;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
+use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
-use Symfony\Component\Security\Core\Security;
 
 #[AsService]
-final class UserIdArgumentValueResolver implements ArgumentValueResolverInterface
+final class UserIdArgumentValueResolver implements ValueResolverInterface
 {
     public function __construct(private readonly Security $security)
     {
@@ -22,21 +22,17 @@ final class UserIdArgumentValueResolver implements ArgumentValueResolverInterfac
 
     /**
      * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter
-     */
-    public function supports(Request $request, ArgumentMetadata $argument): bool
-    {
-        return $argument->getType() === UserId::class;
-    }
-
-    /**
+     *
      * @return iterable<UserId>
      *
      * @throws ApiUnauthorizedException
-     *
-     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter
      */
     public function resolve(Request $request, ArgumentMetadata $argument): iterable
     {
+        if ($argument->getType() !== UserId::class) {
+            return [];
+        }
+
         $user = $this->security->getUser();
 
         if ($user === null) {
@@ -47,6 +43,6 @@ final class UserIdArgumentValueResolver implements ArgumentValueResolverInterfac
             throw new ApiUnauthorizedException();
         }
 
-        yield $user->getUserId();
+        return [$user->getUserId()];
     }
 }

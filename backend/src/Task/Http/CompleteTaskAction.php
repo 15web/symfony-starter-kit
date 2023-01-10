@@ -9,12 +9,12 @@ use App\Infrastructure\SuccessResponse;
 use App\Task\Command\CompleteTask;
 use App\Task\Domain\Task;
 use App\Task\Domain\TaskAlreadyIsDoneException;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted('ROLE_USER')]
-#[Route('/tasks/{id}/complete', methods: ['POST'])]
+#[Route('/tasks/{taskId}/complete', methods: ['POST'])]
 #[AsController]
 final class CompleteTaskAction
 {

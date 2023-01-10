@@ -28,8 +28,7 @@ final class ConfirmEmailTest extends ApiWebTestCase
 
         /** @var TemplatedEmail $email */
         $email = self::getMailerMessage();
-        $context = $email->getContext();
-        $confirmToken = $context['confirmToken'];
+        $confirmToken = $email->getHeaders()->get('confirmToken')?->getBody();
 
         self::assertNotEmpty($confirmToken);
 
@@ -48,8 +47,7 @@ final class ConfirmEmailTest extends ApiWebTestCase
 
         /** @var TemplatedEmail $email */
         $email = self::getMailerMessage();
-        $context = $email->getContext();
-        $confirmToken = $context['confirmToken'];
+        $confirmToken = $email->getHeaders()->get('confirmToken')?->getBody();
 
         self::assertNotEmpty($confirmToken);
         self::request('GET', "/api/confirm-email/{$confirmToken}");

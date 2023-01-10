@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Task\Http\Export;
 
 use App\User\SignUp\Domain\UserId;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted('ROLE_USER')]
 #[Route('/export/tasks.{format}', methods: ['GET'])]

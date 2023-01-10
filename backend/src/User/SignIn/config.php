@@ -17,7 +17,6 @@ return static function (SecurityConfig $security): void {
         ->class(User::class)
         ->property('userEmail.value');
 
-    $security->enableAuthenticatorManager(true);
     $security->firewall('main')
         ->customAuthenticators([ApiTokenAuthenticator::class, JsonLoginAuthenticator::class])
         ->entryPoint(AuthenticationEntryPoint::class)

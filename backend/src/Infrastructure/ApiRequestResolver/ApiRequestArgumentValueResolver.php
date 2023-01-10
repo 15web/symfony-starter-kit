@@ -7,28 +7,16 @@ namespace App\Infrastructure\ApiRequestResolver;
 use App\Infrastructure\ApiException\ApiBadRequestException;
 use App\Infrastructure\AsService;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
+use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\SerializerInterface;
 
 #[AsService]
-final class ApiRequestArgumentValueResolver implements ArgumentValueResolverInterface
+final class ApiRequestArgumentValueResolver implements ValueResolverInterface
 {
     public function __construct(private readonly SerializerInterface $serializer)
     {
-    }
-
-    /**
-     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter
-     */
-    public function supports(Request $request, ArgumentMetadata $argument): bool
-    {
-        if ($argument->getType() === null) {
-            return false;
-        }
-
-        return is_subclass_of($argument->getType(), ApiRequest::class);
     }
 
     /**
@@ -39,10 +27,14 @@ final class ApiRequestArgumentValueResolver implements ArgumentValueResolverInte
     public function resolve(Request $request, ArgumentMetadata $argument): iterable
     {
         if ($argument->getType() === null) {
-            throw new ApiBadRequestException('Укажите объект запроса');
+            return [];
         }
 
-        if ($request->getContentType() !== JsonEncoder::FORMAT) {
+        if (is_subclass_of($argument->getType(), ApiRequest::class) === false) {
+            return [];
+        }
+
+        if ($request->getContentTypeFormat() !== JsonEncoder::FORMAT) {
             throw new ApiBadRequestException('Укажите json');
         }
 
@@ -59,6 +51,6 @@ final class ApiRequestArgumentValueResolver implements ArgumentValueResolverInte
             throw new ApiBadRequestException('Неверный формат запроса', $e);
         }
 
-        yield $requestObject;
+        return [$requestObject];
     }
 }

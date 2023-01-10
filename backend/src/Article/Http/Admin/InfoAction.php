@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace App\Article\Http\Admin;
 
 use App\Article\Domain\Article;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted('ROLE_USER')]
-#[Route('/admin/article/{id}/info', methods: ['GET'])]
+#[Route('/admin/article/{articleId}/info', methods: ['GET'])]
 #[AsController]
 final class InfoAction
 {
