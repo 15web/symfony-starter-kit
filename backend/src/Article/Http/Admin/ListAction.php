@@ -6,9 +6,9 @@ namespace App\Article\Http\Admin;
 
 use App\Article\Domain\Article;
 use App\Article\Domain\Articles;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted('ROLE_USER')]
 #[Route('/admin/article/list', methods: ['GET'])]

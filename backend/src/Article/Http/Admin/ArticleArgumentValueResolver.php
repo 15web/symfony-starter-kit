@@ -10,35 +10,29 @@ use App\Infrastructure\ApiException\ApiBadRequestException;
 use App\Infrastructure\ApiException\ApiNotFoundException;
 use App\Infrastructure\AsService;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
+use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Symfony\Component\Uid\Uuid;
 use Webmozart\Assert\Assert;
 
 #[AsService]
-final class ArticleArgumentValueResolver implements ArgumentValueResolverInterface
+final class ArticleArgumentValueResolver implements ValueResolverInterface
 {
     public function __construct(private readonly Articles $articles)
     {
     }
 
     /**
-     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter
-     */
-    public function supports(Request $request, ArgumentMetadata $argument): bool
-    {
-        return $argument->getType() === Article::class;
-    }
-
-    /**
-     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter
-     *
      * @return iterable<Article>
      */
     public function resolve(Request $request, ArgumentMetadata $argument): iterable
     {
+        if ($argument->getType() !== Article::class) {
+            return [];
+        }
+
         /** @var string|null $id */
-        $id = $request->attributes->get('id');
+        $id = $request->attributes->get('articleId');
         if ($id === null) {
             throw new ApiBadRequestException('Укажите id');
         }
@@ -55,6 +49,6 @@ final class ArticleArgumentValueResolver implements ArgumentValueResolverInterfa
             throw new ApiBadRequestException($exception->getMessage());
         }
 
-        yield $article;
+        return [$article];
     }
 }

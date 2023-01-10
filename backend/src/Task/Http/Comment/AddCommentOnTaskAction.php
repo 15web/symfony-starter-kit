@@ -11,12 +11,12 @@ use App\Task\Command\Comment\Add\AddCommentOnTaskCommand;
 use App\Task\Domain\AddCommentToCompletedTaskException;
 use App\Task\Domain\Task;
 use App\Task\Domain\TaskCommentId;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted('ROLE_USER')]
-#[Route('/tasks/{id}/add-comment', methods: ['POST'])]
+#[Route('/tasks/{taskId}/add-comment', methods: ['POST'])]
 #[AsController]
 final class AddCommentOnTaskAction
 {

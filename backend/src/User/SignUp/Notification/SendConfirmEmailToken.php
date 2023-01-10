@@ -29,6 +29,8 @@ final class SendConfirmEmailToken
                 'confirmToken' => $message->getConfirmToken(),
             ]);
 
+        $email->getHeaders()->addTextHeader('confirmToken', (string) $message->getConfirmToken());
+
         $this->mailer->send($email);
     }
 }

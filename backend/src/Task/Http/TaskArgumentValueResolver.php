@@ -12,15 +12,15 @@ use App\Task\Domain\Task;
 use App\Task\Domain\TaskId;
 use App\Task\Domain\Tasks;
 use App\User\SignUp\Domain\User;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
+use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Uid\Uuid;
 use Webmozart\Assert\Assert;
 
 #[AsService]
-final class TaskArgumentValueResolver implements ArgumentValueResolverInterface
+final class TaskArgumentValueResolver implements ValueResolverInterface
 {
     public function __construct(
         private readonly Security $security,
@@ -29,20 +29,14 @@ final class TaskArgumentValueResolver implements ArgumentValueResolverInterface
     }
 
     /**
-     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter
-     */
-    public function supports(Request $request, ArgumentMetadata $argument): bool
-    {
-        return $argument->getType() === Task::class;
-    }
-
-    /**
-     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter
-     *
      * @return iterable<Task>
      */
     public function resolve(Request $request, ArgumentMetadata $argument): iterable
     {
+        if ($argument->getType() !== Task::class) {
+            return [];
+        }
+
         $user = $this->security->getUser();
 
         if ($user === null) {
@@ -54,7 +48,7 @@ final class TaskArgumentValueResolver implements ArgumentValueResolverInterface
         }
 
         /** @var string|null $taskId */
-        $taskId = $request->attributes->get('id');
+        $taskId = $request->attributes->get('taskId');
         if ($taskId === null) {
             throw new ApiBadRequestException('Укажите id');
         }
@@ -74,6 +68,6 @@ final class TaskArgumentValueResolver implements ArgumentValueResolverInterface
             throw new ApiBadRequestException($exception->getMessage());
         }
 
-        yield $task;
+        return [$task];
     }
 }

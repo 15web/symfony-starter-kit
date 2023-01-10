@@ -44,7 +44,7 @@ final class JsonLoginAuthenticator extends AbstractAuthenticator
     {
         try {
             /** @var array<string, string> $data */
-            $data = json_decode((string) $request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+            $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
             $email = $data[self::EMAIL_KEY];
             Assert::email($email);

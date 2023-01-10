@@ -9,12 +9,12 @@ use App\Infrastructure\SuccessResponse;
 use App\Task\Command\UpdateTaskName\UpdateTaskName;
 use App\Task\Command\UpdateTaskName\UpdateTaskNameCommand;
 use App\Task\Domain\Task;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted('ROLE_USER')]
-#[Route('/tasks/{id}/update-task-name', methods: ['POST'])]
+#[Route('/tasks/{taskId}/update-task-name', methods: ['POST'])]
 #[AsController]
 final class UpdateTaskNameAction
 {

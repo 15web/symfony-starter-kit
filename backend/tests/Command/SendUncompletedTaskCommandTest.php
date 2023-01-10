@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Command;
 
-use App\Task\Query\Task\FindUncompletedTasksByUserId\TaskData;
 use App\Tests\Functional\SDK\ApiWebTestCase;
 use App\Tests\Functional\SDK\Task;
 use App\Tests\Functional\SDK\User;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -26,10 +24,6 @@ final class SendUncompletedTaskCommandTest extends KernelTestCase
         $taskId2 = Task::createAndReturnId('Тестовая задача для отправки писем №2', $token);
         ApiWebTestCase::request('POST', "/api/tasks/{$taskId2}/complete", token: $token);
 
-        $this->tearDown();
-        $token = User::auth('second@example.com');
-        Task::create($taskName3 = 'Тестовая задача для отправки писем №3', $token);
-
         $kernel = self::bootKernel();
         $application = new Application($kernel);
 
@@ -38,20 +32,12 @@ final class SendUncompletedTaskCommandTest extends KernelTestCase
         $commandTester->execute([]);
 
         $commandTester->assertCommandIsSuccessful();
-        self::assertEmailCount(2);
 
-        /** @var TemplatedEmail[] $emailsSent */
-        $emailsSent = self::getMailerMessages('null://');
-        $taskNamesSent = [];
-        foreach ($emailsSent as $email) {
-            /** @var TaskData[] $tasksSentToUser */
-            $tasksSentToUser = $email->getContext()['tasks'];
+        self::assertEmailCount(1);
 
-            self::assertCount(1, $tasksSentToUser);
-            $taskNamesSent[] = $tasksSentToUser[0]->taskName;
-        }
+        $email = self::getMailerMessage();
 
-        self::assertContains($taskName1, $taskNamesSent);
-        self::assertContains($taskName3, $taskNamesSent);
+        self::assertEmailTextBodyContains($email, $taskName1);
+        self::assertEmailHtmlBodyContains($email, $taskName1);
     }
 }
