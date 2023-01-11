@@ -1,4 +1,4 @@
-FROM mysql:8
+FROM mysql:8.0.31
 
 RUN ln -sf /usr/share/zoneinfo/Europe/Moscow /etc/localtime
 

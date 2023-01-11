@@ -45,9 +45,9 @@ services:
             - ${MYSQL_PORT}:3306
         env_file: ./mysql/.env
     mailhog:
-        image: mailhog/mailhog
+        image: mailhog/mailhog:v1.0.1
     docs:
-        image: swaggerapi/swagger-ui
+        image: swaggerapi/swagger-ui:v4.15.5
         environment:
             SWAGGER_JSON_URL: /docs/openapi.yaml
             BASE_URL: /docs
