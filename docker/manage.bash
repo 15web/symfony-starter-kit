@@ -55,6 +55,14 @@ installTest() {
     runBackend ./bin/console doctrine:migrations:migrate --no-interaction
     runBackend ./bin/console messenger:setup-transports
 
+    printf "Waiting for mysql"
+    until echo 'select 1;' | compose exec -T mysql mysql -proot &>/dev/null
+    do
+      printf "."
+      sleep 1
+    done
+    printf "\nMysql is up!\n"
+
     for (( i=1; i<=4; i++ ))
     do
         compose exec -T mysql mysql -proot -e "drop database if exists db_name_test$i;";
@@ -163,7 +171,11 @@ case $COMMAND in
         compose run --rm -e APP_ENV=test backend vendor/bin/paratest -p4
 
         runBackend bin/console app:openapi-routes-diff ./openapi.yaml
+        ;;
+    check-openapi)
+        setupEnvs;
 
+        compose run --rm vacuum lint /app/openapi.yaml -d -e;
         ;;
     install-test)
         setupEnvs;
@@ -216,6 +228,7 @@ case $COMMAND in
             run-backend[rb],
             logs[l],
             check[c],
+            check-openapi,
             install-test,
             test,
             test-verbose,
