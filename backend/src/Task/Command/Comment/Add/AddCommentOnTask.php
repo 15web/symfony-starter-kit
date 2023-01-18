@@ -11,12 +11,15 @@ use App\Task\Domain\Task;
 use App\Task\Domain\TaskComment;
 use App\Task\Domain\TaskCommentBody;
 use App\Task\Domain\TaskCommentId;
+use Psr\Log\LoggerInterface;
 
 #[AsService]
 final class AddCommentOnTask
 {
-    public function __construct(private readonly Flush $flush)
-    {
+    public function __construct(
+        private readonly Flush $flush,
+        private readonly LoggerInterface $logger,
+    ) {
     }
 
     /**
@@ -28,5 +31,11 @@ final class AddCommentOnTask
         $task->addComment($comment);
 
         ($this->flush)();
+
+        $this->logger->info('Задача прокомментирована', [
+            'taskId' => $task->getTaskId(),
+            'commentId' => $commentId->getValue(),
+            self::class => __FUNCTION__,
+        ]);
     }
 }

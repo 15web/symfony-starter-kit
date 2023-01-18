@@ -8,12 +8,15 @@ use App\Infrastructure\AsService;
 use App\Infrastructure\Flush;
 use App\Task\Domain\Task;
 use App\Task\Domain\TaskName;
+use Psr\Log\LoggerInterface;
 
 #[AsService]
 final class UpdateTaskName
 {
-    public function __construct(private readonly Flush $flush)
-    {
+    public function __construct(
+        private readonly Flush $flush,
+        private readonly LoggerInterface $logger,
+    ) {
     }
 
     public function __invoke(Task $task, UpdateTaskNameCommand $command): void
@@ -21,5 +24,10 @@ final class UpdateTaskName
         $task->changeTaskName(new TaskName($command->taskName));
 
         ($this->flush)();
+
+        $this->logger->info('Задача обновлена', [
+            'id' => $task->getTaskId(),
+            self::class => __FUNCTION__,
+        ]);
     }
 }
