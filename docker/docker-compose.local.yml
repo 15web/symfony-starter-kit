@@ -30,6 +30,7 @@ services:
         volumes:
             - ../backend:/app/
         env_file: backend/.env
+        init: true
     nginx:
         build:
             context: ./nginx/

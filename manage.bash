@@ -2,45 +2,37 @@
 
 set -Eeuo pipefail
 
-os-depend-sed-in-place() {
-    if [ "$(uname -s)" == 'Darwin' ]; then
-        sed -i '' "$@";
-    else
-        sed --in-place "$@";
-    fi
+compose() {
+    docker-compose "$@"
 }
 
-setupEnvs() {
-    [ ! -f ./.env ] && cp ./.env.dist ./.env
+replace_env() {
+    ./docker/bin/replace_env.bash "$@"
+}
 
-    if [ "$(grep 'USE_MUTAGEN' ./.env)" == 'USE_MUTAGEN=1' ]; then
+COMPOSE_ENV_PATH="$(realpath ./.env)"
+COMPOSE_DIST_ENV_PATH="$(realpath ./docker/.env.dist)"
+
+setupEnvs() {
+    [ ! -f "${COMPOSE_ENV_PATH}" ] && cp "${COMPOSE_DIST_ENV_PATH}" "${COMPOSE_ENV_PATH}"
+
+    replace_env "${COMPOSE_ENV_PATH}" 'COMPOSE_PROJECT_NAME' 'symfony-starter-kit-local'
+    replace_env "${COMPOSE_ENV_PATH}" 'COMPOSE_FILE' './docker/docker-compose.local.yml'
+
+    if [ "$(grep 'USE_MUTAGEN' ${COMPOSE_ENV_PATH})" == 'USE_MUTAGEN=1' ]; then
         echo 'Mutagen used.';
-        COMPOSE_FILE_ENV="COMPOSE_FILE='docker-compose.local.yml:mutagen-compose.yml'";
+        replace_env "${COMPOSE_ENV_PATH}" 'COMPOSE_PROJECT_NAME' 'symfony-starter-kit-local-mutagen'
+        replace_env "${COMPOSE_ENV_PATH}" 'COMPOSE_FILE' 'docker/docker-compose.local.yml:docker/mutagen-compose.yml'
+
         compose() {
             mutagen-compose "$@"
         }
-    else
-        COMPOSE_FILE_ENV="COMPOSE_FILE='docker-compose.local.yml'";
-        compose() {
-            docker-compose "$@"
-        }
     fi
 
-    if [ "$(grep 'COMPOSE_FILE' ./.env)" != '' ]; then
-        os-depend-sed-in-place -E "s|^.*COMPOSE_FILE=.*$|$COMPOSE_FILE_ENV|" ./.env;
-    else
-        echo "$COMPOSE_FILE_ENV" >> ./.env;
-    fi
+    replace_env "${COMPOSE_ENV_PATH}" 'USER_ID' "$(id -u)"
 
-    USER_ID_ENV="USER_ID=$(id -u)";
-    if [ "$(grep 'USER_ID' ./.env)" != '' ]; then
-        os-depend-sed-in-place -E "s|^.*USER_ID=.*$|$USER_ID_ENV|" ./.env;
-    else
-        echo "$USER_ID_ENV" >> ./.env;
-    fi
-
-    [ ! -f ./backend/.env ] && cp ./backend/.env.dist ./backend/.env
-    [ ! -f ./mysql/.env ] && cp ./mysql/.env.dist ./mysql/.env
+    [ ! -f 'docker/backend/.env' ] && cp 'docker/backend/.env.dist' 'docker/backend/.env'
+    [ ! -f 'docker/mysql/.env' ] && cp 'docker/mysql/.env.dist' 'docker/mysql/.env'
 
     echo 'Envs set up!';
 }
