@@ -8,12 +8,15 @@ use App\Infrastructure\AsService;
 use App\Infrastructure\Flush;
 use App\Task\Domain\Task;
 use App\Task\Domain\TaskAlreadyIsDoneException;
+use Psr\Log\LoggerInterface;
 
 #[AsService]
 final class CompleteTask
 {
-    public function __construct(private readonly Flush $flush)
-    {
+    public function __construct(
+        private readonly Flush $flush,
+        private readonly LoggerInterface $logger,
+    ) {
     }
 
     /**
@@ -24,5 +27,10 @@ final class CompleteTask
         $task->markAsDone();
 
         ($this->flush)();
+
+        $this->logger->info('Задача завершена', [
+            'id' => $task->getTaskId(),
+            self::class => __FUNCTION__,
+        ]);
     }
 }

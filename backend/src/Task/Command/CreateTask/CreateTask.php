@@ -11,12 +11,16 @@ use App\Task\Domain\TaskId;
 use App\Task\Domain\TaskName;
 use App\Task\Domain\Tasks;
 use App\User\SignUp\Domain\UserId;
+use Psr\Log\LoggerInterface;
 
 #[AsService]
 final class CreateTask
 {
-    public function __construct(private readonly Flush $flush, private readonly Tasks $tasks)
-    {
+    public function __construct(
+        private readonly Flush $flush,
+        private readonly Tasks $tasks,
+        private readonly LoggerInterface $logger,
+    ) {
     }
 
     public function __invoke(CreateTaskCommand $createTaskCommand, TaskId $taskId, UserId $userId): void
@@ -25,5 +29,10 @@ final class CreateTask
 
         $this->tasks->add($task);
         ($this->flush)();
+
+        $this->logger->info('Задача создана', [
+            'id' => $taskId,
+            self::class => __FUNCTION__,
+        ]);
     }
 }

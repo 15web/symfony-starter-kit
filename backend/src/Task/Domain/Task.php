@@ -79,4 +79,9 @@ class Task
 
         $this->comments->add($taskComment);
     }
+
+    public function getTaskId(): TaskId
+    {
+        return new TaskId($this->id);
+    }
 }
