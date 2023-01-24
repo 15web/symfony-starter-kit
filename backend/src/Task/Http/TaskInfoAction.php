@@ -16,7 +16,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Uid\Uuid;
 
 #[IsGranted('ROLE_USER')]
-#[Route('/tasks/{taskId}', methods: ['GET'])]
+#[Route('/tasks/{id}', methods: ['GET'])]
 #[AsController]
 final class TaskInfoAction
 {
@@ -24,10 +24,10 @@ final class TaskInfoAction
     {
     }
 
-    public function __invoke(Uuid $taskId, UserId $userId): TaskData
+    public function __invoke(Uuid $id, UserId $userId): TaskData
     {
         try {
-            $taskData = ($this->findTaskById)(new FindTaskByIdQuery($taskId, $userId->value));
+            $taskData = ($this->findTaskById)(new FindTaskByIdQuery($id, $userId->value));
         } catch (TaskNotFoundException $e) {
             throw new ApiNotFoundException($e->getMessage());
         }

@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted('ROLE_USER')]
-#[Route('/admin/article/{articleId}/remove', methods: ['POST'])]
+#[Route('/admin/article/{id}/remove', methods: ['POST'])]
 #[AsController]
 final class RemoveAction
 {

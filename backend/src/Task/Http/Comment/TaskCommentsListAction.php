@@ -14,7 +14,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Uid\Uuid;
 
 #[IsGranted('ROLE_USER')]
-#[Route('/tasks/{taskId}/comments', methods: ['GET'])]
+#[Route('/tasks/{id}/comments', methods: ['GET'])]
 #[AsController]
 final class TaskCommentsListAction
 {
@@ -25,8 +25,8 @@ final class TaskCommentsListAction
     /**
      * @return CommentData[]
      */
-    public function __invoke(Uuid $taskId, UserId $userId): array
+    public function __invoke(Uuid $id, UserId $userId): array
     {
-        return ($this->findAllComments)(new FindAllCommentQuery($taskId, $userId->value));
+        return ($this->findAllComments)(new FindAllCommentQuery($id, $userId->value));
     }
 }
