@@ -15,16 +15,23 @@ final class Profile
     private readonly Uuid $id;
 
     #[ORM\Column]
-    private readonly string $name;
+    private string $name;
 
     #[ORM\Column(nullable: true)]
-    private readonly string $phone;
+    private string $phone;
 
     public function __construct(string $name, string $phone = '')
     {
         Assert::notEmpty($name, 'Укажите Имя');
 
         $this->id = Uuid::v4();
+        $this->name = $name;
+        $this->phone = $phone;
+    }
+
+    public function change(string $name, string $phone = ''): void
+    {
+        Assert::notEmpty($name, 'Укажите Имя');
         $this->name = $name;
         $this->phone = $phone;
     }
