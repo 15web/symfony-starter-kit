@@ -9,9 +9,13 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
+ * @testdox Тестируемый класс: (App\Tests\Unit\Task\Domain\TaskCommentBody)
  */
 final class TaskCommentBodyTest extends TestCase
 {
+    /**
+     * @testdox Проверка метода testEquals прошла успешно
+     */
     public function testEquals(): void
     {
         $body1 = new TaskCommentBody('Комментарий');
@@ -20,6 +24,9 @@ final class TaskCommentBodyTest extends TestCase
         self::assertTrue($body1->equalTo($body2));
     }
 
+    /**
+     * @testdox Проверка метода testEmptyValue прошла успешно
+     */
     public function testEmptyValue(): void
     {
         $this->expectException(\InvalidArgumentException::class);

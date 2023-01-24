@@ -17,9 +17,13 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
+ * @testdox Тестируемый класс: (App\Tests\Unit\Task\Domain\Task)
  */
 final class TaskTest extends TestCase
 {
+    /**
+     * @testdox Проверка метода testAlreadyCompletedTask прошла успешно
+     */
     public function testAlreadyCompletedTask(): void
     {
         $task = new Task(new TaskId(), new TaskName('new task'), new UserId());
@@ -29,6 +33,9 @@ final class TaskTest extends TestCase
         $task->markAsDone();
     }
 
+    /**
+     * @testdox Проверка метода testAddCommentToCompletedTask прошла успешно
+     */
     public function testAddCommentToCompletedTask(): void
     {
         $task = new Task(new TaskId(), new TaskName('new task'), new UserId());

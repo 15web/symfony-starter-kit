@@ -10,9 +10,13 @@ use Symfony\Component\Uid\Uuid;
 
 /**
  * @internal
+ * @testdox Тестируемый класс: (App\Tests\Unit\User\Domain\UserEmail)
  */
 final class UserEmailTest extends TestCase
 {
+    /**
+     * @testdox Проверка метода testCorrectValue прошла успешно
+     */
     public function testCorrectValue(): void
     {
         $confirmToken = Uuid::v4();
@@ -21,6 +25,9 @@ final class UserEmailTest extends TestCase
         self::assertSame($expectedEmail, $userEmail->value);
     }
 
+    /**
+     * @testdox Проверка метода testEmptyEmail прошла успешно
+     */
     public function testEmptyEmail(): void
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -29,6 +36,9 @@ final class UserEmailTest extends TestCase
         new UserEmail('', $confirmToken);
     }
 
+    /**
+     * @testdox Проверка метода testInvalidEmail прошла успешно
+     */
     public function testInvalidEmail(): void
     {
         $this->expectException(\InvalidArgumentException::class);

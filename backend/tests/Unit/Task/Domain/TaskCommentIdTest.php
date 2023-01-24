@@ -9,9 +9,13 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
+ * @testdox Тестируемый класс: (App\Tests\Unit\Task\Domain\TaskCommentId)
  */
 final class TaskCommentIdTest extends TestCase
 {
+    /**
+     * @testdox Проверка метода testEquals прошла успешно
+     */
     public function testEquals(): void
     {
         $taskCommentId1 = new TaskCommentId();
