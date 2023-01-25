@@ -567,6 +567,71 @@ paths:
                                             example: 'Контент первой статьи'
                                             nullable: true
 
+    /article/pagination-list:
+        get:
+            summary: 'Получить список статей с пагинацией'
+            tags: [ 'Статьи' ]
+            security: [ ]
+            parameters:
+                -   in: query
+                    name: count
+                    required: false
+                    description: 'Количество статей на странице'
+                    example: 10
+                    schema:
+                        type: integer
+                -   in: query
+                    name: page
+                    required: false
+                    description: 'Страница'
+                    example: 2
+                    schema:
+                        type: integer
+            responses:
+                200:
+                    description: 'Возвращает пагинацию статей'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                required:
+                                    - items
+                                    - itemsPerPage
+                                    - totalCount
+                                    - currentPage
+                                    - pageCount
+                                additionalProperties: false
+                                properties:
+                                    items:
+                                        type: array
+                                        items:
+                                            properties:
+                                                title:
+                                                    type: string
+                                                alias:
+                                                    type: string
+                                        example:
+                                            -   title: title
+                                                alias: alias
+                                            -   title: title2
+                                                alias: alias2
+                                    itemsPerPage:
+                                        type: integer
+                                        description: 'Количество статей на странице'
+                                        example: 10
+                                    totalCount:
+                                        type: integer
+                                        description: 'Количество всех статей'
+                                        example: 23
+                                    currentPage:
+                                        type: integer
+                                        description: 'Текущая страница'
+                                        example: 2
+                                    pageCount:
+                                        type: integer
+                                        description: 'Количество страниц'
+                                        example: 3
+
     /article/{alias}/info:
         get:
             summary: 'Получить данные по статье'
