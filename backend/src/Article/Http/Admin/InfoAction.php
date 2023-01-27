@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted('ROLE_USER')]
-#[Route('/admin/article/{articleId}/info', methods: ['GET'])]
+#[Route('/admin/article/{id}/info', methods: ['GET'])]
 #[AsController]
 final class InfoAction
 {

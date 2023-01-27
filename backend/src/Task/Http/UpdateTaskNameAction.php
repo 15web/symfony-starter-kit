@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted('ROLE_USER')]
-#[Route('/tasks/{taskId}/update-task-name', methods: ['POST'])]
+#[Route('/tasks/{id}/update-task-name', methods: ['POST'])]
 #[AsController]
 final class UpdateTaskNameAction
 {

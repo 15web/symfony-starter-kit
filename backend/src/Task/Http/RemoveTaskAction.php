@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted('ROLE_USER')]
-#[Route('/tasks/{taskId}/remove', methods: ['POST'])]
+#[Route('/tasks/{id}/remove', methods: ['POST'])]
 #[AsController]
 final class RemoveTaskAction
 {

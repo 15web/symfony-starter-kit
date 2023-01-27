@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted('ROLE_USER')]
-#[Route('/tasks/{taskId}/add-comment', methods: ['POST'])]
+#[Route('/tasks/{id}/add-comment', methods: ['POST'])]
 #[AsController]
 final class AddCommentOnTaskAction
 {

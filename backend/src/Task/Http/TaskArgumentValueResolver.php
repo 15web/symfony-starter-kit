@@ -48,7 +48,7 @@ final class TaskArgumentValueResolver implements ValueResolverInterface
         }
 
         /** @var string|null $taskId */
-        $taskId = $request->attributes->get('taskId');
+        $taskId = $request->attributes->get('id');
         if ($taskId === null) {
             throw new ApiBadRequestException('Укажите id');
         }

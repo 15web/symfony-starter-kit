@@ -32,7 +32,7 @@ final class ArticleArgumentValueResolver implements ValueResolverInterface
         }
 
         /** @var string|null $id */
-        $id = $request->attributes->get('articleId');
+        $id = $request->attributes->get('id');
         if ($id === null) {
             throw new ApiBadRequestException('Укажите id');
         }
