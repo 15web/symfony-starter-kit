@@ -10,9 +10,14 @@ use Symfony\Component\Uid\Uuid;
 
 /**
  * @internal
+ *
+ * @testdox Тестирование ValueObject UserEmail
  */
 final class UserEmailTest extends TestCase
 {
+    /**
+     * @testdox UserEmail успешно создан
+     */
     public function testCorrectValue(): void
     {
         $confirmToken = Uuid::v4();
@@ -21,6 +26,9 @@ final class UserEmailTest extends TestCase
         self::assertSame($expectedEmail, $userEmail->value);
     }
 
+    /**
+     * @testdox Нельзя создать с пустым email
+     */
     public function testEmptyEmail(): void
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -29,6 +37,9 @@ final class UserEmailTest extends TestCase
         new UserEmail('', $confirmToken);
     }
 
+    /**
+     * @testdox Невалидный email
+     */
     public function testInvalidEmail(): void
     {
         $this->expectException(\InvalidArgumentException::class);

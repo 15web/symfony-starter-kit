@@ -11,9 +11,14 @@ use Symfony\Component\Uid\Uuid;
 
 /**
  * @internal
+ *
+ * @testdox Функциональый тест комментирования сущности Task
  */
 final class CreateCommentOnTaskTest extends ApiWebTestCase
 {
+    /**
+     * @testdox Комментарий добавлен
+     */
     public function testSuccessfulCreationTask(): void
     {
         $token = User::auth();
@@ -37,6 +42,9 @@ final class CreateCommentOnTaskTest extends ApiWebTestCase
         self::assertNull($comments[0]['updatedAt']);
     }
 
+    /**
+     * @testdox Task не найден
+     */
     public function testNotFound(): void
     {
         $token = User::auth();
@@ -52,6 +60,9 @@ final class CreateCommentOnTaskTest extends ApiWebTestCase
         self::assertNotFound($response);
     }
 
+    /**
+     * @testdox Нельзя комментировать завершенный Task
+     */
     public function testAddCommentToCompletedTask(): void
     {
         $token = User::auth();
@@ -69,6 +80,8 @@ final class CreateCommentOnTaskTest extends ApiWebTestCase
 
     /**
      * @dataProvider notValidTokenDataProvider
+     *
+     * @testdox Доступ запрещен, невалидный токен
      */
     public function testAccessDenied(string $notValidToken): void
     {
@@ -84,6 +97,9 @@ final class CreateCommentOnTaskTest extends ApiWebTestCase
         self::assertAccessDenied($response);
     }
 
+    /**
+     * @testdox Комментирование запрещено для пользователя не автора
+     */
     public function testNoAccessAnotherUser(): void
     {
         $token = User::auth();

@@ -9,9 +9,14 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
+ *
+ * @testdox Тестирование запроса пагинации
  */
 final class PaginationRequestTest extends TestCase
 {
+    /**
+     * @testdox Тестирование пагинации с дефолтными настройками
+     */
     public function testSuccessDefault(): void
     {
         $paginationRequest = new PaginationRequest();
@@ -21,6 +26,9 @@ final class PaginationRequestTest extends TestCase
         self::assertSame(0, $paginationRequest->getOffset());
     }
 
+    /**
+     * @testdox Переданные данные верны
+     */
     public function testSuccess(): void
     {
         $paginationRequest = new PaginationRequest(3, 15);
@@ -30,12 +38,18 @@ final class PaginationRequestTest extends TestCase
         self::assertSame(30, $paginationRequest->getOffset());
     }
 
+    /**
+     * @testdox Неверное значение для 'page'
+     */
     public function testIncorrectPage(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         new PaginationRequest(0);
     }
 
+    /**
+     * @testdox Неверное значение для 'per-page'
+     */
     public function testIncorrectPerPage(): void
     {
         $this->expectException(\InvalidArgumentException::class);

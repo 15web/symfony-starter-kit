@@ -17,9 +17,14 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
+ *
+ * @testdox Тестирование сущности Task
  */
 final class TaskTest extends TestCase
 {
+    /**
+     * @testdox Нельзя выполнить уже выполненную задачу
+     */
     public function testAlreadyCompletedTask(): void
     {
         $task = new Task(new TaskId(), new TaskName('new task'), new UserId());
@@ -29,6 +34,9 @@ final class TaskTest extends TestCase
         $task->markAsDone();
     }
 
+    /**
+     * @testdox Нельзя комментировать выполненную задачу
+     */
     public function testAddCommentToCompletedTask(): void
     {
         $task = new Task(new TaskId(), new TaskName('new task'), new UserId());

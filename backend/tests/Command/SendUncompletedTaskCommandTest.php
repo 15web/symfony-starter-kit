@@ -13,9 +13,14 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 /**
  * @internal
+ *
+ * @testdox Тестирование отправки незавершенных задач через консоль
  */
 final class SendUncompletedTaskCommandTest extends KernelTestCase
 {
+    /**
+     * @testdox Отправление незавершенных задач
+     */
     public function testExecute(): void
     {
         $token = User::auth();

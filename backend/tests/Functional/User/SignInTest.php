@@ -10,9 +10,14 @@ use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 
 /**
  * @internal
+ *
+ * @testdox Функциональный тест аутентификации
  */
 final class SignInTest extends ApiWebTestCase
 {
+    /**
+     * @testdox Данные верны
+     */
     public function testCorrectCredentials(): void
     {
         $body = [];
@@ -41,6 +46,9 @@ final class SignInTest extends ApiWebTestCase
         self::assertNotEmpty($response['token']);
     }
 
+    /**
+     * @testdox Неверный пароль
+     */
     public function testInvalidPassword(): void
     {
         $body = [];
@@ -65,6 +73,9 @@ final class SignInTest extends ApiWebTestCase
         self::assertAccessDenied($response);
     }
 
+    /**
+     * @testdox Неверный email
+     */
     public function testInvalidEmail(): void
     {
         $body = [];
@@ -89,6 +100,9 @@ final class SignInTest extends ApiWebTestCase
         self::assertAccessDenied($response);
     }
 
+    /**
+     * @testdox Неправильный запрос
+     */
     public function testBadRequest(): void
     {
         $body = json_encode(['email' => 'test', 'password' => ''], JSON_THROW_ON_ERROR);
@@ -97,6 +111,9 @@ final class SignInTest extends ApiWebTestCase
         self::assertBadRequest($response);
     }
 
+    /**
+     * @testdox Email не подтвержден
+     */
     public function testNotConfirmedEmail(): void
     {
         $body = [];

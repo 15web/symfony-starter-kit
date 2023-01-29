@@ -9,9 +9,14 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
+ *
+ * @testdox Тестирование ValueObject TaskId
  */
 final class TaskIdTest extends TestCase
 {
+    /**
+     * @testdox Классы объектов-зачений идентичны
+     */
     public function testEquals(): void
     {
         $taskId1 = new TaskId();

@@ -11,9 +11,14 @@ use Symfony\Component\Uid\Uuid;
 
 /**
  * @internal
+ *
+ * @testdox Функциональный тест админки удаления статьи
  */
 final class RemoveArticleTest extends ApiWebTestCase
 {
+    /**
+     * @testdox Статья удалена
+     */
     public function testSuccess(): void
     {
         $token = User::auth();
@@ -30,6 +35,9 @@ final class RemoveArticleTest extends ApiWebTestCase
         self::assertSame($articleId2, $articles[0]['id']);
     }
 
+    /**
+     * @testdox Статья не найдена
+     */
     public function testNotFound(): void
     {
         $token = User::auth();
@@ -43,6 +51,8 @@ final class RemoveArticleTest extends ApiWebTestCase
 
     /**
      * @dataProvider notValidTokenDataProvider
+     *
+     * @testdox Доступ запрещен, невалидный токен
      */
     public function testAccessDenied(string $notValidToken): void
     {

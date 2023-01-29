@@ -10,9 +10,14 @@ use App\Tests\Functional\SDK\User;
 
 /**
  * @internal
+ *
+ * @testdox Функциональный тест админки списка статей
  */
 final class ArticleListTest extends ApiWebTestCase
 {
+    /**
+     * @testdox Получение списка статей
+     */
     public function testSuccess(): void
     {
         $token = User::auth();
@@ -35,6 +40,8 @@ final class ArticleListTest extends ApiWebTestCase
 
     /**
      * @dataProvider notValidTokenDataProvider
+     *
+     * @testdox Доступ запрещен, невалидный токен
      */
     public function testAccessDenied(string $notValidToken): void
     {

@@ -10,9 +10,14 @@ use App\Tests\Functional\SDK\User;
 
 /**
  * @internal
+ *
+ * @testdox Функциональный тест админки создания статьи
  */
 final class CreateArticleTest extends ApiWebTestCase
 {
+    /**
+     * @testdox Статья создана
+     */
     public function testSuccess(): void
     {
         $token = User::auth();
@@ -30,6 +35,9 @@ final class CreateArticleTest extends ApiWebTestCase
         self::assertNull($articleResponse['updatedAt']);
     }
 
+    /**
+     * @testdox Нельзя создать статью, статья с таким алиасом уже есть
+     */
     public function testExistArticleWithSuchAlias(): void
     {
         $token = User::auth();
@@ -43,6 +51,8 @@ final class CreateArticleTest extends ApiWebTestCase
 
     /**
      * @dataProvider notValidTokenDataProvider
+     *
+     * @testdox Доступ запрещен, невалидный токен
      */
     public function testAccessDenied(string $notValidToken): void
     {
@@ -53,6 +63,8 @@ final class CreateArticleTest extends ApiWebTestCase
 
     /**
      * @dataProvider notValidRequestProvider
+     *
+     * @testdox Неправильный запрос
      */
     public function testBadRequest(array $body): void
     {

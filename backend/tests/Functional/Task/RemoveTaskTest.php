@@ -11,9 +11,14 @@ use Symfony\Component\Uid\Uuid;
 
 /**
  * @internal
+ *
+ * @testdox Функциональный тест удаления сущности Task
  */
 final class RemoveTaskTest extends ApiWebTestCase
 {
+    /**
+     * @testdox Task удален
+     */
     public function testSuccess(): void
     {
         $token = User::auth();
@@ -30,6 +35,9 @@ final class RemoveTaskTest extends ApiWebTestCase
         self::assertSame($task2Id, $tasks[0]['id']);
     }
 
+    /**
+     * @testdox Task не найден
+     */
     public function testNotFound(): void
     {
         $token = User::auth();
@@ -43,6 +51,8 @@ final class RemoveTaskTest extends ApiWebTestCase
 
     /**
      * @dataProvider notValidTokenDataProvider
+     *
+     * @testdox Доступ запрещен, невалидный токен
      */
     public function testAccessDenied(string $notValidToken): void
     {
@@ -54,6 +64,9 @@ final class RemoveTaskTest extends ApiWebTestCase
         self::assertAccessDenied($response);
     }
 
+    /**
+     * @testdox Доступ запрещен для пользователя не автора
+     */
     public function testNoAccessAnotherUser(): void
     {
         $token = User::auth();

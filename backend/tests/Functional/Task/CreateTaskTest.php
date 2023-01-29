@@ -10,9 +10,14 @@ use App\Tests\Functional\SDK\User;
 
 /**
  * @internal
+ *
+ * @testdox Функциональный тест создания сущности Task
  */
 final class CreateTaskTest extends ApiWebTestCase
 {
+    /**
+     * @testdox Task создан
+     */
     public function testSuccess(): void
     {
         $token = User::auth();
@@ -33,6 +38,8 @@ final class CreateTaskTest extends ApiWebTestCase
 
     /**
      * @dataProvider notValidTokenDataProvider
+     *
+     * @testdox Доступ запрещен, невалидный токен
      */
     public function testAccessDenied(string $notValidToken): void
     {
@@ -41,6 +48,9 @@ final class CreateTaskTest extends ApiWebTestCase
         self::assertAccessDenied($response);
     }
 
+    /**
+     * @testdox Неверный запрос
+     */
     public function testBadRequests(): void
     {
         $token = User::auth();

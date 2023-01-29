@@ -8,6 +8,7 @@
          bootstrap="tests/bootstrap.php"
          convertDeprecationsToExceptions="false"
          cacheResultFile="./var/cache/.phpunit.result.cache"
+         testdox="true"
 >
     <php>
         <ini name="display_errors" value="1" />

@@ -10,9 +10,14 @@ use App\Tests\Functional\SDK\User;
 
 /**
  * @internal
+ *
+ * @testdox Функциональный тест получения списка сущностей Task
  */
 final class TaskListTest extends ApiWebTestCase
 {
+    /**
+     * @testdox Получение списка сущностей Task
+     */
     public function testSuccess(): void
     {
         $token = User::auth();
@@ -31,6 +36,9 @@ final class TaskListTest extends ApiWebTestCase
         }
     }
 
+    /**
+     * @testdox Доступ запрещен для пользователя не автора
+     */
     public function testNoAccessAnotherUser(): void
     {
         $token = User::auth();
@@ -54,6 +62,8 @@ final class TaskListTest extends ApiWebTestCase
 
     /**
      * @dataProvider notValidTokenDataProvider
+     *
+     * @testdox Доступ запрещен, невалидный токен
      */
     public function testAccessDenied(string $notValidToken): void
     {
