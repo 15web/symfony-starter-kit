@@ -28,9 +28,16 @@ final class Task extends ApiWebTestCase
         return $taskInfo['id'];
     }
 
-    public static function list(string $token): array
+    public static function list(string $token, int $limit = 10, int $offset = 1): array
     {
-        $response = self::request('GET', '/api/tasks', token: $token);
+        $params = [
+            'per-page' => $limit,
+            'page' => $offset,
+        ];
+
+        $uri = '/api/tasks?'.http_build_query($params);
+
+        $response = self::request('GET', $uri, token: $token);
 
         self::assertSuccessResponse($response);
 

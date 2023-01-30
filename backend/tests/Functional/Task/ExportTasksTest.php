@@ -73,6 +73,50 @@ final class ExportTasksTest extends ApiWebTestCase
     }
 
     /**
+     * @testdox Создано 3 статьи, limit = 2, offset = 1, экспортированы 2 статьи
+     */
+    public function testLimit(): void
+    {
+        $token = User::auth();
+        Task::create('Тестовая задача 1', $token);
+        Task::create('Тестовая задача 2', $token);
+        Task::create('Тестовая задача 3', $token);
+
+        /** @var BinaryFileResponse $response */
+        $response = self::request('GET', '/api/export/tasks.xml?per-page=2', token: $token);
+        self::assertSuccessResponse($response);
+
+        $file = $response->getFile();
+        $xmlEncoder = new XmlEncoder();
+
+        $tasks = $xmlEncoder->decode($file->getContent(), XmlEncoder::FORMAT);
+
+        self::assertCount(2, $tasks);
+    }
+
+    /**
+     * @testdox Создано 3 статьи, limit = 2, offset = 2, экспортирована 1 статья
+     */
+    public function testOffset(): void
+    {
+        $token = User::auth();
+        Task::create('Тестовая задача 1', $token);
+        Task::create('Тестовая задача 2', $token);
+        Task::create('Тестовая задача 3', $token);
+
+        /** @var BinaryFileResponse $response */
+        $response = self::request('GET', '/api/export/tasks.xml?per-page=2&page=2', token: $token);
+        self::assertSuccessResponse($response);
+
+        $file = $response->getFile();
+        $xmlEncoder = new XmlEncoder();
+
+        $tasks = $xmlEncoder->decode($file->getContent(), XmlEncoder::FORMAT);
+
+        self::assertCount(1, $tasks);
+    }
+
+    /**
      * @testdox Пустой экспорт в формате csv
      */
     public function testEmptyCsvExport(): void

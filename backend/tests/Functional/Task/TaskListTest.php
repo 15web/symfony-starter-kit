@@ -37,6 +37,52 @@ final class TaskListTest extends ApiWebTestCase
     }
 
     /**
+     * @testdox Создано 2 статьи, limit = 1, получена 1 статья
+     */
+    public function testLimit(): void
+    {
+        $token = User::auth();
+
+        Task::create('Тестовая задача 1', $token);
+        Task::create('Тестовая задача 2', $token);
+
+        $tasks = Task::list($token, 1);
+
+        self::assertCount(1, $tasks);
+    }
+
+    /**
+     * @testdox Создано 2 статьи, limit = 10, offset = 3, получено 0 статей
+     */
+    public function testOffsetEmptyResult(): void
+    {
+        $token = User::auth();
+
+        Task::create('Тестовая задача 1', $token);
+        Task::create('Тестовая задача 2', $token);
+
+        $tasks = Task::list($token, 10, 3);
+
+        self::assertCount(0, $tasks);
+    }
+
+    /**
+     * @testdox Создано 3 статьи, limit = 1, offset = 2, получена 1 статья
+     */
+    public function testOffsetNotEmptyResult(): void
+    {
+        $token = User::auth();
+
+        Task::create('Тестовая задача 1', $token);
+        Task::create('Тестовая задача 2', $token);
+        Task::create('Тестовая задача 3', $token);
+
+        $tasks = Task::list($token, 1, 2);
+
+        self::assertCount(1, $tasks);
+    }
+
+    /**
      * @testdox Доступ разрешен только автору
      */
     public function testNoAccessAnotherUser(): void

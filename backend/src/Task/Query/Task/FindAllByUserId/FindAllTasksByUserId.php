@@ -27,7 +27,10 @@ final class FindAllTasksByUserId
                 ORDER BY t.isCompleted, t.createdAt DESC
             DQL;
 
-        $dqlQuery = $this->entityManager->createQuery($dql);
+        $dqlQuery = $this->entityManager->createQuery($dql)
+            ->setFirstResult($query->offset)
+            ->setMaxResults($query->limit);
+
         $dqlQuery->setParameter('userId', $query->userId->toBinary());
 
         return $dqlQuery->getResult();
