@@ -12,7 +12,7 @@ use Symfony\Component\Uid\Uuid;
 /**
  * @internal
  *
- * @testdox Функциональый тест комментирования сущности Task
+ * @testdox Комментирование задачи
  */
 final class CreateCommentOnTaskTest extends ApiWebTestCase
 {
@@ -43,7 +43,7 @@ final class CreateCommentOnTaskTest extends ApiWebTestCase
     }
 
     /**
-     * @testdox Task не найден
+     * @testdox Задача не найдена
      */
     public function testNotFound(): void
     {
@@ -61,7 +61,7 @@ final class CreateCommentOnTaskTest extends ApiWebTestCase
     }
 
     /**
-     * @testdox Нельзя комментировать завершенный Task
+     * @testdox Нельзя комментировать выполненную задачу
      */
     public function testAddCommentToCompletedTask(): void
     {
@@ -81,7 +81,7 @@ final class CreateCommentOnTaskTest extends ApiWebTestCase
     /**
      * @dataProvider notValidTokenDataProvider
      *
-     * @testdox Доступ запрещен, невалидный токен
+     * @testdox Доступ запрещен
      */
     public function testAccessDenied(string $notValidToken): void
     {
@@ -98,7 +98,7 @@ final class CreateCommentOnTaskTest extends ApiWebTestCase
     }
 
     /**
-     * @testdox Комментирование запрещено для пользователя не автора
+     * @testdox Комментирование разрешено только автору
      */
     public function testNoAccessAnotherUser(): void
     {
@@ -110,7 +110,7 @@ final class CreateCommentOnTaskTest extends ApiWebTestCase
         $taskId = Task::createAndReturnId('Тестовая задача №2 ', $tokenSecond);
 
         $body = [];
-        $body['commentBody'] = $commentText = 'First comment';
+        $body['commentBody'] = 'First comment';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
         $response = self::request('POST', "/api/tasks/{$taskId}/add-comment", $body, token: $token);

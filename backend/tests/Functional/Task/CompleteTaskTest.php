@@ -12,12 +12,12 @@ use Symfony\Component\Uid\Uuid;
 /**
  * @internal
  *
- * @testdox Функциональный тест завершения сущности Task
+ * @testdox Выполнение задачи
  */
 final class CompleteTaskTest extends ApiWebTestCase
 {
     /**
-     * @testdox Task завершен
+     * @testdox Задача выполнена
      */
     public function testSuccess(): void
     {
@@ -37,7 +37,7 @@ final class CompleteTaskTest extends ApiWebTestCase
     }
 
     /**
-     * @testdox Task уже завершен
+     * @testdox Нельзя повторно выполнить задачу
      */
     public function testTaskHasAlreadyBeenCompleted(): void
     {
@@ -52,7 +52,7 @@ final class CompleteTaskTest extends ApiWebTestCase
     }
 
     /**
-     * @testdox Task не найден
+     * @testdox Задача не найдена
      */
     public function testTaskNotFound(): void
     {
@@ -68,7 +68,7 @@ final class CompleteTaskTest extends ApiWebTestCase
     /**
      * @dataProvider notValidTokenDataProvider
      *
-     * @testdox Доступ запрещен, невалидный токен
+     * @testdox Доступ запрещен
      */
     public function testAccessDenied(string $notValidToken): void
     {
@@ -85,7 +85,7 @@ final class CompleteTaskTest extends ApiWebTestCase
     }
 
     /**
-     * @testdox Доступ запрещен для пользователя не автора
+     * @testdox Выполнить задачу может только автор
      */
     public function testNoAccessAnotherUser(): void
     {

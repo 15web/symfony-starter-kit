@@ -14,12 +14,12 @@ use Symfony\Component\Console\Tester\CommandTester;
 /**
  * @internal
  *
- * @testdox Тестирование отправки незавершенных задач через консоль
+ * @testdox Консольная команда для отправки письма о незавершенных задачах
  */
 final class SendUncompletedTaskCommandTest extends KernelTestCase
 {
     /**
-     * @testdox Отправление незавершенных задач
+     * @testdox Отправлено письмо с 1 незавершенной задачей
      */
     public function testExecute(): void
     {

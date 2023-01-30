@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 final class PaginationRequestTest extends TestCase
 {
     /**
-     * @testdox Тестирование пагинации с дефолтными настройками
+     * @testdox Проверка настроек по умолчанию
      */
     public function testSuccessDefault(): void
     {
@@ -27,7 +27,7 @@ final class PaginationRequestTest extends TestCase
     }
 
     /**
-     * @testdox Переданные данные верны
+     * @testdox Проверка конструктора, расчет оффсета
      */
     public function testSuccess(): void
     {
@@ -39,7 +39,7 @@ final class PaginationRequestTest extends TestCase
     }
 
     /**
-     * @testdox Неверное значение для 'page'
+     * @testdox Неверный номер страницы
      */
     public function testIncorrectPage(): void
     {
@@ -48,7 +48,7 @@ final class PaginationRequestTest extends TestCase
     }
 
     /**
-     * @testdox Неверное значение для 'per-page'
+     * @testdox Неверное кол-во на страницу
      */
     public function testIncorrectPerPage(): void
     {

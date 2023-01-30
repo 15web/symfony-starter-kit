@@ -10,12 +10,12 @@ use PHPUnit\Framework\TestCase;
 /**
  * @internal
  *
- * @testdox Тестирование ValueObject TaskName
+ * @testdox Наименование задачи
  */
 final class TaskNameTest extends TestCase
 {
     /**
-     * @testdox Имена идентичны
+     * @testdox Наименования идентичны
      */
     public function testEquals(): void
     {
@@ -26,7 +26,7 @@ final class TaskNameTest extends TestCase
     }
 
     /**
-     * @testdox Нельзя создать TaskName с пустым именем
+     * @testdox Нельзя создать пустое наименование задачи
      */
     public function testEmptyName(): void
     {

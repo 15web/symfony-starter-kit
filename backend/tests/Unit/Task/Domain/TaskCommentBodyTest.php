@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @internal
  *
- * @testdox Тестирование ValueObject TaskCommentBody
+ * @testdox Комментарий задачи
  */
 final class TaskCommentBodyTest extends TestCase
 {

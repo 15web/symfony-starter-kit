@@ -11,12 +11,12 @@ use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 /**
  * @internal
  *
- * @testdox Функциональный тест аутентификации
+ * @testdox Аутентификация
  */
 final class SignInTest extends ApiWebTestCase
 {
     /**
-     * @testdox Данные верны
+     * @testdox Регистрация выполнена, подтвержден email, аутентификация выполнена
      */
     public function testCorrectCredentials(): void
     {
@@ -74,7 +74,7 @@ final class SignInTest extends ApiWebTestCase
     }
 
     /**
-     * @testdox Неверный email
+     * @testdox Пользователя с таким email не существует
      */
     public function testInvalidEmail(): void
     {
@@ -112,7 +112,7 @@ final class SignInTest extends ApiWebTestCase
     }
 
     /**
-     * @testdox Email не подтвержден
+     * @testdox Логиниться можно только с подтвержденным Email, повторная отправка письма выполнена
      */
     public function testNotConfirmedEmail(): void
     {

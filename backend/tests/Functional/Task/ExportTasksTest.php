@@ -14,7 +14,7 @@ use Symfony\Component\Serializer\Encoder\XmlEncoder;
 /**
  * @internal
  *
- * @testdox Функциональный тест экспорта сущности Task
+ * @testdox Экспорт задач в разные форматы
  */
 final class ExportTasksTest extends ApiWebTestCase
 {
@@ -114,7 +114,7 @@ final class ExportTasksTest extends ApiWebTestCase
     /**
      * @dataProvider notValidTokenDataProvider
      *
-     * @testdox Доступ запрещен, невалидный токен
+     * @testdox Доступ запрещен
      */
     public function testAccessDenied(string $notValidToken): void
     {

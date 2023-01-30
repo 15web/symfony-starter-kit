@@ -12,7 +12,7 @@ use Symfony\Component\Uid\Uuid;
 /**
  * @internal
  *
- * @testdox Функциональный тест смены имени сущности Task
+ * @testdox Смена наименования задачи
  */
 final class ChangeTaskNameTest extends ApiWebTestCase
 {
@@ -39,7 +39,7 @@ final class ChangeTaskNameTest extends ApiWebTestCase
     }
 
     /**
-     * @testdox Task не найден
+     * @testdox Задача не найдена
      */
     public function testNotFound(): void
     {
@@ -69,7 +69,7 @@ final class ChangeTaskNameTest extends ApiWebTestCase
     /**
      * @dataProvider notValidTokenDataProvider
      *
-     * @testdox Доступ запрещен, невалидный токен
+     * @testdox Доступ запрещен
      */
     public function testAccessDenied(string $notValidToken): void
     {
@@ -91,7 +91,7 @@ final class ChangeTaskNameTest extends ApiWebTestCase
     }
 
     /**
-     * @testdox Доступ запрещен для пользователя не автора
+     * @testdox Менять наименование разрешено только автору задачи
      */
     public function testNoAccessAnotherUser(): void
     {

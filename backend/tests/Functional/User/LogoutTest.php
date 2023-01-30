@@ -10,12 +10,12 @@ use App\Tests\Functional\SDK\User;
 /**
  * @internal
  *
- * @testdox Функциональный тест выхода из аккаунта
+ * @testdox Выхода из аккаунта
  */
 final class LogoutTest extends ApiWebTestCase
 {
     /**
-     * @testdox Успешный выход из аккаунта
+     * @testdox Аутентификация, logout выполнен, по повторному logout ошибка доступа
      */
     public function testSuccessUseCase(): void
     {

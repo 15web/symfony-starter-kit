@@ -11,12 +11,12 @@ use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 /**
  * @internal
  *
- * @testdox Функциональный тест регистрации
+ * @testdox Регистрация пользователя
  */
 final class SignUpTest extends ApiWebTestCase
 {
     /**
-     * @testdox Данные верны, аккаунт зарегистрирован
+     * @testdox Регистрация выполнена, токен получен
      */
     public function testCorrectSignUp(): void
     {

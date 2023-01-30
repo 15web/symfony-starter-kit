@@ -12,7 +12,7 @@ use Symfony\Component\Uid\Uuid;
 /**
  * @internal
  *
- * @testdox Функциональный тест админки обновления статьи
+ * @testdox Админка, обновление статьи
  */
 final class UpdateArticleTest extends ApiWebTestCase
 {
@@ -64,7 +64,7 @@ final class UpdateArticleTest extends ApiWebTestCase
     }
 
     /**
-     * @testdox Нельзя обновить статью, алиас уже занят
+     * @testdox Нельзя обновить статью, такой алиас уже существует
      */
     public function testExistArticleWithSuchAlias(): void
     {
@@ -87,7 +87,7 @@ final class UpdateArticleTest extends ApiWebTestCase
     /**
      * @dataProvider notValidTokenDataProvider
      *
-     * @testdox Доступ запрещен, невалидный токен
+     * @testdox Доступ запрещен
      */
     public function testAccessDenied(string $notValidToken): void
     {
@@ -129,12 +129,12 @@ final class UpdateArticleTest extends ApiWebTestCase
 
     private function notValidRequestProvider(): iterable
     {
-        yield [['']];
+        yield 'пустой запрос' => [['']];
 
-        yield [['badKey']];
+        yield 'неверное имя поля в запросе' => [['badKey']];
 
-        yield [['title' => '']];
+        yield 'пустой заголовок' => [['title' => '']];
 
-        yield [['alias' => '']];
+        yield 'пустой алиас' => [['alias' => '']];
     }
 }

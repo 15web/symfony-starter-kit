@@ -11,12 +11,12 @@ use App\Tests\Functional\SDK\User;
 /**
  * @internal
  *
- * @testdox Функциональный тест админки списка статей
+ * @testdox Админка, получение списка статей
  */
 final class ArticleListTest extends ApiWebTestCase
 {
     /**
-     * @testdox Получение списка статей
+     * @testdox Получен список из созданных статей
      */
     public function testSuccess(): void
     {
@@ -41,7 +41,7 @@ final class ArticleListTest extends ApiWebTestCase
     /**
      * @dataProvider notValidTokenDataProvider
      *
-     * @testdox Доступ запрещен, невалидный токен
+     * @testdox Доступ запрещен
      */
     public function testAccessDenied(string $notValidToken): void
     {

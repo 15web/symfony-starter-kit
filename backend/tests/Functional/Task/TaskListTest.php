@@ -11,12 +11,12 @@ use App\Tests\Functional\SDK\User;
 /**
  * @internal
  *
- * @testdox Функциональный тест получения списка сущностей Task
+ * @testdox Список задач
  */
 final class TaskListTest extends ApiWebTestCase
 {
     /**
-     * @testdox Получение списка сущностей Task
+     * @testdox Получение списка из 2 созданных задач
      */
     public function testSuccess(): void
     {
@@ -37,7 +37,7 @@ final class TaskListTest extends ApiWebTestCase
     }
 
     /**
-     * @testdox Доступ запрещен для пользователя не автора
+     * @testdox Доступ разрешен только автору
      */
     public function testNoAccessAnotherUser(): void
     {
@@ -63,7 +63,7 @@ final class TaskListTest extends ApiWebTestCase
     /**
      * @dataProvider notValidTokenDataProvider
      *
-     * @testdox Доступ запрещен, невалидный токен
+     * @testdox Доступ запрещен
      */
     public function testAccessDenied(string $notValidToken): void
     {

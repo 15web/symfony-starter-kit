@@ -11,12 +11,12 @@ use App\Tests\Functional\SDK\User;
 /**
  * @internal
  *
- * @testdox Функциональный тест создания сущности Task
+ * @testdox Создание задачи
  */
 final class CreateTaskTest extends ApiWebTestCase
 {
     /**
-     * @testdox Task создан
+     * @testdox Задача создана
      */
     public function testSuccess(): void
     {
@@ -39,7 +39,7 @@ final class CreateTaskTest extends ApiWebTestCase
     /**
      * @dataProvider notValidTokenDataProvider
      *
-     * @testdox Доступ запрещен, невалидный токен
+     * @testdox Доступ запрещен
      */
     public function testAccessDenied(string $notValidToken): void
     {

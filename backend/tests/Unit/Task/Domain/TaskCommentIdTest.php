@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @internal
  *
- * @testdox Тестирование ValueObject TaskCommentId
+ * @testdox ID комментария
  */
 final class TaskCommentIdTest extends TestCase
 {

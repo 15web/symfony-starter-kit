@@ -11,12 +11,12 @@ use App\Tests\Functional\SDK\User;
 /**
  * @internal
  *
- * @testdox Функциональный тест списка статей
+ * @testdox Список статей
  */
 final class ArticleListTest extends ApiWebTestCase
 {
     /**
-     * @testdox Получение списка статей
+     * @testdox Получен список из 1 созданной статьи
      */
     public function testSuccess(): void
     {

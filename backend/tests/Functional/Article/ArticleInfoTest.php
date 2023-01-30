@@ -11,12 +11,12 @@ use App\Tests\Functional\SDK\User;
 /**
  * @internal
  *
- * @testdox Функциональный тест об информации статьи
+ * @testdox Получение информации по статье
  */
 final class ArticleInfoTest extends ApiWebTestCase
 {
     /**
-     * @testdox Получение информации о статьи
+     * @testdox Статья создана, информация получена
      */
     public function testSuccess(): void
     {

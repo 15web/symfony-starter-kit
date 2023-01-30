@@ -12,7 +12,7 @@ use Symfony\Component\Uid\Uuid;
 /**
  * @internal
  *
- * @testdox Функциональный тест подтверждения регистрации по email
+ * @testdox Подтверждение регистрации по email
  */
 final class ConfirmEmailTest extends ApiWebTestCase
 {

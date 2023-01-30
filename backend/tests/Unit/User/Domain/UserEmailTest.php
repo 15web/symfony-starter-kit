@@ -11,12 +11,12 @@ use Symfony\Component\Uid\Uuid;
 /**
  * @internal
  *
- * @testdox Тестирование ValueObject UserEmail
+ * @testdox Email пользователя
  */
 final class UserEmailTest extends TestCase
 {
     /**
-     * @testdox UserEmail успешно создан
+     * @testdox Создание корректного email
      */
     public function testCorrectValue(): void
     {
@@ -27,7 +27,7 @@ final class UserEmailTest extends TestCase
     }
 
     /**
-     * @testdox Нельзя создать с пустым email
+     * @testdox Нельзя создать пустой email
      */
     public function testEmptyEmail(): void
     {
@@ -38,7 +38,7 @@ final class UserEmailTest extends TestCase
     }
 
     /**
-     * @testdox Невалидный email
+     * @testdox Невалидный формат email
      */
     public function testInvalidEmail(): void
     {

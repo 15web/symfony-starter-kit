@@ -12,12 +12,12 @@ use Symfony\Component\Uid\Uuid;
 /**
  * @internal
  *
- * @testdox Функциональный тест админки об инофрмации статьи
+ * @testdox Админка, получение информации о статье
  */
 final class ArticleInfoTest extends ApiWebTestCase
 {
     /**
-     * @testdox Получение информации о статьи
+     * @testdox Получена информация по созданной статье
      */
     public function testSuccess(): void
     {
@@ -54,7 +54,7 @@ final class ArticleInfoTest extends ApiWebTestCase
     /**
      * @dataProvider notValidTokenDataProvider
      *
-     * @testdox Доступ запрещен, невалидный токен
+     * @testdox Доступ запрещен
      */
     public function testAccessDenied(string $notValidToken): void
     {

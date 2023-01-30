@@ -12,12 +12,12 @@ use Symfony\Component\Uid\Uuid;
 /**
  * @internal
  *
- * @testdox Функциональный тест получения информации о сущности Task
+ * @testdox Получение информации по задаче
  */
 final class TaskInfoTest extends ApiWebTestCase
 {
     /**
-     * @testdox Получение информации по сущности Task
+     * @testdox Создана задача, получена по ней информация
      */
     public function testSuccess(): void
     {
@@ -43,7 +43,7 @@ final class TaskInfoTest extends ApiWebTestCase
     }
 
     /**
-     * @testdox Task не найден
+     * @testdox Задача не найдена
      */
     public function testNotFound(): void
     {
@@ -57,7 +57,7 @@ final class TaskInfoTest extends ApiWebTestCase
     }
 
     /**
-     * @testdox Доступ запрещен для пользователя не автора
+     * @testdox Получение информации по задаче доступно только автору
      */
     public function testNoAccessAnotherUser(): void
     {
@@ -75,7 +75,7 @@ final class TaskInfoTest extends ApiWebTestCase
     /**
      * @dataProvider notValidTokenDataProvider
      *
-     * @testdox Доступ запрещен, невалидный токен
+     * @testdox Доступ запрещен
      */
     public function testAccessDenied(string $notValidToken): void
     {

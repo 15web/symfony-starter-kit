@@ -18,7 +18,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @internal
  *
- * @testdox Тестирование сущности Task
+ * @testdox Тестирование задачи
  */
 final class TaskTest extends TestCase
 {

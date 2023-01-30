@@ -12,7 +12,7 @@ use Symfony\Component\Uid\Uuid;
 /**
  * @internal
  *
- * @testdox Функциональный тест админки удаления статьи
+ * @testdox Админка, удаление статьи
  */
 final class RemoveArticleTest extends ApiWebTestCase
 {
@@ -52,7 +52,7 @@ final class RemoveArticleTest extends ApiWebTestCase
     /**
      * @dataProvider notValidTokenDataProvider
      *
-     * @testdox Доступ запрещен, невалидный токен
+     * @testdox Доступ запрещен
      */
     public function testAccessDenied(string $notValidToken): void
     {
