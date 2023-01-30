@@ -16,6 +16,9 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 
+/**
+ * Проверяет Request и Response на соответствие документации OpenApi
+ */
 #[AsService]
 #[When('dev')]
 #[When('test')]

@@ -15,6 +15,9 @@ use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Symfony\Component\Uid\Uuid;
 use Webmozart\Assert\Assert;
 
+/**
+ * Резолвер для сущности 'статья'
+ */
 #[AsService]
 final class ArticleArgumentValueResolver implements ValueResolverInterface
 {

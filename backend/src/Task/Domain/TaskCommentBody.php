@@ -8,6 +8,9 @@ use App\Infrastructure\ValueObject;
 use Doctrine\ORM\Mapping as ORM;
 use Webmozart\Assert\Assert;
 
+/**
+ * Текст комментария задачи
+ */
 #[ORM\Embeddable]
 final class TaskCommentBody implements ValueObject
 {

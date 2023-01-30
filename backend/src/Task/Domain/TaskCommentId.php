@@ -7,6 +7,9 @@ namespace App\Task\Domain;
 use App\Infrastructure\ValueObject;
 use Symfony\Component\Uid\Uuid;
 
+/**
+ * ID комментария задачи
+ */
 final class TaskCommentId implements ValueObject
 {
     private readonly Uuid $value;

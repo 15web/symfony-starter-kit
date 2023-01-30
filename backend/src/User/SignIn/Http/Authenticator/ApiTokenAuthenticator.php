@@ -20,6 +20,9 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 use Symfony\Component\Uid\Uuid;
 
+/**
+ * Аутентификатор по апи токену (UserToken)
+ */
 #[AsService]
 final class ApiTokenAuthenticator extends AbstractAuthenticator
 {

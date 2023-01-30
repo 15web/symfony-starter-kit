@@ -6,6 +6,9 @@ namespace App\Task\Query\Comment\FindAll;
 
 use Symfony\Component\Uid\Uuid;
 
+/**
+ * DTO комментария
+ */
 final class CommentData
 {
     public function __construct(

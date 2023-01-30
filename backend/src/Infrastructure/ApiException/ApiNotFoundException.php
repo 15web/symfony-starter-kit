@@ -6,6 +6,9 @@ namespace App\Infrastructure\ApiException;
 
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Ошибка 404
+ */
 final class ApiNotFoundException extends \Exception implements ApiException
 {
     public function __construct(private readonly string $errorMessage = 'Запись не найдена')

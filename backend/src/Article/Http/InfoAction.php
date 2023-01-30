@@ -9,6 +9,9 @@ use App\Infrastructure\ApiException\ApiNotFoundException;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * Ручка информации статьи
+ */
 #[Route('/article/{alias}/info', methods: ['GET'])]
 #[AsController]
 final class InfoAction

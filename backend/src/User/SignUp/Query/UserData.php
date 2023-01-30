@@ -6,6 +6,9 @@ namespace App\User\SignUp\Query;
 
 use Symfony\Component\Uid\Uuid;
 
+/**
+ * DTO пользователя
+ */
 final class UserData
 {
     public function __construct(public readonly Uuid $id, public readonly string $email)

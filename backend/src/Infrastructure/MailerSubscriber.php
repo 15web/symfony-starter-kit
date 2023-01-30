@@ -10,6 +10,9 @@ use Symfony\Component\Mailer\Event\MessageEvent;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
 
+/**
+ * Заполняет from секцию и subject поля для отправки сообщений из конфига
+ */
 #[AsService]
 final class MailerSubscriber implements EventSubscriberInterface
 {

@@ -10,6 +10,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 
+/**
+ * Резолвер для запроса на пагинацию
+ */
 #[AsService]
 final class PaginationRequestArgumentResolver implements ValueResolverInterface
 {

@@ -8,6 +8,9 @@ use App\Article\Domain\Articles;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * Ручка списка статей
+ */
 #[Route('/article/list', methods: ['GET'])]
 #[AsController]
 final class ListAction

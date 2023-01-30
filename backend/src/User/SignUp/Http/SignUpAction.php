@@ -14,6 +14,9 @@ use App\User\SignUp\Command\UserAlreadyExistException;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * Ручка регистрации
+ */
 #[Route('/sign-up', methods: ['POST'])]
 #[AsController]
 final class SignUpAction

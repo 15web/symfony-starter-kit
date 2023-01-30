@@ -11,6 +11,9 @@ use App\User\SignUp\Domain\UserId;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
+/**
+ * Экспорт задач пользователя в заданном формате
+ */
 #[AsService]
 final class ExportTasks
 {

@@ -11,6 +11,9 @@ use App\User\SignUp\Domain\UserNotFoundException;
 use App\User\SignUp\Domain\Users;
 use Symfony\Component\Uid\Uuid;
 
+/**
+ * Хендлер подтверждения email
+ */
 #[AsService]
 final class ConfirmEmail
 {

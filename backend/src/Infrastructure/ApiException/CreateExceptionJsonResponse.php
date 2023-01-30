@@ -9,6 +9,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\SerializerInterface;
 
+/**
+ * Сериализует объект ошибки в JsonResponse
+ */
 #[AsService]
 final class CreateExceptionJsonResponse
 {

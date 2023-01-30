@@ -12,6 +12,9 @@ use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\SerializerInterface;
 
+/**
+ * Преобразует Request в нужный для ручки объект запроса
+ */
 #[AsService]
 final class ApiRequestArgumentValueResolver implements ValueResolverInterface
 {

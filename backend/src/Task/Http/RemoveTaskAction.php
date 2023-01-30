@@ -11,6 +11,9 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+/**
+ * Ручка удаления задачи
+ */
 #[IsGranted('ROLE_USER')]
 #[Route('/tasks/{id}/remove', methods: ['POST'])]
 #[AsController]

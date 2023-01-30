@@ -13,6 +13,9 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+/**
+ * Ручка создания задачи
+ */
 #[IsGranted('ROLE_USER')]
 #[Route('/tasks/create', methods: ['POST'])]
 #[AsController]

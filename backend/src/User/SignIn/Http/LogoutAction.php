@@ -14,6 +14,9 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Uid\Uuid;
 
+/**
+ * Ручка выхода из системы
+ */
 #[IsGranted('ROLE_USER')]
 #[Route('/logout', methods: ['GET'])]
 #[AsController]

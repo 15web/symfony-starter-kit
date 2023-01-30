@@ -8,6 +8,9 @@ use App\Infrastructure\ValueObject;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV4;
 
+/**
+ * ID задачи
+ */
 final class TaskId implements ValueObject
 {
     public function __construct(public readonly Uuid $value = new UuidV4())

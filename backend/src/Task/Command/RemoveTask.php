@@ -10,6 +10,9 @@ use App\Task\Domain\Task;
 use App\Task\Domain\Tasks;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Хендлер удаления задачи
+ */
 #[AsService]
 final class RemoveTask
 {

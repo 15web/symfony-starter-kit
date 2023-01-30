@@ -7,6 +7,9 @@ namespace App\Task\Query\Comment\FindAll;
 use App\Infrastructure\AsService;
 use Doctrine\ORM\EntityManagerInterface;
 
+/**
+ * Хендлер нахождения комментариев задачи по пользователю
+ */
 #[AsService]
 final class FindAllCommentsByTaskIdAndUserId
 {

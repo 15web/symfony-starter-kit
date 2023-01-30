@@ -8,6 +8,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 use Webmozart\Assert\Assert;
 
+/**
+ * Статья
+ */
 #[ORM\Entity]
 /** @final */
 class Article

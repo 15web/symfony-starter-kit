@@ -9,6 +9,9 @@ use App\Infrastructure\Flush;
 use App\User\SignIn\Domain\UserTokens;
 use Symfony\Component\Uid\Uuid;
 
+/**
+ * Хендлер удаления токена
+ */
 #[AsService]
 final class DeleteToken
 {

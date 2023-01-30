@@ -6,6 +6,9 @@ namespace App\User\SignIn\Http;
 
 use Symfony\Component\Uid\Uuid;
 
+/**
+ * Ответ ручки SignInAction
+ */
 final class UserResponse
 {
     public function __construct(

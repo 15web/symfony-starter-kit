@@ -8,6 +8,9 @@ use App\Infrastructure\AsService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Uid\Uuid;
 
+/**
+ * Репозиторий пользователей
+ */
 #[AsService]
 final class Users
 {

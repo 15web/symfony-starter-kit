@@ -7,6 +7,9 @@ namespace App\Task\Query\Task\FindAllByUserId;
 use Symfony\Component\Uid\Uuid;
 use Webmozart\Assert\Assert;
 
+/**
+ * Запрос на нахождение всех задач по пользователю
+ */
 final class FindAllTasksByUserIdQuery
 {
     public function __construct(

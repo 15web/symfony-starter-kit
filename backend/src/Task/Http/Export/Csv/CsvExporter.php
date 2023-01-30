@@ -14,6 +14,9 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Serializer\Encoder\CsvEncoder;
 use Symfony\Component\Serializer\SerializerInterface;
 
+/**
+ * Экспорт задач в формат csv
+ */
 #[AsService]
 final class CsvExporter implements Exporter
 {

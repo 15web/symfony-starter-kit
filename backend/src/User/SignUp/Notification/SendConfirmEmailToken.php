@@ -9,6 +9,9 @@ use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
+/**
+ * Отправляет токен на почту для подтверждения
+ */
 #[AsService]
 #[AsMessageHandler]
 final class SendConfirmEmailToken

@@ -7,6 +7,9 @@ namespace App\User\SignUp\Command;
 use App\Infrastructure\ApiRequestResolver\ApiRequest;
 use Webmozart\Assert\Assert;
 
+/**
+ * Команда для регистрации
+ */
 final class SignUpCommand implements ApiRequest
 {
     public function __construct(

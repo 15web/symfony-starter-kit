@@ -10,6 +10,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Uid\Uuid;
 use Webmozart\Assert\Assert;
 
+/**
+ * Пользователь
+ */
 #[ORM\Entity]
 /** @final */
 class User implements UserInterface, PasswordAuthenticatedUserInterface

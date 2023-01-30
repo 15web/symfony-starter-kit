@@ -7,6 +7,9 @@ namespace App\User\SignUp\Query;
 use App\Infrastructure\AsService;
 use Doctrine\ORM\EntityManagerInterface;
 
+/**
+ * Хендлер нахождения всех пользователей
+ */
 #[AsService]
 final class FindAllUsers
 {

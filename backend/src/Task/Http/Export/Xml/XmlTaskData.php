@@ -6,6 +6,9 @@ namespace App\Task\Http\Export\Xml;
 
 use Symfony\Component\Uid\Uuid;
 
+/**
+ * Данные задачи для xml формата
+ */
 final class XmlTaskData
 {
     public function __construct(
