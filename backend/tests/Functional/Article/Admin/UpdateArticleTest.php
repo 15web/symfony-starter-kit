@@ -11,9 +11,14 @@ use Symfony\Component\Uid\Uuid;
 
 /**
  * @internal
+ *
+ * @testdox Админка, обновление статьи
  */
 final class UpdateArticleTest extends ApiWebTestCase
 {
+    /**
+     * @testdox Статья обновлена
+     */
     public function testSuccess(): void
     {
         $token = User::auth();
@@ -39,6 +44,9 @@ final class UpdateArticleTest extends ApiWebTestCase
         self::assertNotNull($articleResponse['updatedAt']);
     }
 
+    /**
+     * @testdox Статья не найдена
+     */
     public function testNotFound(): void
     {
         $token = User::auth();
@@ -55,6 +63,9 @@ final class UpdateArticleTest extends ApiWebTestCase
         self::assertNotFound($response);
     }
 
+    /**
+     * @testdox Нельзя обновить статью, такой алиас уже существует
+     */
     public function testExistArticleWithSuchAlias(): void
     {
         $token = User::auth();
@@ -75,6 +86,8 @@ final class UpdateArticleTest extends ApiWebTestCase
 
     /**
      * @dataProvider notValidTokenDataProvider
+     *
+     * @testdox Доступ запрещен
      */
     public function testAccessDenied(string $notValidToken): void
     {
@@ -94,6 +107,8 @@ final class UpdateArticleTest extends ApiWebTestCase
 
     /**
      * @dataProvider notValidRequestProvider
+     *
+     * @testdox Неправильный запрос
      */
     public function testBadRequest(array $body): void
     {
@@ -114,12 +129,12 @@ final class UpdateArticleTest extends ApiWebTestCase
 
     private function notValidRequestProvider(): iterable
     {
-        yield [['']];
+        yield 'пустой запрос' => [['']];
 
-        yield [['badKey']];
+        yield 'неверное имя поля в запросе' => [['badKey']];
 
-        yield [['title' => '']];
+        yield 'пустой заголовок' => [['title' => '']];
 
-        yield [['alias' => '']];
+        yield 'пустой алиас' => [['alias' => '']];
     }
 }

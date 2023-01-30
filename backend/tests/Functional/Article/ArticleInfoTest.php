@@ -10,9 +10,14 @@ use App\Tests\Functional\SDK\User;
 
 /**
  * @internal
+ *
+ * @testdox Получение информации по статье
  */
 final class ArticleInfoTest extends ApiWebTestCase
 {
+    /**
+     * @testdox Статья создана, информация получена
+     */
     public function testSuccess(): void
     {
         $token = User::auth();
@@ -28,6 +33,9 @@ final class ArticleInfoTest extends ApiWebTestCase
         self::assertSame($article['body'], $content);
     }
 
+    /**
+     * @testdox Статья не найдена
+     */
     public function testNotFound(): void
     {
         $token = User::auth();

@@ -10,9 +10,14 @@ use App\Tests\Functional\SDK\User;
 
 /**
  * @internal
+ *
+ * @testdox Список задач
  */
 final class TaskListTest extends ApiWebTestCase
 {
+    /**
+     * @testdox Получение списка из 2 созданных задач
+     */
     public function testSuccess(): void
     {
         $token = User::auth();
@@ -31,6 +36,9 @@ final class TaskListTest extends ApiWebTestCase
         }
     }
 
+    /**
+     * @testdox Доступ разрешен только автору
+     */
     public function testNoAccessAnotherUser(): void
     {
         $token = User::auth();
@@ -54,6 +62,8 @@ final class TaskListTest extends ApiWebTestCase
 
     /**
      * @dataProvider notValidTokenDataProvider
+     *
+     * @testdox Доступ запрещен
      */
     public function testAccessDenied(string $notValidToken): void
     {

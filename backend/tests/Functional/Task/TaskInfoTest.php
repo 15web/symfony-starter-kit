@@ -11,9 +11,14 @@ use Symfony\Component\Uid\Uuid;
 
 /**
  * @internal
+ *
+ * @testdox Получение информации по задаче
  */
 final class TaskInfoTest extends ApiWebTestCase
 {
+    /**
+     * @testdox Создана задача, получена по ней информация
+     */
     public function testSuccess(): void
     {
         $token = User::auth();
@@ -37,6 +42,9 @@ final class TaskInfoTest extends ApiWebTestCase
         self::assertNull($task['updatedAt']);
     }
 
+    /**
+     * @testdox Задача не найдена
+     */
     public function testNotFound(): void
     {
         $token = User::auth();
@@ -48,6 +56,9 @@ final class TaskInfoTest extends ApiWebTestCase
         self::assertNotFound($response);
     }
 
+    /**
+     * @testdox Получение информации по задаче доступно только автору
+     */
     public function testNoAccessAnotherUser(): void
     {
         $token = User::auth();
@@ -63,6 +74,8 @@ final class TaskInfoTest extends ApiWebTestCase
 
     /**
      * @dataProvider notValidTokenDataProvider
+     *
+     * @testdox Доступ запрещен
      */
     public function testAccessDenied(string $notValidToken): void
     {

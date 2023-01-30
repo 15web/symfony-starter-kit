@@ -176,6 +176,14 @@ case $COMMAND in
         runBackend bin/console --env=test cache:clear
         compose run --rm -e APP_ENV=test backend vendor/bin/paratest -p4
         ;;
+    test-verbose)
+        # запуск тестов с описанием
+
+        setupEnvs;
+
+        runBackend bin/console --env=test cache:clear
+        compose run --rm -e APP_ENV=test backend vendor/bin/phpunit --testdox
+        ;;
     fix | f)
         setupEnvs;
 
@@ -210,6 +218,7 @@ case $COMMAND in
             check[c],
             install-test,
             test,
+            test-verbose,
             fix[f],
             hooks-install[hi],
             cleanup-mutagen[cm],

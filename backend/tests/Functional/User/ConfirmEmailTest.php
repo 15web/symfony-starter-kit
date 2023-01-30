@@ -11,9 +11,14 @@ use Symfony\Component\Uid\Uuid;
 
 /**
  * @internal
+ *
+ * @testdox Подтверждение регистрации по email
  */
 final class ConfirmEmailTest extends ApiWebTestCase
 {
+    /**
+     * @testdox Email подтвержден
+     */
     public function testCorrectConfirmEmail(): void
     {
         $body = [];
@@ -36,6 +41,9 @@ final class ConfirmEmailTest extends ApiWebTestCase
         self::assertSuccessResponse($response);
     }
 
+    /**
+     * @testdox Email уже подтвержден
+     */
     public function testEmailAlreadyIsConfirmed(): void
     {
         $body = [];
@@ -57,6 +65,9 @@ final class ConfirmEmailTest extends ApiWebTestCase
         self::assertApiError($response, ApiErrorCode::EmailAlreadyIsConfirmed->value);
     }
 
+    /**
+     * @testdox Регистрация не подтверждена, неверный токен
+     */
     public function testNotValidConfirmToken(): void
     {
         $body = [];

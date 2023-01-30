@@ -10,9 +10,14 @@ use App\Tests\Functional\SDK\User;
 
 /**
  * @internal
+ *
+ * @testdox Список статей
  */
 final class ArticleListTest extends ApiWebTestCase
 {
+    /**
+     * @testdox Получен список из 1 созданной статьи
+     */
     public function testSuccess(): void
     {
         $token = User::auth();

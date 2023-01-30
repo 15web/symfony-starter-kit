@@ -10,9 +10,14 @@ use App\Tests\Functional\SDK\User;
 
 /**
  * @internal
+ *
+ * @testdox Админка, создание статьи
  */
 final class CreateArticleTest extends ApiWebTestCase
 {
+    /**
+     * @testdox Статья создана
+     */
     public function testSuccess(): void
     {
         $token = User::auth();
@@ -30,6 +35,9 @@ final class CreateArticleTest extends ApiWebTestCase
         self::assertNull($articleResponse['updatedAt']);
     }
 
+    /**
+     * @testdox Нельзя создать статьи с одинаковым алиасом
+     */
     public function testExistArticleWithSuchAlias(): void
     {
         $token = User::auth();
@@ -43,6 +51,8 @@ final class CreateArticleTest extends ApiWebTestCase
 
     /**
      * @dataProvider notValidTokenDataProvider
+     *
+     * @testdox Доступ запрещен
      */
     public function testAccessDenied(string $notValidToken): void
     {
@@ -53,6 +63,8 @@ final class CreateArticleTest extends ApiWebTestCase
 
     /**
      * @dataProvider notValidRequestProvider
+     *
+     * @testdox Неправильный запрос
      */
     public function testBadRequest(array $body): void
     {
@@ -65,12 +77,12 @@ final class CreateArticleTest extends ApiWebTestCase
 
     private function notValidRequestProvider(): iterable
     {
-        yield [['']];
+        yield 'пустой запрос' => [['']];
 
-        yield [['badKey']];
+        yield 'неверное именование поля' => [['badKey']];
 
-        yield [['title' => '', 'alias' => 'alias']];
+        yield 'пустой заголовок' => [['title' => '', 'alias' => 'alias']];
 
-        yield [['title' => 'title', 'alias' => '']];
+        yield 'пустой алиас' => [['title' => 'title', 'alias' => '']];
     }
 }

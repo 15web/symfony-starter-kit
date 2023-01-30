@@ -102,15 +102,12 @@ abstract class ApiWebTestCase extends WebTestCase
         static::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
     }
 
-    /**
-     * @return iterable<array<string>>
-     */
     private function notValidTokenDataProvider(): iterable
     {
-        yield [''];
+        yield 'пустая строка' => [''];
 
-        yield ['просто не пустая строка'];
+        yield 'текст' => ['любая строка'];
 
-        yield [(string) Uuid::v4()];
+        yield 'случайный идентификатор' => [(string) Uuid::v4()];
     }
 }

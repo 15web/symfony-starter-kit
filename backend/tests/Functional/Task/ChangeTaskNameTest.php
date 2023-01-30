@@ -11,9 +11,14 @@ use Symfony\Component\Uid\Uuid;
 
 /**
  * @internal
+ *
+ * @testdox Смена наименования задачи
  */
 final class ChangeTaskNameTest extends ApiWebTestCase
 {
+    /**
+     * @testdox Имя изменено
+     */
     public function testSuccess(): void
     {
         $token = User::auth();
@@ -33,6 +38,9 @@ final class ChangeTaskNameTest extends ApiWebTestCase
         self::assertNotNull($task['updatedAt']);
     }
 
+    /**
+     * @testdox Задача не найдена
+     */
     public function testNotFound(): void
     {
         $token = User::auth();
@@ -47,6 +55,9 @@ final class ChangeTaskNameTest extends ApiWebTestCase
         self::assertNotFound($response);
     }
 
+    /**
+     * @testdox Неправильный запрос
+     */
     public function testBadRequests(): void
     {
         $token = User::auth();
@@ -57,6 +68,8 @@ final class ChangeTaskNameTest extends ApiWebTestCase
 
     /**
      * @dataProvider notValidTokenDataProvider
+     *
+     * @testdox Доступ запрещен
      */
     public function testAccessDenied(string $notValidToken): void
     {
@@ -77,6 +90,9 @@ final class ChangeTaskNameTest extends ApiWebTestCase
         self::assertAccessDenied($response);
     }
 
+    /**
+     * @testdox Менять наименование разрешено только автору задачи
+     */
     public function testNoAccessAnotherUser(): void
     {
         $userToken = User::auth();

@@ -10,9 +10,14 @@ use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 
 /**
  * @internal
+ *
+ * @testdox Регистрация пользователя
  */
 final class SignUpTest extends ApiWebTestCase
 {
+    /**
+     * @testdox Регистрация выполнена, токен получен
+     */
     public function testCorrectSignUp(): void
     {
         $body = [];
@@ -32,6 +37,9 @@ final class SignUpTest extends ApiWebTestCase
         self::assertNotEmpty($confirmToken);
     }
 
+    /**
+     * @testdox Пользователь с таким email уже существует
+     */
     public function testCreationUserWithSameEmail(): void
     {
         $body = [];
@@ -45,6 +53,9 @@ final class SignUpTest extends ApiWebTestCase
         self::assertApiError($response, ApiErrorCode::UserAlreadyExist->value);
     }
 
+    /**
+     * @testdox Неправильный запрос
+     */
     public function testBadRequest(): void
     {
         $body = json_encode(['email' => 'test', 'password' => '123456'], JSON_THROW_ON_ERROR);

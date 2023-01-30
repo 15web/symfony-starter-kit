@@ -10,9 +10,14 @@ use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 
 /**
  * @internal
+ *
+ * @testdox Аутентификация
  */
 final class SignInTest extends ApiWebTestCase
 {
+    /**
+     * @testdox Регистрация выполнена, подтвержден email, аутентификация выполнена
+     */
     public function testCorrectCredentials(): void
     {
         $body = [];
@@ -41,6 +46,9 @@ final class SignInTest extends ApiWebTestCase
         self::assertNotEmpty($response['token']);
     }
 
+    /**
+     * @testdox Неверный пароль
+     */
     public function testInvalidPassword(): void
     {
         $body = [];
@@ -65,6 +73,9 @@ final class SignInTest extends ApiWebTestCase
         self::assertAccessDenied($response);
     }
 
+    /**
+     * @testdox Пользователя с таким email не существует
+     */
     public function testInvalidEmail(): void
     {
         $body = [];
@@ -89,6 +100,9 @@ final class SignInTest extends ApiWebTestCase
         self::assertAccessDenied($response);
     }
 
+    /**
+     * @testdox Неправильный запрос
+     */
     public function testBadRequest(): void
     {
         $body = json_encode(['email' => 'test', 'password' => ''], JSON_THROW_ON_ERROR);
@@ -97,6 +111,9 @@ final class SignInTest extends ApiWebTestCase
         self::assertBadRequest($response);
     }
 
+    /**
+     * @testdox Логиниться можно только с подтвержденным Email, повторная отправка письма выполнена
+     */
     public function testNotConfirmedEmail(): void
     {
         $body = [];

@@ -9,9 +9,14 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
+ *
+ * @testdox ID задачи
  */
 final class TaskIdTest extends TestCase
 {
+    /**
+     * @testdox Идентификаторы идентичны
+     */
     public function testEquals(): void
     {
         $taskId1 = new TaskId();

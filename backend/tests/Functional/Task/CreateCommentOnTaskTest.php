@@ -11,9 +11,14 @@ use Symfony\Component\Uid\Uuid;
 
 /**
  * @internal
+ *
+ * @testdox Комментирование задачи
  */
 final class CreateCommentOnTaskTest extends ApiWebTestCase
 {
+    /**
+     * @testdox Комментарий добавлен
+     */
     public function testSuccessfulCreationTask(): void
     {
         $token = User::auth();
@@ -37,6 +42,9 @@ final class CreateCommentOnTaskTest extends ApiWebTestCase
         self::assertNull($comments[0]['updatedAt']);
     }
 
+    /**
+     * @testdox Задача не найдена
+     */
     public function testNotFound(): void
     {
         $token = User::auth();
@@ -52,6 +60,9 @@ final class CreateCommentOnTaskTest extends ApiWebTestCase
         self::assertNotFound($response);
     }
 
+    /**
+     * @testdox Нельзя комментировать выполненную задачу
+     */
     public function testAddCommentToCompletedTask(): void
     {
         $token = User::auth();
@@ -69,6 +80,8 @@ final class CreateCommentOnTaskTest extends ApiWebTestCase
 
     /**
      * @dataProvider notValidTokenDataProvider
+     *
+     * @testdox Доступ запрещен
      */
     public function testAccessDenied(string $notValidToken): void
     {
@@ -84,6 +97,9 @@ final class CreateCommentOnTaskTest extends ApiWebTestCase
         self::assertAccessDenied($response);
     }
 
+    /**
+     * @testdox Комментирование разрешено только автору
+     */
     public function testNoAccessAnotherUser(): void
     {
         $token = User::auth();
@@ -94,7 +110,7 @@ final class CreateCommentOnTaskTest extends ApiWebTestCase
         $taskId = Task::createAndReturnId('Тестовая задача №2 ', $tokenSecond);
 
         $body = [];
-        $body['commentBody'] = $commentText = 'First comment';
+        $body['commentBody'] = 'First comment';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
         $response = self::request('POST', "/api/tasks/{$taskId}/add-comment", $body, token: $token);

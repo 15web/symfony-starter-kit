@@ -13,9 +13,14 @@ use Symfony\Component\Serializer\Encoder\XmlEncoder;
 
 /**
  * @internal
+ *
+ * @testdox Экспорт задач в разные форматы
  */
 final class ExportTasksTest extends ApiWebTestCase
 {
+    /**
+     * @testdox Экспорт в формате csv
+     */
     public function testCsvExport(): void
     {
         $token = User::auth();
@@ -39,6 +44,9 @@ final class ExportTasksTest extends ApiWebTestCase
         }
     }
 
+    /**
+     * @testdox Экспорт в формате xml
+     */
     public function testXmlExport(): void
     {
         $token = User::auth();
@@ -64,6 +72,9 @@ final class ExportTasksTest extends ApiWebTestCase
         }
     }
 
+    /**
+     * @testdox Пустой экспорт в формате csv
+     */
     public function testEmptyCsvExport(): void
     {
         $token = User::auth();
@@ -81,6 +92,9 @@ final class ExportTasksTest extends ApiWebTestCase
         self::assertSame([['' => null]], $tasks); // [['' => null]] такой формат выдается при decode пустого файла
     }
 
+    /**
+     * @testdox Пустой экспорт в формате xml
+     */
     public function testEmptyXmlExport(): void
     {
         $token = User::auth();
@@ -99,6 +113,8 @@ final class ExportTasksTest extends ApiWebTestCase
 
     /**
      * @dataProvider notValidTokenDataProvider
+     *
+     * @testdox Доступ запрещен
      */
     public function testAccessDenied(string $notValidToken): void
     {
@@ -114,6 +130,9 @@ final class ExportTasksTest extends ApiWebTestCase
         self::assertAccessDenied($response);
     }
 
+    /**
+     * @testdox Пользователь может экспортировать только свои задачи
+     */
     public function testNoAccessAnotherUser(): void
     {
         $token = User::auth();

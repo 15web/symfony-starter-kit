@@ -9,9 +9,14 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
+ *
+ * @testdox ID комментария
  */
 final class TaskCommentIdTest extends TestCase
 {
+    /**
+     * @testdox Классы объектов-значений идентичны
+     */
     public function testEquals(): void
     {
         $taskCommentId1 = new TaskCommentId();
