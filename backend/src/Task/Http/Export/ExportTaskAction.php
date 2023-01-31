@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Task\Http\Export;
 
+use App\Infrastructure\Pagination\PaginationRequest;
 use App\User\SignUp\Domain\UserId;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -19,8 +20,13 @@ final class ExportTaskAction
     {
     }
 
-    public function __invoke(Format $format, UserId $userId): BinaryFileResponse
+    public function __invoke(Format $format, UserId $userId, PaginationRequest $paginationRequest): BinaryFileResponse
     {
-        return ($this->exportTasks)($format, $userId);
+        return ($this->exportTasks)(
+            $format,
+            $userId,
+            $paginationRequest->perPage,
+            $paginationRequest->getOffset()
+        );
     }
 }

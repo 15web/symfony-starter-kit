@@ -32,13 +32,13 @@ final class ExportTasks
         }
     }
 
-    public function __invoke(Format $format, UserId $userId): BinaryFileResponse
+    public function __invoke(Format $format, UserId $userId, int $limit = 10, int $offset = 0): BinaryFileResponse
     {
         if (\array_key_exists($format->value, $this->exporters) === false) {
             throw new \RuntimeException('Не найден обработчик');
         }
 
-        $tasks = ($this->findAllTasksByUserId)(new FindAllTasksByUserIdQuery($userId->value));
+        $tasks = ($this->findAllTasksByUserId)(new FindAllTasksByUserIdQuery($userId->value, $limit, $offset));
 
         return $this->exporters[$format->value]->export($tasks);
     }

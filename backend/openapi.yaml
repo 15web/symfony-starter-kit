@@ -149,6 +149,9 @@ paths:
         get:
             summary: 'Список задач'
             tags: [ 'Задачи' ]
+            parameters:
+                -   $ref: '#/components/parameters/page'
+                -   $ref: '#/components/parameters/perPage'
             responses:
                 200:
                     description: 'Возвращает список задач'
@@ -510,6 +513,8 @@ paths:
                         enum:
                             - csv
                             - xml
+                -   $ref: '#/components/parameters/page'
+                -   $ref: '#/components/parameters/perPage'
             responses:
                 200:
                     description: 'Список задач успешно экспортирован'
@@ -882,6 +887,22 @@ components:
                     nullable: true
 
     parameters:
+        page:
+            in: query
+            name: page
+            required: false
+            description: 'Номер страницы'
+            example: 2
+            schema:
+                type: integer
+        perPage:
+            in: query
+            name: per-page
+            required: false
+            description: 'Лимит'
+            example: 10
+            schema:
+                type: integer
         taskId:
             name: id
             in: path

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Task\Http;
 
+use App\Infrastructure\Pagination\PaginationRequest;
 use App\Task\Query\Task\FindAllByUserId\FindAllTasksByUserId;
 use App\Task\Query\Task\FindAllByUserId\FindAllTasksByUserIdQuery;
 use App\Task\Query\Task\FindAllByUserId\TaskData;
@@ -24,8 +25,14 @@ final class TaskListAction
     /**
      * @return TaskData[]
      */
-    public function __invoke(UserId $userId): array
+    public function __invoke(UserId $userId, PaginationRequest $paginationRequest): array
     {
-        return ($this->findAllTasksByUserId)(new FindAllTasksByUserIdQuery($userId->value));
+        return ($this->findAllTasksByUserId)(
+            new FindAllTasksByUserIdQuery(
+                $userId->value,
+                $paginationRequest->perPage,
+                $paginationRequest->getOffset(),
+            )
+        );
     }
 }
