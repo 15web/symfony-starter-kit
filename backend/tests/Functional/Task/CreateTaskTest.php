@@ -27,7 +27,8 @@ final class CreateTaskTest extends ApiWebTestCase
         $taskInfo = self::jsonDecode($response->getContent());
         self::assertNotNull($taskInfo['id']);
 
-        $tasks = Task::list($token);
+        $response = Task::list($token);
+        $tasks = $response['data'];
 
         self::assertCount(1, $tasks);
         self::assertSame($taskName, $tasks[0]['taskName']);

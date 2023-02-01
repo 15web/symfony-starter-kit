@@ -13,6 +13,7 @@ parameters:
 includes:
     - vendor/phpstan/phpstan/conf/bleedingEdge.neon
     - vendor/phpstan/phpstan-doctrine/extension.neon
+    - vendor/phpstan/phpstan-doctrine/rules.neon
     - vendor/phpstan/phpstan-strict-rules/rules.neon
     - src-dev/PHPStan/phpstan-baseline.neon
 

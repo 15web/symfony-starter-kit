@@ -44,7 +44,13 @@ final class ExportTasks
             throw new \RuntimeException('Не найден обработчик');
         }
 
-        $tasks = ($this->findAllTasksByUserId)(new FindAllTasksByUserIdQuery($userId->value, $limit, $offset));
+        $tasks = $this->findAllTasksByUserId->execute(
+            new FindAllTasksByUserIdQuery(
+                $userId->value,
+                $limit,
+                $offset,
+            )
+        );
 
         if (\count($tasks) === 0) {
             throw new NotFoundTasksForExportException('Нет задач для экспорта');

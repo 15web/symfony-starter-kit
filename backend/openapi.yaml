@@ -181,37 +181,41 @@ paths:
                     content:
                         application/json:
                             schema:
-                                type: array
-                                items:
-                                    type: object
-                                    required:
-                                        - id
-                                        - taskName
-                                        - isCompleted
-                                        - createdAt
-                                    additionalProperties: false
-                                    properties:
-                                        id:
-                                            type: string
-                                            format: uuid
-                                            description: ID задачи
-                                        taskName:
-                                            type: string
-                                            description: Наименование задачи
-                                        isCompleted:
-                                            type: boolean
-                                            description: Выполнена ли задача
-                                        createdAt:
-                                            type: string
-                                            description: Дата создания
-                            example: [
-                                {
-                                    id: dc8dbada-b154-4ffb-b21c-da70162e2704,
-                                    taskName: Моя первая задача,
-                                    isCompleted: true,
-                                    createdAt: '2021-10-28T16:19:44+00:00'
-                                }
-                            ]
+                                type: object
+                                required:
+                                    - data
+                                    - pagination
+                                additionalProperties: false
+                                properties:
+                                    pagination:
+                                        $ref: '#/components/schemas/paginationResponse'
+                                    data:
+                                        type: array
+                                        items:
+                                            properties:
+                                                id:
+                                                    type: string
+                                                    format: uuid
+                                                    description: ID задачи
+                                                taskName:
+                                                    type: string
+                                                    description: Наименование задачи
+                                                isCompleted:
+                                                    type: boolean
+                                                    description: Выполнена ли задача
+                                                createdAt:
+                                                    type: string
+                                                    description: Дата создания
+                                        example:
+                                            -   id: dc8dbada-b154-4ffb-b21c-da70162e2704
+                                                taskName: Моя первая задача
+                                                isCompleted: true
+                                                createdAt: '2021-10-28T16:19:44+00:00'
+                                            -   id: 80b12ebd-e493-4dce-a104-7d30464cef43
+                                                taskName: Моя вторая задача
+                                                isCompleted: true
+                                                createdAt: '2021-10-28T16:19:45+00:00'
+
                 '401':
                     description: Доступ запрещен
                     content:
@@ -952,12 +956,31 @@ components:
                     description: Дата обновления
                     example: '2021-10-28T16:19:44+00:00'
                     nullable: true
+        paginationResponse:
+            type: object
+            properties:
+                pagesCount:
+                    type: integer
+                    description: Количество страниц
+                    example: 1
+                total:
+                    type: integer
+                    description: Количество всех данных
+                    example: 2
+                perPage:
+                    type: integer
+                    description: Количество данных на странице
+                    example: 10
+                currentPage:
+                    type: integer
+                    description: Текущая страница
+                    example: 1
     parameters:
         page:
             in: query
             name: page
             required: false
-            description: 'Номер страницы'
+            description: Номер страницы
             example: 2
             schema:
                 type: integer
@@ -965,7 +988,7 @@ components:
             in: query
             name: per-page
             required: false
-            description: 'Лимит'
+            description: Лимит
             example: 10
             schema:
                 type: integer

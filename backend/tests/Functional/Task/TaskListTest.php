@@ -15,6 +15,13 @@ use App\Tests\Functional\SDK\User;
  */
 final class TaskListTest extends ApiWebTestCase
 {
+    private const TASK_DATA_KEY = 'data';
+    private const PAGINATION_KEY = 'pagination';
+    private const TOTAL = 'total';
+    private const PAGES_COUNT = 'pagesCount';
+    private const CURRENT_PAGE = 'currentPage';
+    private const PER_PAGE = 'perPage';
+
     /**
      * @testdox Получение списка из 2 созданных задач
      */
@@ -25,15 +32,38 @@ final class TaskListTest extends ApiWebTestCase
         Task::create('Тестовая задача 1', $token);
         Task::create('Тестовая задача 2', $token);
 
-        $tasks = Task::list($token);
+        $response = Task::list($token);
+        $tasks = $response[self::TASK_DATA_KEY];
+        $pagination = $response[self::PAGINATION_KEY];
 
         self::assertCount(2, $tasks);
+        self::assertSame(2, $pagination[self::TOTAL]);
+        self::assertSame(1, $pagination[self::CURRENT_PAGE]);
+        self::assertSame(1, $pagination[self::PAGES_COUNT]);
+        self::assertSame(10, $pagination[self::PER_PAGE]);
 
         foreach ($tasks as $task) {
             self::assertNotNull($task['id']);
             self::assertFalse($task['isCompleted']);
             self::assertNotNull($task['taskName']);
         }
+    }
+
+    /**
+     * @testdox Пустой запрос
+     */
+    public function testEmptyResult(): void
+    {
+        $token = User::auth();
+
+        $response = Task::list($token);
+        $tasks = $response[self::TASK_DATA_KEY];
+        $pagination = $response[self::PAGINATION_KEY];
+
+        self::assertCount(0, $tasks);
+        self::assertSame(1, $pagination[self::CURRENT_PAGE]);
+        self::assertSame(1, $pagination[self::PAGES_COUNT]);
+        self::assertSame(0, $pagination[self::TOTAL]);
     }
 
     /**
@@ -46,9 +76,14 @@ final class TaskListTest extends ApiWebTestCase
         Task::create('Тестовая задача 1', $token);
         Task::create('Тестовая задача 2', $token);
 
-        $tasks = Task::list($token, 1);
+        $response = Task::list($token, 1);
+        $tasks = $response[self::TASK_DATA_KEY];
+        $pagination = $response[self::PAGINATION_KEY];
 
         self::assertCount(1, $tasks);
+        self::assertSame(1, $pagination[self::CURRENT_PAGE]);
+        self::assertSame(2, $pagination[self::PAGES_COUNT]);
+        self::assertSame(2, $pagination[self::TOTAL]);
     }
 
     /**
@@ -61,9 +96,15 @@ final class TaskListTest extends ApiWebTestCase
         Task::create('Тестовая задача 1', $token);
         Task::create('Тестовая задача 2', $token);
 
-        $tasks = Task::list($token, 10, 3);
+        $response = Task::list($token, 10, 3);
+        $tasks = $response[self::TASK_DATA_KEY];
+        $pagination = $response[self::PAGINATION_KEY];
 
         self::assertCount(0, $tasks);
+        self::assertSame(2, $pagination[self::TOTAL]);
+        self::assertSame(3, $pagination[self::CURRENT_PAGE]);
+        self::assertSame(10, $pagination[self::PER_PAGE]);
+        self::assertSame(1, $pagination[self::PAGES_COUNT]);
     }
 
     /**
@@ -77,9 +118,14 @@ final class TaskListTest extends ApiWebTestCase
         Task::create('Тестовая задача 2', $token);
         Task::create('Тестовая задача 3', $token);
 
-        $tasks = Task::list($token, 1, 2);
+        $response = Task::list($token, 1, 2);
+        $tasks = $response[self::TASK_DATA_KEY];
+        $pagination = $response[self::PAGINATION_KEY];
 
         self::assertCount(1, $tasks);
+        self::assertSame(3, $pagination[self::TOTAL]);
+        self::assertSame(2, $pagination[self::CURRENT_PAGE]);
+        self::assertSame(3, $pagination[self::PAGES_COUNT]);
     }
 
     /**
@@ -96,7 +142,13 @@ final class TaskListTest extends ApiWebTestCase
         $taskId3 = Task::createAndReturnId($taskName3 = 'Тестовая задача 3', $tokenSecond);
         $taskId4 = Task::createAndReturnId($taskName4 = 'Тестовая задача 4', $tokenSecond);
 
-        $tasks = Task::list($token);
+        $response = Task::list($token);
+        $tasks = $response[self::TASK_DATA_KEY];
+        $pagination = $response[self::PAGINATION_KEY];
+
+        self::assertSame(2, $pagination[self::TOTAL]);
+        self::assertSame(1, $pagination[self::CURRENT_PAGE]);
+        self::assertSame(1, $pagination[self::PAGES_COUNT]);
 
         foreach ($tasks as $task) {
             self::assertNotSame($task['id'], $taskId3);

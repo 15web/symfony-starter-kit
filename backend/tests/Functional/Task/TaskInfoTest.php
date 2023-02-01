@@ -25,7 +25,8 @@ final class TaskInfoTest extends ApiWebTestCase
 
         $taskId = Task::createAndReturnId($taskName = 'Тестовая задача 1', $token);
 
-        $tasks = Task::list($token);
+        $response = Task::list($token);
+        $tasks = $response['data'];
 
         self::assertCount(1, $tasks);
 
