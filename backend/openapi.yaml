@@ -175,6 +175,9 @@ paths:
             summary: Список задач
             tags:
                 - tasks
+            parameters:
+                -   $ref: '#/components/parameters/page'
+                -   $ref: '#/components/parameters/perPage'
             responses:
                 '200':
                     description: Возвращает список задач
@@ -218,7 +221,7 @@ paths:
                                 error: true
                                 code: 401
                                 errorMessage: Необходимо пройти аутентификацию
-    /tasks/{taskId}:
+    /tasks/{id}:
         get:
             operationId: taskInfo
             description: Подробная информация по задаче
@@ -337,7 +340,7 @@ paths:
                                 error: true
                                 code: 401
                                 errorMessage: Необходимо пройти аутентификацию
-    /tasks/{taskId}/update-task-name:
+    /tasks/{id}/update-task-name:
         post:
             operationId: updateTaskName
             description: Обновить наименование задачи
@@ -387,7 +390,7 @@ paths:
                                 errorMessage: Необходимо пройти аутентификацию
                 '404':
                     description: Задача не найдена
-    /tasks/{taskId}/remove:
+    /tasks/{id}/remove:
         post:
             operationId: removeTask
             description: Удаляет задачу
@@ -415,7 +418,7 @@ paths:
                                 errorMessage: Необходимо пройти аутентификацию
                 '404':
                     description: Задача не найдена
-    /tasks/{taskId}/complete:
+    /tasks/{id}/complete:
         post:
             operationId: completeTask
             description: Завершает задачу
@@ -453,7 +456,7 @@ paths:
                                 errorMessage: Необходимо пройти аутентификацию
                 '404':
                     description: Задача не найдена
-    /tasks/{taskId}/add-comment:
+    /tasks/{id}/add-comment:
         post:
             operationId: addCommentToTask
             description: Добавление комментария к задаче
@@ -502,7 +505,7 @@ paths:
                                 errorMessage: Необходимо пройти аутентификацию
                 '404':
                     description: Задача не найдена
-    /tasks/{taskId}/comments:
+    /tasks/{id}/comments:
         get:
             operationId: listTaskComments
             description: Получить список комментариев к задаче
@@ -554,6 +557,8 @@ paths:
                       enum:
                           - csv
                           - xml
+                -   $ref: '#/components/parameters/page'
+                -   $ref: '#/components/parameters/perPage'
             responses:
                 '200':
                     description: Список задач успешно экспортирован
@@ -709,7 +714,7 @@ paths:
                                 error: true
                                 code: 401
                                 errorMessage: Необходимо пройти аутентификацию
-    /admin/article/{articleId}/update:
+    /admin/article/{id}/update:
         post:
             operationId: adminArticleUpdate
             description: Обновить статью
@@ -797,7 +802,7 @@ paths:
                                 error: true
                                 code: 401
                                 errorMessage: Необходимо пройти аутентификацию
-    /admin/article/{articleId}/info:
+    /admin/article/{id}/info:
         get:
             operationId: adminArticleInfo
             description: Получить информацию по статье
@@ -825,7 +830,7 @@ paths:
                                 errorMessage: Необходимо пройти аутентификацию
                 '404':
                     description: Статья не найдена
-    /admin/article/{articleId}/remove:
+    /admin/article/{id}/remove:
         post:
             operationId: adminArticleRemove
             description: Удалить статью
@@ -939,8 +944,24 @@ components:
                     example: '2021-10-28T16:19:44+00:00'
                     nullable: true
     parameters:
+        page:
+            in: query
+            name: page
+            required: false
+            description: 'Номер страницы'
+            example: 2
+            schema:
+                type: integer
+        perPage:
+            in: query
+            name: per-page
+            required: false
+            description: 'Лимит'
+            example: 10
+            schema:
+                type: integer
         taskId:
-            name: taskId
+            name: id
             in: path
             required: true
             description: ID задачи
@@ -949,7 +970,7 @@ components:
                 type: string
                 format: uuid
         articleId:
-            name: articleId
+            name: id
             in: path
             required: true
             description: ID статьи
