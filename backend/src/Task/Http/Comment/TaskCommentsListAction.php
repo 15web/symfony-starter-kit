@@ -13,6 +13,9 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Uid\Uuid;
 
+/**
+ * Ручка списка комментариев для задачи по пользователю
+ */
 #[IsGranted('ROLE_USER')]
 #[Route('/tasks/{id}/comments', methods: ['GET'])]
 #[AsController]

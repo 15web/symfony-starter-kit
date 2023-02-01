@@ -15,6 +15,9 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Uid\Uuid;
 
+/**
+ * Ручка информации задачи
+ */
 #[IsGranted('ROLE_USER')]
 #[Route('/tasks/{id}', methods: ['GET'])]
 #[AsController]

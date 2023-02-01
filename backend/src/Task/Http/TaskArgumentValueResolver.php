@@ -19,6 +19,9 @@ use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Symfony\Component\Uid\Uuid;
 use Webmozart\Assert\Assert;
 
+/**
+ * Резолвер нахождения задачи по айди и пользователю
+ */
 #[AsService]
 final class TaskArgumentValueResolver implements ValueResolverInterface
 {

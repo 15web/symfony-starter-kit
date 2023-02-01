@@ -7,6 +7,9 @@ namespace App\Task\Query\Task\FindAllByUserId;
 use App\Infrastructure\AsService;
 use Doctrine\ORM\EntityManagerInterface;
 
+/**
+ * Хендлер нахождения всех задач по пользователю
+ */
 #[AsService]
 final class FindAllTasksByUserId
 {

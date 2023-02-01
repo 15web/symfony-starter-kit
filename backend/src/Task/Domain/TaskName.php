@@ -8,6 +8,9 @@ use App\Infrastructure\ValueObject;
 use Doctrine\ORM\Mapping as ORM;
 use Webmozart\Assert\Assert;
 
+/**
+ * Наименование задачи
+ */
 #[ORM\Embeddable]
 final class TaskName implements ValueObject
 {

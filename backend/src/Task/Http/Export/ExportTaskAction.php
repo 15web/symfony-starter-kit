@@ -11,6 +11,9 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+/**
+ * Ручка экспорта задач
+ */
 #[IsGranted('ROLE_USER')]
 #[Route('/export/tasks.{format}', methods: ['GET'])]
 #[AsController]

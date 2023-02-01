@@ -15,6 +15,9 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Uid\Uuid;
 
+/**
+ * Ручка подтверждения почты
+ */
 #[Route('/confirm-email/{confirmToken}', methods: ['GET'])]
 #[AsController]
 final class ConfirmEmailAction

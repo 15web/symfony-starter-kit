@@ -8,6 +8,9 @@ use App\Infrastructure\ValueObject;
 use Doctrine\ORM\Mapping as ORM;
 use Webmozart\Assert\Assert;
 
+/**
+ * Пароль пользователя
+ */
 #[ORM\Embeddable]
 final class UserPassword implements ValueObject
 {

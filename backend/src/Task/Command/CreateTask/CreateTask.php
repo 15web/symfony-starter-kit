@@ -13,6 +13,9 @@ use App\Task\Domain\Tasks;
 use App\User\SignUp\Domain\UserId;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Хендлер создания задачи
+ */
 #[AsService]
 final class CreateTask
 {

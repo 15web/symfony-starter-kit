@@ -6,6 +6,9 @@ namespace App\Task\Query\Task\FindAllByUserId;
 
 use Symfony\Component\Uid\Uuid;
 
+/**
+ * DTO задачи
+ */
 final class TaskData
 {
     public function __construct(

@@ -14,6 +14,9 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\SerializerInterface;
 
+/**
+ * Экспорт задач в формат xml
+ */
 #[AsService]
 final class XmlExporter implements Exporter
 {

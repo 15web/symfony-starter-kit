@@ -6,6 +6,9 @@ namespace App\Infrastructure\Pagination;
 
 use Webmozart\Assert\Assert;
 
+/**
+ * Запрос на пагинацию
+ */
 final class PaginationRequest
 {
     public function __construct(

@@ -13,6 +13,9 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Yaml\Yaml;
 
+/**
+ * Проверяет расхождения ручек и документации OpenApi
+ */
 #[AsCommand(name: 'app:openapi-routes-diff', description: 'Находит расхождения ручек и документации openapi')]
 final class OpenApiRoutesDiffCommand extends Command
 {

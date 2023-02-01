@@ -7,6 +7,9 @@ namespace App\Task\Domain;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 
+/**
+ * Комментарий задачи
+ */
 #[ORM\Entity]
 /** @final */
 class TaskComment

@@ -17,6 +17,9 @@ use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Uid\Uuid;
 
+/**
+ * Хендлер регистрации
+ */
 #[AsService]
 final class SignUp
 {

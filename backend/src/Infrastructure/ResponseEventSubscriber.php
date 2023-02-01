@@ -12,6 +12,9 @@ use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\SerializerInterface;
 
+/**
+ * Сериализует ответ ручки в JsonResponse
+ */
 #[AsService]
 final class ResponseEventSubscriber implements EventSubscriberInterface
 {

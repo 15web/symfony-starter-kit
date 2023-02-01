@@ -10,6 +10,9 @@ use App\Task\Domain\Task;
 use App\Task\Domain\TaskAlreadyIsDoneException;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Хендлер завершения задачи
+ */
 #[AsService]
 final class CompleteTask
 {

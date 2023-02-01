@@ -8,6 +8,9 @@ use App\Task\Query\Task\FindAllByUserId\TaskData;
 use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
+/**
+ * Интерфейс экспорта
+ */
 #[Autoconfigure(tags: ['app.task.exporter'])]
 interface Exporter
 {

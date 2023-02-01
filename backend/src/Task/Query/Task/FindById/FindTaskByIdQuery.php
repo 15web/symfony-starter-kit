@@ -6,6 +6,9 @@ namespace App\Task\Query\Task\FindById;
 
 use Symfony\Component\Uid\Uuid;
 
+/**
+ * Запрос на нахождение задачи по айди
+ */
 final class FindTaskByIdQuery
 {
     public function __construct(

@@ -9,6 +9,9 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
+/**
+ * Проверяет тип ошибки, проеобразовывает ее в JsonResponse
+ */
 #[AsService]
 final class ExceptionEventSubscriber implements EventSubscriberInterface
 {

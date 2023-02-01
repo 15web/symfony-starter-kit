@@ -8,6 +8,9 @@ use App\User\SignUp\Domain\UserId;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 
+/**
+ * Токен пользователя
+ */
 #[ORM\Entity]
 #[ORM\Index(fields: ['userId'], name: 'user_id_idx')]
 /** @final */

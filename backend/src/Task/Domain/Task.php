@@ -10,6 +10,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 
+/**
+ * Задача
+ */
 #[ORM\Entity]
 #[ORM\Index(fields: ['userId'], name: 'user_id_idx')]
 /** @final */

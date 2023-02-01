@@ -19,6 +19,9 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordC
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Webmozart\Assert\Assert;
 
+/**
+ * Аутентификатор по почте и паролю
+ */
 #[AsService]
 final class JsonLoginAuthenticator extends AbstractAuthenticator
 {

@@ -16,6 +16,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Mailer\MailerInterface;
 
+/**
+ * Консольная команда отправки пользователю списка невыполненных задач
+ */
 #[AsCommand(name: 'app:task:send-uncompleted', description: 'Отправляет пользователю список невыполненных задач')]
 final class SendUncompletedTaskToUser extends Command
 {

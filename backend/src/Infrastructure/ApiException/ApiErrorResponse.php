@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\ApiException;
 
+/**
+ * Сообщение ошибки
+ */
 final class ApiErrorResponse
 {
     private readonly bool $isError;

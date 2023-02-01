@@ -7,6 +7,9 @@ namespace App\Task\Query\Task\FindById;
 use App\Infrastructure\AsService;
 use Doctrine\ORM\EntityManagerInterface;
 
+/**
+ * Хендлер нахождения задачи по айди
+ */
 #[AsService]
 final class FindTaskById
 {

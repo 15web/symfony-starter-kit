@@ -15,6 +15,9 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+/**
+ * Ручка добавления комментария для задачи
+ */
 #[IsGranted('ROLE_USER')]
 #[Route('/tasks/{id}/add-comment', methods: ['POST'])]
 #[AsController]

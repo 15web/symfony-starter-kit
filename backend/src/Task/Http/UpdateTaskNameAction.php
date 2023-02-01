@@ -13,6 +13,9 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+/**
+ * Ручка обновления имени задачи
+ */
 #[IsGranted('ROLE_USER')]
 #[Route('/tasks/{id}/update-task-name', methods: ['POST'])]
 #[AsController]

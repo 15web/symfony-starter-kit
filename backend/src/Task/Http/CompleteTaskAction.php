@@ -13,6 +13,9 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+/**
+ * Ручка завершения задачи
+ */
 #[IsGranted('ROLE_USER')]
 #[Route('/tasks/{id}/complete', methods: ['POST'])]
 #[AsController]

@@ -6,6 +6,9 @@ namespace App\Infrastructure;
 
 use Doctrine\ORM\EntityManagerInterface;
 
+/**
+ * Флашер
+ */
 #[AsService]
 final class Flush
 {

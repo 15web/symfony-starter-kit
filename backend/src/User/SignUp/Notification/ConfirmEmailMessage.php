@@ -8,6 +8,9 @@ use App\Infrastructure\Message;
 use Symfony\Component\Uid\Uuid;
 use Webmozart\Assert\Assert;
 
+/**
+ * Message для подтверждения почты
+ */
 final class ConfirmEmailMessage implements Message
 {
     public function __construct(private readonly Uuid $confirmToken, private readonly string $email)

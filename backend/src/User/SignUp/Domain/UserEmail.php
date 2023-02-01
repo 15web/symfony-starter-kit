@@ -9,6 +9,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 use Webmozart\Assert\Assert;
 
+/**
+ * Email пользователя
+ */
 #[ORM\Embeddable]
 final class UserEmail implements ValueObject
 {

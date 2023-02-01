@@ -13,6 +13,9 @@ use App\Task\Domain\TaskCommentBody;
 use App\Task\Domain\TaskCommentId;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Хендлер добавления комментария к задаче
+ */
 #[AsService]
 final class AddCommentOnTask
 {

@@ -8,6 +8,9 @@ use App\Infrastructure\AsService;
 use App\User\SignUp\Domain\UserId;
 use Doctrine\ORM\EntityManagerInterface;
 
+/**
+ * Репозиторий задач
+ */
 #[AsService]
 final class Tasks
 {

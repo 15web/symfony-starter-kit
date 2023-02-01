@@ -7,6 +7,9 @@ namespace App\Article\Http\Admin;
 use App\Infrastructure\ApiRequestResolver\ApiRequest;
 use Webmozart\Assert\Assert;
 
+/**
+ * Объект запроса на создание статьи
+ */
 final class CreateRequest implements ApiRequest
 {
     public function __construct(

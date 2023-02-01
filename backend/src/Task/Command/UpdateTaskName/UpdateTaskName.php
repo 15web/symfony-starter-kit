@@ -10,6 +10,9 @@ use App\Task\Domain\Task;
 use App\Task\Domain\TaskName;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Хендлер обновления имени задачи
+ */
 #[AsService]
 final class UpdateTaskName
 {

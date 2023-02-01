@@ -7,6 +7,9 @@ namespace App\Task\Query\Task\FindUncompletedTasksByUserId;
 use App\Infrastructure\AsService;
 use Doctrine\ORM\EntityManagerInterface;
 
+/**
+ * Хендлер нахождения незавершенных задач по пользователю
+ */
 #[AsService]
 final class FindUncompletedTasksByUserId
 {

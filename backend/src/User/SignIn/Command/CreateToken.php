@@ -11,6 +11,9 @@ use App\User\SignIn\Domain\UserTokens;
 use App\User\SignUp\Domain\UserId;
 use Symfony\Component\Uid\Uuid;
 
+/**
+ * Хендлер создания токена
+ */
 #[AsService]
 final class CreateToken
 {

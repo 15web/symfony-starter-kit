@@ -6,6 +6,9 @@ namespace App\Infrastructure\ApiException;
 
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Класс исключения для ошибочного запроса
+ */
 final class ApiBadRequestException extends \Exception implements ApiException
 {
     public function __construct(

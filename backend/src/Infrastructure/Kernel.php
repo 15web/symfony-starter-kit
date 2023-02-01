@@ -14,6 +14,9 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
 
+/**
+ * Подключает конфиги из модулей, заполняет Service Container
+ */
 #[AsService]
 final class Kernel extends BaseKernel implements CompilerPassInterface
 {

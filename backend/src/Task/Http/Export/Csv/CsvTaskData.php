@@ -6,6 +6,9 @@ namespace App\Task\Http\Export\Csv;
 
 use Symfony\Component\Uid\Uuid;
 
+/**
+ * Данные задачи для csv формата
+ */
 final class CsvTaskData
 {
     public function __construct(
