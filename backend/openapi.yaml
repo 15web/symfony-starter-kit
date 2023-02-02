@@ -21,11 +21,11 @@ paths:
         post:
             operationId: signUp
             summary: Регистрация пользователя
-            description: Регистрация пользователя
             tags:
                 - auth
             security: []
             requestBody:
+                description: Запрос на регистрацию
                 content:
                     application/json:
                         schema:
@@ -65,7 +65,6 @@ paths:
     /confirm-email/{confirmToken}:
         get:
             operationId: confirmEmail
-            description: Подтверждение email
             summary: Подтверждение email
             tags:
                 - auth
@@ -94,12 +93,12 @@ paths:
     /sign-in:
         post:
             operationId: signIn
-            description: Аутентификация пользователя
             summary: Аутентификация пользователя
             tags:
                 - auth
             security: []
             requestBody:
+                description: Запрос на аутентификацию
                 content:
                     application/json:
                         schema:
@@ -147,7 +146,6 @@ paths:
     /logout:
         get:
             operationId: logout
-            description: Выйти из приложения
             summary: Выйти из приложения
             tags:
                 - auth
@@ -171,7 +169,6 @@ paths:
     /tasks:
         get:
             operationId: tasksList
-            description: Список задач
             summary: Список задач
             tags:
                 - tasks
@@ -198,19 +195,23 @@ paths:
                                             type: string
                                             format: uuid
                                             description: ID задачи
-                                            example: dc8dbada-b154-4ffb-b21c-da70162e2704
                                         taskName:
                                             type: string
                                             description: Наименование задачи
-                                            example: Моя первая задача
                                         isCompleted:
                                             type: boolean
                                             description: Выполнена ли задача
-                                            example: true
                                         createdAt:
                                             type: string
                                             description: Дата создания
-                                            example: '2021-10-28T16:19:44+00:00'
+                            example: [
+                                {
+                                    id: dc8dbada-b154-4ffb-b21c-da70162e2704,
+                                    taskName: Моя первая задача,
+                                    isCompleted: true,
+                                    createdAt: '2021-10-28T16:19:44+00:00'
+                                }
+                            ]
                 '401':
                     description: Доступ запрещен
                     content:
@@ -224,7 +225,6 @@ paths:
     /tasks/{id}:
         get:
             operationId: taskInfo
-            description: Подробная информация по задаче
             summary: Подробная информация по задаче
             tags:
                 - tasks
@@ -250,29 +250,31 @@ paths:
                                         type: string
                                         format: uuid
                                         description: ID задачи
-                                        example: dc8dbada-b154-4ffb-b21c-da70162e2704
                                     taskName:
                                         type: string
                                         description: Наименование задачи
-                                        example: Моя первая задача
                                     isCompleted:
                                         type: boolean
                                         description: Выполнена ли задача
-                                        example: true
                                     createdAt:
                                         type: string
                                         description: Дата создания
-                                        example: '2021-10-28T16:19:44+00:00'
                                     completedAt:
                                         type: string
                                         description: Дата завершения
-                                        example: '2021-10-28T16:19:44+00:00'
                                         nullable: true
                                     updatedAt:
                                         type: string
                                         description: Дата обновления
-                                        example: '2021-10-28T16:19:44+00:00'
                                         nullable: true
+                            example: {
+                                id: dc8dbada-b154-4ffb-b21c-da70162e2704,
+                                taskName: Моя первая задача,
+                                isCompleted: true,
+                                createdAt: '2021-10-28T16:19:44+00:00',
+                                completedAt: '2021-10-28T16:19:44+00:00',
+                                updatedAt: '2021-10-28T16:19:44+00:00'
+                            }
                 '401':
                     description: Доступ запрещен
                     content:
@@ -288,11 +290,11 @@ paths:
     /tasks/create:
         post:
             operationId: createTask
-            description: Создать задачу
             summary: Создать задачу
             tags:
                 - tasks
             requestBody:
+                description: Запрос на создание задачи
                 content:
                     application/json:
                         schema:
@@ -319,7 +321,9 @@ paths:
                                         type: string
                                         format: uuid
                                         description: ID задачи
-                                        example: dc8dbada-b154-4ffb-b21c-da70162e2704
+                            example: {
+                                id: dc8dbada-b154-4ffb-b21c-da70162e2704,
+                            }
                 '400':
                     description: Ошибка запроса
                     content:
@@ -343,13 +347,13 @@ paths:
     /tasks/{id}/update-task-name:
         post:
             operationId: updateTaskName
-            description: Обновить наименование задачи
             summary: Обновить наименование задачи
             tags:
                 - tasks
             parameters:
                 - $ref: '#/components/parameters/taskId'
             requestBody:
+                description: Запрос на обновление наименования задачи
                 content:
                     application/json:
                         schema:
@@ -393,7 +397,6 @@ paths:
     /tasks/{id}/remove:
         post:
             operationId: removeTask
-            description: Удаляет задачу
             summary: Удаляет задачу
             tags:
                 - tasks
@@ -421,7 +424,6 @@ paths:
     /tasks/{id}/complete:
         post:
             operationId: completeTask
-            description: Завершает задачу
             summary: Завершает задачу
             tags:
                 - tasks
@@ -459,13 +461,13 @@ paths:
     /tasks/{id}/add-comment:
         post:
             operationId: addCommentToTask
-            description: Добавление комментария к задаче
             summary: Добавление комментария к задаче
             tags:
                 - tasks
             parameters:
                 - $ref: '#/components/parameters/taskId'
             requestBody:
+                description: Запрос на добавление комментария
                 content:
                     application/json:
                         schema:
@@ -508,7 +510,6 @@ paths:
     /tasks/{id}/comments:
         get:
             operationId: listTaskComments
-            description: Получить список комментариев к задаче
             summary: Получить список комментариев к задаче
             tags:
                 - tasks
@@ -542,7 +543,6 @@ paths:
     /export/tasks.{format}:
         get:
             operationId: exportTasks
-            description: Экспорт задач в нужном формате
             summary: Экспорт задач в нужном формате
             tags:
                 - tasks
@@ -566,11 +566,11 @@ paths:
                         text/csv:
                             schema:
                                 type: string
-                                example: '2021-11-16T16:52:08+00:00,Задача 1,выполнена'
+                            example: '2021-11-16T16:52:08+00:00,Задача 1,выполнена'
                         text/xml:
                             schema:
                                 type: string
-                                example: '<?xml version="1.0"?><response><item key="0"><id>da5b20a7-3c8b-4516-bc7c-7297c0e2f686</id><createdAt>2022-07-12T12:13:23+00:00</createdAt><taskName>Тестовая задача</taskName><isCompleted>0</isCompleted></item></response>'
+                            example: '<?xml version="1.0"?><response><item key="0"><id>da5b20a7-3c8b-4516-bc7c-7297c0e2f686</id><createdAt>2022-07-12T12:13:23+00:00</createdAt><taskName>Тестовая задача</taskName><isCompleted>0</isCompleted></item></response>'
                 '401':
                     description: Доступ запрещен
                     content:
@@ -584,7 +584,6 @@ paths:
     /article/list:
         get:
             operationId: articleList
-            description: Получить список статей
             summary: Получить список статей
             tags:
                 - articles
@@ -607,20 +606,21 @@ paths:
                                         title:
                                             type: string
                                             description: Заголовок
-                                            example: Первая статья
                                         alias:
                                             type: string
                                             description: Алиас
-                                            example: first-article
                                         body:
                                             type: string
                                             description: Контент
-                                            example: Контент первой статьи
                                             nullable: true
+                            example: [{
+                                title: Первая статья,
+                                alias: first-article,
+                                body: Контент первой статьи
+                            }]
     /article/{alias}/info:
         get:
             operationId: articleInfo
-            description: Получить данные по статье
             summary: Получить данные по статье
             tags:
                 - articles
@@ -654,16 +654,20 @@ paths:
                                         description: Контент
                                         example: Контент первой статьи
                                         nullable: true
+                            example: {
+                                title: Первая статья,
+                                body: Контент первой статьи
+                            }
                 '404':
                     description: Статья не найдена
     /admin/article/create:
         post:
             operationId: adminArticleCreate
-            description: Создать статью
             summary: Создать статью
             tags:
                 - articles
             requestBody:
+                description: Запрос на создание статьи
                 content:
                     application/json:
                         schema:
@@ -717,13 +721,13 @@ paths:
     /admin/article/{id}/update:
         post:
             operationId: adminArticleUpdate
-            description: Обновить статью
             summary: Обновить статью
             tags:
                 - articles
             parameters:
                 - $ref: '#/components/parameters/articleId'
             requestBody:
+                description: Запрос на обновление статьи
                 content:
                     application/json:
                         schema:
@@ -779,7 +783,6 @@ paths:
     /admin/article/list:
         get:
             operationId: adminArticleList
-            description: Получить список статей
             summary: Получить список статей
             tags:
                 - articles
@@ -789,9 +792,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                type: array
-                                items:
-                                    $ref: '#/components/schemas/articleResponse'
+                                $ref: '#/components/schemas/articleResponseList'
                 '401':
                     description: Доступ запрещен
                     content:
@@ -805,7 +806,6 @@ paths:
     /admin/article/{id}/info:
         get:
             operationId: adminArticleInfo
-            description: Получить информацию по статье
             summary: Получить информацию по статье
             tags:
                 - articles
@@ -833,7 +833,6 @@ paths:
     /admin/article/{id}/remove:
         post:
             operationId: adminArticleRemove
-            description: Удалить статью
             summary: Удалить статью
             tags:
                 - articles
@@ -872,10 +871,8 @@ components:
             additionalProperties: false
             properties:
                 success:
-                    enum:
-                        - true
                     type: boolean
-                    default: true
+                    example: true
         errorResponse:
             type: object
             required:
@@ -886,9 +883,7 @@ components:
             properties:
                 error:
                     type: boolean
-                    enum:
-                        - true
-                    default: true
+                    example: true
                 code:
                     type: integer
                 errorMessage:
@@ -907,6 +902,10 @@ components:
                     type: string
                     format: uuid
                     example: 123e4567-e89b-12d3-a456-426614174000
+        articleResponseList:
+            type: array
+            items:
+                $ref: '#/components/schemas/articleResponse'
         articleResponse:
             type: object
             additionalProperties: false
