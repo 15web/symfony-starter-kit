@@ -9,6 +9,7 @@
     <arg name="extensions" value="php"/>
 
     <file>src/</file>
+    <file>src-dev/</file>
 
     <config name="installed_paths" value="vendor/slevomat/coding-standard"/><!-- relative path from PHPCS source location -->
 

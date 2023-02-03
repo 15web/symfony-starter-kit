@@ -1,6 +1,8 @@
-<?php declare(strict_types=1);
+<?php
 
-namespace Studio15\CodeQuality\PHPCodeSniffer\Sniffs\ControlStructures;
+declare(strict_types=1);
+
+namespace Dev\PHPCodeSniffer\Sniffs\ControlStructures;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;

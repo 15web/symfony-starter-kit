@@ -5,8 +5,8 @@
     <arg name="colors"/>
     <arg name="extensions" value="php"/>
 
-    <file>../src/</file>
+    <file>../../src/</file>
 
     <!-- Rule: There is no "else" -->
-    <rule ref="phpcs.ControlStructures.NoElse"/>
+    <rule ref="PHPCodeSniffer.ControlStructures.NoElse"/>
 </ruleset>

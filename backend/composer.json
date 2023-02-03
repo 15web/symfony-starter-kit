@@ -82,9 +82,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "App\\Tests\\": "tests/",
-            "App\\PHPStan\\": "phpstan/",
-            "Studio15\\CodeQuality\\PHPCodeSniffer\\": "phpcs/"
+            "Dev\\": "src-dev/",
+            "App\\Tests\\": "tests/"
         }
     },
     "replace": {
@@ -110,8 +109,8 @@
         "stan": "vendor/bin/phpstan analyse -c phpstan-config.neon --ansi --memory-limit 2G",
         "fixer-check": "php-cs-fixer --config=php-cs-fixer-config.php fix --dry-run --diff --ansi -v",
         "fixer-fix": "php-cs-fixer --config=php-cs-fixer-config.php fix --ansi -v",
-        "sniffer-check": "phpcs --standard=phpcs.xml,phpcs/ruleset.xml --colors -p",
-        "sniffer-fix": "phpcbf --standard=phpcs.xml,phpcs/ruleset.xml --colors -p",
+        "sniffer-check": "phpcs --standard=phpcs.xml,src-dev/PHPCodeSniffer/ruleset.xml --colors -p",
+        "sniffer-fix": "phpcbf --standard=phpcs.xml,src-dev/PHPCodeSniffer/ruleset.xml --colors -p",
         "twig-lint": "bin/console lint:twig templates",
         "container-lint": "bin/console lint:container",
         "validate-doctrine-schema": "bin/console doctrine:schema:validate -v",
@@ -120,7 +119,7 @@
         "deptrac-check": "vendor/bin/deptrac analyse --fail-on-uncovered --report-uncovered --config-file=deptrac.yaml --cache-file=var/cache/.deptrac.cache",
         "deptrac-check-unassigned": "vendor/bin/deptrac debug:unassigned --config-file=deptrac.yaml --cache-file=var/cache/.deptrac.cache | tee /dev/stderr | grep 'There are no unassigned tokens'",
         "deprecations-check": "bin/console debug:container --deprecations",
-        "rector-check": "vendor/bin/rector process src --dry-run",
+        "rector-check": "vendor/bin/rector process --dry-run",
         "rector-fix": "vendor/bin/rector process src --cache-clear",
         "check": "@parallel container-lint validate-doctrine-schema twig-lint stan fixer-check rector-check sniffer-check cache-prod-check validate-openapi-schema deptrac-check deptrac-check-unassigned",
         "fix": ["@fixer-fix", "@sniffer-fix"]
