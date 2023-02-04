@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional\Task;
 
+use App\Infrastructure\ApiException\ApiErrorCode;
 use App\Tests\Functional\SDK\ApiWebTestCase;
 use App\Tests\Functional\SDK\Task;
 use App\Tests\Functional\SDK\User;
@@ -117,42 +118,27 @@ final class ExportTasksTest extends ApiWebTestCase
     }
 
     /**
-     * @testdox Пустой экспорт в формате csv
+     * @testdox Ошибка при пустом экспорте в формате csv
      */
     public function testEmptyCsvExport(): void
     {
         $token = User::auth();
 
-        /** @var BinaryFileResponse $response */
         $response = self::request('GET', '/api/export/tasks.csv', token: $token);
-        self::assertSuccessResponse($response);
 
-        $file = $response->getFile();
-        $csvEncoder = new CsvEncoder();
-
-        $tasks = $csvEncoder->decode($file->getContent(), CsvEncoder::FORMAT);
-
-        self::assertSame("\n\n", $file->getContent()); // пустой файл содержит "\n\n"
-        self::assertSame([['' => null]], $tasks); // [['' => null]] такой формат выдается при decode пустого файла
+        self::assertApiError($response, ApiErrorCode::NotFoundTasksForExport->value);
     }
 
     /**
-     * @testdox Пустой экспорт в формате xml
+     * @testdox Ошибка при пустом экспорте в формате xml
      */
     public function testEmptyXmlExport(): void
     {
         $token = User::auth();
 
-        /** @var BinaryFileResponse $response */
         $response = self::request('GET', '/api/export/tasks.xml', token: $token);
-        self::assertSuccessResponse($response);
 
-        $file = $response->getFile();
-        $xmlEncoder = new XmlEncoder();
-
-        $tasks = $xmlEncoder->decode($file->getContent(), XmlEncoder::FORMAT);
-
-        self::assertEmpty($tasks);
+        self::assertApiError($response, ApiErrorCode::NotFoundTasksForExport->value);
     }
 
     /**
