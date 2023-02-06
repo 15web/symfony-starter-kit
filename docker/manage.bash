@@ -171,6 +171,9 @@ case $COMMAND in
         compose run --rm -e APP_ENV=test backend vendor/bin/paratest -p4
 
         runBackend bin/console app:openapi-routes-diff ./openapi.yaml
+
+        compose run --rm vacuum lint /app/openapi.yaml -d;
+
         ;;
     check-openapi)
         setupEnvs;
