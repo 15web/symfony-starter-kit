@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\User\Domain;
+namespace App\Tests\Unit\User\SignUp\Domain;
 
 use App\User\SignUp\Domain\UserEmail;
 use PHPUnit\Framework\TestCase;

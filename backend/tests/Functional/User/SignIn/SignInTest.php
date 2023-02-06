@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Functional\User;
+namespace App\Tests\Functional\User\SignIn;
 
 use App\Infrastructure\ApiException\ApiErrorCode;
 use App\Tests\Functional\SDK\ApiWebTestCase;
