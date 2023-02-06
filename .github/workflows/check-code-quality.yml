@@ -35,5 +35,8 @@ jobs:
       - name: Check difference between OpenApi and application endpoints
         run: cd ./docker && ./manage.bash run-backend bin/console app:openapi-routes-diff ./openapi.yaml
 
+      - name: Check OpenApi schema
+        run: cd ./docker && ./manage.bash check-openapi
+
       - name: Run functional tests
         run: cd ./docker && ./manage.bash test

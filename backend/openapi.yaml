@@ -2,15 +2,30 @@ openapi: 3.0.3
 info:
     title: symfony-starter-kit
     version: 1.0.0
+    description: Заготовка для проектов на symfony, примеры модулей
+    contact:
+        name: Студия 15
+        url: https://www.15web.ru
+        email: info@15web.ru
+tags:
+    - name: auth
+      description: Аутентификация
+    - name: tasks
+      description: Задачи
+    - name: articles
+      description: Статьи
 servers:
-    -   url: '/api'
+    - url: /api
 paths:
     /sign-up:
         post:
-            summary: 'Регистрация пользователя'
-            tags: [ 'Аутентификация' ]
-            security: [ ]
+            operationId: signUp
+            summary: Регистрация пользователя
+            tags:
+                - auth
+            security: []
             requestBody:
+                description: Запрос на регистрацию
                 content:
                     application/json:
                         schema:
@@ -18,27 +33,27 @@ paths:
                                 email:
                                     type: string
                                     format: email
-                                    description: 'Email пользователя'
-                                    example: 'test@test.ru'
+                                    description: Email пользователя
+                                    example: test@test.ru
                                 password:
                                     type: string
-                                    description: 'Пароль пользователя'
+                                    description: Пароль пользователя
                                     minLength: 6
                                     example: '123456'
                             additionalProperties: false
                             required:
                                 - email
             responses:
-                200:
-                    description: 'Пользователь успешно зарегистрирован'
+                '200':
+                    description: Пользователь успешно зарегистрирован
                     content:
                         application/json:
                             schema:
                                 oneOf:
-                                    -   $ref: '#/components/schemas/successResponse'
-                                    -   $ref: '#/components/schemas/errorResponse'
-                400:
-                    description: 'Ошибка запроса'
+                                    - $ref: '#/components/schemas/successResponse'
+                                    - $ref: '#/components/schemas/errorResponse'
+                '400':
+                    description: Ошибка запроса
                     content:
                         application/json:
                             schema:
@@ -46,24 +61,25 @@ paths:
                             example:
                                 error: true
                                 code: 400
-                                errorMessage: 'Неверный формат запроса'
-
+                                errorMessage: Неверный формат запроса
     /confirm-email/{confirmToken}:
         get:
-            summary: 'Подтверждение email'
-            tags: [ 'Аутентификация' ]
-            security: [ ]
+            operationId: confirmEmail
+            summary: Подтверждение email
+            tags:
+                - auth
+            security: []
             parameters:
                 - $ref: '#/components/parameters/confirmToken'
             responses:
-                200:
-                    description: 'Email подтвержден'
+                '200':
+                    description: Email подтвержден
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/successResponse'
-                400:
-                    description: 'Email уже подтвержден'
+                '400':
+                    description: Email уже подтвержден
                     content:
                         application/json:
                             schema:
@@ -71,15 +87,18 @@ paths:
                             example:
                                 error: true
                                 code: 400
-                                errorMessage: 'Неверный формат запроса'
-                404:
-                    description: 'Email с таким токеном не найден'
+                                errorMessage: Неверный формат запроса
+                '404':
+                    description: Email с таким токеном не найден
     /sign-in:
         post:
-            summary: 'Аутентификация пользователя'
-            tags: [ 'Аутентификация' ]
-            security: [ ]
+            operationId: signIn
+            summary: Аутентификация пользователя
+            tags:
+                - auth
+            security: []
             requestBody:
+                description: Запрос на аутентификацию
                 content:
                     application/json:
                         schema:
@@ -87,25 +106,25 @@ paths:
                                 email:
                                     type: string
                                     format: email
-                                    description: 'Email пользователя'
-                                    example: 'test@test.ru'
+                                    description: Email пользователя
+                                    example: test@test.ru
                                 password:
                                     type: string
-                                    description: 'Пароль пользователя'
-                                    example: 'qwer1234'
+                                    description: Пароль пользователя
+                                    example: qwer1234
                             additionalProperties: false
                             required:
                                 - email
                                 - password
             responses:
-                200:
-                    description: 'Аутентификация прошла успешно'
+                '200':
+                    description: Аутентификация прошла успешно
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/authResponse'
-                400:
-                    description: 'Ошибка запроса'
+                '400':
+                    description: Ошибка запроса
                     content:
                         application/json:
                             schema:
@@ -113,9 +132,9 @@ paths:
                             example:
                                 error: true
                                 code: 400
-                                errorMessage: 'Неверный формат запроса'
-                401:
-                    description: 'Ошибка аутентификации'
+                                errorMessage: Неверный формат запроса
+                '401':
+                    description: Ошибка аутентификации
                     content:
                         application/json:
                             schema:
@@ -123,20 +142,22 @@ paths:
                             example:
                                 error: true
                                 code: 401
-                                errorMessage: 'Не верный логин или пароль'
+                                errorMessage: Не верный логин или пароль
     /logout:
         get:
-            summary: 'Выйти из приложения'
-            tags: [ 'Аутентификация' ]
+            operationId: logout
+            summary: Выйти из приложения
+            tags:
+                - auth
             responses:
-                200:
-                    description: 'Выход прошел успешно'
+                '200':
+                    description: Выход прошел успешно
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/successResponse'
-                401:
-                    description: 'Доступ запрещен'
+                '401':
+                    description: Доступ запрещен
                     content:
                         application/json:
                             schema:
@@ -144,17 +165,19 @@ paths:
                             example:
                                 error: true
                                 code: 401
-                                errorMessage: 'Необходимо пройти аутентификацию'
+                                errorMessage: Необходимо пройти аутентификацию
     /tasks:
         get:
-            summary: 'Список задач'
-            tags: [ 'Задачи' ]
+            operationId: tasksList
+            summary: Список задач
+            tags:
+                - tasks
             parameters:
                 -   $ref: '#/components/parameters/page'
                 -   $ref: '#/components/parameters/perPage'
             responses:
-                200:
-                    description: 'Возвращает список задач'
+                '200':
+                    description: Возвращает список задач
                     content:
                         application/json:
                             schema:
@@ -171,22 +194,26 @@ paths:
                                         id:
                                             type: string
                                             format: uuid
-                                            description: 'ID задачи'
-                                            example: 'dc8dbada-b154-4ffb-b21c-da70162e2704'
+                                            description: ID задачи
                                         taskName:
                                             type: string
-                                            description: 'Наименование задачи'
-                                            example: 'Моя первая задача'
+                                            description: Наименование задачи
                                         isCompleted:
                                             type: boolean
-                                            description: 'Выполнена ли задача'
-                                            example: true
+                                            description: Выполнена ли задача
                                         createdAt:
                                             type: string
-                                            description: 'Дата создания'
-                                            example: '2021-10-28T16:19:44+00:00'
-                401:
-                    description: 'Доступ запрещен'
+                                            description: Дата создания
+                            example: [
+                                {
+                                    id: dc8dbada-b154-4ffb-b21c-da70162e2704,
+                                    taskName: Моя первая задача,
+                                    isCompleted: true,
+                                    createdAt: '2021-10-28T16:19:44+00:00'
+                                }
+                            ]
+                '401':
+                    description: Доступ запрещен
                     content:
                         application/json:
                             schema:
@@ -194,17 +221,18 @@ paths:
                             example:
                                 error: true
                                 code: 401
-                                errorMessage: 'Необходимо пройти аутентификацию'
-
+                                errorMessage: Необходимо пройти аутентификацию
     /tasks/{id}:
         get:
-            summary: 'Подробная информация по задаче'
-            tags: [ 'Задачи' ]
+            operationId: taskInfo
+            summary: Подробная информация по задаче
+            tags:
+                - tasks
             parameters:
-                -   $ref: '#/components/parameters/taskId'
+                - $ref: '#/components/parameters/taskId'
             responses:
-                200:
-                    description: 'Возвращает подробную информацию по задаче'
+                '200':
+                    description: Возвращает подробную информацию по задаче
                     content:
                         application/json:
                             schema:
@@ -221,34 +249,34 @@ paths:
                                     id:
                                         type: string
                                         format: uuid
-                                        description: 'ID задачи'
-                                        example: 'dc8dbada-b154-4ffb-b21c-da70162e2704'
+                                        description: ID задачи
                                     taskName:
                                         type: string
-                                        description: 'Наименование задачи'
-                                        example: 'Моя первая задача'
+                                        description: Наименование задачи
                                     isCompleted:
                                         type: boolean
-                                        description: 'Выполнена ли задача'
-                                        example: true
+                                        description: Выполнена ли задача
                                     createdAt:
                                         type: string
-                                        description: 'Дата создания'
-                                        example: '2021-10-28T16:19:44+00:00'
+                                        description: Дата создания
                                     completedAt:
                                         type: string
-                                        description: 'Дата завершения'
-                                        example: '2021-10-28T16:19:44+00:00'
+                                        description: Дата завершения
                                         nullable: true
                                     updatedAt:
                                         type: string
-                                        description: 'Дата обновления'
-                                        example: '2021-10-28T16:19:44+00:00'
+                                        description: Дата обновления
                                         nullable: true
-                404:
-                    description: 'Задача не найдена'
-                401:
-                    description: 'Доступ запрещен'
+                            example: {
+                                id: dc8dbada-b154-4ffb-b21c-da70162e2704,
+                                taskName: Моя первая задача,
+                                isCompleted: true,
+                                createdAt: '2021-10-28T16:19:44+00:00',
+                                completedAt: '2021-10-28T16:19:44+00:00',
+                                updatedAt: '2021-10-28T16:19:44+00:00'
+                            }
+                '401':
+                    description: Доступ запрещен
                     content:
                         application/json:
                             schema:
@@ -256,27 +284,31 @@ paths:
                             example:
                                 error: true
                                 code: 401
-                                errorMessage: 'Необходимо пройти аутентификацию'
-
+                                errorMessage: Необходимо пройти аутентификацию
+                '404':
+                    description: Задача не найдена
     /tasks/create:
         post:
-            summary: 'Создать задачу'
-            tags: [ 'Задачи' ]
+            operationId: createTask
+            summary: Создать задачу
+            tags:
+                - tasks
             requestBody:
+                description: Запрос на создание задачи
                 content:
                     application/json:
                         schema:
                             properties:
                                 taskName:
                                     type: string
-                                    description: 'Наименование задачи'
-                                    example: 'Моя первая задача'
+                                    description: Наименование задачи
+                                    example: Моя первая задача
                             additionalProperties: false
                             required:
                                 - taskName
             responses:
-                200:
-                    description: 'Задача создана'
+                '200':
+                    description: Задача создана
                     content:
                         application/json:
                             schema:
@@ -288,10 +320,12 @@ paths:
                                     id:
                                         type: string
                                         format: uuid
-                                        description: 'ID задачи'
-                                        example: 'dc8dbada-b154-4ffb-b21c-da70162e2704'
-                400:
-                    description: 'Ошибка запроса'
+                                        description: ID задачи
+                            example: {
+                                id: dc8dbada-b154-4ffb-b21c-da70162e2704,
+                            }
+                '400':
+                    description: Ошибка запроса
                     content:
                         application/json:
                             schema:
@@ -299,9 +333,9 @@ paths:
                             example:
                                 error: true
                                 code: 400
-                                errorMessage: 'Неверный формат запроса'
-                401:
-                    description: 'Доступ запрещен'
+                                errorMessage: Неверный формат запроса
+                '401':
+                    description: Доступ запрещен
                     content:
                         application/json:
                             schema:
@@ -309,35 +343,37 @@ paths:
                             example:
                                 error: true
                                 code: 401
-                                errorMessage: 'Необходимо пройти аутентификацию'
-
+                                errorMessage: Необходимо пройти аутентификацию
     /tasks/{id}/update-task-name:
         post:
-            summary: 'Обновить наименование задачи'
-            tags: [ 'Задачи' ]
+            operationId: updateTaskName
+            summary: Обновить наименование задачи
+            tags:
+                - tasks
             parameters:
-                -   $ref: '#/components/parameters/taskId'
+                - $ref: '#/components/parameters/taskId'
             requestBody:
+                description: Запрос на обновление наименования задачи
                 content:
                     application/json:
                         schema:
                             properties:
                                 taskName:
                                     type: string
-                                    description: 'Наименование задачи'
-                                    example: 'Моя вторая задача'
+                                    description: Наименование задачи
+                                    example: Моя вторая задача
                             additionalProperties: false
                             required:
                                 - taskName
             responses:
-                200:
-                    description: 'Наименование задачи обновлено'
+                '200':
+                    description: Наименование задачи обновлено
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/successResponse'
-                400:
-                    description: 'Ошибка запроса'
+                '400':
+                    description: Ошибка запроса
                     content:
                         application/json:
                             schema:
@@ -345,11 +381,9 @@ paths:
                             example:
                                 error: true
                                 code: 400
-                                errorMessage: 'Неверный формат запроса'
-                404:
-                    description: 'Задача не найдена'
-                401:
-                    description: 'Доступ запрещен'
+                                errorMessage: Неверный формат запроса
+                '401':
+                    description: Доступ запрещен
                     content:
                         application/json:
                             schema:
@@ -357,25 +391,26 @@ paths:
                             example:
                                 error: true
                                 code: 401
-                                errorMessage: 'Необходимо пройти аутентификацию'
-
+                                errorMessage: Необходимо пройти аутентификацию
+                '404':
+                    description: Задача не найдена
     /tasks/{id}/remove:
         post:
-            summary: 'Удаляет задачу'
-            tags: [ 'Задачи' ]
+            operationId: removeTask
+            summary: Удаляет задачу
+            tags:
+                - tasks
             parameters:
-                -   $ref: '#/components/parameters/taskId'
+                - $ref: '#/components/parameters/taskId'
             responses:
-                200:
-                    description: 'Задача удалена'
+                '200':
+                    description: Задача удалена
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/successResponse'
-                404:
-                    description: 'Задача не найдена'
-                401:
-                    description: 'Доступ запрещен'
+                '401':
+                    description: Доступ запрещен
                     content:
                         application/json:
                             schema:
@@ -383,23 +418,26 @@ paths:
                             example:
                                 error: true
                                 code: 401
-                                errorMessage: 'Необходимо пройти аутентификацию'
-
+                                errorMessage: Необходимо пройти аутентификацию
+                '404':
+                    description: Задача не найдена
     /tasks/{id}/complete:
         post:
-            summary: 'Завершает задачу'
-            tags: [ 'Задачи' ]
+            operationId: completeTask
+            summary: Завершает задачу
+            tags:
+                - tasks
             parameters:
-                -   $ref: '#/components/parameters/taskId'
+                - $ref: '#/components/parameters/taskId'
             responses:
-                200:
-                    description: 'Задача завершена'
+                '200':
+                    description: Задача завершена
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/successResponse'
-                400:
-                    description: 'Задача уже выполнена'
+                '400':
+                    description: Задача уже выполнена
                     content:
                         application/json:
                             schema:
@@ -407,11 +445,9 @@ paths:
                             example:
                                 error: true
                                 code: 400
-                                errorMessage: 'Неверный формат запроса'
-                404:
-                    description: 'Задача не найдена'
-                401:
-                    description: 'Доступ запрещен'
+                                errorMessage: Неверный формат запроса
+                '401':
+                    description: Доступ запрещен
                     content:
                         application/json:
                             schema:
@@ -419,34 +455,38 @@ paths:
                             example:
                                 error: true
                                 code: 401
-                                errorMessage: 'Необходимо пройти аутентификацию'
-
+                                errorMessage: Необходимо пройти аутентификацию
+                '404':
+                    description: Задача не найдена
     /tasks/{id}/add-comment:
         post:
-            summary: 'Добавление комментария к задаче'
-            tags: [ 'Задачи' ]
+            operationId: addCommentToTask
+            summary: Добавление комментария к задаче
+            tags:
+                - tasks
             parameters:
-                -   $ref: '#/components/parameters/taskId'
+                - $ref: '#/components/parameters/taskId'
             requestBody:
+                description: Запрос на добавление комментария
                 content:
                     application/json:
                         schema:
                             properties:
                                 commentBody:
                                     type: string
-                                    description: 'Текст комментария'
-                                    example: 'Мой первый комментарий'
+                                    description: Текст комментария
+                                    example: Мой первый комментарий
                             required:
                                 - commentBody
             responses:
-                200:
-                    description: 'Комментарий успешно добавлен'
+                '200':
+                    description: Комментарий успешно добавлен
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/successResponse'
-                400:
-                    description: 'Нельзя добавлять комментарий в выполненную задачу'
+                '400':
+                    description: Нельзя добавлять комментарий в выполненную задачу
                     content:
                         application/json:
                             schema:
@@ -454,11 +494,9 @@ paths:
                             example:
                                 error: true
                                 code: 400
-                                errorMessage: 'Неверный формат запроса'
-                404:
-                    description: 'Задача не найдена'
-                401:
-                    description: 'Доступ запрещен'
+                                errorMessage: Неверный формат запроса
+                '401':
+                    description: Доступ запрещен
                     content:
                         application/json:
                             schema:
@@ -466,16 +504,20 @@ paths:
                             example:
                                 error: true
                                 code: 401
-                                errorMessage: 'Необходимо пройти аутентификацию'
+                                errorMessage: Необходимо пройти аутентификацию
+                '404':
+                    description: Задача не найдена
     /tasks/{id}/comments:
         get:
-            summary: 'Получить список комментариев к задаче'
-            tags: [ 'Задачи' ]
+            operationId: listTaskComments
+            summary: Получить список комментариев к задаче
+            tags:
+                - tasks
             parameters:
-                -   $ref: '#/components/parameters/taskId'
+                - $ref: '#/components/parameters/taskId'
             responses:
-                200:
-                    description: 'Список'
+                '200':
+                    description: Список
                     content:
                         application/json:
                             schema:
@@ -483,52 +525,54 @@ paths:
                                     id:
                                         type: string
                                         format: uuid
-                                        description: 'ID комментария'
-                                        example: 'dc8dbada-b154-4ffb-b21c-da70162e2704'
+                                        description: ID комментария
+                                        example: dc8dbada-b154-4ffb-b21c-da70162e2704
                                     body:
                                         type: string
-                                        description: 'Текст комментария'
-                                        example: 'Мой первый комментарий'
+                                        description: Текст комментария
+                                        example: Мой первый комментарий
                                     createdAt:
                                         type: string
-                                        description: 'Дата создания'
+                                        description: Дата создания
                                         example: '2021-10-28T16:19:44+00:00'
                                     updatedAt:
                                         type: string
-                                        description: 'Дата обновления'
+                                        description: Дата обновления
                                         example: '2021-10-28T16:19:44+00:00'
                                         nullable: true
     /export/tasks.{format}:
         get:
-            summary: 'Экспорт задач в нужном формате'
-            tags: [ 'Задачи' ]
+            operationId: exportTasks
+            summary: Экспорт задач в нужном формате
+            tags:
+                - tasks
             parameters:
-                -   in: path
-                    name: format
-                    required: true
-                    description: 'Формат (csv, xml)'
-                    example: 'csv'
-                    schema:
-                        type: string
-                        enum:
-                            - csv
-                            - xml
+                - in: path
+                  name: format
+                  required: true
+                  description: Формат (csv, xml)
+                  example: csv
+                  schema:
+                      type: string
+                      enum:
+                          - csv
+                          - xml
                 -   $ref: '#/components/parameters/page'
                 -   $ref: '#/components/parameters/perPage'
             responses:
-                200:
-                    description: 'Список задач успешно экспортирован'
+                '200':
+                    description: Список задач успешно экспортирован
                     content:
                         text/csv:
                             schema:
                                 type: string
-                                example: '2021-11-16T16:52:08+00:00,Задача 1,выполнена'
+                            example: '2021-11-16T16:52:08+00:00,Задача 1,выполнена'
                         text/xml:
                             schema:
                                 type: string
-                                example: '<?xml version="1.0"?><response><item key="0"><id>da5b20a7-3c8b-4516-bc7c-7297c0e2f686</id><createdAt>2022-07-12T12:13:23+00:00</createdAt><taskName>Тестовая задача</taskName><isCompleted>0</isCompleted></item></response>'
-                401:
-                    description: 'Доступ запрещен'
+                            example: '<?xml version="1.0"?><response><item key="0"><id>da5b20a7-3c8b-4516-bc7c-7297c0e2f686</id><createdAt>2022-07-12T12:13:23+00:00</createdAt><taskName>Тестовая задача</taskName><isCompleted>0</isCompleted></item></response>'
+                '401':
+                    description: Доступ запрещен
                     content:
                         application/json:
                             schema:
@@ -536,16 +580,17 @@ paths:
                             example:
                                 error: true
                                 code: 401
-                                errorMessage: 'Необходимо пройти аутентификацию'
-
+                                errorMessage: Необходимо пройти аутентификацию
     /article/list:
         get:
-            summary: 'Получить список статей'
-            tags: [ 'Статьи' ]
-            security: [ ]
+            operationId: articleList
+            summary: Получить список статей
+            tags:
+                - articles
+            security: []
             responses:
-                200:
-                    description: 'Возвращает список статей'
+                '200':
+                    description: Возвращает список статей
                     content:
                         application/json:
                             schema:
@@ -560,34 +605,37 @@ paths:
                                     properties:
                                         title:
                                             type: string
-                                            description: 'Заголовок'
-                                            example: 'Первая статья'
+                                            description: Заголовок
                                         alias:
                                             type: string
-                                            description: 'Алиас'
-                                            example: 'first-article'
+                                            description: Алиас
                                         body:
                                             type: string
-                                            description: 'Контент'
-                                            example: 'Контент первой статьи'
+                                            description: Контент
                                             nullable: true
-
+                            example: [{
+                                title: Первая статья,
+                                alias: first-article,
+                                body: Контент первой статьи
+                            }]
     /article/{alias}/info:
         get:
-            summary: 'Получить данные по статье'
-            tags: [ 'Статьи' ]
-            security: [ ]
+            operationId: articleInfo
+            summary: Получить данные по статье
+            tags:
+                - articles
+            security: []
             parameters:
-                -   in: path
-                    name: alias
-                    required: true
-                    description: 'Алиас статьи'
-                    example: 'first-article'
-                    schema:
-                        type: string
+                - in: path
+                  name: alias
+                  required: true
+                  description: Алиас статьи
+                  example: first-article
+                  schema:
+                      type: string
             responses:
-                200:
-                    description: 'Возвращает статью'
+                '200':
+                    description: Возвращает статью
                     content:
                         application/json:
                             schema:
@@ -599,53 +647,59 @@ paths:
                                 properties:
                                     title:
                                         type: string
-                                        description: 'Заголовок'
-                                        example: 'Первая статья'
+                                        description: Заголовок
+                                        example: Первая статья
                                     body:
                                         type: string
-                                        description: 'Контент'
-                                        example: 'Контент первой статьи'
+                                        description: Контент
+                                        example: Контент первой статьи
                                         nullable: true
-                404:
-                    description: 'Статья не найдена'
-
+                            example: {
+                                title: Первая статья,
+                                body: Контент первой статьи
+                            }
+                '404':
+                    description: Статья не найдена
     /admin/article/create:
         post:
-            summary: 'Создать статью'
-            tags: [ 'Статьи' ]
+            operationId: adminArticleCreate
+            summary: Создать статью
+            tags:
+                - articles
             requestBody:
+                description: Запрос на создание статьи
                 content:
                     application/json:
                         schema:
                             properties:
                                 title:
                                     type: string
-                                    description: 'Заголовок'
-                                    example: 'Первая статья'
+                                    description: Заголовок
+                                    example: Первая статья
                                 alias:
                                     type: string
-                                    description: 'Алиас'
-                                    example: 'first-article'
+                                    description: Алиас
+                                    example: first-article
                                 body:
                                     type: string
-                                    description: 'Контент'
-                                    example: 'Контент первой статьи'
+                                    description: Контент
+                                    example: Контент первой статьи
                                     nullable: true
                             additionalProperties: false
                             required:
                                 - title
                                 - alias
             responses:
-                200:
-                    description: 'Статья создана'
+                '200':
+                    description: Статья создана
                     content:
                         application/json:
                             schema:
                                 oneOf:
-                                    -   $ref: '#/components/schemas/articleResponse'
-                                    -   $ref: '#/components/schemas/errorResponse'
-                400:
-                    description: 'Ошибка запроса'
+                                    - $ref: '#/components/schemas/articleResponse'
+                                    - $ref: '#/components/schemas/errorResponse'
+                '400':
+                    description: Ошибка запроса
                     content:
                         application/json:
                             schema:
@@ -653,9 +707,9 @@ paths:
                             example:
                                 error: true
                                 code: 400
-                                errorMessage: 'Неверный формат запроса'
-                401:
-                    description: 'Доступ запрещен'
+                                errorMessage: Неверный формат запроса
+                '401':
+                    description: Доступ запрещен
                     content:
                         application/json:
                             schema:
@@ -663,48 +717,49 @@ paths:
                             example:
                                 error: true
                                 code: 401
-                                errorMessage: 'Необходимо пройти аутентификацию'
-
-
+                                errorMessage: Необходимо пройти аутентификацию
     /admin/article/{id}/update:
         post:
-            summary: 'Обновить статью'
-            tags: [ 'Статьи' ]
+            operationId: adminArticleUpdate
+            summary: Обновить статью
+            tags:
+                - articles
             parameters:
-                -   $ref: '#/components/parameters/articleId'
+                - $ref: '#/components/parameters/articleId'
             requestBody:
+                description: Запрос на обновление статьи
                 content:
                     application/json:
                         schema:
                             properties:
                                 title:
                                     type: string
-                                    description: 'Заголовок'
-                                    example: 'Первая статья'
+                                    description: Заголовок
+                                    example: Первая статья
                                 alias:
                                     type: string
-                                    description: 'Алиас'
-                                    example: 'first-article'
+                                    description: Алиас
+                                    example: first-article
                                 body:
                                     type: string
-                                    description: 'Контент'
-                                    example: 'Контент первой статьи'
+                                    description: Контент
+                                    example: Контент первой статьи
                                     nullable: true
                             additionalProperties: false
                             required:
                                 - title
                                 - alias
             responses:
-                200:
-                    description: 'Статья обновлена'
+                '200':
+                    description: Статья обновлена
                     content:
                         application/json:
                             schema:
                                 oneOf:
-                                    -   $ref: '#/components/schemas/articleResponse'
-                                    -   $ref: '#/components/schemas/errorResponse'
-                400:
-                    description: 'Ошибка запроса'
+                                    - $ref: '#/components/schemas/articleResponse'
+                                    - $ref: '#/components/schemas/errorResponse'
+                '400':
+                    description: Ошибка запроса
                     content:
                         application/json:
                             schema:
@@ -712,11 +767,9 @@ paths:
                             example:
                                 error: true
                                 code: 400
-                                errorMessage: 'Неверный формат запроса'
-                404:
-                    description: 'Статья не найдена'
-                401:
-                    description: 'Доступ запрещен'
+                                errorMessage: Неверный формат запроса
+                '401':
+                    description: Доступ запрещен
                     content:
                         application/json:
                             schema:
@@ -724,23 +777,24 @@ paths:
                             example:
                                 error: true
                                 code: 401
-                                errorMessage: 'Необходимо пройти аутентификацию'
-
+                                errorMessage: Необходимо пройти аутентификацию
+                '404':
+                    description: Статья не найдена
     /admin/article/list:
         get:
-            summary: 'Получить список статей'
-            tags: [ 'Статьи' ]
+            operationId: adminArticleList
+            summary: Получить список статей
+            tags:
+                - articles
             responses:
-                200:
-                    description: 'Список статей'
+                '200':
+                    description: Список статей
                     content:
                         application/json:
                             schema:
-                                type: array
-                                items:
-                                    $ref: '#/components/schemas/articleResponse'
-                401:
-                    description: 'Доступ запрещен'
+                                $ref: '#/components/schemas/articleResponseList'
+                '401':
+                    description: Доступ запрещен
                     content:
                         application/json:
                             schema:
@@ -748,25 +802,24 @@ paths:
                             example:
                                 error: true
                                 code: 401
-                                errorMessage: 'Необходимо пройти аутентификацию'
-
+                                errorMessage: Необходимо пройти аутентификацию
     /admin/article/{id}/info:
         get:
-            summary: 'Получить информацию по статье'
-            tags: [ 'Статьи' ]
+            operationId: adminArticleInfo
+            summary: Получить информацию по статье
+            tags:
+                - articles
             parameters:
-                -   $ref: '#/components/parameters/articleId'
+                - $ref: '#/components/parameters/articleId'
             responses:
-                200:
-                    description: 'Информация по статье'
+                '200':
+                    description: Информация по статье
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/articleResponse'
-                404:
-                    description: 'Статья не найдена'
-                401:
-                    description: 'Доступ запрещен'
+                '401':
+                    description: Доступ запрещен
                     content:
                         application/json:
                             schema:
@@ -774,26 +827,26 @@ paths:
                             example:
                                 error: true
                                 code: 401
-                                errorMessage: 'Необходимо пройти аутентификацию'
-
-
+                                errorMessage: Необходимо пройти аутентификацию
+                '404':
+                    description: Статья не найдена
     /admin/article/{id}/remove:
         post:
-            summary: 'Удалить статью'
-            tags: [ 'Статьи' ]
+            operationId: adminArticleRemove
+            summary: Удалить статью
+            tags:
+                - articles
             parameters:
-                -   $ref: '#/components/parameters/articleId'
+                - $ref: '#/components/parameters/articleId'
             responses:
-                200:
-                    description: 'Статья удалена'
+                '200':
+                    description: Статья удалена
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/successResponse'
-                404:
-                    description: 'Статья не найдена'
-                401:
-                    description: 'Доступ запрещен'
+                '401':
+                    description: Доступ запрещен
                     content:
                         application/json:
                             schema:
@@ -801,7 +854,9 @@ paths:
                             example:
                                 error: true
                                 code: 401
-                                errorMessage: 'Необходимо пройти аутентификацию'
+                                errorMessage: Необходимо пройти аутентификацию
+                '404':
+                    description: Статья не найдена
 components:
     securitySchemes:
         ApiTokenAuth:
@@ -812,13 +867,12 @@ components:
         successResponse:
             type: object
             required:
-                - success # Указываем что параметр success обязателен
+                - success
             additionalProperties: false
             properties:
                 success:
-                    enum: [ true ]
                     type: boolean
-                    default: true
+                    example: true
         errorResponse:
             type: object
             required:
@@ -829,8 +883,7 @@ components:
             properties:
                 error:
                     type: boolean
-                    enum: [ true ]
-                    default: true
+                    example: true
                 code:
                     type: integer
                 errorMessage:
@@ -838,7 +891,7 @@ components:
             example:
                 error: true
                 code: 1
-                errorMessage: 'Ошибка валидации'
+                errorMessage: Ошибка валидации
         authResponse:
             type: object
             required:
@@ -848,7 +901,11 @@ components:
                 token:
                     type: string
                     format: uuid
-                    example: '123e4567-e89b-12d3-a456-426614174000'
+                    example: 123e4567-e89b-12d3-a456-426614174000
+        articleResponseList:
+            type: array
+            items:
+                $ref: '#/components/schemas/articleResponse'
         articleResponse:
             type: object
             additionalProperties: false
@@ -861,31 +918,30 @@ components:
                 id:
                     type: string
                     format: uuid
-                    description: 'ID'
-                    example: 'dc8dbada-b154-4ffb-b21c-da70162e2704'
+                    description: ID
+                    example: dc8dbada-b154-4ffb-b21c-da70162e2704
                 title:
                     type: string
-                    description: 'Заголовок'
-                    example: 'Первая статья'
+                    description: Заголовок
+                    example: Первая статья
                 alias:
                     type: string
-                    description: 'Алиас'
-                    example: 'first-article'
+                    description: Алиас
+                    example: first-article
                 body:
                     type: string
-                    description: 'Контент'
-                    example: 'Контент первой статьи'
+                    description: Контент
+                    example: Контент статьи
                     nullable: true
                 createdAt:
                     type: string
-                    description: 'Дата создания'
+                    description: Дата создания
                     example: '2021-10-28T16:19:44+00:00'
                 updatedAt:
                     type: string
-                    description: 'Дата обновления'
+                    description: Дата обновления
                     example: '2021-10-28T16:19:44+00:00'
                     nullable: true
-
     parameters:
         page:
             in: query
@@ -907,8 +963,8 @@ components:
             name: id
             in: path
             required: true
-            description: 'ID задачи'
-            example: '123e4567-e89b-12d3-a456-426614174000'
+            description: ID задачи
+            example: 123e4567-e89b-12d3-a456-426614174000
             schema:
                 type: string
                 format: uuid
@@ -916,8 +972,8 @@ components:
             name: id
             in: path
             required: true
-            description: 'ID статьи'
-            example: '123e4567-e89b-12d3-a456-426614174000'
+            description: ID статьи
+            example: 123e4567-e89b-12d3-a456-426614174000
             schema:
                 type: string
                 format: uuid
@@ -925,10 +981,10 @@ components:
             name: confirmToken
             in: path
             required: true
-            description: 'Токен подтверждения'
-            example: '123e4567-e89b-12d3-a456-426614174000'
+            description: Токен подтверждения
+            example: 123e4567-e89b-12d3-a456-426614174000
             schema:
                 type: string
                 format: uuid
 security:
-    -   ApiTokenAuth: [ ]
+    - ApiTokenAuth: []

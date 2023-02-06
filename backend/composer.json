@@ -40,7 +40,6 @@
     },
     "require-dev": {
         "brianium/paratest": "^6.8",
-        "cebe/php-openapi": "^1.7",
         "dama/doctrine-test-bundle": "^7.1",
         "friendsofphp/php-cs-fixer": "^3.14",
         "league/openapi-psr7-validator": "^0.18.0",
@@ -115,13 +114,12 @@
         "container-lint": "bin/console lint:container",
         "validate-doctrine-schema": "bin/console doctrine:schema:validate -v",
         "cache-prod-check": "bin/console cache:clear --env=prod",
-        "validate-openapi-schema": "vendor/bin/php-openapi validate ./openapi.yaml",
         "deptrac-check": "vendor/bin/deptrac analyse --fail-on-uncovered --report-uncovered --config-file=deptrac.yaml --cache-file=var/cache/.deptrac.cache",
         "deptrac-check-unassigned": "vendor/bin/deptrac debug:unassigned --config-file=deptrac.yaml --cache-file=var/cache/.deptrac.cache | tee /dev/stderr | grep 'There are no unassigned tokens'",
         "deprecations-check": "bin/console debug:container --deprecations",
         "rector-check": "vendor/bin/rector process --dry-run",
         "rector-fix": "vendor/bin/rector process src --cache-clear",
-        "check": "@parallel container-lint validate-doctrine-schema twig-lint stan fixer-check rector-check sniffer-check cache-prod-check validate-openapi-schema deptrac-check deptrac-check-unassigned",
+        "check": "@parallel container-lint validate-doctrine-schema twig-lint stan fixer-check rector-check sniffer-check cache-prod-check deptrac-check deptrac-check-unassigned",
         "fix": ["@fixer-fix", "@sniffer-fix"]
     },
     "conflict": {
