@@ -571,6 +571,16 @@ paths:
                             schema:
                                 type: string
                             example: '<?xml version="1.0"?><response><item key="0"><id>da5b20a7-3c8b-4516-bc7c-7297c0e2f686</id><createdAt>2022-07-12T12:13:23+00:00</createdAt><taskName>Тестовая задача</taskName><isCompleted>0</isCompleted></item></response>'
+                '400':
+                    description: Нет задач для экспорта
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/errorResponse'
+                            example:
+                                error: true
+                                code: 400
+                                errorMessage: 'Нет задач для экспорта'
                 '401':
                     description: Доступ запрещен
                     content:

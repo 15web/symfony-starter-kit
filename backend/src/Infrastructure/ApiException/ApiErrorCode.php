@@ -16,4 +16,6 @@ enum ApiErrorCode: int
     case EmailAlreadyIsConfirmed = 3;
 
     case EmailIsNotConfirmed = 4;
+
+    case NotFoundTasksForExport = 5;
 }

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Task\Http\Export;
 
+use App\Infrastructure\ApiException\ApiBadResponseException;
+use App\Infrastructure\ApiException\ApiErrorCode;
 use App\Infrastructure\Pagination\PaginationRequest;
 use App\User\SignUp\Domain\UserId;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -25,11 +27,15 @@ final class ExportTaskAction
 
     public function __invoke(Format $format, UserId $userId, PaginationRequest $paginationRequest): BinaryFileResponse
     {
-        return ($this->exportTasks)(
-            $format,
-            $userId,
-            $paginationRequest->perPage,
-            $paginationRequest->getOffset()
-        );
+        try {
+            return ($this->exportTasks)(
+                $format,
+                $userId,
+                $paginationRequest->perPage,
+                $paginationRequest->getOffset()
+            );
+        } catch (NotFoundTasksForExportException $e) {
+            throw new ApiBadResponseException($e->getMessage(), ApiErrorCode::NotFoundTasksForExport);
+        }
     }
 }

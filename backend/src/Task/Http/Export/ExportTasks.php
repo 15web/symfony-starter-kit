@@ -35,6 +35,9 @@ final class ExportTasks
         }
     }
 
+    /**
+     * @throws NotFoundTasksForExportException
+     */
     public function __invoke(Format $format, UserId $userId, int $limit = 10, int $offset = 0): BinaryFileResponse
     {
         if (\array_key_exists($format->value, $this->exporters) === false) {
@@ -42,6 +45,10 @@ final class ExportTasks
         }
 
         $tasks = ($this->findAllTasksByUserId)(new FindAllTasksByUserIdQuery($userId->value, $limit, $offset));
+
+        if (\count($tasks) === 0) {
+            throw new NotFoundTasksForExportException('Нет задач для экспорта');
+        }
 
         return $this->exporters[$format->value]->export($tasks);
     }
