@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Article\Http;
+namespace App\Article\Http\ArticleList;
 
 /**
- * Класс ответа ручки ListAction
+ * Данные для списка статей
  */
-final class ListData
+final class ArticleListData
 {
     public function __construct(
         public readonly string $title,
