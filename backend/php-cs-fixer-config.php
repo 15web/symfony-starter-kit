@@ -24,6 +24,8 @@ return (new PhpCsFixer\Config())
         '@PhpCsFixer' => true,
         '@PhpCsFixer:risky' => true,
 
+        'escape_implicit_backslashes' => ['heredoc_syntax' => false],
+
         'final_class' => true,
         'final_public_method_for_abstract_class' => true,
         'date_time_immutable' => true,

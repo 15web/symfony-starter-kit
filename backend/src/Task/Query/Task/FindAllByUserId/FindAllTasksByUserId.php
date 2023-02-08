@@ -6,6 +6,7 @@ namespace App\Task\Query\Task\FindAllByUserId;
 
 use App\Infrastructure\AsService;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query;
 
 /**
  * Хендлер нахождения всех задач по пользователю
@@ -20,22 +21,57 @@ final class FindAllTasksByUserId
     /**
      * @return TaskData[]
      */
-    public function __invoke(FindAllTasksByUserIdQuery $query): array
+    public function execute(FindAllTasksByUserIdQuery $query): array
     {
-        $dql = <<<'DQL'
+        $dql = <<<DQL
                 SELECT
                 NEW App\Task\Query\Task\FindAllByUserId\TaskData(t.id, t.taskName.value, t.isCompleted, t.createdAt)
                 FROM App\Task\Domain\Task AS t
-                WHERE t.userId = :userId
+                WHERE 1 = 1 {$this->applyFilter()}
                 ORDER BY t.isCompleted, t.createdAt DESC
             DQL;
 
-        $dqlQuery = $this->entityManager->createQuery($dql)
+        $ormQuery = $this->entityManager->createQuery($dql);
+        $this->applyParameters($ormQuery, $query);
+
+        $ormQuery
             ->setFirstResult($query->offset)
             ->setMaxResults($query->limit);
 
-        $dqlQuery->setParameter('userId', $query->userId->toBinary());
+        /** @var TaskData[] $tasks */
+        $tasks = $ormQuery->getResult();
 
-        return $dqlQuery->getResult();
+        return $tasks;
+    }
+
+    public function countAll(FindAllTasksByUserIdQuery $query): int
+    {
+        $dql = <<<DQL
+                SELECT
+                COUNT(t.id)
+                FROM App\Task\Domain\Task AS t
+                WHERE 1 = 1 {$this->applyFilter()}
+            DQL;
+
+        $ormQuery = $this->entityManager->createQuery($dql);
+        $this->applyParameters($ormQuery, $query);
+
+        /** @var int $result */
+        $result = $ormQuery->getSingleScalarResult();
+
+        return $result;
+    }
+
+    private function applyFilter(): string
+    {
+        $conditions = [];
+        $conditions[] = 'AND t.userId = :userId';
+
+        return implode(' ', $conditions);
+    }
+
+    private function applyParameters(Query $ormQuery, FindAllTasksByUserIdQuery $query): void
+    {
+        $ormQuery->setParameter('userId', $query->userId->toBinary());
     }
 }

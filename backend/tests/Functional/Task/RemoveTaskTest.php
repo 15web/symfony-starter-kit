@@ -29,7 +29,8 @@ final class RemoveTaskTest extends ApiWebTestCase
         $response = self::request('POST', "/api/tasks/{$task1Id}/remove", token: $token);
         self::assertSuccessContentResponse($response);
 
-        $tasks = Task::list($token);
+        $response = Task::list($token);
+        $tasks = $response['data'];
 
         self::assertCount(1, $tasks);
         self::assertSame($task2Id, $tasks[0]['id']);
