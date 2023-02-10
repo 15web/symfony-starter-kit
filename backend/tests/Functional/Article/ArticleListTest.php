@@ -27,12 +27,17 @@ final class ArticleListTest extends ApiWebTestCase
         $response = self::request('GET', '/api/article/list');
         self::assertSuccessResponse($response);
 
-        $articles = self::jsonDecode($response->getContent());
+        $responseData = self::jsonDecode($response->getContent());
+        $articles = $responseData['data'];
+        $paginationResponse = $responseData['pagination'];
 
         self::assertCount(1, $articles);
-
         self::assertSame($articles[0]['title'], $title);
         self::assertSame($articles[0]['alias'], $alias);
         self::assertSame($articles[0]['body'], $content);
+
+        self::assertSame($paginationResponse['total'], 1);
+        self::assertSame($paginationResponse['currentPage'], 1);
+        self::assertSame($paginationResponse['pagesCount'], 1);
     }
 }

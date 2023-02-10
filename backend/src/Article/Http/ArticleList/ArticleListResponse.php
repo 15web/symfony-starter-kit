@@ -2,18 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\Task\Http\TaskList;
+namespace App\Article\Http\ArticleList;
 
 use App\Infrastructure\Pagination\PaginationResponse;
-use App\Task\Query\Task\FindAllByUserId\TaskData;
 
 /**
- * Ответ списка задач с пагинацией
+ * Ответ списка статей с пагинацией
  */
-final class TaskListResponse
+final class ArticleListResponse
 {
     /**
-     * @param TaskData[] $data
+     * @param ArticleListData[] $data
      */
     public function __construct(
         public readonly array $data,

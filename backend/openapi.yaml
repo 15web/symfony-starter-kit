@@ -601,6 +601,9 @@ paths:
             summary: Получить список статей
             tags:
                 - articles
+            parameters:
+                -   $ref: '#/components/parameters/page'
+                -   $ref: '#/components/parameters/perPage'
             security: []
             responses:
                 '200':
@@ -608,30 +611,35 @@ paths:
                     content:
                         application/json:
                             schema:
-                                type: array
-                                items:
-                                    type: object
-                                    required:
-                                        - title
-                                        - alias
-                                        - body
-                                    additionalProperties: false
-                                    properties:
-                                        title:
-                                            type: string
-                                            description: Заголовок
-                                        alias:
-                                            type: string
-                                            description: Алиас
-                                        body:
-                                            type: string
-                                            description: Контент
-                                            nullable: true
-                            example: [{
-                                title: Первая статья,
-                                alias: first-article,
-                                body: Контент первой статьи
-                            }]
+                                type: object
+                                required:
+                                    - data
+                                    - pagination
+                                additionalProperties: false
+                                properties:
+                                    pagination:
+                                        $ref: '#/components/schemas/paginationResponse'
+                                    data:
+                                        type: array
+                                        items:
+                                            properties:
+                                                title:
+                                                    type: string
+                                                    description: Заголовок
+                                                alias:
+                                                    type: string
+                                                    description: Алиас
+                                                body:
+                                                    type: string
+                                                    description: Контент
+                                                    nullable: true
+                                        example:
+                                            -   title: Первая статья
+                                                alias: first-article
+                                                body: Контент первой статьи
+                                            -   title: Вторая статья
+                                                alias: second-article
+                                                body: Контент второй статьи
     /article/{alias}/info:
         get:
             operationId: articleInfo

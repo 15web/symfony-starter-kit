@@ -41,8 +41,27 @@ final class Articles
     /**
      * @return Article[]
      */
-    public function getAll(): array
+    public function getAll(int $limit = 10, int $offset = 0): array
     {
-        return $this->entityManager->getRepository(Article::class)->findBy([], ['createdAt' => 'DESC']);
+        /** @var Article[] $articles */
+        $articles = $this->entityManager->getRepository(Article::class)->createQueryBuilder('a')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->orderBy('a.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+
+        return $articles;
+    }
+
+    public function countAll(): int
+    {
+        /** @var int $countAll */
+        $countAll = $this->entityManager->getRepository(Article::class)->createQueryBuilder('a')
+            ->select('COUNT(a.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        return $countAll;
     }
 }
