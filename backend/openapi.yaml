@@ -14,6 +14,8 @@ tags:
       description: Задачи
     - name: articles
       description: Статьи
+    - name: profile
+      description: Профиль
 servers:
     - url: /api
 paths:
@@ -156,6 +158,68 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/successResponse'
+                '401':
+                    description: Доступ запрещен
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/errorResponse'
+                            example:
+                                error: true
+                                code: 401
+                                errorMessage: Необходимо пройти аутентификацию
+    /profile:
+        get:
+            operationId: profileInfo
+            summary: Подробная информация по профилю
+            tags:
+                - profile
+            responses:
+                '200':
+                    description: Возвращает подробную информацию по профилю
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/profileInfoResponse'
+                '401':
+                    description: Доступ запрещен
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/errorResponse'
+                            example:
+                                error: true
+                                code: 401
+                                errorMessage: Необходимо пройти аутентификацию
+    /profile-save:
+        post:
+            operationId: saveProfile
+            summary: Сохранить профиль
+            tags:
+                - profile
+            requestBody:
+                description: Запрос на сохранение профиля
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/profileCreateRequest'
+            responses:
+                '200':
+                    description: Профиль сохранен
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/profileInfoResponse'
+                '400':
+                    description: Ошибка запроса
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/errorResponse'
+                            example:
+                                error: true
+                                code: 400
+                                errorMessage: Неверный формат запроса
                 '401':
                     description: Доступ запрещен
                     content:
@@ -924,6 +988,39 @@ components:
                     type: string
                     format: uuid
                     example: 123e4567-e89b-12d3-a456-426614174000
+        profileInfoResponse:
+            type: object
+            required:
+                - phone
+                - name
+            additionalProperties: false
+            properties:
+                phone:
+                    type: string
+                    description: Телефон в профиле
+                    nullable: true
+                name:
+                    type: string
+                    description: Имя в профиле
+                    nullable: true
+            example: {
+                phone: 89272222222,
+                name: cazak,
+            }
+        profileCreateRequest:
+            properties:
+                phone:
+                    type: string
+                    description: Телефон в профиле
+                    example: 89272222222
+                name:
+                    type: string
+                    description: Имя в профиле
+                    example: cazak
+            additionalProperties: false
+            required:
+                - phone
+                - name
         articleResponseList:
             type: array
             items:
