@@ -52,9 +52,6 @@ installTest() {
 
     compose up --detach --force-recreate --remove-orphans backend mysql
 
-    runBackend ./bin/console doctrine:migrations:migrate --no-interaction
-    runBackend ./bin/console messenger:setup-transports
-
     printf "Waiting for mysql"
     until echo 'select 1;' | compose exec -T mysql mysql -proot &>/dev/null
     do
@@ -62,6 +59,9 @@ installTest() {
       sleep 1
     done
     printf "\nMysql is up!\n"
+
+    runBackend ./bin/console doctrine:migrations:migrate --no-interaction
+    runBackend ./bin/console messenger:setup-transports
 
     for (( i=1; i<=4; i++ ))
     do

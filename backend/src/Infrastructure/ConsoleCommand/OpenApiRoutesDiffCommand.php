@@ -45,17 +45,17 @@ final class OpenApiRoutesDiffCommand extends Command
         $missingAppPaths = array_diff($openApiPaths, $appPaths);
         $missingOpenApiPaths = array_diff($appPaths, $openApiPaths);
 
-        if (\count($missingAppPaths) === 0 && \count($missingOpenApiPaths) === 0) {
+        if ($missingAppPaths === [] && $missingOpenApiPaths === []) {
             $io->success('Расхождения ручек и документации openapi не найдены');
 
             return Command::SUCCESS;
         }
 
-        if (\count($missingAppPaths) > 0) {
+        if ($missingAppPaths !== []) {
             $io->info(['Найдены ручки, которые не реализованы в приложении:', ...$missingAppPaths]);
         }
 
-        if (\count($missingOpenApiPaths) > 0) {
+        if ($missingOpenApiPaths !== []) {
             $io->info(["Найдены ручки, которые не описаны в {$file}:", ...$missingOpenApiPaths]);
         }
 
@@ -69,7 +69,7 @@ final class OpenApiRoutesDiffCommand extends Command
     {
         $openApiValues = (array) Yaml::parseFile($file);
 
-        if (\array_key_exists('paths', $openApiValues) === false) {
+        if (!\array_key_exists('paths', $openApiValues)) {
             throw new \InvalidArgumentException('Invalid yaml file');
         }
 
@@ -94,7 +94,7 @@ final class OpenApiRoutesDiffCommand extends Command
         $result = [];
         foreach ($routes as $route) {
             $path = $route->getPath();
-            if (str_contains($path, 'api') === false) {
+            if (!str_contains($path, 'api')) {
                 continue;
             }
             $result[] = $route->getPath();

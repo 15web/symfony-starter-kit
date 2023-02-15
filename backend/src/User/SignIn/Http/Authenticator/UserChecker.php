@@ -31,7 +31,7 @@ final class UserChecker implements UserCheckerInterface
             return;
         }
 
-        if ($user->userEmail->isConfirmed() === true) {
+        if ($user->userEmail->isConfirmed()) {
             return;
         }
 
@@ -40,9 +40,6 @@ final class UserChecker implements UserCheckerInterface
         throw new ApiBadResponseException('E-mail пользователя не подтвержден', ApiErrorCode::EmailIsNotConfirmed);
     }
 
-    /**
-     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter
-     */
     public function checkPostAuth(UserInterface $user): void
     {
     }

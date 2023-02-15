@@ -47,7 +47,7 @@ final class ApiTokenAuthenticator extends AbstractAuthenticator
             throw new CustomUserMessageAuthenticationException('Не передан токен');
         }
 
-        if (Uuid::isValid($apiToken) === false) {
+        if (!Uuid::isValid($apiToken)) {
             throw new CustomUserMessageAuthenticationException('Невалидный токен');
         }
 
@@ -66,17 +66,11 @@ final class ApiTokenAuthenticator extends AbstractAuthenticator
         return new SelfValidatingPassport(new UserBadge($user->getUserIdentifier()));
     }
 
-    /**
-     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter
-     */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
         return null;
     }
 
-    /**
-     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter
-     */
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
         /**

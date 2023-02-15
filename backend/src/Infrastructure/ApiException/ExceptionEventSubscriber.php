@@ -39,7 +39,7 @@ final class ExceptionEventSubscriber implements EventSubscriberInterface
         }
 
         $e = $event->getThrowable();
-        if (($e instanceof ApiException) === false) {
+        if (!$e instanceof ApiException) {
             return;
         }
 

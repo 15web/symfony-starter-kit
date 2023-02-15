@@ -69,7 +69,7 @@ final class PaginationResponseTest extends TestCase
         new PaginationResponse(total: 10, perPage: 1, currentPage: $value);
     }
 
-    private function incorrectPageAndPerPage(): iterable
+    public function incorrectPageAndPerPage(): \Iterator
     {
         yield 'отрицательное значение' => [-1];
 

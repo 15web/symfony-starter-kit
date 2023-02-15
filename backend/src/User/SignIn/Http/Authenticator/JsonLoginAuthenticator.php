@@ -36,8 +36,11 @@ final class JsonLoginAuthenticator extends AbstractAuthenticator
 
     public function supports(Request $request): ?bool
     {
-        return $request->attributes->get('_route') === self::SIGN_IN
-            && \in_array($request->getMethod(), self::SIGN_IN_METHODS, true) === true;
+        if ($request->attributes->get('_route') !== self::SIGN_IN) {
+            return false;
+        }
+
+        return \in_array($request->getMethod(), self::SIGN_IN_METHODS, true);
     }
 
     /**
@@ -63,17 +66,11 @@ final class JsonLoginAuthenticator extends AbstractAuthenticator
         );
     }
 
-    /**
-     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter
-     */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
         return null;
     }
 
-    /**
-     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter
-     */
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
         $message = 'Ошибка аутентификации';
