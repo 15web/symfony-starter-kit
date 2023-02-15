@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <defaults public="false" />
+
+        <service id="maker.custom_generator" class="Dev\Maker\CustomGenerator">
+            <argument type="service" id="maker.file_manager" />
+            <argument /> <!-- root namespace -->
+            <argument>null</argument> <!-- PhpCompatUtil -->
+            <argument type="service" id="maker.template_component_generator" />
+        </service>
+
+        <service id="maker.module_entity_class_generator" class="Dev\Maker\Doctrine\EntityClassGeneratorForModule">
+            <argument type="service" id="maker.custom_generator" />
+            <argument type="service" id="maker.doctrine_helper" />
+        </service>
+    </services>
+</container>
