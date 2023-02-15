@@ -781,7 +781,7 @@ components:
                     description: Имя в профиле
                     nullable: true
             example: {
-                phone: 89272222222,
+                phone: '89272222222',
                 name: cazak,
             }
         profileCreateRequest:
@@ -789,7 +789,7 @@ components:
                 phone:
                     type: string
                     description: Телефон в профиле
-                    example: 89272222222
+                    example: '89272222222'
                 name:
                     type: string
                     description: Имя в профиле
