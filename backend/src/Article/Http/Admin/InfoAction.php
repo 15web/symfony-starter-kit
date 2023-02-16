@@ -13,7 +13,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * Ручка информации статьи
  */
 #[IsGranted('ROLE_USER')]
-#[Route('/admin/article/{id}/info', methods: ['GET'])]
+#[Route('/admin/articles/{id}', methods: ['GET'])]
 #[AsController]
 final class InfoAction
 {

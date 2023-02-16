@@ -17,7 +17,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * Ручка обновления статьи
  */
 #[IsGranted('ROLE_USER')]
-#[Route('/admin/article/{id}/update', methods: ['POST'])]
+#[Route('/admin/articles/{id}/update', methods: ['POST'])]
 #[AsController]
 final class UpdateAction
 {

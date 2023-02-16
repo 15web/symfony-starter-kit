@@ -14,7 +14,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * Ручка списка статей
  */
 #[IsGranted('ROLE_USER')]
-#[Route('/admin/article/list', methods: ['GET'])]
+#[Route('/admin/articles', methods: ['GET'])]
 #[AsController]
 final class ListAction
 {

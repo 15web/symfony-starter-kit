@@ -45,7 +45,7 @@ final class ArticleListTest extends ApiWebTestCase
      */
     public function testAccessDenied(string $notValidToken): void
     {
-        $response = self::request('GET', '/api/admin/article/list', token: $notValidToken);
+        $response = self::request('GET', '/api/admin/articles', token: $notValidToken);
 
         self::assertAccessDenied($response);
     }
