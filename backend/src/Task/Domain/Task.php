@@ -65,7 +65,7 @@ class Task
 
     public function markAsDone(): void
     {
-        if ($this->isCompleted === true) {
+        if ($this->isCompleted) {
             throw new TaskAlreadyIsDoneException('Задача уже выполнена');
         }
 
@@ -76,7 +76,7 @@ class Task
 
     public function addComment(TaskComment $taskComment): void
     {
-        if ($this->isCompleted === true) {
+        if ($this->isCompleted) {
             throw new AddCommentToCompletedTaskException('Нельзя добавлять комментарии в выполненную задачу');
         }
 

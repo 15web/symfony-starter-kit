@@ -26,8 +26,6 @@ final class AuthenticationEntryPoint implements AuthenticationEntryPointInterfac
 
     /**
      * {@inheritDoc}
-     *
-     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter
      */
     public function start(Request $request, ?AuthenticationException $authException = null): Response
     {

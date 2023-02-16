@@ -57,7 +57,7 @@ final class OpenApiValidateSubscriber implements EventSubscriberInterface
      */
     public function onKernelRequest(RequestEvent $event): void
     {
-        if ($this->needValidate($event) === false) {
+        if (!$this->needValidate($event)) {
             return;
         }
 
@@ -73,7 +73,7 @@ final class OpenApiValidateSubscriber implements EventSubscriberInterface
 
     public function onKernelResponse(ResponseEvent $event): void
     {
-        if ($this->needValidate($event) === false) {
+        if (!$this->needValidate($event)) {
             return;
         }
 
@@ -96,15 +96,11 @@ final class OpenApiValidateSubscriber implements EventSubscriberInterface
 
     private function needValidate(ResponseEvent|RequestEvent $event): bool
     {
-        if ($event->isMainRequest() === false) {
+        if (!$event->isMainRequest()) {
             return false;
         }
 
-        if (str_starts_with($event->getRequest()->getPathInfo(), '/_profiler') === true) {
-            return false;
-        }
-
-        return true;
+        return !str_starts_with($event->getRequest()->getPathInfo(), '/_profiler');
     }
 
     private function buildPsrHttpFactory(): PsrHttpFactory

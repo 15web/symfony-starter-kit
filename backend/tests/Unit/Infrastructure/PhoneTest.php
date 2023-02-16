@@ -37,7 +37,7 @@ final class PhoneTest extends TestCase
         new Phone($phone);
     }
 
-    private function incorrectPhones(): iterable
+    public function incorrectPhones(): \Iterator
     {
         yield 'Неверный формат' => ['неправильный телефон'];
 

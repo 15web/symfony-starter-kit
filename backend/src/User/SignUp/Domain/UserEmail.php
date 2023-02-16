@@ -44,7 +44,7 @@ final class UserEmail implements ValueObject
 
     public function confirm(): void
     {
-        if ($this->isConfirmed === true) {
+        if ($this->isConfirmed) {
             throw new EmailAlreadyIsConfirmedException('Email уже подтвержден');
         }
 

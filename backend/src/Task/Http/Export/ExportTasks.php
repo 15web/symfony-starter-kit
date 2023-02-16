@@ -40,7 +40,7 @@ final class ExportTasks
      */
     public function __invoke(Format $format, UserId $userId, int $limit = 10, int $offset = 0): BinaryFileResponse
     {
-        if (\array_key_exists($format->value, $this->exporters) === false) {
+        if (!\array_key_exists($format->value, $this->exporters)) {
             throw new \RuntimeException('Не найден обработчик');
         }
 
@@ -52,7 +52,7 @@ final class ExportTasks
             )
         );
 
-        if (\count($tasks) === 0) {
+        if ($tasks === []) {
             throw new NotFoundTasksForExportException('Нет задач для экспорта');
         }
 

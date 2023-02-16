@@ -54,26 +54,28 @@ final class Kernel extends BaseKernel implements CompilerPassInterface
         }
 
         $namespace = $class->getNamespaceName();
-
-        if ($namespace === '' || str_contains($namespace, 'App\\') === false) {
+        if ($namespace === '') {
+            return;
+        }
+        if (!str_contains($namespace, 'App\\')) {
             return;
         }
 
         $attributeAsService = $class->getAttributes(AsService::class, \ReflectionAttribute::IS_INSTANCEOF);
 
-        if (\count($attributeAsService) > 0) {
+        if ($attributeAsService !== []) {
             return;
         }
 
         $attributeAsController = $class->getAttributes(AsController::class, \ReflectionAttribute::IS_INSTANCEOF);
 
-        if (\count($attributeAsController) > 0) {
+        if ($attributeAsController !== []) {
             return;
         }
 
         $attributeAsCommand = $class->getAttributes(AsCommand::class, \ReflectionAttribute::IS_INSTANCEOF);
 
-        if (\count($attributeAsCommand) > 0) {
+        if ($attributeAsCommand !== []) {
             return;
         }
 

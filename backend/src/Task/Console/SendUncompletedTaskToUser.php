@@ -33,9 +33,6 @@ final class SendUncompletedTaskToUser extends Command
         parent::__construct();
     }
 
-    /**
-     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter
-     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if (!$this->lock()) {
@@ -48,7 +45,7 @@ final class SendUncompletedTaskToUser extends Command
         $emailSent = 0;
         foreach ($users as $user) {
             $uncompletedTasks = ($this->findUncompletedTasksByUserId)(new FindUncompletedTasksByUserIdQuery($user->id));
-            if (\count($uncompletedTasks) === 0) {
+            if ($uncompletedTasks === []) {
                 continue;
             }
 

@@ -33,7 +33,7 @@ final class ApiRequestArgumentValueResolver implements ValueResolverInterface
             return [];
         }
 
-        if (is_subclass_of($argument->getType(), ApiRequest::class) === false) {
+        if (!is_subclass_of($argument->getType(), ApiRequest::class)) {
             return [];
         }
 

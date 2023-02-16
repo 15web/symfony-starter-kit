@@ -24,8 +24,6 @@ final class UserIdArgumentValueResolver implements ValueResolverInterface
     }
 
     /**
-     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter
-     *
      * @return iterable<UserId>
      *
      * @throws ApiUnauthorizedException
@@ -42,7 +40,7 @@ final class UserIdArgumentValueResolver implements ValueResolverInterface
             throw new ApiUnauthorizedException();
         }
 
-        if ($user instanceof User === false) {
+        if (!$user instanceof User) {
             throw new ApiUnauthorizedException();
         }
 

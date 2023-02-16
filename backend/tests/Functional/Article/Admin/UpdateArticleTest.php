@@ -127,7 +127,7 @@ final class UpdateArticleTest extends ApiWebTestCase
         self::assertBadRequest($response);
     }
 
-    private function notValidRequestProvider(): iterable
+    public function notValidRequestProvider(): \Iterator
     {
         yield 'пустой запрос' => [['']];
 

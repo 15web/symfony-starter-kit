@@ -27,7 +27,7 @@ abstract class ApiWebTestCase extends WebTestCase
         Assert::notEmpty($method);
         Assert::notEmpty($uri);
 
-        if (self::$client === null || $newClient === true) {
+        if (self::$client === null || $newClient) {
             self::$client = self::createClient();
         }
 
@@ -102,7 +102,7 @@ abstract class ApiWebTestCase extends WebTestCase
         static::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
     }
 
-    private function notValidTokenDataProvider(): iterable
+    final public function notValidTokenDataProvider(): \Iterator
     {
         yield 'пустая строка' => [''];
 

@@ -50,8 +50,6 @@
         "phpunit/phpunit": "^9.5",
         "qossmic/deptrac-shim": "^1.0.2",
         "rector/rector": "^0.15.8",
-        "slevomat/coding-standard": "^7.2",
-        "squizlabs/php_codesniffer": "^3.6",
         "symfony/browser-kit": "6.2.*",
         "symfony/css-selector": "6.2.*",
         "symfony/phpunit-bridge": "^6.2",
@@ -108,8 +106,6 @@
         "stan": "vendor/bin/phpstan analyse -c phpstan-config.neon --ansi --memory-limit 2G",
         "fixer-check": "php-cs-fixer --config=php-cs-fixer-config.php fix --dry-run --diff --ansi -v",
         "fixer-fix": "php-cs-fixer --config=php-cs-fixer-config.php fix --ansi -v",
-        "sniffer-check": "phpcs --standard=phpcs.xml,src-dev/PHPCodeSniffer/ruleset.xml --colors -p",
-        "sniffer-fix": "phpcbf --standard=phpcs.xml,src-dev/PHPCodeSniffer/ruleset.xml --colors -p",
         "twig-lint": "bin/console lint:twig templates",
         "container-lint": "bin/console lint:container",
         "validate-doctrine-schema": "bin/console doctrine:schema:validate -v",
@@ -118,9 +114,9 @@
         "deptrac-check-unassigned": "vendor/bin/deptrac debug:unassigned --config-file=deptrac.yaml --cache-file=var/cache/.deptrac.cache | tee /dev/stderr | grep 'There are no unassigned tokens'",
         "deprecations-check": "bin/console debug:container --deprecations",
         "rector-check": "vendor/bin/rector process --dry-run",
-        "rector-fix": "vendor/bin/rector process src --cache-clear",
-        "check": "@parallel container-lint validate-doctrine-schema twig-lint stan fixer-check rector-check sniffer-check cache-prod-check deptrac-check deptrac-check-unassigned",
-        "fix": ["@fixer-fix", "@sniffer-fix"]
+        "rector-fix": "vendor/bin/rector process --clear-cache",
+        "check": "@parallel container-lint validate-doctrine-schema twig-lint stan fixer-check rector-check cache-prod-check deptrac-check deptrac-check-unassigned",
+        "fix": ["@fixer-fix", "@rector-fix"]
     },
     "conflict": {
         "symfony/symfony": "*"
