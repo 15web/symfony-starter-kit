@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace App\User\SignUp\Command;
 
 use App\Infrastructure\AsService;
+use App\Infrastructure\Email;
 use App\Infrastructure\Flush;
+use App\User\SignUp\Domain\ConfirmToken;
 use App\User\SignUp\Domain\User;
-use App\User\SignUp\Domain\UserEmail;
 use App\User\SignUp\Domain\UserId;
 use App\User\SignUp\Domain\UserPassword;
 use App\User\SignUp\Domain\UserRole;
@@ -39,8 +40,8 @@ final class SignUp
         }
 
         $confirmToken = Uuid::v4();
-        $userEmail = new UserEmail($signUpCommand->email, $confirmToken);
-        $user = new User(new UserId(), $userEmail, UserRole::User);
+        $userEmail = new Email($signUpCommand->email);
+        $user = new User(new UserId(), $userEmail, new ConfirmToken($confirmToken), UserRole::User);
 
         $hashedPassword = $this->passwordHasher->hashPassword(
             $user,
