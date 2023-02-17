@@ -31,11 +31,11 @@ final class UserChecker implements UserCheckerInterface
             return;
         }
 
-        if ($user->userEmail->isConfirmed()) {
+        if ($user->isConfirmed()) {
             return;
         }
 
-        $this->messageBus->dispatch(new ConfirmEmailMessage($user->userEmail->confirmToken, $user->userEmail->value));
+        $this->messageBus->dispatch(new ConfirmEmailMessage($user->confirmToken->value, $user->userEmail->value));
 
         throw new ApiBadResponseException('E-mail пользователя не подтвержден', ApiErrorCode::EmailIsNotConfirmed);
     }

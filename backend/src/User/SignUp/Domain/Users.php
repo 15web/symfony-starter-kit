@@ -41,7 +41,7 @@ final class Users
     public function findByConfirmToken(Uuid $confirmToken): User
     {
         $user = $this->entityManager->getRepository(User::class)->findOneBy([
-            'userEmail.confirmToken' => $confirmToken,
+            'confirmToken.value' => $confirmToken,
         ]);
 
         if ($user === null) {

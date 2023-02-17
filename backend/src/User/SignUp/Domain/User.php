@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\User\SignUp\Domain;
 
+use App\Infrastructure\Email;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -18,7 +19,10 @@ use Webmozart\Assert\Assert;
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Embedded]
-    public readonly UserEmail $userEmail;
+    public readonly Email $userEmail;
+
+    #[ORM\Embedded]
+    public readonly ConfirmToken $confirmToken;
 
     #[ORM\Id, ORM\Column(type: 'uuid', unique: true)]
     private readonly Uuid $id;
@@ -33,15 +37,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private UserRole $userRole;
 
     #[ORM\Column]
+    private bool $isConfirmed;
+
+    #[ORM\Column]
     private readonly \DateTimeImmutable $createdAt;
 
-    public function __construct(UserId $userId, UserEmail $userEmail, UserRole $userRole)
+    public function __construct(UserId $userId, Email $userEmail, ConfirmToken $confirmToken, UserRole $userRole)
     {
         $this->id = $userId->value;
         $this->userEmail = $userEmail;
+        $this->confirmToken = $confirmToken;
         $this->userRole = $userRole;
         $this->userPassword = new UserPassword('empty');
 
+        $this->isConfirmed = false;
         $this->createdAt = new \DateTimeImmutable();
     }
 
@@ -50,6 +59,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         Assert::false($this->userPassword->equalTo($userPassword));
 
         $this->userPassword = $userPassword;
+    }
+
+    public function confirm(): void
+    {
+        if ($this->isConfirmed) {
+            throw new EmailAlreadyIsConfirmedException('Email уже подтвержден');
+        }
+
+        $this->isConfirmed = true;
+    }
+
+    public function isConfirmed(): bool
+    {
+        return $this->isConfirmed;
     }
 
     public function getPassword(): ?string
