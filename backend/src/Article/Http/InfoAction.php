@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Ручка информации статьи
  */
-#[Route('/article/{alias}/info', methods: ['GET'])]
+#[Route('/articles/{alias}', methods: ['GET'])]
 #[AsController]
 final class InfoAction
 {

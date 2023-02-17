@@ -26,7 +26,7 @@ final class RemoveArticleTest extends ApiWebTestCase
         $articleId1 = Article::createAndReturnId('Статья1', 'statya', '<p>Контент</p>', $token);
         $articleId2 = Article::createAndReturnId('Статья2', 'statya2', '<p>Контент</p>', $token);
 
-        $response = self::request('POST', "/api/admin/article/{$articleId1}/remove", token: $token);
+        $response = self::request('POST', "/api/admin/articles/{$articleId1}/remove", token: $token);
         self::assertSuccessContentResponse($response);
 
         $articles = Article::list($token);
@@ -45,7 +45,7 @@ final class RemoveArticleTest extends ApiWebTestCase
         Article::create('Статья', 'statya', '<p>Контент</p>', $token);
 
         $articleId = (string) Uuid::v4();
-        $response = self::request('POST', "/api/admin/article/{$articleId}/remove", token: $token);
+        $response = self::request('POST', "/api/admin/articles/{$articleId}/remove", token: $token);
         self::assertNotFound($response);
     }
 
@@ -59,7 +59,7 @@ final class RemoveArticleTest extends ApiWebTestCase
         $token = User::auth();
         $articleId = Article::createAndReturnId('Статья1', 'statya', '<p>Контент</p>', $token);
 
-        $response = self::request('POST', "/api/admin/article/{$articleId}/remove", token: $notValidToken);
+        $response = self::request('POST', "/api/admin/articles/{$articleId}/remove", token: $notValidToken);
 
         self::assertAccessDenied($response);
     }

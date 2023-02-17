@@ -24,7 +24,7 @@ final class ArticleInfoTest extends ApiWebTestCase
 
         Article::create($title = 'Статья', $alias = 'statya', $content = '<p>Контент</p>', $token);
 
-        $response = self::request('GET', "/api/article/{$alias}/info");
+        $response = self::request('GET', "/api/articles/{$alias}");
         self::assertSuccessResponse($response);
 
         $article = self::jsonDecode($response->getContent());
@@ -42,7 +42,7 @@ final class ArticleInfoTest extends ApiWebTestCase
 
         Article::create('Статья', 'statya', '<p>Контент</p>', $token);
 
-        $response = self::request('GET', '/api/article/another-alias/info');
+        $response = self::request('GET', '/api/articles/another-alias');
         self::assertNotFound($response);
     }
 }

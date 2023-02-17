@@ -16,7 +16,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * Ручка удаления статьи
  */
 #[IsGranted('ROLE_USER')]
-#[Route('/admin/article/{id}/remove', methods: ['POST'])]
+#[Route('/admin/articles/{id}/remove', methods: ['POST'])]
 #[AsController]
 final class RemoveAction
 {

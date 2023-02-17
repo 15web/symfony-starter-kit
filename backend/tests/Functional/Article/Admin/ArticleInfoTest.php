@@ -25,7 +25,7 @@ final class ArticleInfoTest extends ApiWebTestCase
 
         $articleId = Article::createAndReturnId($title = 'Статья', $alias = 'statya', $content = '<p>Контент</p>', $token);
 
-        $response = self::request('GET', "/api/admin/article/{$articleId}/info", token: $token);
+        $response = self::request('GET', "/api/admin/articles/{$articleId}", token: $token);
         self::assertSuccessResponse($response);
 
         $articleResponse = self::jsonDecode($response->getContent());
@@ -47,7 +47,7 @@ final class ArticleInfoTest extends ApiWebTestCase
         Article::create('Статья', 'statya', '<p>Контент</p>', $token);
 
         $articleId = (string) Uuid::v4();
-        $response = self::request('GET', "/api/admin/article/{$articleId}/info", token: $token);
+        $response = self::request('GET', "/api/admin/articles/{$articleId}", token: $token);
         self::assertNotFound($response);
     }
 
@@ -61,7 +61,7 @@ final class ArticleInfoTest extends ApiWebTestCase
         $token = User::auth();
         $articleId = Article::createAndReturnId('Статья', 'statya', '<p>Контент</p>', $token);
 
-        $response = self::request('GET', "/api/admin/article/{$articleId}/info", token: $notValidToken);
+        $response = self::request('GET', "/api/admin/articles/{$articleId}", token: $notValidToken);
 
         self::assertAccessDenied($response);
     }

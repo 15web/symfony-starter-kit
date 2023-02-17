@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Ручка списка статей
  */
-#[Route('/article/list', methods: ['GET'])]
+#[Route('/articles', methods: ['GET'])]
 #[AsController]
 final class ArticleListAction
 {
