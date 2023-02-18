@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\User\SignUp\Domain;
 
 use App\Infrastructure\Email;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -40,7 +41,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private bool $isConfirmed;
 
     #[ORM\Column]
-    private readonly \DateTimeImmutable $createdAt;
+    private readonly DateTimeImmutable $createdAt;
 
     public function __construct(UserId $userId, Email $userEmail, ConfirmToken $confirmToken, UserRole $userRole)
     {
@@ -51,7 +52,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->userPassword = new UserPassword('empty');
 
         $this->isConfirmed = false;
-        $this->createdAt = new \DateTimeImmutable();
+        $this->createdAt = new DateTimeImmutable();
     }
 
     public function applyHashedPassword(UserPassword $userPassword): void

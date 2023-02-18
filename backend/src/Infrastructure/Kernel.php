@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure;
 
+use ReflectionAttribute;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
@@ -61,19 +62,19 @@ final class Kernel extends BaseKernel implements CompilerPassInterface
             return;
         }
 
-        $attributeAsService = $class->getAttributes(AsService::class, \ReflectionAttribute::IS_INSTANCEOF);
+        $attributeAsService = $class->getAttributes(AsService::class, ReflectionAttribute::IS_INSTANCEOF);
 
         if ($attributeAsService !== []) {
             return;
         }
 
-        $attributeAsController = $class->getAttributes(AsController::class, \ReflectionAttribute::IS_INSTANCEOF);
+        $attributeAsController = $class->getAttributes(AsController::class, ReflectionAttribute::IS_INSTANCEOF);
 
         if ($attributeAsController !== []) {
             return;
         }
 
-        $attributeAsCommand = $class->getAttributes(AsCommand::class, \ReflectionAttribute::IS_INSTANCEOF);
+        $attributeAsCommand = $class->getAttributes(AsCommand::class, ReflectionAttribute::IS_INSTANCEOF);
 
         if ($attributeAsCommand !== []) {
             return;

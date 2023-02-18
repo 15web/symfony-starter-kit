@@ -11,6 +11,7 @@ use App\Infrastructure\SuccessResponse;
 use App\User\SignUp\Command\SignUp;
 use App\User\SignUp\Command\SignUpCommand;
 use App\User\SignUp\Command\UserAlreadyExistException;
+use InvalidArgumentException;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -29,7 +30,7 @@ final class SignUpAction
     {
         try {
             ($this->signUp)($signUpCommand);
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             throw new ApiBadRequestException($e->getMessage());
         } catch (UserAlreadyExistException $e) {
             throw new ApiBadResponseException($e->getMessage(), ApiErrorCode::UserAlreadyExist);

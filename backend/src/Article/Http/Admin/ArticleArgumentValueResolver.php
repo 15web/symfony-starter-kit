@@ -9,6 +9,7 @@ use App\Article\Domain\Articles;
 use App\Infrastructure\ApiException\ApiBadRequestException;
 use App\Infrastructure\ApiException\ApiNotFoundException;
 use App\Infrastructure\AsService;
+use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
@@ -48,7 +49,7 @@ final class ArticleArgumentValueResolver implements ValueResolverInterface
             if ($article === null) {
                 throw new ApiNotFoundException('Статья не найдена');
             }
-        } catch (\InvalidArgumentException $exception) {
+        } catch (InvalidArgumentException $exception) {
             throw new ApiBadRequestException($exception->getMessage());
         }
 

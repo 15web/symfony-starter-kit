@@ -17,6 +17,7 @@ use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordCredentials;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
+use Throwable;
 use Webmozart\Assert\Assert;
 
 /**
@@ -56,7 +57,7 @@ final class JsonLoginAuthenticator extends AbstractAuthenticator
             Assert::email($email);
 
             $password = $data[self::PASSWORD_KEY];
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             throw new ApiBadRequestException(previous: $e);
         }
 

@@ -6,6 +6,7 @@ namespace App\User\SignIn\Domain;
 
 use App\Infrastructure\AsService;
 use Doctrine\ORM\EntityManagerInterface;
+use DomainException;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -22,7 +23,7 @@ final class UserTokens
     {
         $userToken = $this->entityManager->getRepository(UserToken::class)->find($userTokenId);
         if (!$userToken instanceof UserToken) {
-            throw new \DomainException('Токен пользователя не найден.');
+            throw new DomainException('Токен пользователя не найден.');
         }
 
         return $userToken;

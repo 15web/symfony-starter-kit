@@ -9,6 +9,7 @@ use App\Infrastructure\SuccessResponse;
 use App\Task\Command\UpdateTaskName\UpdateTaskName;
 use App\Task\Command\UpdateTaskName\UpdateTaskNameCommand;
 use App\Task\Domain\Task;
+use InvalidArgumentException;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -29,7 +30,7 @@ final class UpdateTaskNameAction
     {
         try {
             ($this->updateTaskName)($task, $command);
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             throw new ApiBadRequestException($e->getMessage());
         }
 

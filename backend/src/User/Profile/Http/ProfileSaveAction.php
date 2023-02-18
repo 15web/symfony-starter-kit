@@ -11,6 +11,7 @@ use App\User\Profile\Query\FindByUserId\FindProfileByUserId;
 use App\User\Profile\Query\FindByUserId\FindProfileByUserIdQuery;
 use App\User\Profile\Query\FindByUserId\ProfileData;
 use App\User\SignUp\Domain\UserId;
+use InvalidArgumentException;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -33,7 +34,7 @@ final class ProfileSaveAction
     {
         try {
             ($this->saveProfile)($command, $userId);
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             throw new ApiBadRequestException($e->getMessage());
         }
 

@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\ApiException;
 
+use Exception;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Класс исключения для ошибочного ответа
  */
-final class ApiBadResponseException extends \Exception implements ApiException
+final class ApiBadResponseException extends Exception implements ApiException
 {
     public function __construct(private readonly string $errorMessage, private readonly ApiErrorCode $apiCode)
     {

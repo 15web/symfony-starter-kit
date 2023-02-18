@@ -38,6 +38,8 @@ return (new PhpCsFixer\Config())
         'ordered_imports' => true,
         'return_assignment' => false,
 
+        'global_namespace_import' => ['import_classes' => true],
+
         'phpdoc_align' => ['align' => 'left'],
         'phpdoc_line_span' => true,
         'phpdoc_summary' => false,

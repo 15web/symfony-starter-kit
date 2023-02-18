@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\ConsoleCommand;
 
+use InvalidArgumentException;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -70,7 +71,7 @@ final class OpenApiRoutesDiffCommand extends Command
         $openApiValues = (array) Yaml::parseFile($file);
 
         if (!\array_key_exists('paths', $openApiValues)) {
-            throw new \InvalidArgumentException('Invalid yaml file');
+            throw new InvalidArgumentException('Invalid yaml file');
         }
 
         $openApiPaths = array_keys($openApiValues['paths']);

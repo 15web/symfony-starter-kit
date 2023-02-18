@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Unit\Task\Domain;
 
 use App\Task\Domain\TaskCommentBody;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -30,7 +31,7 @@ final class TaskCommentBodyTest extends TestCase
      */
     public function testEmptyValue(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         new TaskCommentBody('');
     }

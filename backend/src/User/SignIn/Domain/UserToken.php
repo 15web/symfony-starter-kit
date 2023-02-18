@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\User\SignIn\Domain;
 
 use App\User\SignUp\Domain\UserId;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 
@@ -23,14 +24,14 @@ class UserToken
     private readonly Uuid $userId;
 
     #[ORM\Column]
-    private readonly \DateTimeImmutable $createdAt;
+    private readonly DateTimeImmutable $createdAt;
 
     public function __construct(Uuid $id, UserId $userId)
     {
         $this->id = $id;
         $this->userId = $userId->value;
 
-        $this->createdAt = new \DateTimeImmutable();
+        $this->createdAt = new DateTimeImmutable();
     }
 
     public function getUserId(): UserId
