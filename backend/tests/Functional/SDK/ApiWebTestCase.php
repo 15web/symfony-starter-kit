@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Functional\SDK;
 
 use App\Infrastructure\OpenApiValidateSubscriber;
+use Iterator;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
@@ -102,7 +103,7 @@ abstract class ApiWebTestCase extends WebTestCase
         static::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
     }
 
-    final public function notValidTokenDataProvider(): \Iterator
+    final public function notValidTokenDataProvider(): Iterator
     {
         yield 'пустая строка' => [''];
 

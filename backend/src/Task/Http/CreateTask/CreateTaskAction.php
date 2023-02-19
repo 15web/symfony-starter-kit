@@ -9,6 +9,7 @@ use App\Task\Command\CreateTask\CreateTask;
 use App\Task\Command\CreateTask\CreateTaskCommand;
 use App\Task\Domain\TaskId;
 use App\User\SignUp\Domain\UserId;
+use InvalidArgumentException;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -30,7 +31,7 @@ final class CreateTaskAction
         try {
             $taskId = new TaskId();
             ($this->createTask)($createTaskCommand, $taskId, $userId);
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             throw new ApiBadRequestException($e->getMessage());
         }
 

@@ -8,6 +8,7 @@ use App\Infrastructure\AsService;
 use App\Task\Query\Task\FindAllByUserId\FindAllTasksByUserId;
 use App\Task\Query\Task\FindAllByUserId\FindAllTasksByUserIdQuery;
 use App\User\SignUp\Domain\UserId;
+use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
@@ -41,7 +42,7 @@ final class ExportTasks
     public function __invoke(Format $format, UserId $userId, int $limit = 10, int $offset = 0): BinaryFileResponse
     {
         if (!\array_key_exists($format->value, $this->exporters)) {
-            throw new \RuntimeException('Не найден обработчик');
+            throw new RuntimeException('Не найден обработчик');
         }
 
         $tasks = $this->findAllTasksByUserId->execute(

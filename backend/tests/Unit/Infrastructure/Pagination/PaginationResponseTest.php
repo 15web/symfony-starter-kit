@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Tests\Unit\Infrastructure\Pagination;
 
 use App\Infrastructure\Pagination\PaginationResponse;
+use InvalidArgumentException;
+use Iterator;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -43,7 +45,7 @@ final class PaginationResponseTest extends TestCase
      */
     public function testIncorrectTotalDataCount(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         new PaginationResponse(total: -10, perPage: 2, currentPage: 1);
     }
 
@@ -54,7 +56,7 @@ final class PaginationResponseTest extends TestCase
      */
     public function testIncorrectPerPage(int $value): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         new PaginationResponse(total: 10, perPage: $value, currentPage: 1);
     }
 
@@ -65,11 +67,11 @@ final class PaginationResponseTest extends TestCase
      */
     public function testIncorrectCurrentPage(int $value): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         new PaginationResponse(total: 10, perPage: 1, currentPage: $value);
     }
 
-    public function incorrectPageAndPerPage(): \Iterator
+    public function incorrectPageAndPerPage(): Iterator
     {
         yield 'отрицательное значение' => [-1];
 

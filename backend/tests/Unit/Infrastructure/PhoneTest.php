@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Tests\Unit\Infrastructure;
 
 use App\Infrastructure\Phone;
+use InvalidArgumentException;
+use Iterator;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -32,12 +34,12 @@ final class PhoneTest extends TestCase
      */
     public function testIncorrectNumber(string $phone): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         new Phone($phone);
     }
 
-    public function incorrectPhones(): \Iterator
+    public function incorrectPhones(): Iterator
     {
         yield 'Неверный формат' => ['неправильный телефон'];
 

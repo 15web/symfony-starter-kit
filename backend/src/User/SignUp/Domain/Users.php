@@ -6,6 +6,7 @@ namespace App\User\SignUp\Domain;
 
 use App\Infrastructure\AsService;
 use Doctrine\ORM\EntityManagerInterface;
+use DomainException;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -19,13 +20,13 @@ final class Users
     }
 
     /**
-     * @throws \DomainException
+     * @throws DomainException
      */
     public function getById(UserId $userId): User
     {
         $user = $this->entityManager->getRepository(User::class)->find($userId->value);
         if (!$user instanceof User) {
-            throw new \DomainException('Пользователь не найден.');
+            throw new DomainException('Пользователь не найден.');
         }
 
         return $user;

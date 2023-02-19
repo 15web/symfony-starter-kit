@@ -6,11 +6,13 @@ namespace App\Infrastructure\ApiRequestResolver;
 
 use App\Infrastructure\ApiException\ApiBadRequestException;
 use App\Infrastructure\AsService;
+use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\SerializerInterface;
+use Throwable;
 
 /**
  * Преобразует Request в нужный для ручки объект запроса
@@ -48,9 +50,9 @@ final class ApiRequestArgumentValueResolver implements ValueResolverInterface
                 $argument->getType(),
                 JsonEncoder::FORMAT
             );
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             throw new ApiBadRequestException($e->getMessage(), $e);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             throw new ApiBadRequestException('Неверный формат запроса', $e);
         }
 

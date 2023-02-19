@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Task\Domain;
 
 use App\User\SignUp\Domain\UserId;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -37,20 +38,20 @@ class Task
     private Collection $comments;
 
     #[ORM\Column]
-    private readonly \DateTimeImmutable $createdAt;
+    private readonly DateTimeImmutable $createdAt;
 
     #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $completedAt;
+    private ?DateTimeImmutable $completedAt;
 
     #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $updatedAt;
+    private ?DateTimeImmutable $updatedAt;
 
     public function __construct(TaskId $taskId, TaskName $taskName, UserId $userId)
     {
         $this->id = $taskId->value;
         $this->taskName = $taskName;
         $this->userId = $userId->value;
-        $this->createdAt = new \DateTimeImmutable();
+        $this->createdAt = new DateTimeImmutable();
         $this->completedAt = null;
         $this->updatedAt = null;
         $this->isCompleted = false;
@@ -60,7 +61,7 @@ class Task
     public function changeTaskName(TaskName $taskName): void
     {
         $this->taskName = $taskName;
-        $this->updatedAt = new \DateTimeImmutable();
+        $this->updatedAt = new DateTimeImmutable();
     }
 
     public function markAsDone(): void
@@ -70,8 +71,8 @@ class Task
         }
 
         $this->isCompleted = true;
-        $this->updatedAt = new \DateTimeImmutable();
-        $this->completedAt = new \DateTimeImmutable();
+        $this->updatedAt = new DateTimeImmutable();
+        $this->completedAt = new DateTimeImmutable();
     }
 
     public function addComment(TaskComment $taskComment): void

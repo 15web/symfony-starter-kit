@@ -8,6 +8,7 @@ use App\Infrastructure\AsService;
 use App\Task\Http\Export\Exporter;
 use App\Task\Http\Export\Format;
 use App\Task\Query\Task\FindAllByUserId\TaskData;
+use Generator;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -51,9 +52,9 @@ final class CsvExporter implements Exporter
     /**
      * @param TaskData[] $tasks
      *
-     * @return \Generator<CsvTaskData>
+     * @return Generator<CsvTaskData>
      */
-    private function adaptData(array $tasks): \Generator
+    private function adaptData(array $tasks): Generator
     {
         foreach ($tasks as $task) {
             yield new CsvTaskData(

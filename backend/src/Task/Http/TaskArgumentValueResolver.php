@@ -12,6 +12,7 @@ use App\Task\Domain\Task;
 use App\Task\Domain\TaskId;
 use App\Task\Domain\Tasks;
 use App\User\SignUp\Domain\User;
+use InvalidArgumentException;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
@@ -67,7 +68,7 @@ final class TaskArgumentValueResolver implements ValueResolverInterface
             if ($task === null) {
                 throw new ApiNotFoundException('Задача не найдена');
             }
-        } catch (\InvalidArgumentException $exception) {
+        } catch (InvalidArgumentException $exception) {
             throw new ApiBadRequestException($exception->getMessage());
         }
 

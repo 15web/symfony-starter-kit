@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Article\Domain;
 
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 use Webmozart\Assert\Assert;
@@ -28,10 +29,10 @@ class Article
     private string $body;
 
     #[ORM\Column]
-    private readonly \DateTimeImmutable $createdAt;
+    private readonly DateTimeImmutable $createdAt;
 
     #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $updatedAt;
+    private ?DateTimeImmutable $updatedAt;
 
     public function __construct(string $title, string $alias, string $body = '')
     {
@@ -42,7 +43,7 @@ class Article
         $this->title = $title;
         $this->alias = $alias;
         $this->body = $body;
-        $this->createdAt = new \DateTimeImmutable();
+        $this->createdAt = new DateTimeImmutable();
         $this->updatedAt = null;
     }
 
@@ -54,7 +55,7 @@ class Article
         $this->title = $title;
         $this->alias = $alias;
         $this->body = $body;
-        $this->updatedAt = new \DateTimeImmutable();
+        $this->updatedAt = new DateTimeImmutable();
     }
 
     public function getId(): Uuid
@@ -77,12 +78,12 @@ class Article
         return $this->body;
     }
 
-    public function getCreatedAt(): \DateTimeImmutable
+    public function getCreatedAt(): DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): ?DateTimeImmutable
     {
         return $this->updatedAt;
     }

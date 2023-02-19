@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Unit\Infrastructure\Pagination;
 
 use App\Infrastructure\Pagination\PaginationRequest;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -43,7 +44,7 @@ final class PaginationRequestTest extends TestCase
      */
     public function testIncorrectPage(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         new PaginationRequest(0);
     }
 
@@ -52,7 +53,7 @@ final class PaginationRequestTest extends TestCase
      */
     public function testIncorrectPerPage(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         new PaginationRequest(perPage: -1);
     }
 }

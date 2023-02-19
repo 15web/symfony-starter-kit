@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Unit\Infrastructure;
 
 use App\Infrastructure\Email;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -29,7 +30,7 @@ final class EmailTest extends TestCase
      */
     public function testEmptyEmail(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         new Email('');
     }
@@ -39,7 +40,7 @@ final class EmailTest extends TestCase
      */
     public function testInvalidEmail(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         new Email('test');
     }

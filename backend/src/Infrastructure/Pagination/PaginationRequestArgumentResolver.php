@@ -6,6 +6,7 @@ namespace App\Infrastructure\Pagination;
 
 use App\Infrastructure\ApiException\ApiBadRequestException;
 use App\Infrastructure\AsService;
+use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
@@ -35,7 +36,7 @@ final class PaginationRequestArgumentResolver implements ValueResolverInterface
 
         try {
             $paginationRequest = new PaginationRequest($page, $perPage);
-        } catch (\InvalidArgumentException $exception) {
+        } catch (InvalidArgumentException $exception) {
             throw new ApiBadRequestException($exception->getMessage());
         }
 

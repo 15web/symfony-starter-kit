@@ -7,6 +7,7 @@ namespace App\Tests\Functional\Article\Admin;
 use App\Tests\Functional\SDK\ApiWebTestCase;
 use App\Tests\Functional\SDK\Article;
 use App\Tests\Functional\SDK\User;
+use Iterator;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -127,7 +128,7 @@ final class UpdateArticleTest extends ApiWebTestCase
         self::assertBadRequest($response);
     }
 
-    public function notValidRequestProvider(): \Iterator
+    public function notValidRequestProvider(): Iterator
     {
         yield 'пустой запрос' => [['']];
 
