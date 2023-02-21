@@ -15,6 +15,9 @@ $finder = (new PhpCsFixer\Finder())
 return (new PhpCsFixer\Config())
     ->setCacheFile(__DIR__.'/var/cache/.php-cs-fixer-cache')
     ->setRiskyAllowed(true)
+    ->registerCustomFixers([
+        new \Dev\PHPCsFixer\Comment\ClassDocCommentFixer(),
+    ])
     ->setRules([
         '@PER' => true,
         '@PER:risky' => true,
@@ -46,5 +49,7 @@ return (new PhpCsFixer\Config())
         'phpdoc_types_order' => ['null_adjustment' => 'always_last'],
 
         'php_unit_test_class_requires_covers' => false,
+
+        'ClassDocComment/class_doc_comment' => true,
     ])
     ->setFinder($finder);
