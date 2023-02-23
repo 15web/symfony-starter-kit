@@ -5,3 +5,5 @@
 /docker/backend/.env
 /docker/mysql/.env
 ###< docker ###
+
+/.env
