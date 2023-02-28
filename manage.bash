@@ -66,7 +66,7 @@ installTest() {
         compose exec -T mysql mysql -proot -e "create database if not exists db_name_test$i;";
         compose exec -T mysql mysql -proot -e "GRANT ALL PRIVILEGES ON db_name_test$i.* TO 'db_user'@'%';";
 
-        compose run -e TEST_TOKEN=$i --rm backend bin/console --env=test doctrine:migrations:migrate --no-interaction
+        runBackend bash -c "TEST_TOKEN=${i} bin/console --env=test doctrine:migrations:migrate --no-interaction"
     done
 }
 
@@ -112,7 +112,7 @@ build() {
 }
 
 runBackend() {
-    compose run --rm backend "$@"
+    compose run --rm backend-cli "$@"
 }
 
 logs() {
@@ -165,7 +165,7 @@ case $COMMAND in
         runBackend composer check
 
         runBackend bin/console --env=test cache:clear
-        compose run --rm -e APP_ENV=test backend vendor/bin/paratest -p4
+        runBackend bash -c 'APP_ENV=test vendor/bin/paratest -p4'
 
         runBackend bin/console app:openapi-routes-diff ./openapi.yaml
 
@@ -186,7 +186,7 @@ case $COMMAND in
         setupEnvs;
 
         runBackend bin/console --env=test cache:clear
-        compose run --rm -e APP_ENV=test backend vendor/bin/paratest -p4
+        runBackend bash -c 'APP_ENV=test vendor/bin/paratest -p4'
         ;;
     test-verbose)
         # запуск тестов с описанием
@@ -194,7 +194,7 @@ case $COMMAND in
         setupEnvs;
 
         runBackend bin/console --env=test cache:clear
-        compose run --rm -e APP_ENV=test backend vendor/bin/phpunit --testdox
+        runBackend bash -c 'APP_ENV=test vendor/bin/phpunit --testdox'
         ;;
     fix | f)
         setupEnvs;
