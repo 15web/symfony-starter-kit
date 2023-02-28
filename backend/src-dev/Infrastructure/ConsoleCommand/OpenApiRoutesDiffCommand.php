@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\ConsoleCommand;
+namespace Dev\Infrastructure\ConsoleCommand;
 
 use InvalidArgumentException;
 use Symfony\Component\Console\Attribute\AsCommand;
