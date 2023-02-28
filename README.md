@@ -9,13 +9,13 @@
 ```shell
 git clone git@github.com:15web/symfony-starter-kit.git your-folder-name
 
-cd ./your-folder-name/docker
+cd ./your-folder-name/
 
 ./manage.bash i
 
 ```
 
-Порты настраиваются в файле `./your-folder-name/docker/.env`
+Порты настраиваются в файле `./.env`
 
 После настройки портов запустить `./manage.bash i`
 
@@ -27,14 +27,10 @@ cd ./your-folder-name/docker
 
 Предварительно нужно выполнить настройку тестового окружения:
 ```shell
-cd ./your-folder-name/docker
-
 ./manage.bash install-test
 ```
 Запуск проверок:
 ```shell
-cd ./your-folder-name/docker
-
 ./manage.bash c
 ```
 
