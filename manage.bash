@@ -167,7 +167,7 @@ case $COMMAND in
         runBackend bin/console --env=test cache:clear
         runBackend bash -c 'APP_ENV=test vendor/bin/paratest -p4'
 
-        runBackend bin/console app:openapi-routes-diff ./openapi.yaml
+        runBackend bin/console-dev app:openapi-routes-diff ./openapi.yaml
 
         compose run --rm vacuum lint /app/openapi.yaml -d;
 

@@ -33,7 +33,7 @@ jobs:
         run: ./manage.bash run-backend composer check
 
       - name: Check difference between OpenApi and application endpoints
-        run: ./manage.bash run-backend bin/console app:openapi-routes-diff ./openapi.yaml
+        run: ./manage.bash run-backend bin/console-dev app:openapi-routes-diff ./openapi.yaml
 
       - name: Check OpenApi schema
         run: ./manage.bash check-openapi
