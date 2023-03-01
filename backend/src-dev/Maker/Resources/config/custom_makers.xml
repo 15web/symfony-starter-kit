@@ -9,6 +9,7 @@
         <service id="maker.maker.make_module" class="Dev\Maker\SimpleModule\MakeModule">
             <argument type="service" id="maker.module_crud_generator" />
             <argument type="service" id="maker.module_entity_generator" />
+            <argument type="service" id="maker.functional_test_generator" />
             <argument>null</argument>
             <tag name="maker.command" />
         </service>
