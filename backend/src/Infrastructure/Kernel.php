@@ -39,7 +39,7 @@ final class Kernel extends BaseKernel implements CompilerPassInterface
 
         $container->import('./di.php');
         if ($container->env() !== 'prod') {
-            $container->import('../../src-dev/**/di.php');
+            $container->import('../../src-dev/**/di.php', null, true);
         }
     }
 
