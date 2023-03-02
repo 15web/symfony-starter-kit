@@ -6,14 +6,14 @@ namespace App\User\SignUp\Domain;
 
 use App\Infrastructure\ValueObject;
 use Symfony\Component\Uid\Uuid;
-use Symfony\Component\Uid\UuidV4;
+use Symfony\Component\Uid\UuidV7;
 
 /**
  * ID пользователя
  */
 final class UserId implements ValueObject
 {
-    public function __construct(public readonly Uuid $value = new UuidV4())
+    public function __construct(public readonly Uuid $value = new UuidV7())
     {
     }
 

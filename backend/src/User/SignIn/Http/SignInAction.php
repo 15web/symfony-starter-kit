@@ -9,7 +9,7 @@ use App\User\SignIn\Http\Authenticator\JsonLoginAuthenticator;
 use App\User\SignUp\Domain\UserId;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Uid\UuidV7;
 
 /**
  * Ручка аутентификации
@@ -24,7 +24,7 @@ final class SignInAction
 
     public function __invoke(UserId $userId): UserResponse
     {
-        $token = Uuid::v4();
+        $token = new UuidV7();
         ($this->createToken)($userId, $token);
 
         return new UserResponse($token);

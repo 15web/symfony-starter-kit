@@ -16,7 +16,7 @@ use App\User\SignUp\Domain\Users;
 use App\User\SignUp\Notification\ConfirmEmailMessage;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Uid\UuidV7;
 
 /**
  * Хендлер регистрации
@@ -39,7 +39,7 @@ final class SignUp
             throw new UserAlreadyExistException('Пользователь с таким email уже существует');
         }
 
-        $confirmToken = Uuid::v4();
+        $confirmToken = new UuidV7();
         $userEmail = new Email($signUpCommand->email);
         $user = new User(new UserId(), $userEmail, new ConfirmToken($confirmToken), UserRole::User);
 

@@ -7,6 +7,7 @@ namespace App\Article\Domain;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Uid\UuidV7;
 use Webmozart\Assert\Assert;
 
 /**
@@ -39,7 +40,7 @@ class Article
         Assert::notEmpty($title, 'Укажите заголовок');
         Assert::notEmpty($alias, 'Укажите алиас');
 
-        $this->id = Uuid::v4();
+        $this->id = new UuidV7();
         $this->title = $title;
         $this->alias = $alias;
         $this->body = $body;

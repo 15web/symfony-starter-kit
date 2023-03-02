@@ -6,6 +6,7 @@ namespace App\Task\Domain;
 
 use App\Infrastructure\ValueObject;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Uid\UuidV7;
 
 /**
  * ID комментария задачи
@@ -16,7 +17,7 @@ final class TaskCommentId implements ValueObject
 
     public function __construct()
     {
-        $this->value = Uuid::v4();
+        $this->value = new UuidV7();
     }
 
     /**
