@@ -1103,7 +1103,7 @@ components:
             name: page
             required: false
             description: Номер страницы
-            example: 2
+            example: 1
             schema:
                 type: integer
         perPage:
