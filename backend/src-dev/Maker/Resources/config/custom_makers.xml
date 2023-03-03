@@ -6,13 +6,10 @@
 
     <services>
         <defaults public="false" />
-        <service id="maker.maker.make_module" class="Dev\Maker\Maker\MakeModule">
-            <argument type="service" id="maker.file_manager" />
-            <argument type="service" id="maker.doctrine_helper" />
+        <service id="maker.maker.make_module" class="Dev\Maker\SimpleModule\MakeModule">
+            <argument type="service" id="maker.module_crud_generator" />
+            <argument type="service" id="maker.module_entity_generator" />
             <argument>null</argument>
-            <argument type="service" id="maker.custom_generator" />
-            <argument type="service" id="maker.module_entity_class_generator" />
-            <argument type="service" id="maker.php_compat_util" />
             <tag name="maker.command" />
         </service>
     </services>

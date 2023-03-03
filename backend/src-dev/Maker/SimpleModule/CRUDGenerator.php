@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Dev\Maker;
+namespace Dev\Maker\SimpleModule;
 
 use App\Infrastructure\ApiException\ApiBadRequestException;
 use App\Infrastructure\ApiException\ApiNotFoundException;
@@ -10,6 +10,8 @@ use App\Infrastructure\ApiRequestResolver\ApiRequest;
 use App\Infrastructure\AsService;
 use App\Infrastructure\Flush;
 use App\Infrastructure\SuccessResponse;
+use Dev\Maker\EntityFieldsManipulator;
+use Dev\Maker\Vendor\CustomGenerator;
 use InvalidArgumentException;
 use Symfony\Bundle\MakerBundle\Str;
 use Symfony\Bundle\MakerBundle\Util\ClassNameDetails;
@@ -28,16 +30,22 @@ use Webmozart\Assert\Assert;
  */
 final class CRUDGenerator
 {
-    public function __construct(private readonly CustomGenerator $generator)
-    {
+    public function __construct(
+        private readonly CustomGenerator $generator,
+        private readonly EntityFieldsManipulator $entityFieldsManipulator
+    ) {
     }
 
-    public function generate(string $namespacePrefix, ClassNameDetails $entityClass, string $repoClassName): void
-    {
+    public function generate(
+        string $namespacePrefix,
+        ClassNameDetails $entityClass,
+        string $repoClassName,
+        array $fields
+    ): void {
         $this->generateEntityArgumentValueResolver($namespacePrefix, $repoClassName, $entityClass);
         $this->generateInfoAction($namespacePrefix, $entityClass);
-        $this->generateCreateAction($namespacePrefix, $repoClassName, $entityClass);
-        $this->generateUpdateAction($namespacePrefix, $entityClass);
+        $this->generateCreateAction($namespacePrefix, $repoClassName, $entityClass, $fields);
+        $this->generateUpdateAction($namespacePrefix, $entityClass, $fields);
         $this->generateRemoveAction($namespacePrefix, $repoClassName, $entityClass);
 
         $this->generator->writeChanges();
@@ -145,9 +153,10 @@ final class CRUDGenerator
     private function generateCreateAction(
         string $namespacePrefix,
         string $repoClassName,
-        ClassNameDetails $entityClass
+        ClassNameDetails $entityClass,
+        array $fields
     ): void {
-        $this->generateCreateRequest($namespacePrefix, $entityClass);
+        $this->generateCreateRequest($namespacePrefix, $entityClass, $fields);
 
         $createActionDetails = $this->generator->createClassNameDetails(
             'CreateAction',
@@ -179,7 +188,7 @@ final class CRUDGenerator
         );
     }
 
-    private function generateCreateRequest(string $namespacePrefix, ClassNameDetails $entityClass): void
+    private function generateCreateRequest(string $namespacePrefix, ClassNameDetails $entityClass, array $fields): void
     {
         $createActionDetails = $this->generator->createClassNameDetails(
             'CreateRequest',
@@ -188,7 +197,6 @@ final class CRUDGenerator
 
         $shortEntityClass = Str::getShortClassName($entityClass->getShortName());
         $useStatements = new UseStatementGenerator([
-            $entityClass->getFullName(),
             ApiRequest::class,
             Assert::class,
         ]);
@@ -199,13 +207,15 @@ final class CRUDGenerator
             [
                 'use_statements' => $useStatements,
                 'entity_classname' => $shortEntityClass,
+                'entity_fields' => $fields,
+                'properties' => $this->entityFieldsManipulator->getConstructorProperties($fields),
             ]
         );
     }
 
-    private function generateUpdateAction(string $namespacePrefix, ClassNameDetails $entityClass): void
+    private function generateUpdateAction(string $namespacePrefix, ClassNameDetails $entityClass, array $fields): void
     {
-        $this->generateUpdateRequest($namespacePrefix, $entityClass);
+        $this->generateUpdateRequest($namespacePrefix, $entityClass, $fields);
 
         $createActionDetails = $this->generator->createClassNameDetails(
             'UpdateAction',
@@ -235,7 +245,7 @@ final class CRUDGenerator
         );
     }
 
-    private function generateUpdateRequest(string $namespacePrefix, ClassNameDetails $entityClass): void
+    private function generateUpdateRequest(string $namespacePrefix, ClassNameDetails $entityClass, array $fields): void
     {
         $createActionDetails = $this->generator->createClassNameDetails(
             'UpdateRequest',
@@ -254,6 +264,8 @@ final class CRUDGenerator
             [
                 'use_statements' => $useStatements,
                 'entity_classname' => $shortEntityClass,
+                'entity_fields' => $fields,
+                'properties' => $this->entityFieldsManipulator->getConstructorProperties($fields),
             ]
         );
     }

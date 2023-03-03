@@ -7,16 +7,31 @@
     <services>
         <defaults public="false" />
 
-        <service id="maker.custom_generator" class="Dev\Maker\CustomGenerator">
+        <service id="maker.custom_generator" class="Dev\Maker\Vendor\CustomGenerator">
             <argument type="service" id="maker.file_manager" />
-            <argument /> <!-- root namespace -->
+            <argument>App</argument> <!-- root namespace -->
             <argument>null</argument> <!-- PhpCompatUtil -->
             <argument type="service" id="maker.template_component_generator" />
         </service>
 
-        <service id="maker.module_entity_class_generator" class="Dev\Maker\Doctrine\EntityClassGeneratorForModule">
+        <service id="maker.module_entity_generator" class="Dev\Maker\Vendor\EntityGenerator">
+            <argument type="service" id="maker.file_manager" />
+            <argument type="service" id="maker.doctrine_helper" />
+            <argument type="service" id="maker.custom_generator" />
+            <argument type="service" id="maker.module_entity_class_generator" />
+        </service>
+
+        <service id="maker.module_entity_class_generator" class="Dev\Maker\Vendor\EntityClassGeneratorForModule">
             <argument type="service" id="maker.custom_generator" />
             <argument type="service" id="maker.doctrine_helper" />
+        </service>
+
+        <service id="maker.module_entity_fields_manipulator" class="Dev\Maker\EntityFieldsManipulator">
+        </service>
+
+        <service id="maker.module_crud_generator" class="Dev\Maker\SimpleModule\CRUDGenerator">
+            <argument type="service" id="maker.custom_generator" />
+            <argument type="service" id="maker.module_entity_fields_manipulator" />
         </service>
     </services>
 </container>

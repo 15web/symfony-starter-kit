@@ -29,7 +29,10 @@ final class MakerExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container): void
     {
-        $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader = new Loader\XmlFileLoader($container, new FileLocator([
+            __DIR__.'/../Resources/config',
+            __DIR__.'/../../../vendor/symfony/maker-bundle/src/Resources/config',
+        ]));
         $loader->load('services.xml');
         $loader->load('makers.xml');
         $loader->load('custom_services.xml');

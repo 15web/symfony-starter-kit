@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Dev\Maker;
+namespace Dev\Maker\Vendor;
 
 use Exception;
 use LogicException;
@@ -14,7 +14,8 @@ use Symfony\Bundle\MakerBundle\Util\PhpCompatUtil;
 use Symfony\Bundle\MakerBundle\Validator;
 
 /**
- * Используется только для Make комманд из этого модуля, подгружает ресурсы из Resources директории этого модуля
+ * Подгружает наши ресурсы (шаблоны классов)
+ * Полная копия Generator(MakerBundle) за исключением addOperation метода, где указывается наша директория с ресурсами
  */
 final class CustomGenerator
 {
@@ -25,9 +26,6 @@ final class CustomGenerator
         private string $namespacePrefix,
         ?PhpCompatUtil $phpCompatUtil = null,
     ) {
-        if ($namespacePrefix === '') {
-            $namespacePrefix = 'App';
-        }
         $this->namespacePrefix = trim($namespacePrefix, '\\');
 
         if ($phpCompatUtil !== null) {
@@ -166,7 +164,7 @@ final class CustomGenerator
 
         $templatePath = $templateName;
         if (!file_exists($templatePath)) {
-            $templatePath = __DIR__.'/Resources/skeleton/'.$templateName;
+            $templatePath = __DIR__.'/../Resources/skeleton/'.$templateName;
 
             if (!file_exists($templatePath)) {
                 throw new Exception(sprintf('Cannot find template "%s"', $templateName));
