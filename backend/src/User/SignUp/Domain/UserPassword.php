@@ -12,10 +12,10 @@ use Webmozart\Assert\Assert;
  * Пароль пользователя
  */
 #[ORM\Embeddable]
-final class UserPassword implements ValueObject
+final readonly class UserPassword implements ValueObject
 {
     #[ORM\Column]
-    public readonly string $value;
+    public string $value;
 
     public function __construct(string $hashedPassword)
     {

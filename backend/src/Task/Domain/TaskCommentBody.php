@@ -12,10 +12,10 @@ use Webmozart\Assert\Assert;
  * Текст комментария задачи
  */
 #[ORM\Embeddable]
-final class TaskCommentBody implements ValueObject
+final readonly class TaskCommentBody implements ValueObject
 {
     #[ORM\Column]
-    private readonly string $value;
+    private string $value;
 
     public function __construct(string $value)
     {

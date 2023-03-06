@@ -32,10 +32,6 @@ final readonly class FindProfileByUserId
         /** @var ?ProfileData $result */
         $result = $dqlQuery->getOneOrNullResult();
 
-        if ($result === null) {
-            return new ProfileData();
-        }
-
-        return $result;
+        return $result ?? new ProfileData();
     }
 }

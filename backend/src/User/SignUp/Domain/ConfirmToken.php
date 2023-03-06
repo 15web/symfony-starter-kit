@@ -12,10 +12,10 @@ use Symfony\Component\Uid\Uuid;
  * Токен подтверждения регистрации
  */
 #[ORM\Embeddable]
-final class ConfirmToken implements ValueObject
+final readonly class ConfirmToken implements ValueObject
 {
     #[ORM\Column(type: 'uuid', unique: true)]
-    public readonly Uuid $value;
+    public Uuid $value;
 
     public function __construct(Uuid $value)
     {

@@ -11,10 +11,10 @@ use Webmozart\Assert\Assert;
  * Email
  */
 #[ORM\Embeddable]
-final class Email implements ValueObject
+final readonly class Email implements ValueObject
 {
     #[ORM\Column]
-    public readonly string $value;
+    public string $value;
 
     public function __construct(string $value)
     {
