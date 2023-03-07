@@ -11,7 +11,7 @@ namespace <?php echo $namespace; ?>;
  * Ручка получения информации <?php echo $entity_classname."\n"; ?>
  */
 #[IsGranted('ROLE_USER')]
-#[Route('<?php echo $route_path; ?>')]
+#[Route('<?php echo $route_path; ?>', <?php echo $method; ?>)]
 #[AsController]
 final class InfoAction
 {

@@ -102,6 +102,7 @@ final class CRUDGenerator
                 'use_statements' => $useStatements,
                 'entity_classname' => $shortEntityClass,
                 'route_path' => $route,
+                'method' => 'methods: [\'GET\']',
             ]
         );
     }
@@ -136,6 +137,7 @@ final class CRUDGenerator
                 'entity_classname' => $shortEntityClass,
                 'repository_classname' => $repoClassName,
                 'route_path' => $route,
+                'method' => 'methods: [\'POST\']',
             ]
         );
     }
@@ -172,6 +174,7 @@ final class CRUDGenerator
                 'entity_classname' => $shortEntityClass,
                 'repository_classname' => $repoClassName,
                 'route_path' => $route,
+                'method' => 'methods: [\'POST\']',
             ]
         );
     }
@@ -227,6 +230,7 @@ final class CRUDGenerator
                 'use_statements' => $useStatements,
                 'entity_classname' => $shortEntityClass,
                 'route_path' => $route,
+                'method' => 'methods: [\'POST\']',
             ]
         );
     }
