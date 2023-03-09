@@ -16,7 +16,7 @@ class <?php echo $class_name."\n"; ?>
 
     public function __construct()
     {
-        $this->id = Uuid::v4();
+        $this->id = new UuidV7();
     }
 
     public function getId(): Uuid
