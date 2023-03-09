@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Dev\Maker\Doctrine;
+namespace Dev\Maker\Vendor;
 
 use App\Infrastructure\AsService;
-use Dev\Maker\CustomGenerator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\MakerBundle\Doctrine\DoctrineHelper;
 use Symfony\Bundle\MakerBundle\Str;
@@ -19,7 +18,7 @@ use Symfony\Component\Uid\Uuid;
  * @internal
  *
  * Создает сущность и репозиторий в нужной директории - App\ModuleName\Domain, добавляет суффикс к репозиторию (s)
- * Используется только в наших Maker'ах
+ * Почти копия EntityClassGenerator(MakerBundle)
  */
 final class EntityClassGeneratorForModule
 {

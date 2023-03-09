@@ -12,8 +12,13 @@ namespace <?php echo $namespace; ?>;
  */
 final class UpdateRequest implements ApiRequest
 {
-    public function __construct(
-    ) {
+    public function __construct(<?php echo $properties; ?>) {
+<?php foreach ($entity_fields as $entity_field) { ?>
+<?php if (isset($entity_field['nullable'])) {
+    continue;
+} ?>
+        Assert::notEmpty($<?php echo $entity_field['fieldName']; ?>);
+<?php } ?>
     }
 }
 

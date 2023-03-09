@@ -2,10 +2,8 @@
 
 declare(strict_types=1);
 
-namespace Dev\Maker;
+namespace Dev\Maker\Vendor;
 
-use Dev\Maker\Doctrine\EntityClassGeneratorForModule;
-use Dev\Maker\Maker\MakeModule;
 use Doctrine\DBAL\Types\Type;
 use Exception;
 use InvalidArgumentException;
@@ -18,22 +16,19 @@ use Symfony\Bundle\MakerBundle\Exception\RuntimeCommandException;
 use Symfony\Bundle\MakerBundle\FileManager;
 use Symfony\Bundle\MakerBundle\Str;
 use Symfony\Bundle\MakerBundle\Util\ClassDetails;
-use Symfony\Bundle\MakerBundle\Util\ClassNameDetails;
 use Symfony\Bundle\MakerBundle\Util\ClassSourceManipulator;
 use Symfony\Bundle\MakerBundle\Validator;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Question\Question;
 
 /**
- * Содержит в себе логику создания сущности и репозитория, здесь фиксится захардкоденный код из MakeEntity
- * Почти копия MakeEntity из MakerBundle, за тем исключением, что создает сущность и репозиторий по нашим правилам
- * Используется в MakeModule команде для генерации Domain слоя
+ * Запрашивает информауию о генерируемой сущности, здесь фиксится захардкоденный код из MakeEntity
+ * Копировался из MakeEntity(MakerBundle), создает сущность и репозиторий в нужном модуле
+ * Содержит инфомарцию о генерируемых полях сущности (имя, тип, nullable)
+ * Используется для генерации Domain слоя
  */
 final class EntityGenerator
 {
-    private ClassNameDetails $entityClassName;
-    private string $repositoryClassName = '';
-
     public function __construct(
         private readonly FileManager $fileManager,
         private readonly DoctrineHelper $doctrineHelper,
@@ -42,7 +37,7 @@ final class EntityGenerator
     ) {
     }
 
-    public function generate(InputInterface $input, ConsoleStyle $io, MakeModule $makeMyModule): void
+    public function generate(InputInterface $input, ConsoleStyle $io): array
     {
         $moduleName = $input->getArgument('module-name');
         $overwrite = false;
@@ -50,9 +45,6 @@ final class EntityGenerator
             $input->getArgument('name'),
             $moduleName.'\\Domain\\'
         );
-
-        $this->entityClassName = $entityClassDetails;
-        $this->repositoryClassName = $entityClassDetails->getShortName().'s';
 
         $classExists = class_exists($entityClassDetails->getFullName());
         if (!$classExists) {
@@ -62,6 +54,9 @@ final class EntityGenerator
             );
             $this->generator->writeChanges();
         }
+
+        // Сюда записываются поля сущности (имя, тип, nullable)
+        $creatingFields = [];
 
         if (!$this->doesEntityUseAttributeMapping($entityClassDetails->getFullName())) {
             throw new RuntimeCommandException(sprintf('Only attribute mapping is supported by make:entity, but the <info>%s</info> class uses a different format. If you would like this command to generate the properties & getter/setter methods, add your mapping configuration, and then re-run this command with the <info>--regenerate</info> flag.', $entityClassDetails->getFullName()));
@@ -166,6 +161,8 @@ final class EntityGenerator
                 throw new Exception('Invalid value');
             }
 
+            $creatingFields[] = $newField;
+
             foreach ($fileManagerOperations as $path => $manipulatorOrMessage) {
                 if (\is_string($manipulatorOrMessage)) {
                     $io->comment($manipulatorOrMessage);
@@ -175,17 +172,16 @@ final class EntityGenerator
             }
         }
 
-        $makeMyModule->writeMessage($io);
+        return [$entityClassDetails, $creatingFields];
     }
 
-    public function getEntityClassName(): ClassNameDetails
+    public function createEntityClassQuestion(string $questionText): Question
     {
-        return $this->entityClassName;
-    }
+        $question = new Question($questionText);
+        $question->setValidator(static fn (?string $value = null): string => \Symfony\Bundle\MakerBundle\Validator::notBlank($value));
+        $question->setAutocompleterValues($this->doctrineHelper->getEntitiesForAutocomplete());
 
-    public function getRepositoryClassName(): string
-    {
-        return $this->repositoryClassName;
+        return $question;
     }
 
     private function askForNextField(ConsoleStyle $io, array $fields, string $entityClass, bool $isFirstField): EntityRelation|array|null
@@ -371,15 +367,6 @@ final class EntityGenerator
         // empty the values
         $allTypes = array_map(static fn (): array => [], $allTypes);
         $printSection($allTypes);
-    }
-
-    private function createEntityClassQuestion(string $questionText): Question
-    {
-        $question = new Question($questionText);
-        $question->setValidator(static fn (?string $value = null): string => \Symfony\Bundle\MakerBundle\Validator::notBlank($value));
-        $question->setAutocompleterValues($this->doctrineHelper->getEntitiesForAutocomplete());
-
-        return $question;
     }
 
     private function askRelationDetails(ConsoleStyle $io, string $generatedEntityClass, string $type, string $newFieldName): EntityRelation
