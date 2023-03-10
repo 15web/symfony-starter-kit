@@ -26,6 +26,7 @@ final class MakeModule extends AbstractMaker implements InputAwareMakerInterface
     public function __construct(
         private readonly CRUDGenerator $crudGenerator,
         private readonly EntityGenerator $entityGenerator,
+        private readonly FunctionalTestsGenerator $functionalTestsGenerator,
         ?string $projectDirectory = null,
     ) {
         if ($projectDirectory !== null) {
@@ -73,14 +74,16 @@ final class MakeModule extends AbstractMaker implements InputAwareMakerInterface
         // $fields - массив полей сущности (имя поля и ее тип)
         [$entityClassDetails, $fields] = $this->entityGenerator->generate($input, $io);
 
-        $this->writeMessage($io);
-
         $this->crudGenerator->generate(
             $moduleName.'\\Http\\',
             $entityClassDetails,
             $entityClassDetails->getShortName().'s',
             $fields
         );
+
+        $this->functionalTestsGenerator->generate($moduleName, $entityClassDetails, $fields);
+
+        $this->writeMessage($io);
     }
 
     public function writeMessage(ConsoleStyle $io): void
