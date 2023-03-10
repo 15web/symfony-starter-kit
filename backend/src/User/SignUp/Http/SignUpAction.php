@@ -7,6 +7,7 @@ namespace App\User\SignUp\Http;
 use App\Infrastructure\ApiException\ApiBadRequestException;
 use App\Infrastructure\ApiException\ApiBadResponseException;
 use App\Infrastructure\ApiException\ApiErrorCode;
+use App\Infrastructure\Flush;
 use App\Infrastructure\SuccessResponse;
 use App\User\SignUp\Command\SignUp;
 use App\User\SignUp\Command\SignUpCommand;
@@ -22,14 +23,17 @@ use Symfony\Component\Routing\Annotation\Route;
 #[AsController]
 final class SignUpAction
 {
-    public function __construct(private readonly SignUp $signUp)
-    {
+    public function __construct(
+        private readonly SignUp $signUp,
+        private readonly Flush $flush,
+    ) {
     }
 
     public function __invoke(SignUpCommand $signUpCommand): SuccessResponse
     {
         try {
             ($this->signUp)($signUpCommand);
+            ($this->flush)();
         } catch (InvalidArgumentException $e) {
             throw new ApiBadRequestException($e->getMessage());
         } catch (UserAlreadyExistException $e) {

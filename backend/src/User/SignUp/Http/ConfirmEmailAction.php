@@ -7,6 +7,7 @@ namespace App\User\SignUp\Http;
 use App\Infrastructure\ApiException\ApiBadResponseException;
 use App\Infrastructure\ApiException\ApiErrorCode;
 use App\Infrastructure\ApiException\ApiNotFoundException;
+use App\Infrastructure\Flush;
 use App\Infrastructure\SuccessResponse;
 use App\User\SignUp\Command\ConfirmEmail;
 use App\User\SignUp\Domain\EmailAlreadyIsConfirmedException;
@@ -22,14 +23,17 @@ use Symfony\Component\Uid\Uuid;
 #[AsController]
 final class ConfirmEmailAction
 {
-    public function __construct(private readonly ConfirmEmail $confirmEmail)
-    {
+    public function __construct(
+        private readonly ConfirmEmail $confirmEmail,
+        private readonly Flush $flush,
+    ) {
     }
 
     public function __invoke(Uuid $confirmToken): SuccessResponse
     {
         try {
             ($this->confirmEmail)($confirmToken);
+            ($this->flush)();
         } catch (EmailAlreadyIsConfirmedException $e) {
             throw new ApiBadResponseException($e->getMessage(), ApiErrorCode::EmailAlreadyIsConfirmed);
         } catch (UserNotFoundException $e) {

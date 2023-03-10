@@ -6,7 +6,6 @@ namespace App\User\SignUp\Command;
 
 use App\Infrastructure\AsService;
 use App\Infrastructure\Email;
-use App\Infrastructure\Flush;
 use App\User\SignUp\Domain\ConfirmToken;
 use App\User\SignUp\Domain\User;
 use App\User\SignUp\Domain\UserId;
@@ -26,7 +25,6 @@ final class SignUp
 {
     public function __construct(
         private readonly Users $users,
-        private readonly Flush $flush,
         private readonly MessageBusInterface $messageBus,
         private readonly UserPasswordHasherInterface $passwordHasher,
     ) {
@@ -51,7 +49,6 @@ final class SignUp
         $user->applyHashedPassword(new UserPassword($hashedPassword));
 
         $this->users->add($user);
-        ($this->flush)();
 
         $this->messageBus->dispatch(new ConfirmEmailMessage($confirmToken, $userEmail->value));
     }

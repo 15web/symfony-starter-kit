@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\User\SignIn\Http;
 
 use App\Infrastructure\ApiException\ApiUnauthorizedException;
+use App\Infrastructure\Flush;
 use App\Infrastructure\SuccessResponse;
 use App\User\SignIn\Command\DeleteToken;
 use App\User\SignIn\Http\Authenticator\ApiTokenAuthenticator;
@@ -22,8 +23,10 @@ use Symfony\Component\Uid\Uuid;
 #[AsController]
 final class LogoutAction
 {
-    public function __construct(private readonly DeleteToken $deleteToken)
-    {
+    public function __construct(
+        private readonly DeleteToken $deleteToken,
+        private readonly Flush $flush,
+    ) {
     }
 
     public function __invoke(Request $request): SuccessResponse
@@ -34,6 +37,7 @@ final class LogoutAction
         }
 
         ($this->deleteToken)(Uuid::fromString($apiToken));
+        ($this->flush)();
 
         return new SuccessResponse();
     }

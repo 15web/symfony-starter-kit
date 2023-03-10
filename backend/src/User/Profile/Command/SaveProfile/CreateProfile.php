@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\User\Profile\Command\SaveProfile;
 
 use App\Infrastructure\AsService;
-use App\Infrastructure\Flush;
 use App\Infrastructure\Phone;
 use App\User\Profile\Domain\Profile;
 use App\User\Profile\Domain\ProfileId;
@@ -18,10 +17,8 @@ use App\User\SignUp\Domain\UserId;
 #[AsService]
 final class CreateProfile
 {
-    public function __construct(
-        private readonly Flush $flush,
-        private readonly Profiles $profiles,
-    ) {
+    public function __construct(private readonly Profiles $profiles)
+    {
     }
 
     public function __invoke(SaveProfileCommand $command, UserId $userId): void
@@ -34,6 +31,5 @@ final class CreateProfile
         );
 
         $this->profiles->add($profile);
-        ($this->flush)();
     }
 }
