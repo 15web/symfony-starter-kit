@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Dev\Rector\OneFlushInClassRector;
 use Rector\CodeQuality\Rector\Class_\InlineConstructorDefaultToPropertyRector;
 use Rector\CodeQuality\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector;
 use Rector\Config\RectorConfig;
@@ -34,4 +35,6 @@ return static function (RectorConfig $rectorConfig): void {
         FlipTypeControlToUseExclusiveTypeRector::class,
         RemoveUnusedPrivatePropertyRector::class => [__DIR__.'/src/*/Domain/*'],
     ]);
+
+    $rectorConfig->rule(OneFlushInClassRector::class);
 };
