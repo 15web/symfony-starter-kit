@@ -53,7 +53,7 @@ final class <?php echo $test_name; ?> extends ApiWebTestCase
 <?php } ?>
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $<?php echo $entity_classname_small; ?>Id = (string) Uuid::v4();
+        $<?php echo $entity_classname_small; ?>Id = (string) new UuidV7();
         $response = self::request('POST', "/api/<?php echo $entity_classname_small; ?>s/{$<?php echo $entity_classname_small; ?>Id}/update", $body, token: $token);
         self::assertNotFound($response);
     }

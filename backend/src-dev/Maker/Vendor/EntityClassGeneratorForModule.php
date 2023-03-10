@@ -13,6 +13,7 @@ use Symfony\Bundle\MakerBundle\Util\UseStatementGenerator;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Uid\UuidV7;
 
 /**
  * @internal
@@ -40,6 +41,7 @@ final class EntityClassGeneratorForModule
 
         $useStatements = new UseStatementGenerator([
             Uuid::class,
+            UuidV7::class,
             ['Doctrine\\ORM\\Mapping' => 'ORM'],
         ]);
 

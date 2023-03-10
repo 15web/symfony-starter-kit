@@ -42,7 +42,7 @@ final class <?php echo $test_name; ?> extends ApiWebTestCase
         $token = User::auth();
         <?php echo $entity_classname; ?>::create(<?php echo $create_params; ?>, $token);
 
-        $<?php echo $entity_classname_small; ?>Id = (string) Uuid::v4();
+        $<?php echo $entity_classname_small; ?>Id = (string) new UuidV7();
         $response = self::request('GET', "/api/<?php echo $entity_classname_small; ?>s/{$<?php echo $entity_classname_small; ?>Id}", token: $token);
         self::assertNotFound($response);
     }

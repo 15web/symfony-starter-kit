@@ -13,6 +13,7 @@ use Symfony\Bundle\MakerBundle\Util\ClassNameDetails;
 use Symfony\Bundle\MakerBundle\Util\UseStatementGenerator;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Uid\UuidV7;
 
 /**
  * Создает функциональные тесты для модуля
@@ -76,6 +77,7 @@ final class FunctionalTestsGenerator
             'App\\Tests\\'.$this->path.'\\SDK\\'.$entityClassDetails->getShortName(), // SDK
             User::class,
             Uuid::class,
+            UuidV7::class,
         ]);
 
         $this->generator->generateClass(
@@ -136,6 +138,7 @@ final class FunctionalTestsGenerator
             'App\\Tests\\'.$this->path.'\\SDK\\'.$entityClassDetails->getShortName(), // SDK
             User::class,
             Uuid::class,
+            UuidV7::class,
         ]);
 
         $this->generator->generateClass(
@@ -165,6 +168,7 @@ final class FunctionalTestsGenerator
             'App\\Tests\\'.$this->path.'\\SDK\\'.$entityClassDetails->getShortName(), // SDK
             User::class,
             Uuid::class,
+            UuidV7::class,
             Iterator::class,
         ]);
 
