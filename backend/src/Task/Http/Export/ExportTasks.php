@@ -28,7 +28,7 @@ final class ExportTasks
      */
     public function __construct(
         private readonly FindAllTasksByUserId $findAllTasksByUserId,
-        #[TaggedIterator(tag: 'app.task.exporter')]
+        #[TaggedIterator(Exporter::class)]
         iterable $exporters,
     ) {
         foreach ($exporters as $exporter) {

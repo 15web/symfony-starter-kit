@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace App\Task\Http\Export;
 
 use App\Task\Query\Task\FindAllByUserId\TaskData;
-use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 /**
  * Интерфейс экспорта
  */
-#[Autoconfigure(tags: ['app.task.exporter'])]
+#[AutoconfigureTag]
 interface Exporter
 {
     public function getFormat(): Format;
