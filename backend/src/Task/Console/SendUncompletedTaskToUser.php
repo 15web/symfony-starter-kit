@@ -15,6 +15,7 @@ use Symfony\Component\Console\Command\LockableTrait;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Консольная команда отправки пользователю списка невыполненных задач
@@ -26,6 +27,7 @@ final class SendUncompletedTaskToUser extends Command
 
     public function __construct(
         private readonly FindUncompletedTasksByUserId $findUncompletedTasksByUserId,
+        private readonly TranslatorInterface $translator,
         private readonly FindAllUsers $findAllUsers,
         private readonly LoggerInterface $logger,
         private readonly MailerInterface $mailer,
@@ -51,7 +53,7 @@ final class SendUncompletedTaskToUser extends Command
 
             $email = (new TemplatedEmail())
                 ->to($user->email)
-                ->subject('Невыполненные задачи')
+                ->subject($this->translator->trans('task.uncompleted_tasks_subject'))
                 ->htmlTemplate('emails/uncompleted-tasks.html.twig')
                 ->context([
                     'tasks' => $uncompletedTasks,
