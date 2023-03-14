@@ -16,9 +16,9 @@ use Symfony\Component\Serializer\SerializerInterface;
  * Сериализует ответ ручки в JsonResponse
  */
 #[AsService]
-final class ResponseEventSubscriber implements EventSubscriberInterface
+final readonly class ResponseEventSubscriber implements EventSubscriberInterface
 {
-    public function __construct(private readonly SerializerInterface $serializer)
+    public function __construct(private SerializerInterface $serializer)
     {
     }
 

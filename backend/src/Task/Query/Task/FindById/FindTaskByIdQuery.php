@@ -9,11 +9,11 @@ use Symfony\Component\Uid\Uuid;
 /**
  * Запрос на нахождение задачи по айди
  */
-final class FindTaskByIdQuery
+final readonly class FindTaskByIdQuery
 {
     public function __construct(
-        public readonly Uuid $taskId,
-        public readonly Uuid $userId,
+        public Uuid $taskId,
+        public Uuid $userId,
     ) {
     }
 }

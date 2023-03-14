@@ -18,9 +18,9 @@ use Throwable;
  * Преобразует Request в нужный для ручки объект запроса
  */
 #[AsService]
-final class ApiRequestArgumentValueResolver implements ValueResolverInterface
+final readonly class ApiRequestArgumentValueResolver implements ValueResolverInterface
 {
-    public function __construct(private readonly SerializerInterface $serializer)
+    public function __construct(private SerializerInterface $serializer)
     {
     }
 

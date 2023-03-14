@@ -13,9 +13,9 @@ use Symfony\Component\HttpKernel\KernelEvents;
  * Проверяет тип ошибки, проеобразовывает ее в JsonResponse
  */
 #[AsService]
-final class ExceptionEventSubscriber implements EventSubscriberInterface
+final readonly class ExceptionEventSubscriber implements EventSubscriberInterface
 {
-    public function __construct(private readonly CreateExceptionJsonResponse $createExceptionJsonResponse)
+    public function __construct(private CreateExceptionJsonResponse $createExceptionJsonResponse)
     {
     }
 

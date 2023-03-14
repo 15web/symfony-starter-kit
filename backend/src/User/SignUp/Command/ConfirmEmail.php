@@ -14,9 +14,9 @@ use Symfony\Component\Uid\Uuid;
  * Хендлер подтверждения email
  */
 #[AsService]
-final class ConfirmEmail
+final readonly class ConfirmEmail
 {
-    public function __construct(private readonly Users $users)
+    public function __construct(private Users $users)
     {
     }
 

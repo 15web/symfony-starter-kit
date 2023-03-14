@@ -14,11 +14,11 @@ use PhpCsFixer\WhitespacesFixerConfig;
 /**
  * Добавляет методам теста аннотацию testdox
  */
-final class TestdoxForMethods
+final readonly class TestdoxForMethods
 {
     public function __construct(
-        private readonly WhitespacesFixerConfig $whitespacesConfig,
-        private readonly DocCommentHelper $commentHelper
+        private WhitespacesFixerConfig $whitespacesConfig,
+        private DocCommentHelper $commentHelper
     ) {
     }
 

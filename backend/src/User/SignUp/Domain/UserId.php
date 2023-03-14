@@ -11,9 +11,9 @@ use Symfony\Component\Uid\UuidV7;
 /**
  * ID пользователя
  */
-final class UserId implements ValueObject
+final readonly class UserId implements ValueObject
 {
-    public function __construct(public readonly Uuid $value = new UuidV7())
+    public function __construct(public Uuid $value = new UuidV7())
     {
     }
 

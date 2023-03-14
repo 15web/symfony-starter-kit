@@ -12,12 +12,12 @@ use App\User\SignUp\Domain\UserId;
  * Хендлер сохранения профиля
  */
 #[AsService]
-final class SaveProfile
+final readonly class SaveProfile
 {
     public function __construct(
-        private readonly CreateProfile $createProfile,
-        private readonly UpdateProfile $updateProfile,
-        private readonly Profiles $profiles,
+        private CreateProfile $createProfile,
+        private UpdateProfile $updateProfile,
+        private Profiles $profiles,
     ) {
     }
 

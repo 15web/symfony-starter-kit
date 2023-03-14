@@ -27,13 +27,13 @@ use Symfony\Component\Console\Question\Question;
  * Содержит инфомарцию о генерируемых полях сущности (имя, тип, nullable)
  * Используется для генерации Domain слоя
  */
-final class EntityGenerator
+final readonly class EntityGenerator
 {
     public function __construct(
-        private readonly FileManager $fileManager,
-        private readonly DoctrineHelper $doctrineHelper,
-        private readonly CustomGenerator $generator,
-        private readonly EntityClassGeneratorForModule $entityClassGenerator,
+        private FileManager $fileManager,
+        private DoctrineHelper $doctrineHelper,
+        private CustomGenerator $generator,
+        private EntityClassGeneratorForModule $entityClassGenerator,
     ) {
     }
 

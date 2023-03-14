@@ -9,14 +9,14 @@ use App\Infrastructure\Pagination\PaginationResponse;
 /**
  * Ответ списка статей с пагинацией
  */
-final class ArticleListResponse
+final readonly class ArticleListResponse
 {
     /**
      * @param ArticleListData[] $data
      */
     public function __construct(
-        public readonly array $data,
-        public readonly PaginationResponse $pagination
+        public array $data,
+        public PaginationResponse $pagination
     ) {
     }
 }

@@ -12,9 +12,9 @@ use Doctrine\ORM\EntityManagerInterface;
  * Репозиторий задач
  */
 #[AsService]
-final class Tasks
+final readonly class Tasks
 {
-    public function __construct(private readonly EntityManagerInterface $entityManager)
+    public function __construct(private EntityManagerInterface $entityManager)
     {
     }
 

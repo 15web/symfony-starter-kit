@@ -9,10 +9,10 @@ use Symfony\Component\Uid\Uuid;
 /**
  * Ответ ручки SignInAction
  */
-final class UserResponse
+final readonly class UserResponse
 {
     public function __construct(
-        public readonly Uuid $token,
+        public Uuid $token,
     ) {
     }
 }

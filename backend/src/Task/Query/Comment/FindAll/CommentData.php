@@ -10,13 +10,13 @@ use Symfony\Component\Uid\Uuid;
 /**
  * DTO комментария
  */
-final class CommentData
+final readonly class CommentData
 {
     public function __construct(
-        public readonly Uuid $id,
-        public readonly string $body,
-        public readonly DateTimeImmutable $createdAt,
-        public readonly ?DateTimeImmutable $updatedAt,
+        public Uuid $id,
+        public string $body,
+        public DateTimeImmutable $createdAt,
+        public ?DateTimeImmutable $updatedAt,
     ) {
     }
 }

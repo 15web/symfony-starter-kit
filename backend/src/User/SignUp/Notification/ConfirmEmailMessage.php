@@ -11,9 +11,9 @@ use Webmozart\Assert\Assert;
 /**
  * Message для подтверждения почты
  */
-final class ConfirmEmailMessage implements Message
+final readonly class ConfirmEmailMessage implements Message
 {
-    public function __construct(private readonly Uuid $confirmToken, private readonly string $email)
+    public function __construct(private Uuid $confirmToken, private string $email)
     {
         Assert::notEmpty($email);
         Assert::email($email);

@@ -21,9 +21,9 @@ use Symfony\Component\Uid\Uuid;
 #[IsGranted('ROLE_USER')]
 #[Route('/tasks/{id}', methods: ['GET'])]
 #[AsController]
-final class TaskInfoAction
+final readonly class TaskInfoAction
 {
-    public function __construct(private readonly FindTaskById $findTaskById)
+    public function __construct(private FindTaskById $findTaskById)
     {
     }
 

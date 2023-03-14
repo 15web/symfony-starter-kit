@@ -13,9 +13,9 @@ use Symfony\Component\Serializer\SerializerInterface;
  * Сериализует объект ошибки в JsonResponse
  */
 #[AsService]
-final class CreateExceptionJsonResponse
+final readonly class CreateExceptionJsonResponse
 {
-    public function __construct(private readonly SerializerInterface $serializer)
+    public function __construct(private SerializerInterface $serializer)
     {
     }
 

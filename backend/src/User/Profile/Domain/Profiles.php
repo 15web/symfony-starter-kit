@@ -12,9 +12,9 @@ use Doctrine\ORM\EntityManagerInterface;
  * Репозиторий профилей
  */
 #[AsService]
-final class Profiles
+final readonly class Profiles
 {
-    public function __construct(private readonly EntityManagerInterface $entityManager)
+    public function __construct(private EntityManagerInterface $entityManager)
     {
     }
 

@@ -9,9 +9,9 @@ use Symfony\Component\Uid\Uuid;
 /**
  * Запрос нахождения всех комментариев задачи по пользователю
  */
-final class FindAllCommentQuery
+final readonly class FindAllCommentQuery
 {
-    public function __construct(public readonly Uuid $taskId, public readonly Uuid $userId)
+    public function __construct(public Uuid $taskId, public Uuid $userId)
     {
     }
 }

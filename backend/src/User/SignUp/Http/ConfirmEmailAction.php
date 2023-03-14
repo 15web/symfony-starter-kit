@@ -21,11 +21,11 @@ use Symfony\Component\Uid\Uuid;
  */
 #[Route('/confirm-email/{confirmToken}', methods: ['GET'])]
 #[AsController]
-final class ConfirmEmailAction
+final readonly class ConfirmEmailAction
 {
     public function __construct(
-        private readonly ConfirmEmail $confirmEmail,
-        private readonly Flush $flush,
+        private ConfirmEmail $confirmEmail,
+        private Flush $flush,
     ) {
     }
 

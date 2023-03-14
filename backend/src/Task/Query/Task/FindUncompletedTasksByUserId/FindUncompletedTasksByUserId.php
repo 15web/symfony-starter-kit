@@ -11,9 +11,9 @@ use Doctrine\ORM\EntityManagerInterface;
  * Хендлер нахождения незавершенных задач по пользователю
  */
 #[AsService]
-final class FindUncompletedTasksByUserId
+final readonly class FindUncompletedTasksByUserId
 {
-    public function __construct(private readonly EntityManagerInterface $entityManager)
+    public function __construct(private EntityManagerInterface $entityManager)
     {
     }
 

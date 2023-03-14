@@ -18,13 +18,13 @@ use Symfony\Component\Uid\UuidV7;
 /**
  * Создает функциональные тесты для модуля
  */
-final class FunctionalTestsGenerator
+final readonly class FunctionalTestsGenerator
 {
-    private readonly EntityFieldsManipulator $entityFieldsManipulator;
+    private EntityFieldsManipulator $entityFieldsManipulator;
 
     public function __construct(
-        private readonly string $path,
-        private readonly CustomGenerator $generator
+        private string $path,
+        private CustomGenerator $generator
     ) {
         $this->entityFieldsManipulator = new EntityFieldsManipulator();
     }

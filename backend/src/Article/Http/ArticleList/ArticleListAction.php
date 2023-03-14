@@ -15,9 +15,9 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 #[Route('/articles', methods: ['GET'])]
 #[AsController]
-final class ArticleListAction
+final readonly class ArticleListAction
 {
-    public function __construct(private readonly Articles $articles)
+    public function __construct(private Articles $articles)
     {
     }
 

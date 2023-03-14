@@ -10,9 +10,9 @@ use Webmozart\Assert\Assert;
 /**
  * Команда добавления комментария к задаче
  */
-final class AddCommentOnTaskCommand implements ApiRequest
+final readonly class AddCommentOnTaskCommand implements ApiRequest
 {
-    public function __construct(public readonly string $commentBody)
+    public function __construct(public string $commentBody)
     {
         Assert::notEmpty($commentBody, 'Укажите текст комментария');
     }

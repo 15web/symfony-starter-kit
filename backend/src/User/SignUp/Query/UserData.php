@@ -9,9 +9,9 @@ use Symfony\Component\Uid\Uuid;
 /**
  * DTO пользователя
  */
-final class UserData
+final readonly class UserData
 {
-    public function __construct(public readonly Uuid $id, public readonly string $email)
+    public function __construct(public Uuid $id, public string $email)
     {
     }
 }

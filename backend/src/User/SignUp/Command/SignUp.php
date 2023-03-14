@@ -21,12 +21,12 @@ use Symfony\Component\Uid\UuidV7;
  * Хендлер регистрации
  */
 #[AsService]
-final class SignUp
+final readonly class SignUp
 {
     public function __construct(
-        private readonly Users $users,
-        private readonly MessageBusInterface $messageBus,
-        private readonly UserPasswordHasherInterface $passwordHasher,
+        private Users $users,
+        private MessageBusInterface $messageBus,
+        private UserPasswordHasherInterface $passwordHasher,
     ) {
     }
 

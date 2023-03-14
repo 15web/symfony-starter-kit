@@ -14,13 +14,13 @@ use Symfony\Component\Mime\Email;
  * Заполняет from секцию и subject поля для отправки сообщений из конфига
  */
 #[AsService]
-final class MailerSubscriber implements EventSubscriberInterface
+final readonly class MailerSubscriber implements EventSubscriberInterface
 {
     public function __construct(
         #[Autowire('%env(string:MAILER_FROM_EMAIL)%')]
-        private readonly string $fromEmail,
+        private string $fromEmail,
         #[Autowire('%env(string:MAILER_FROM_NAME)%')]
-        private readonly string $fromName
+        private string $fromName
     ) {
     }
 

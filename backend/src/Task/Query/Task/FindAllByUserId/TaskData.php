@@ -10,13 +10,13 @@ use Symfony\Component\Uid\Uuid;
 /**
  * DTO задачи
  */
-final class TaskData
+final readonly class TaskData
 {
     public function __construct(
-        public readonly Uuid $id,
-        public readonly string $taskName,
-        public readonly bool $isCompleted,
-        public readonly DateTimeImmutable $createdAt,
+        public Uuid $id,
+        public string $taskName,
+        public bool $isCompleted,
+        public DateTimeImmutable $createdAt,
     ) {
     }
 }

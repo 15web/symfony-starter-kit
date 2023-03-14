@@ -13,9 +13,9 @@ use Symfony\Component\Uid\Uuid;
  * Репозиторий пользователей
  */
 #[AsService]
-final class Users
+final readonly class Users
 {
-    public function __construct(private readonly EntityManagerInterface $entityManager)
+    public function __construct(private EntityManagerInterface $entityManager)
     {
     }
 

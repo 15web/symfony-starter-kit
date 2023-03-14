@@ -10,14 +10,14 @@ use App\Task\Query\Task\FindAllByUserId\TaskData;
 /**
  * Ответ списка задач с пагинацией
  */
-final class TaskListResponse
+final readonly class TaskListResponse
 {
     /**
      * @param TaskData[] $data
      */
     public function __construct(
-        public readonly array $data,
-        public readonly PaginationResponse $pagination
+        public array $data,
+        public PaginationResponse $pagination
     ) {
     }
 }

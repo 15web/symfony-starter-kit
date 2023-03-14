@@ -12,9 +12,9 @@ use PhpCsFixer\WhitespacesFixerConfig;
 /**
  * Содержит повторяющиеся методы
  */
-final class DocCommentHelper
+final readonly class DocCommentHelper
 {
-    public function __construct(private readonly WhitespacesFixerConfig $whitespacesConfig)
+    public function __construct(private WhitespacesFixerConfig $whitespacesConfig)
     {
     }
 

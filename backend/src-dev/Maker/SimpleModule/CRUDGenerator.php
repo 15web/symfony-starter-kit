@@ -28,11 +28,11 @@ use Webmozart\Assert\Assert;
 /**
  * Создает HTTP слой для модуля
  */
-final class CRUDGenerator
+final readonly class CRUDGenerator
 {
     public function __construct(
-        private readonly CustomGenerator $generator,
-        private readonly EntityFieldsManipulator $entityFieldsManipulator
+        private CustomGenerator $generator,
+        private EntityFieldsManipulator $entityFieldsManipulator
     ) {
     }
 

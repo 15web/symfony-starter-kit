@@ -7,11 +7,11 @@ namespace App\Infrastructure;
 /**
  * Дефолтный успешный ответ
  */
-final class SuccessResponse
+final readonly class SuccessResponse
 {
     private const SUCCESS_VALUE = true;
 
-    public readonly bool $success;
+    public bool $success;
 
     public function __construct()
     {

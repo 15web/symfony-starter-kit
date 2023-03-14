@@ -19,12 +19,12 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_USER')]
 #[Route('/tasks/{id}/remove', methods: ['POST'])]
 #[AsController]
-final class RemoveTaskAction
+final readonly class RemoveTaskAction
 {
     public function __construct(
-        private readonly RemoveTask $removeTask,
-        private readonly Flush $flush,
-        private readonly LoggerInterface $logger,
+        private RemoveTask $removeTask,
+        private Flush $flush,
+        private LoggerInterface $logger,
     ) {
     }
 

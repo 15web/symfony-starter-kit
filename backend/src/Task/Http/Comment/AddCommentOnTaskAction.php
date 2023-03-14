@@ -23,12 +23,12 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_USER')]
 #[Route('/tasks/{id}/add-comment', methods: ['POST'])]
 #[AsController]
-final class AddCommentOnTaskAction
+final readonly class AddCommentOnTaskAction
 {
     public function __construct(
-        private readonly AddCommentOnTask $addCommentOnTask,
-        private readonly Flush $flush,
-        private readonly LoggerInterface $logger,
+        private AddCommentOnTask $addCommentOnTask,
+        private Flush $flush,
+        private LoggerInterface $logger,
     ) {
     }
 

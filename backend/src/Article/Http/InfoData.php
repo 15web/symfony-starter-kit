@@ -7,11 +7,11 @@ namespace App\Article\Http;
 /**
  * Класс ответа ручки InfoAction
  */
-final class InfoData
+final readonly class InfoData
 {
     public function __construct(
-        public readonly string $title,
-        public readonly string $body,
+        public string $title,
+        public string $body,
     ) {
     }
 }

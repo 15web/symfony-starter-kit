@@ -12,9 +12,9 @@ use Symfony\Component\Uid\Uuid;
  * Хендлер удаления токена
  */
 #[AsService]
-final class DeleteToken
+final readonly class DeleteToken
 {
-    public function __construct(private readonly UserTokens $userTokens)
+    public function __construct(private UserTokens $userTokens)
     {
     }
 

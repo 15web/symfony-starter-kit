@@ -11,9 +11,9 @@ use Symfony\Component\Uid\UuidV7;
 /**
  * ID задачи
  */
-final class TaskId implements ValueObject
+final readonly class TaskId implements ValueObject
 {
-    public function __construct(public readonly Uuid $value = new UuidV7())
+    public function __construct(public Uuid $value = new UuidV7())
     {
     }
 

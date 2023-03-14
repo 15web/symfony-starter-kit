@@ -19,11 +19,11 @@ use Symfony\Component\Serializer\SerializerInterface;
  * Экспорт задач в формат xml
  */
 #[AsService]
-final class XmlExporter implements Exporter
+final readonly class XmlExporter implements Exporter
 {
     public function __construct(
-        private readonly SerializerInterface $serializer,
-        private readonly Filesystem $filesystem,
+        private SerializerInterface $serializer,
+        private Filesystem $filesystem,
     ) {
     }
 

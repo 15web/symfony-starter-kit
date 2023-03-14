@@ -9,11 +9,11 @@ use DateTimeImmutable;
 /**
  * DTO задачи
  */
-final class TaskData
+final readonly class TaskData
 {
     public function __construct(
-        public readonly string $taskName,
-        public readonly DateTimeImmutable $createdAt,
+        public string $taskName,
+        public DateTimeImmutable $createdAt,
     ) {
     }
 }

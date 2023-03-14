@@ -7,11 +7,11 @@ namespace App\Infrastructure\ApiException;
 /**
  * Сообщение ошибки
  */
-final class ApiErrorResponse
+final readonly class ApiErrorResponse
 {
-    private readonly bool $isError;
+    private bool $isError;
 
-    public function __construct(private readonly string $errorMessage, private readonly int $code)
+    public function __construct(private string $errorMessage, private int $code)
     {
         $this->isError = true;
     }

@@ -18,9 +18,9 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_USER')]
 #[Route('/admin/articles/{id}/remove', methods: ['POST'])]
 #[AsController]
-final class RemoveAction
+final readonly class RemoveAction
 {
-    public function __construct(private readonly Articles $articles, private readonly Flush $flush)
+    public function __construct(private Articles $articles, private Flush $flush)
     {
     }
 

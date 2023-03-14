@@ -11,9 +11,9 @@ use Symfony\Component\Uid\UuidV7;
 /**
  * ID комментария задачи
  */
-final class TaskCommentId implements ValueObject
+final readonly class TaskCommentId implements ValueObject
 {
-    private readonly Uuid $value;
+    private Uuid $value;
 
     public function __construct()
     {
