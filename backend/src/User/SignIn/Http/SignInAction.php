@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\User\SignIn\Http;
 
+use App\Infrastructure\Flush;
 use App\User\SignIn\Command\CreateToken;
 use App\User\SignIn\Http\Authenticator\JsonLoginAuthenticator;
 use App\User\SignUp\Domain\UserId;
@@ -18,14 +19,18 @@ use Symfony\Component\Uid\UuidV7;
 #[AsController]
 final class SignInAction
 {
-    public function __construct(private readonly CreateToken $createToken)
-    {
+    public function __construct(
+        private readonly CreateToken $createToken,
+        private readonly Flush $flush,
+    ) {
     }
 
     public function __invoke(UserId $userId): UserResponse
     {
         $token = new UuidV7();
         ($this->createToken)($userId, $token);
+
+        ($this->flush)();
 
         return new UserResponse($token);
     }
