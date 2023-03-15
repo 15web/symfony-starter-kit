@@ -10,12 +10,12 @@ use Webmozart\Assert\Assert;
 /**
  * Объект запроса для обновления статьи
  */
-final class UpdateRequest implements ApiRequest
+final readonly class UpdateRequest implements ApiRequest
 {
     public function __construct(
-        public readonly string $title,
-        public readonly string $alias,
-        public readonly string $body = '',
+        public string $title,
+        public string $alias,
+        public string $body = '',
     ) {
         Assert::notEmpty($title, 'Укажите заголовок');
         Assert::notEmpty($alias, 'Укажите алиас');

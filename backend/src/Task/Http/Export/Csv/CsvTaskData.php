@@ -9,12 +9,12 @@ use Symfony\Component\Uid\Uuid;
 /**
  * Данные задачи для csv формата
  */
-final class CsvTaskData
+final readonly class CsvTaskData
 {
     public function __construct(
-        public readonly Uuid $id,
-        public readonly string $taskName,
-        public readonly bool $isCompleted,
+        public Uuid $id,
+        public string $taskName,
+        public bool $isCompleted,
     ) {
     }
 }

@@ -10,13 +10,13 @@ use Symfony\Component\Uid\Uuid;
 /**
  * Данные задачи для xml формата
  */
-final class XmlTaskData
+final readonly class XmlTaskData
 {
     public function __construct(
-        public readonly Uuid $id,
-        public readonly DateTimeImmutable $createdAt,
-        public readonly string $taskName,
-        public readonly bool $isCompleted,
+        public Uuid $id,
+        public DateTimeImmutable $createdAt,
+        public string $taskName,
+        public bool $isCompleted,
     ) {
     }
 }

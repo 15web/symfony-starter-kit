@@ -10,9 +10,9 @@ use Webmozart\Assert\Assert;
 /**
  * Команда создания задачи
  */
-final class CreateTaskCommand implements ApiRequest
+final readonly class CreateTaskCommand implements ApiRequest
 {
-    public function __construct(public readonly string $taskName)
+    public function __construct(public string $taskName)
     {
         Assert::notEmpty($taskName, 'Укажите наименование задачи');
     }

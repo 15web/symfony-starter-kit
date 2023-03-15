@@ -11,9 +11,9 @@ use Doctrine\ORM\EntityManagerInterface;
  * Хендлер нахождения всех пользователей
  */
 #[AsService]
-final class FindAllUsers
+final readonly class FindAllUsers
 {
-    public function __construct(private readonly EntityManagerInterface $entityManager)
+    public function __construct(private EntityManagerInterface $entityManager)
     {
     }
 

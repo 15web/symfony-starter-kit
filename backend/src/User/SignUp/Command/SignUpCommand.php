@@ -10,11 +10,11 @@ use Webmozart\Assert\Assert;
 /**
  * Команда для регистрации
  */
-final class SignUpCommand implements ApiRequest
+final readonly class SignUpCommand implements ApiRequest
 {
     public function __construct(
-        public readonly string $email,
-        public readonly string $password
+        public string $email,
+        public string $password
     ) {
         Assert::notEmpty($email);
         Assert::email($email);

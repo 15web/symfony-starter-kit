@@ -23,12 +23,12 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_USER')]
 #[Route('/profile-save', methods: ['POST'])]
 #[AsController]
-final class ProfileSaveAction
+final readonly class ProfileSaveAction
 {
     public function __construct(
-        private readonly SaveProfile $saveProfile,
-        private readonly FindProfileByUserId $findProfileByUserId,
-        private readonly Flush $flush,
+        private SaveProfile $saveProfile,
+        private FindProfileByUserId $findProfileByUserId,
+        private Flush $flush,
     ) {
     }
 

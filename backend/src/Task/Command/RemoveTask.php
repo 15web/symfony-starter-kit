@@ -12,9 +12,9 @@ use App\Task\Domain\Tasks;
  * Хендлер удаления задачи
  */
 #[AsService]
-final class RemoveTask
+final readonly class RemoveTask
 {
-    public function __construct(private readonly Tasks $tasks)
+    public function __construct(private Tasks $tasks)
     {
     }
 

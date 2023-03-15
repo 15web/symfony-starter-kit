@@ -22,19 +22,19 @@ use Symfony\Component\HttpKernel\Event\ResponseEvent;
 #[AsService]
 #[When('dev')]
 #[When('test')]
-final class OpenApiValidateSubscriber implements EventSubscriberInterface
+final readonly class OpenApiValidateSubscriber implements EventSubscriberInterface
 {
     public const DISABLE_VALIDATE_REQUEST_KEY = 'disable_request_validate';
     public const DISABLE_VALIDATE_RESPONSE_KEY = 'disable_response_validate';
 
-    private readonly RequestValidator $requestValidator;
-    private readonly ResponseValidator $responseValidator;
+    private RequestValidator $requestValidator;
+    private ResponseValidator $responseValidator;
 
     public function __construct(
         #[Autowire('%env(string:APP_ENV)%')]
-        private readonly string $appEnv,
+        private string $appEnv,
         #[Autowire('%kernel.project_dir%%env(string:OPENAPI_YAML_FILE)%')]
-        readonly string $openApiFilePath,
+        string $openApiFilePath,
     ) {
         $validatorBuilder = (new ValidatorBuilder())->fromYamlFile($openApiFilePath);
         $this->requestValidator = $validatorBuilder->getRequestValidator();

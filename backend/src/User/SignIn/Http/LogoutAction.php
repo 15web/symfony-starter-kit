@@ -21,11 +21,11 @@ use Symfony\Component\Uid\Uuid;
 #[IsGranted('ROLE_USER')]
 #[Route('/logout', methods: ['GET'])]
 #[AsController]
-final class LogoutAction
+final readonly class LogoutAction
 {
     public function __construct(
-        private readonly DeleteToken $deleteToken,
-        private readonly Flush $flush,
+        private DeleteToken $deleteToken,
+        private Flush $flush,
     ) {
     }
 

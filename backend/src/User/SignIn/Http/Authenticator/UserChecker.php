@@ -19,9 +19,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * Класс проверяет подтвержден ли email пользователя
  */
 #[AsService]
-final class UserChecker implements UserCheckerInterface
+final readonly class UserChecker implements UserCheckerInterface
 {
-    public function __construct(private readonly MessageBusInterface $messageBus)
+    public function __construct(private MessageBusInterface $messageBus)
     {
     }
 

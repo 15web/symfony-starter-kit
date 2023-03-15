@@ -19,11 +19,11 @@ use Symfony\Component\Serializer\SerializerInterface;
  * Экспорт задач в формат csv
  */
 #[AsService]
-final class CsvExporter implements Exporter
+final readonly class CsvExporter implements Exporter
 {
     public function __construct(
-        private readonly SerializerInterface $serializer,
-        private readonly Filesystem $filesystem,
+        private SerializerInterface $serializer,
+        private Filesystem $filesystem,
     ) {
     }
 

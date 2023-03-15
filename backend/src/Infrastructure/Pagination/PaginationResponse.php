@@ -9,14 +9,14 @@ use Webmozart\Assert\Assert;
 /**
  * Ответ пагинации. Высчитывает кол-во страниц
  */
-final class PaginationResponse
+final readonly class PaginationResponse
 {
-    public readonly int $pagesCount;
+    public int $pagesCount;
 
     public function __construct(
-        public readonly int $total,
-        public readonly int $perPage,
-        public readonly int $currentPage,
+        public int $total,
+        public int $perPage,
+        public int $currentPage,
     ) {
         Assert::positiveInteger($perPage);
         Assert::positiveInteger($currentPage);

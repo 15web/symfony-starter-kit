@@ -11,9 +11,9 @@ use Doctrine\ORM\EntityManagerInterface;
  * Хендлер нахождения профиля по пользователю
  */
 #[AsService]
-final class FindProfileByUserId
+final readonly class FindProfileByUserId
 {
-    public function __construct(private readonly EntityManagerInterface $entityManager)
+    public function __construct(private EntityManagerInterface $entityManager)
     {
     }
 

@@ -15,9 +15,9 @@ use App\User\SignUp\Domain\UserId;
  * Хендлер создания задачи
  */
 #[AsService]
-final class CreateTask
+final readonly class CreateTask
 {
-    public function __construct(private readonly Tasks $tasks)
+    public function __construct(private Tasks $tasks)
     {
     }
 

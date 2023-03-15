@@ -18,9 +18,9 @@ use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface
  * @see https://symfony.com/doc/current/security/access_denied_handler.html#customize-the-unauthorized-response
  */
 #[AsService]
-final class AuthenticationEntryPoint implements AuthenticationEntryPointInterface
+final readonly class AuthenticationEntryPoint implements AuthenticationEntryPointInterface
 {
-    public function __construct(private readonly CreateExceptionJsonResponse $createExceptionJsonResponse)
+    public function __construct(private CreateExceptionJsonResponse $createExceptionJsonResponse)
     {
     }
 

@@ -17,9 +17,9 @@ use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
  * Резолвер для айди пользователя
  */
 #[AsService]
-final class UserIdArgumentValueResolver implements ValueResolverInterface
+final readonly class UserIdArgumentValueResolver implements ValueResolverInterface
 {
-    public function __construct(private readonly Security $security)
+    public function __construct(private Security $security)
     {
     }
 

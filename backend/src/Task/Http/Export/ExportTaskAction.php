@@ -19,9 +19,9 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_USER')]
 #[Route('/export/tasks.{format}', methods: ['GET'])]
 #[AsController]
-final class ExportTaskAction
+final readonly class ExportTaskAction
 {
-    public function __construct(private readonly ExportTasks $exportTasks)
+    public function __construct(private ExportTasks $exportTasks)
     {
     }
 

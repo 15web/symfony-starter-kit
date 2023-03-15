@@ -16,9 +16,9 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_USER')]
 #[Route('/admin/articles', methods: ['GET'])]
 #[AsController]
-final class ListAction
+final readonly class ListAction
 {
-    public function __construct(private readonly Articles $articles)
+    public function __construct(private Articles $articles)
     {
     }
 

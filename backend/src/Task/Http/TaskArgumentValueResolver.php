@@ -24,11 +24,11 @@ use Webmozart\Assert\Assert;
  * Резолвер нахождения задачи по айди и пользователю
  */
 #[AsService]
-final class TaskArgumentValueResolver implements ValueResolverInterface
+final readonly class TaskArgumentValueResolver implements ValueResolverInterface
 {
     public function __construct(
-        private readonly Security $security,
-        private readonly Tasks $tasks,
+        private Security $security,
+        private Tasks $tasks,
     ) {
     }
 

@@ -19,9 +19,9 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_USER')]
 #[Route('/admin/articles/create', methods: ['POST'])]
 #[AsController]
-final class CreateAction
+final readonly class CreateAction
 {
-    public function __construct(private readonly Articles $articles, private readonly Flush $flush)
+    public function __construct(private Articles $articles, private Flush $flush)
     {
     }
 

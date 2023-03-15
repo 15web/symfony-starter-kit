@@ -11,9 +11,9 @@ use Doctrine\ORM\EntityManagerInterface;
  * Хендлер нахождения задачи по айди
  */
 #[AsService]
-final class FindTaskById
+final readonly class FindTaskById
 {
-    public function __construct(private readonly EntityManagerInterface $entityManager)
+    public function __construct(private EntityManagerInterface $entityManager)
     {
     }
 

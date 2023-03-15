@@ -22,12 +22,12 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_USER')]
 #[Route('/tasks/{id}/update-task-name', methods: ['POST'])]
 #[AsController]
-final class UpdateTaskNameAction
+final readonly class UpdateTaskNameAction
 {
     public function __construct(
-        private readonly UpdateTaskName $updateTaskName,
-        private readonly Flush $flush,
-        private readonly LoggerInterface $logger,
+        private UpdateTaskName $updateTaskName,
+        private Flush $flush,
+        private LoggerInterface $logger,
     ) {
     }
 

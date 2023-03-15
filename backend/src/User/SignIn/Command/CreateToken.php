@@ -14,9 +14,9 @@ use Symfony\Component\Uid\Uuid;
  * Хендлер создания токена
  */
 #[AsService]
-final class CreateToken
+final readonly class CreateToken
 {
-    public function __construct(private readonly UserTokens $userTokens)
+    public function __construct(private UserTokens $userTokens)
     {
     }
 

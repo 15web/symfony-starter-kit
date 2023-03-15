@@ -9,9 +9,9 @@ use Symfony\Component\Uid\Uuid;
 /**
  * Ответ ручки создания задачи
  */
-final class TaskData
+final readonly class TaskData
 {
-    public function __construct(public readonly Uuid $id)
+    public function __construct(public Uuid $id)
     {
     }
 }

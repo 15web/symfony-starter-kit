@@ -19,9 +19,9 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_USER')]
 #[Route('/tasks', methods: ['GET'])]
 #[AsController]
-final class TaskListAction
+final readonly class TaskListAction
 {
-    public function __construct(private readonly FindAllTasksByUserId $findAllTasksByUserId)
+    public function __construct(private FindAllTasksByUserId $findAllTasksByUserId)
     {
     }
 

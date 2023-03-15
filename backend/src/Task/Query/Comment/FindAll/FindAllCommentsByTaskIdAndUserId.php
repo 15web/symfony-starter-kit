@@ -11,9 +11,9 @@ use Doctrine\ORM\EntityManagerInterface;
  * Хендлер нахождения комментариев задачи по пользователю
  */
 #[AsService]
-final class FindAllCommentsByTaskIdAndUserId
+final readonly class FindAllCommentsByTaskIdAndUserId
 {
-    public function __construct(private readonly EntityManagerInterface $entityManager)
+    public function __construct(private EntityManagerInterface $entityManager)
     {
     }
 

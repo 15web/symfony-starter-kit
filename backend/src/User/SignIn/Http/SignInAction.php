@@ -17,11 +17,11 @@ use Symfony\Component\Uid\UuidV7;
  */
 #[Route('/sign-in', name: JsonLoginAuthenticator::SIGN_IN, methods: JsonLoginAuthenticator::SIGN_IN_METHODS)]
 #[AsController]
-final class SignInAction
+final readonly class SignInAction
 {
     public function __construct(
-        private readonly CreateToken $createToken,
-        private readonly Flush $flush,
+        private CreateToken $createToken,
+        private Flush $flush,
     ) {
     }
 

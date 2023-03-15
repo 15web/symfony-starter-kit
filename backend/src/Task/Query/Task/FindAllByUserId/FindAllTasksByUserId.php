@@ -12,9 +12,9 @@ use Doctrine\ORM\Query;
  * Хендлер нахождения всех задач по пользователю
  */
 #[AsService]
-final class FindAllTasksByUserId
+final readonly class FindAllTasksByUserId
 {
-    public function __construct(private readonly EntityManagerInterface $entityManager)
+    public function __construct(private EntityManagerInterface $entityManager)
     {
     }
 

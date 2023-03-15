@@ -15,9 +15,9 @@ use App\User\SignUp\Domain\UserId;
  * Создает профиль
  */
 #[AsService]
-final class CreateProfile
+final readonly class CreateProfile
 {
-    public function __construct(private readonly Profiles $profiles)
+    public function __construct(private Profiles $profiles)
     {
     }
 

@@ -21,12 +21,12 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_USER')]
 #[Route('/tasks/{id}/complete', methods: ['POST'])]
 #[AsController]
-final class CompleteTaskAction
+final readonly class CompleteTaskAction
 {
     public function __construct(
-        private readonly CompleteTask $completeTask,
-        private readonly Flush $flush,
-        private readonly LoggerInterface $logger,
+        private CompleteTask $completeTask,
+        private Flush $flush,
+        private LoggerInterface $logger,
     ) {
     }
 

@@ -7,12 +7,12 @@ namespace App\Article\Http\ArticleList;
 /**
  * Данные для списка статей
  */
-final class ArticleListData
+final readonly class ArticleListData
 {
     public function __construct(
-        public readonly string $title,
-        public readonly string $alias,
-        public readonly string $body,
+        public string $title,
+        public string $alias,
+        public string $body,
     ) {
     }
 }

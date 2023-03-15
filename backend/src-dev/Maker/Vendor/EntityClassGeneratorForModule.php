@@ -21,11 +21,11 @@ use Symfony\Component\Uid\UuidV7;
  * Создает сущность и репозиторий в нужной директории - App\ModuleName\Domain, добавляет суффикс к репозиторию (s)
  * Почти копия EntityClassGenerator(MakerBundle)
  */
-final class EntityClassGeneratorForModule
+final readonly class EntityClassGeneratorForModule
 {
     public function __construct(
-        private readonly CustomGenerator $generator,
-        private readonly DoctrineHelper $doctrineHelper,
+        private CustomGenerator $generator,
+        private DoctrineHelper $doctrineHelper,
     ) {
     }
 

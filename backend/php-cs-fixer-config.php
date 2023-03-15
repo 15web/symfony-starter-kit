@@ -24,7 +24,7 @@ return (new PhpCsFixer\Config())
         '@PER:risky' => true,
         '@DoctrineAnnotation' => true,
         '@PHP80Migration:risky' => true,
-        '@PHP81Migration' => true,
+        '@PHP82Migration' => true,
         '@PhpCsFixer' => true,
         '@PhpCsFixer:risky' => true,
 

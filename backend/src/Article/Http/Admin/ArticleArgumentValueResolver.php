@@ -20,9 +20,9 @@ use Webmozart\Assert\Assert;
  * Резолвер для сущности 'статья'
  */
 #[AsService]
-final class ArticleArgumentValueResolver implements ValueResolverInterface
+final readonly class ArticleArgumentValueResolver implements ValueResolverInterface
 {
-    public function __construct(private readonly Articles $articles)
+    public function __construct(private Articles $articles)
     {
     }
 

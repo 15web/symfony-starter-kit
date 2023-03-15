@@ -18,9 +18,9 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_USER')]
 #[Route('/profile', methods: ['GET'])]
 #[AsController]
-final class ProfileInfoAction
+final readonly class ProfileInfoAction
 {
-    public function __construct(private readonly FindProfileByUserId $findProfileByUserId)
+    public function __construct(private FindProfileByUserId $findProfileByUserId)
     {
     }
 

@@ -14,9 +14,9 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
  */
 #[AsService]
 #[AsMessageHandler]
-final class SendConfirmEmailToken
+final readonly class SendConfirmEmailToken
 {
-    public function __construct(private readonly MailerInterface $mailer)
+    public function __construct(private MailerInterface $mailer)
     {
     }
 

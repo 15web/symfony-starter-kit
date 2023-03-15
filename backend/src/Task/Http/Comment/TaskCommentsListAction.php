@@ -19,9 +19,9 @@ use Symfony\Component\Uid\Uuid;
 #[IsGranted('ROLE_USER')]
 #[Route('/tasks/{id}/comments', methods: ['GET'])]
 #[AsController]
-final class TaskCommentsListAction
+final readonly class TaskCommentsListAction
 {
-    public function __construct(private readonly FindAllCommentsByTaskIdAndUserId $findAllComments)
+    public function __construct(private FindAllCommentsByTaskIdAndUserId $findAllComments)
     {
     }
 

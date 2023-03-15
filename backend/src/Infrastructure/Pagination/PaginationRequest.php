@@ -9,11 +9,11 @@ use Webmozart\Assert\Assert;
 /**
  * Запрос на пагинацию
  */
-final class PaginationRequest
+final readonly class PaginationRequest
 {
     public function __construct(
-        public readonly int $page = 1,
-        public readonly int $perPage = 10,
+        public int $page = 1,
+        public int $perPage = 10,
     ) {
         Assert::positiveInteger($page);
         Assert::positiveInteger($perPage);

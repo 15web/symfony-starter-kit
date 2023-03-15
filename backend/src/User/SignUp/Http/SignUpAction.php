@@ -21,11 +21,11 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 #[Route('/sign-up', methods: ['POST'])]
 #[AsController]
-final class SignUpAction
+final readonly class SignUpAction
 {
     public function __construct(
-        private readonly SignUp $signUp,
-        private readonly Flush $flush,
+        private SignUp $signUp,
+        private Flush $flush,
     ) {
     }
 

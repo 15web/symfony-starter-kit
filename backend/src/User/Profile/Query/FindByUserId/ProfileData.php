@@ -7,11 +7,11 @@ namespace App\User\Profile\Query\FindByUserId;
 /**
  * Данные профиля
  */
-final class ProfileData
+final readonly class ProfileData
 {
     public function __construct(
-        public readonly ?string $phone = null,
-        public readonly ?string $name = null
+        public ?string $phone = null,
+        public ?string $name = null
     ) {
     }
 }

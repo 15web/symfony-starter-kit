@@ -9,9 +9,9 @@ use Symfony\Component\Uid\Uuid;
 /**
  * Запрос на нахождение незавершенных задач по пользователю
  */
-final class FindUncompletedTasksByUserIdQuery
+final readonly class FindUncompletedTasksByUserIdQuery
 {
-    public function __construct(public readonly Uuid $userId)
+    public function __construct(public Uuid $userId)
     {
     }
 }
