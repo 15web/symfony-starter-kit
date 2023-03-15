@@ -3,7 +3,7 @@
 Генератор простых CRUD модулей
 
 ```shell
-./manage.bash rb bin/console make:module
+docker-compose run --rm backend-cli bin/console make:module
 ```
 Необходимо ввести параметры:
 
