@@ -14,6 +14,8 @@ tags:
       description: Задачи
     - name: articles
       description: Статьи
+    - name: setting
+      description: Настройки
     - name: profile
       description: Профиль
 servers:
@@ -701,6 +703,92 @@ paths:
                                 errorMessage: Необходимо пройти аутентификацию
                 '404':
                     description: Статья не найдена
+    /settings:
+        get:
+            operationId: settingList
+            summary: Получить список настроек
+            tags:
+                - setting
+            security: [ ]
+            responses:
+                '200':
+                    description: Список настроек
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/publicSettingResponseList'
+    /admin/settings:
+        get:
+            operationId: adminSettingList
+            summary: Получить список настроек
+            tags:
+                - setting
+            responses:
+                '200':
+                    description: Список настроек
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/settingResponseList'
+                '401':
+                    description: Доступ запрещен
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/errorResponse'
+                            example:
+                                error: true
+                                code: 401
+                                errorMessage: Необходимо пройти аутентификацию
+    /admin/setting/save:
+        post:
+            operationId: saveSetting
+            summary: Сохранить изменения настройки
+            tags:
+                - setting
+            requestBody:
+                description: Запрос на сохранение настройки
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/settingSaveRequest'
+            responses:
+                '200':
+                    description: Данные настройки сохранены
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/successResponse'
+                '400':
+                    description: Ошибка запроса
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/errorResponse'
+                            example:
+                                error: true
+                                code: 400
+                                errorMessage: Неверный формат запроса
+                '401':
+                    description: Доступ запрещен
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/errorResponse'
+                            example:
+                                error: true
+                                code: 401
+                                errorMessage: Необходимо пройти аутентификацию
+                '404':
+                    description: Запись не найдена
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/errorResponse'
+                            example:
+                                error: true
+                                code: 404
+                                errorMessage: Настройка не найдена
 components:
     securitySchemes:
         ApiTokenAuth:
@@ -1001,6 +1089,44 @@ components:
                             taskName: Моя вторая задача
                             isCompleted: true
                             createdAt: '2021-10-28T16:19:45+00:00'
+        settingResponseList:
+            type: array
+            items:
+                $ref: '#/components/schemas/settingResponse'
+        settingResponse:
+            type: object
+            additionalProperties: false
+            required:
+                - type
+                - value
+                - isPublic
+                - createdAt
+            properties:
+                type:
+                    $ref: '#/components/schemas/settingType'
+                value:
+                    $ref: '#/components/schemas/settingValue'
+                isPublic:
+                    $ref: '#/components/schemas/settingIsPublic'
+                createdAt:
+                    $ref: '#/components/schemas/createdAt'
+                updatedAt:
+                    $ref: '#/components/schemas/updatedAt'
+        publicSettingResponseList:
+            type: array
+            items:
+                $ref: '#/components/schemas/publicSettingResponse'
+        publicSettingResponse:
+            type: object
+            additionalProperties: false
+            required:
+                - type
+                - value
+            properties:
+                type:
+                    $ref: '#/components/schemas/settingType'
+                value:
+                    $ref: '#/components/schemas/settingValue'
         taskCreateRequest:
             properties:
                 taskName:
@@ -1027,6 +1153,16 @@ components:
                     example: Мой первый комментарий
             required:
                 - commentBody
+        settingSaveRequest:
+            properties:
+                type:
+                    $ref: '#/components/schemas/settingType'
+                value:
+                    $ref: '#/components/schemas/settingValue'
+            additionalProperties: false
+            required:
+                - type
+                - value
         paginationResponse:
             type: object
             properties:
@@ -1078,6 +1214,17 @@ components:
             type: string
             description: Дата создания
             example: '2021-10-28T16:19:44+00:00'
+        settingType:
+            type: string
+            description: Тип настройки
+            example: site_name
+        settingValue:
+            type: string
+            description: Значение настройки
+            example: symfony-starter-kit
+        settingIsPublic:
+            type: boolean
+            description: Публична ли настройка
     parameters:
         articleAlias:
             in: path

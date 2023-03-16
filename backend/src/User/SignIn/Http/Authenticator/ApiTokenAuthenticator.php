@@ -9,6 +9,7 @@ use App\Infrastructure\ApiException\CreateExceptionJsonResponse;
 use App\Infrastructure\AsService;
 use App\User\SignIn\Domain\UserTokens;
 use App\User\SignUp\Domain\Users;
+use DomainException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -53,13 +54,13 @@ final class ApiTokenAuthenticator extends AbstractAuthenticator
 
         try {
             $userToken = $this->userTokens->getById(Uuid::fromString($apiToken));
-        } catch (\DomainException) {
+        } catch (DomainException) {
             throw new CustomUserMessageAuthenticationException('Токен не найден');
         }
 
         try {
             $user = $this->users->getById($userToken->getUserId());
-        } catch (\DomainException) {
+        } catch (DomainException) {
             throw new CustomUserMessageAuthenticationException('Пользователь не найден');
         }
 

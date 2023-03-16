@@ -12,10 +12,10 @@ use Webmozart\Assert\Assert;
  * Наименование задачи
  */
 #[ORM\Embeddable]
-final class TaskName implements ValueObject
+final readonly class TaskName implements ValueObject
 {
     #[ORM\Column]
-    private readonly string $value;
+    private string $value;
 
     public function __construct(string $value)
     {
