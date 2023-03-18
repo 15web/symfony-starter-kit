@@ -16,7 +16,7 @@ use Symfony\Component\Uid\Uuid;
 final readonly class FindAllTasksByUserId
 {
     public function __construct(
-        private Connection $entityManager,
+        private Connection $connection,
         private Filter $filter
     ) {
     }
@@ -26,7 +26,7 @@ final readonly class FindAllTasksByUserId
      */
     public function __invoke(FindAllTasksByUserIdQuery $query): array
     {
-        $queryBuilder = $this->entityManager->createQueryBuilder()
+        $queryBuilder = $this->connection->createQueryBuilder()
             ->select(['t.id', 't.task_name_value AS taskName', 't.is_completed AS isCompleted', 't.created_at AS createdAt'])
             ->from('task', 't')
             ->orderBy('t.is_completed', 'DESC')
@@ -42,11 +42,26 @@ final readonly class FindAllTasksByUserId
 
         $tasks = [];
         foreach ($items as $item) {
+            /** @var string $id */
+            $id = $item['id'];
+
+            /** @var string $createdAt */
+            $createdAt = $item['createdAt'];
+
+            /** @var string $taskName */
+            $taskName = $item['taskName'];
+
+            /** @var bool $isCompleted */
+            $isCompleted = (bool) $item['isCompleted'];
+
+            /** @var DateTimeImmutable $date */
+            $date = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $createdAt);
+
             $tasks[] = new TaskData(
-                Uuid::fromString($item['id']),
-                $item['taskName'],
-                (bool) $item['isCompleted'],
-                DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $item['createdAt'])
+                Uuid::fromString($id),
+                $taskName,
+                $isCompleted,
+                $date
             );
         }
 
