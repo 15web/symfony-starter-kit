@@ -269,8 +269,8 @@ paths:
             tags:
                 - tasks
             parameters:
-                -   $ref: '#/components/parameters/page'
-                -   $ref: '#/components/parameters/perPage'
+                -   $ref: '#/components/parameters/limit'
+                -   $ref: '#/components/parameters/offset'
             responses:
                 '200':
                     description: Возвращает список задач
@@ -527,8 +527,8 @@ paths:
                 - tasks
             parameters:
                 -   $ref: '#/components/parameters/taskExportFormat'
-                -   $ref: '#/components/parameters/page'
-                -   $ref: '#/components/parameters/perPage'
+                -   $ref: '#/components/parameters/limit'
+                -   $ref: '#/components/parameters/offset'
             responses:
                 '200':
                     description: Список задач успешно экспортирован
@@ -568,8 +568,8 @@ paths:
             tags:
                 - articles
             parameters:
-                -   $ref: '#/components/parameters/page'
-                -   $ref: '#/components/parameters/perPage'
+                -   $ref: '#/components/parameters/limit'
+                -   $ref: '#/components/parameters/offset'
             security: []
             responses:
                 '200':
@@ -1248,22 +1248,10 @@ components:
         paginationResponse:
             type: object
             properties:
-                pagesCount:
-                    type: integer
-                    description: Количество страниц
-                    example: 1
                 total:
                     type: integer
                     description: Количество всех данных
                     example: 2
-                perPage:
-                    type: integer
-                    description: Количество данных на странице
-                    example: 10
-                currentPage:
-                    type: integer
-                    description: Текущая страница
-                    example: 1
         email:
             type: string
             format: email
@@ -1330,20 +1318,20 @@ components:
                 enum:
                     - csv
                     - xml
-        page:
+        limit:
             in: query
-            name: page
-            required: false
-            description: Номер страницы
-            example: 1
-            schema:
-                type: integer
-        perPage:
-            in: query
-            name: per-page
+            name: limit
             required: false
             description: Лимит
             example: 10
+            schema:
+                type: integer
+        offset:
+            in: query
+            name: offset
+            required: false
+            description: Смещение
+            example: 1
             schema:
                 type: integer
         taskId:

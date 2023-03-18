@@ -17,8 +17,8 @@ use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 #[AsService]
 final class PaginationRequestArgumentResolver implements ValueResolverInterface
 {
-    private const QUERY_PAGE_NAME = 'page';
-    private const QUERY_PER_PAGE_NAME = 'per-page';
+    private const QUERY_LIMIT_NAME = 'limit';
+    private const QUERY_OFFSET_NAME = 'offset';
 
     /**
      * @return iterable<PaginationRequest>
@@ -31,11 +31,11 @@ final class PaginationRequestArgumentResolver implements ValueResolverInterface
             return [];
         }
 
-        $page = $request->query->getInt(self::QUERY_PAGE_NAME, 1);
-        $perPage = $request->query->getInt(self::QUERY_PER_PAGE_NAME, 10);
+        $offset = $request->query->getInt(self::QUERY_OFFSET_NAME);
+        $limit = $request->query->getInt(self::QUERY_LIMIT_NAME, 10);
 
         try {
-            $paginationRequest = new PaginationRequest($page, $perPage);
+            $paginationRequest = new PaginationRequest($offset, $limit);
         } catch (InvalidArgumentException $exception) {
             throw new ApiBadRequestException($exception->getMessage());
         }

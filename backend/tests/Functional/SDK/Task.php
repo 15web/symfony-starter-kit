@@ -28,11 +28,11 @@ final class Task extends ApiWebTestCase
         return $taskInfo['id'];
     }
 
-    public static function list(string $token, int $limit = 10, int $offset = 1): array
+    public static function list(string $token, int $limit = 10, int $offset = 0): array
     {
         $params = [
-            'per-page' => $limit,
-            'page' => $offset,
+            'limit' => $limit,
+            'offset' => $offset,
         ];
 
         $uri = '/api/tasks?'.http_build_query($params);

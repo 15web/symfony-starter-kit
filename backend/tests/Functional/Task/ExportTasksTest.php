@@ -74,7 +74,7 @@ final class ExportTasksTest extends ApiWebTestCase
     }
 
     /**
-     * @testdox Создано 3 статьи, limit = 2, offset = 1, экспортированы 2 статьи
+     * @testdox Создано 3 статьи, limit = 2, экспортированы 2 статьи
      */
     public function testLimit(): void
     {
@@ -84,7 +84,7 @@ final class ExportTasksTest extends ApiWebTestCase
         Task::create('Тестовая задача 3', $token);
 
         /** @var BinaryFileResponse $response */
-        $response = self::request('GET', '/api/export/tasks.xml?per-page=2', token: $token);
+        $response = self::request('GET', '/api/export/tasks.xml?limit=2', token: $token);
         self::assertSuccessResponse($response);
 
         $file = $response->getFile();
@@ -106,7 +106,7 @@ final class ExportTasksTest extends ApiWebTestCase
         Task::create('Тестовая задача 3', $token);
 
         /** @var BinaryFileResponse $response */
-        $response = self::request('GET', '/api/export/tasks.xml?per-page=2&page=2', token: $token);
+        $response = self::request('GET', '/api/export/tasks.xml?limit=2&offset=2', token: $token);
         self::assertSuccessResponse($response);
 
         $file = $response->getFile();

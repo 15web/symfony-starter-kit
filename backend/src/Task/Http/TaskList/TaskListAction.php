@@ -6,6 +6,7 @@ namespace App\Task\Http\TaskList;
 
 use App\Infrastructure\Pagination\PaginationRequest;
 use App\Infrastructure\Pagination\PaginationResponse;
+use App\Task\Query\Task\FindAllByUserId\CountAllTasksByUserId;
 use App\Task\Query\Task\FindAllByUserId\FindAllTasksByUserId;
 use App\Task\Query\Task\FindAllByUserId\FindAllTasksByUserIdQuery;
 use App\User\SignUp\Domain\UserId;
@@ -21,25 +22,25 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[AsController]
 final readonly class TaskListAction
 {
-    public function __construct(private FindAllTasksByUserId $findAllTasksByUserId)
-    {
+    public function __construct(
+        private CountAllTasksByUserId $countAllTasksByUserId,
+        private FindAllTasksByUserId $findAllTasksByUserId,
+    ) {
     }
 
     public function __invoke(UserId $userId, PaginationRequest $paginationRequest): TaskListResponse
     {
         $query = new FindAllTasksByUserIdQuery(
             $userId->value,
-            $paginationRequest->perPage,
-            $paginationRequest->getOffset(),
+            $paginationRequest->limit,
+            $paginationRequest->offset,
         );
 
-        $tasks = $this->findAllTasksByUserId->execute($query);
-        $allTasksCount = $this->findAllTasksByUserId->countAll($query);
+        $tasks = ($this->findAllTasksByUserId)($query);
+        $allTasksCount = ($this->countAllTasksByUserId)($query);
 
         $pagination = new PaginationResponse(
-            total: $allTasksCount,
-            perPage: $paginationRequest->perPage,
-            currentPage: $paginationRequest->page
+            total: $allTasksCount
         );
 
         return new TaskListResponse($tasks, $pagination);

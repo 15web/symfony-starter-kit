@@ -31,8 +31,8 @@ final readonly class ExportTaskAction
             return ($this->exportTasks)(
                 $format,
                 $userId,
-                $paginationRequest->perPage,
-                $paginationRequest->getOffset()
+                $paginationRequest->limit,
+                $paginationRequest->offset
             );
         } catch (NotFoundTasksForExportException $e) {
             throw new ApiBadResponseException($e->getMessage(), ApiErrorCode::NotFoundTasksForExport);

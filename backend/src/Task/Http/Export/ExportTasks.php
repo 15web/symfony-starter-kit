@@ -45,7 +45,7 @@ final class ExportTasks
             throw new RuntimeException('Не найден обработчик');
         }
 
-        $tasks = $this->findAllTasksByUserId->execute(
+        $tasks = ($this->findAllTasksByUserId)(
             new FindAllTasksByUserIdQuery(
                 $userId->value,
                 $limit,

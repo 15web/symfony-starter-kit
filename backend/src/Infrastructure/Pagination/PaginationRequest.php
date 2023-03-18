@@ -12,17 +12,10 @@ use Webmozart\Assert\Assert;
 final readonly class PaginationRequest
 {
     public function __construct(
-        public int $page = 1,
-        public int $perPage = 10,
+        public int $offset = 0,
+        public int $limit = 10,
     ) {
-        Assert::positiveInteger($page);
-        Assert::positiveInteger($perPage);
-    }
-
-    public function getOffset(): int
-    {
-        $offset = $this->page - 1;
-
-        return $offset * $this->perPage;
+        Assert::natural($offset);
+        Assert::positiveInteger($limit);
     }
 }
