@@ -144,6 +144,62 @@ paths:
                                 error: true
                                 code: 401
                                 errorMessage: Необходимо пройти аутентификацию
+    /request-password-recovery:
+        post:
+            operationId: recoverPasswordRequest
+            summary: Запрос на восстановление пароля
+            tags:
+                - auth
+            security: [ ]
+            requestBody:
+                description: Запрос на восстановление пароля
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/recoverPasswordSendRequest'
+            responses:
+                '200':
+                    description: Токен отправлен
+                    content:
+                        application/json:
+                            schema:
+                                oneOf:
+                                    -   $ref: '#/components/schemas/successResponse'
+                                    -   $ref: '#/components/schemas/errorResponse'
+                '400':
+                    description: Ошибка запроса
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/errorResponse'
+                            example:
+                                error: true
+                                code: 400
+                                errorMessage: 'Неверный формат запроса'
+    /recover-password/{recoveryToken}:
+        post:
+            operationId: recoverPassword
+            summary: Восстановление пароля
+            tags:
+                - auth
+            security: [ ]
+            parameters:
+                - $ref: '#/components/parameters/recoveryToken'
+            requestBody:
+                description: Восстановление пароля
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/recoverPasswordRequest'
+            responses:
+                '200':
+                    description: Пароль восстановлен
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/successResponse'
+                '404':
+                    description: Пользователь с таким токеном не найден
     /profile:
         get:
             operationId: profileInfo
@@ -853,6 +909,27 @@ components:
             additionalProperties: false
             required:
                 - email
+        recoverPasswordSendRequest:
+            properties:
+                email:
+                    type: string
+                    format: email
+                    description: Email пользователя
+                    example: test@test.ru
+            additionalProperties: false
+            required:
+                - email
+        recoverPasswordRequest:
+            properties:
+                password:
+                    type: string
+                    nullable: false
+                    description: Пароль пользователя
+                    example: qwer1234
+                    minLength: 6
+            additionalProperties: false
+            required:
+                - password
         profileInfoResponse:
             type: object
             required:
@@ -1288,5 +1365,14 @@ components:
             schema:
                 type: string
                 format: uuid
+        recoveryToken:
+            name: recoveryToken
+            in: path
+            required: true
+            description: Токен восстановления пароля
+            example: 123e4567-e89b-12d3-a456-426614174000
+            schema:
+                 type: string
+                 format: uuid
 security:
     - ApiTokenAuth: []
