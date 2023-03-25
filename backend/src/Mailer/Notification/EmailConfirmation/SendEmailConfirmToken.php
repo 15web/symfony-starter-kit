@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\User\SignUp\Notification;
+namespace App\Mailer\Notification\EmailConfirmation;
 
 use App\Infrastructure\AsService;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -15,7 +15,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 #[AsService]
 #[AsMessageHandler]
-final readonly class SendConfirmEmailToken
+final readonly class SendEmailConfirmToken
 {
     public function __construct(
         private MailerInterface $mailer,
@@ -28,7 +28,7 @@ final readonly class SendConfirmEmailToken
         $email = (new TemplatedEmail())
             ->to($message->getEmail())
             ->subject($this->translator->trans('user.mail.confirm_email_subject'))
-            ->htmlTemplate('emails/confirm.html.twig')
+            ->htmlTemplate('@mails/emails/confirm.html.twig')
             ->context([
                 'confirmToken' => $message->getConfirmToken(),
             ]);

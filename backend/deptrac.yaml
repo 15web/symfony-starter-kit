@@ -71,6 +71,7 @@ parameters:
             - Domain
             - Infrastructure
             - Vendor
+            - Query
         Command:
             - Domain
             - Infrastructure

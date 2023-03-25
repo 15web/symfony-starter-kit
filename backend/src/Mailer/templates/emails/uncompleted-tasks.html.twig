@@ -1,3 +1,5 @@
+{% extends '@mails/layout.html.twig' %}
+{% block body %}
 <p>{{ 'task.uncompleted_tasks_text'|trans }}:</p>
 <ul>
     {% for task in tasks %}
@@ -9,3 +11,4 @@
         </li>
     {% endfor %}
 </ul>
+{% endblock %}

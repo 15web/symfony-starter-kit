@@ -6,13 +6,13 @@ namespace App\User\SignUp\Command;
 
 use App\Infrastructure\AsService;
 use App\Infrastructure\Email;
+use App\Mailer\Notification\EmailConfirmation\ConfirmEmailMessage;
 use App\User\SignUp\Domain\ConfirmToken;
 use App\User\SignUp\Domain\User;
 use App\User\SignUp\Domain\UserId;
 use App\User\SignUp\Domain\UserPassword;
 use App\User\SignUp\Domain\UserRole;
 use App\User\SignUp\Domain\Users;
-use App\User\SignUp\Notification\ConfirmEmailMessage;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Uid\UuidV7;

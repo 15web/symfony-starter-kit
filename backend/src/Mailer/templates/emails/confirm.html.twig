@@ -1,0 +1,4 @@
+{% extends '@mails/layout.html.twig' %}
+{% block body %}
+<p>{{ 'user.mail.confirm_email_text'|trans }} {{ confirmToken }}</p>
+{% endblock %}

@@ -10,9 +10,6 @@ when@dev:
                     retry_strategy:
                         delay: 60000 # 60s * 1000ms
                 failed: 'doctrine://default?queue_name=failed'
-            routing:
-                # Route your messages to the transports
-                'App\Infrastructure\Message': async
             buses:
                 command_bus:
                     middleware:
@@ -35,8 +32,6 @@ when@test:
         messenger:
             transports:
                 sync: 'sync://'
-            routing:
-                'App\Infrastructure\Message': sync
 
 when@prod:
     framework:
@@ -50,9 +45,6 @@ when@prod:
                     retry_strategy:
                         delay: 60000 # 60s * 1000ms
                 failed: 'doctrine://default?queue_name=failed'
-            routing:
-                # Route your messages to the transports
-                'App\Infrastructure\Message': async
             buses:
                 command_bus:
                     middleware:
