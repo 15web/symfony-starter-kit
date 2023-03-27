@@ -29,7 +29,7 @@ final readonly class UpdateAction
     {
         $sameArticle = $this->articles->findByAlias($updateRequest->alias);
         if ($sameArticle !== null && $sameArticle->getId() !== $article->getId()) {
-            throw new ApiBadResponseException('Запись с таким алиасом уже существует', ApiErrorCode::ArticleAlreadyExist);
+            throw new ApiBadResponseException('article.not_found_by_alias', ApiErrorCode::ArticleAlreadyExist);
         }
 
         $article->change($updateRequest->title, $updateRequest->alias, $updateRequest->body);

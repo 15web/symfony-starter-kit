@@ -8,6 +8,7 @@ use App\Infrastructure\AsService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Сериализует объект ошибки в JsonResponse
@@ -15,14 +16,16 @@ use Symfony\Component\Serializer\SerializerInterface;
 #[AsService]
 final readonly class CreateExceptionJsonResponse
 {
-    public function __construct(private SerializerInterface $serializer)
-    {
+    public function __construct(
+        private SerializerInterface $serializer,
+        private TranslatorInterface $translator
+    ) {
     }
 
     public function __invoke(ApiException $e): JsonResponse
     {
         $content = $this->serializer->serialize(
-            new ApiErrorResponse($e->getErrorMessage(), $e->getApiCode()),
+            new ApiErrorResponse($this->translator->trans($e->getErrorMessage()), $e->getApiCode()),
             JsonEncoder::FORMAT
         );
 

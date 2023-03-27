@@ -34,7 +34,7 @@ final readonly class SignUp
     {
         $user = $this->users->findByEmail($signUpCommand->email);
         if ($user !== null) {
-            throw new UserAlreadyExistException('Пользователь с таким email уже существует');
+            throw new UserAlreadyExistException('user.exception.already_exist');
         }
 
         $confirmToken = new UuidV7();

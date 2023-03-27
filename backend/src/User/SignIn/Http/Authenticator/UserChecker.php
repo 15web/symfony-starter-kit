@@ -37,7 +37,7 @@ final readonly class UserChecker implements UserCheckerInterface
 
         $this->messageBus->dispatch(new ConfirmEmailMessage($user->confirmToken->value, $user->userEmail->value));
 
-        throw new ApiBadResponseException('E-mail пользователя не подтвержден', ApiErrorCode::EmailIsNotConfirmed);
+        throw new ApiBadResponseException('user.exception.not_confirmed_email', ApiErrorCode::EmailIsNotConfirmed);
     }
 
     public function checkPostAuth(UserInterface $user): void

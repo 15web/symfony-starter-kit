@@ -1,6 +1,11 @@
-<p>У вас есть невыполненные задачи:</p>
+<p>{{ 'task.uncompleted_tasks_text'|trans }}:</p>
 <ul>
     {% for task in tasks %}
-        <li>{{ task.taskName }} от {{ task.createdAt|date('Y-m-d H:i:s') }}</li>
+        <li>
+            {{ 'task.uncompleted_tasks_row'|trans({
+                '%taskName%': task.taskName,
+                '%createdAt%': task.createdAt|date('Y-m-d H:i:s')
+            }) }}
+        </li>
     {% endfor %}
 </ul>
