@@ -10,7 +10,8 @@ namespace <?php echo $namespace; ?>;
 /**
  * Объект запроса для создания <?php echo $entity_classname."\n"; ?>
  */
-final class CreateRequest implements ApiRequest
+#[ApiRequest]
+final class CreateRequest
 {
     public function __construct(<?php echo $properties; ?>) {
 <?php foreach ($entity_fields as $entity_field) { ?>

@@ -10,7 +10,8 @@ use Webmozart\Assert\Assert;
 /**
  * Команда для запроса на восстановление пароля
  */
-final readonly class GenerateRecoveryTokenCommand implements ApiRequest
+#[ApiRequest]
+final readonly class GenerateRecoveryTokenCommand
 {
     public function __construct(public string $email)
     {

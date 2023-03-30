@@ -10,7 +10,8 @@ use Webmozart\Assert\Assert;
 /**
  * Команда добавления комментария к задаче
  */
-final readonly class AddCommentOnTaskCommand implements ApiRequest
+#[ApiRequest]
+final readonly class AddCommentOnTaskCommand
 {
     public function __construct(public string $commentBody)
     {

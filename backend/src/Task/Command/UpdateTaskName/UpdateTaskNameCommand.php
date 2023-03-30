@@ -10,7 +10,8 @@ use Webmozart\Assert\Assert;
 /**
  * Команда обновления имени задачи
  */
-final readonly class UpdateTaskNameCommand implements ApiRequest
+#[ApiRequest]
+final readonly class UpdateTaskNameCommand
 {
     public function __construct(public string $taskName)
     {

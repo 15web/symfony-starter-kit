@@ -10,7 +10,8 @@ use Webmozart\Assert\Assert;
 /**
  * Объект запроса на создание статьи
  */
-final readonly class CreateRequest implements ApiRequest
+#[ApiRequest]
+final readonly class CreateRequest
 {
     public function __construct(
         public string $title,
