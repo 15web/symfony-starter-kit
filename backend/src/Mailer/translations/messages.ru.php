@@ -8,4 +8,10 @@ return [
         'uncompleted_tasks_text' => 'У вас есть невыполненные задачи',
         'uncompleted_tasks_row' => 'Задача %taskName% от %createdAt%',
     ],
+    'user' => [
+        'mail' => [
+            'confirm_email_subject' => 'Подтверждение email',
+            'confirm_email_text' => 'Токен подтверждения email',
+        ],
+    ],
 ];
