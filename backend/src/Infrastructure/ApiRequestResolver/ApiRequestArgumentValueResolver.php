@@ -7,6 +7,7 @@ namespace App\Infrastructure\ApiRequestResolver;
 use App\Infrastructure\ApiException\ApiBadRequestException;
 use App\Infrastructure\AsService;
 use InvalidArgumentException;
+use ReflectionClass;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
@@ -35,7 +36,13 @@ final readonly class ApiRequestArgumentValueResolver implements ValueResolverInt
             return [];
         }
 
-        if (!is_subclass_of($argument->getType(), ApiRequest::class)) {
+        /** @var class-string $className */
+        $className = $argument->getType();
+        $class = new ReflectionClass($className);
+
+        $attributeApiRequest = $class->getAttributes(ApiRequest::class);
+
+        if ($attributeApiRequest === []) {
             return [];
         }
 

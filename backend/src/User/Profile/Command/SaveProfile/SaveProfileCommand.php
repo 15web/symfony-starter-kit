@@ -10,7 +10,8 @@ use Webmozart\Assert\Assert;
 /**
  * Команда сохранения профиля
  */
-final readonly class SaveProfileCommand implements ApiRequest
+#[ApiRequest]
+final readonly class SaveProfileCommand
 {
     public function __construct(
         public string $phone,

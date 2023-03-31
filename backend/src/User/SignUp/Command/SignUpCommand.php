@@ -10,7 +10,8 @@ use Webmozart\Assert\Assert;
 /**
  * Команда для регистрации
  */
-final readonly class SignUpCommand implements ApiRequest
+#[ApiRequest]
+final readonly class SignUpCommand
 {
     public function __construct(
         public string $email,

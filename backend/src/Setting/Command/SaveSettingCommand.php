@@ -11,7 +11,8 @@ use Webmozart\Assert\Assert;
 /**
  * Команда сохранения настройки
  */
-final readonly class SaveSettingCommand implements ApiRequest
+#[ApiRequest]
+final readonly class SaveSettingCommand
 {
     public function __construct(
         public string $type,

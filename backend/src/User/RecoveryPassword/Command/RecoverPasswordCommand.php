@@ -10,7 +10,8 @@ use Webmozart\Assert\Assert;
 /**
  * Команда восстановления пароля
  */
-final readonly class RecoverPasswordCommand implements ApiRequest
+#[ApiRequest]
+final readonly class RecoverPasswordCommand
 {
     public function __construct(public string $password)
     {
