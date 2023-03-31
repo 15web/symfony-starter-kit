@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\User\RecoveryPassword\Notification;
+namespace App\Mailer\Notification\PasswordRecovery;
 
 use App\Infrastructure\Message;
 use Symfony\Component\Uid\Uuid;

@@ -109,7 +109,7 @@
         "stan": "vendor/bin/phpstan analyse -c phpstan-config.neon --ansi --memory-limit 2G",
         "fixer-check": "php-cs-fixer --config=php-cs-fixer-config.php fix --dry-run --diff --ansi -v",
         "fixer-fix": "php-cs-fixer --config=php-cs-fixer-config.php fix --ansi -v",
-        "twig-lint": "bin/console lint:twig templates",
+        "twig-lint": "bin/console lint:twig src/Mailer/templates",
         "container-lint": "bin/console lint:container",
         "validate-doctrine-schema": "bin/console doctrine:schema:validate -v",
         "cache-prod-check": "bin/console cache:clear --env=prod",

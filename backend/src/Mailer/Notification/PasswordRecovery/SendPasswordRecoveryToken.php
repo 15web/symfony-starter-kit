@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\User\RecoveryPassword\Notification;
+namespace App\Mailer\Notification\PasswordRecovery;
 
 use App\Infrastructure\AsService;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -14,7 +14,7 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
  */
 #[AsService]
 #[AsMessageHandler]
-final readonly class SendRecoveryPasswordToken
+final readonly class SendPasswordRecoveryToken
 {
     public function __construct(private MailerInterface $mailer)
     {
@@ -27,7 +27,7 @@ final readonly class SendRecoveryPasswordToken
         $email = (new TemplatedEmail())
             ->to($message->email)
             ->subject($subject)
-            ->htmlTemplate('emails/recoverPassword.html.twig')
+            ->htmlTemplate('@mails/emails/recoverPassword.html.twig')
             ->context([
                 'recoverToken' => $message->token,
             ]);

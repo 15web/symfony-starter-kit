@@ -1,6 +1,9 @@
 framework:
     default_locale: ru
     translator:
-        default_path: '%kernel.project_dir%/src'
+        paths:
+            - '%kernel.project_dir%/src/Task/translations'
+            - '%kernel.project_dir%/src/User/translations'
+            - '%kernel.project_dir%/src/Article/translations'
         fallbacks:
             - ru

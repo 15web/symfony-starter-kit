@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\User\RecoveryPassword\Command;
 
 use App\Infrastructure\AsService;
+use App\Mailer\Notification\PasswordRecovery\RecoveryPasswordMessage;
 use App\User\RecoveryPassword\Domain\RecoveryToken;
 use App\User\RecoveryPassword\Domain\RecoveryTokens;
-use App\User\RecoveryPassword\Notification\RecoveryPasswordMessage;
 use App\User\SignUp\Domain\UserNotFoundException;
 use App\User\SignUp\Domain\Users;
 use Symfony\Component\Messenger\MessageBusInterface;

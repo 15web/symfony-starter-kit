@@ -47,11 +47,11 @@ cd ./your-folder-name/
   - `backend/tests/Functional`, кроме `backend/tests/Functional/SDK/ApiWebTestCase.php`
   - `backend/tests/Unit`
 - Все миграции из директории `backend/migrations` и сгенерировать новые.
-- Шаблоны из директории `backend/templates`
 - Переменные окружения из файла `docker/backend/.env.dist`
 - Задания `cron` из файла `docker/backend/cron/crontab`
 - Разделы документации из файла `backend/openapi.yaml`
 - Слои и правила `deptrac` из файла `backend/deptrac.yaml`
+- Убрать секцию `paths` в конфиге `translation` из файла `backend/config/packages/translation.yaml`
 
 ### Copyright and license
 
