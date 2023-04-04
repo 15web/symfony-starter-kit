@@ -5,73 +5,51 @@ declare(strict_types=1);
 namespace App\Task\Query\Task\FindAllByUserId;
 
 use App\Infrastructure\AsService;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Query;
+use DateTimeImmutable;
+use Doctrine\DBAL\Connection;
+use Symfony\Component\Uid\Uuid;
 
 /**
- * Хендлер нахождения всех задач по пользователю
+ * Возвращает записи с limit и offset
  */
 #[AsService]
 final readonly class FindAllTasksByUserId
 {
-    public function __construct(private EntityManagerInterface $entityManager)
-    {
+    public function __construct(
+        private Connection $entityManager,
+        private Filter $filter
+    ) {
     }
 
     /**
      * @return TaskData[]
      */
-    public function execute(FindAllTasksByUserIdQuery $query): array
+    public function __invoke(FindAllTasksByUserIdQuery $query): array
     {
-        $dql = <<<DQL
-                SELECT
-                NEW App\Task\Query\Task\FindAllByUserId\TaskData(t.id, t.taskName.value, t.isCompleted, t.createdAt)
-                FROM App\Task\Domain\Task AS t
-                WHERE 1 = 1 {$this->applyFilter()}
-                ORDER BY t.isCompleted, t.createdAt DESC
-            DQL;
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select(['t.id', 't.task_name_value AS taskName', 't.is_completed AS isCompleted', 't.created_at AS createdAt'])
+            ->from('task', 't')
+            ->orderBy('t.is_completed', 'DESC')
+            ->addOrderBy('t.created_at', 'DESC');
 
-        $ormQuery = $this->entityManager->createQuery($dql);
-        $this->applyParameters($ormQuery, $query);
+        $this->filter->applyFilter($queryBuilder, $query);
 
-        $ormQuery
+        $queryBuilder
             ->setFirstResult($query->offset)
             ->setMaxResults($query->limit);
 
-        /** @var TaskData[] $tasks */
-        $tasks = $ormQuery->getResult();
+        $items = $queryBuilder->executeQuery()->fetchAllAssociative();
+
+        $tasks = [];
+        foreach ($items as $item) {
+            $tasks[] = new TaskData(
+                Uuid::fromString($item['id']),
+                $item['taskName'],
+                (bool) $item['isCompleted'],
+                DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $item['createdAt'])
+            );
+        }
 
         return $tasks;
-    }
-
-    public function countAll(FindAllTasksByUserIdQuery $query): int
-    {
-        $dql = <<<DQL
-                SELECT
-                COUNT(t.id)
-                FROM App\Task\Domain\Task AS t
-                WHERE 1 = 1 {$this->applyFilter()}
-            DQL;
-
-        $ormQuery = $this->entityManager->createQuery($dql);
-        $this->applyParameters($ormQuery, $query);
-
-        /** @var int $result */
-        $result = $ormQuery->getSingleScalarResult();
-
-        return $result;
-    }
-
-    private function applyFilter(): string
-    {
-        $conditions = [];
-        $conditions[] = 'AND t.userId = :userId';
-
-        return implode(' ', $conditions);
-    }
-
-    private function applyParameters(Query $ormQuery, FindAllTasksByUserIdQuery $query): void
-    {
-        $ormQuery->setParameter('userId', $query->userId->toBinary());
     }
 }

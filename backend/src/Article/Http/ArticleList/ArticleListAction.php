@@ -23,7 +23,7 @@ final readonly class ArticleListAction
 
     public function __invoke(PaginationRequest $paginationRequest): ArticleListResponse
     {
-        $articles = $this->articles->getAll($paginationRequest->perPage, $paginationRequest->getOffset());
+        $articles = $this->articles->getAll($paginationRequest->limit, $paginationRequest->offset);
         $articlesCount = $this->articles->countAll();
 
         $data = [];
@@ -33,8 +33,6 @@ final readonly class ArticleListAction
 
         $pagination = new PaginationResponse(
             total: $articlesCount,
-            perPage: $paginationRequest->perPage,
-            currentPage: $paginationRequest->page
         );
 
         return new ArticleListResponse($data, $pagination);

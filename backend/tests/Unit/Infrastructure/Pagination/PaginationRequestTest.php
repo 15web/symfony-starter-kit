@@ -22,38 +22,36 @@ final class PaginationRequestTest extends TestCase
     {
         $paginationRequest = new PaginationRequest();
 
-        self::assertSame(1, $paginationRequest->page);
-        self::assertSame(10, $paginationRequest->perPage);
-        self::assertSame(0, $paginationRequest->getOffset());
+        self::assertSame(0, $paginationRequest->offset);
+        self::assertSame(10, $paginationRequest->limit);
     }
 
     /**
-     * @testdox Проверка конструктора, расчет оффсета
+     * @testdox Проверка аргументов
      */
     public function testSuccess(): void
     {
         $paginationRequest = new PaginationRequest(3, 15);
 
-        self::assertSame(3, $paginationRequest->page);
-        self::assertSame(15, $paginationRequest->perPage);
-        self::assertSame(30, $paginationRequest->getOffset());
+        self::assertSame(3, $paginationRequest->offset);
+        self::assertSame(15, $paginationRequest->limit);
     }
 
     /**
-     * @testdox Неверный номер страницы
+     * @testdox Неверный лимит
      */
-    public function testIncorrectPage(): void
+    public function testIncorrectLimit(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        new PaginationRequest(0);
+        new PaginationRequest(0, -1);
     }
 
     /**
-     * @testdox Неверное кол-во на страницу
+     * @testdox Неверный оффсет
      */
     public function testIncorrectPerPage(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        new PaginationRequest(perPage: -1);
+        new PaginationRequest(-1, 10);
     }
 }

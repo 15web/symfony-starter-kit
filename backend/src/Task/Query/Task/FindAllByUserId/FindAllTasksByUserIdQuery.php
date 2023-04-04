@@ -18,6 +18,6 @@ final readonly class FindAllTasksByUserIdQuery
         public int $offset = 0,
     ) {
         Assert::positiveInteger($limit);
-        Assert::greaterThanEq($offset, 0);
+        Assert::natural($offset);
     }
 }
