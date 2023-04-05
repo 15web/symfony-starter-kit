@@ -7,10 +7,11 @@
     "prefer-stable": true,
     "require": {
         "php": ">=8.2",
+        "ext-bcmath": "*",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "doctrine/annotations": "^2.0",
-        "doctrine/doctrine-bundle": "^2.8",
+        "doctrine/doctrine-bundle": "^2.9",
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.14",
         "phpdocumentor/reflection-docblock": "^5.3",
@@ -40,14 +41,14 @@
         "webmozart/assert": "^1.11"
     },
     "require-dev": {
-        "brianium/paratest": "^6.8",
-        "dama/doctrine-test-bundle": "^7.1",
-        "friendsofphp/php-cs-fixer": "^3.15",
-        "league/openapi-psr7-validator": "^0.18.0",
+        "brianium/paratest": "^6.9",
+        "dama/doctrine-test-bundle": "^7.2",
+        "friendsofphp/php-cs-fixer": "^3.16",
+        "league/openapi-psr7-validator": "^0.21",
         "nyholm/psr7": "^1.5",
-        "phpstan/phpstan": "^1.7",
+        "phpstan/phpstan": "^1.10",
         "phpstan/phpstan-doctrine": "^1.3",
-        "phpstan/phpstan-strict-rules": "^1.4",
+        "phpstan/phpstan-strict-rules": "^1.5",
         "phpunit/phpunit": "^9.5",
         "qossmic/deptrac-shim": "^1.0.2",
         "rector/rector": "^0.15.8",
@@ -58,7 +59,7 @@
         "symfony/psr-http-message-bridge": "^2.1",
         "symfony/stopwatch": "6.2.*",
         "symfony/web-profiler-bundle": "6.2.*",
-        "veewee/composer-run-parallel": "^1.1"
+        "veewee/composer-run-parallel": "^1.2"
     },
     "config": {
         "allow-plugins": {
@@ -87,13 +88,15 @@
         }
     },
     "replace": {
+        "symfony/polyfill-bcmath": "*",
         "symfony/polyfill-ctype": "*",
         "symfony/polyfill-iconv": "*",
         "symfony/polyfill-php72": "*",
         "symfony/polyfill-php73": "*",
         "symfony/polyfill-php74": "*",
         "symfony/polyfill-php80": "*",
-        "symfony/polyfill-php81": "*"
+        "symfony/polyfill-php81": "*",
+        "symfony/polyfill-php82": "*"
     },
     "scripts": {
         "auto-scripts": {
