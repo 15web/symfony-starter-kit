@@ -9,9 +9,5 @@ return [
             'not_confirmed_email' => 'E-mail пользователя не подтвержден',
             'email_already_is_confirmed' => 'Email уже подтвержден',
         ],
-        'mail' => [
-            'confirm_email_subject' => 'Подтверждение email',
-            'confirm_email_text' => 'Токен подтверждения email',
-        ],
     ],
 ];
