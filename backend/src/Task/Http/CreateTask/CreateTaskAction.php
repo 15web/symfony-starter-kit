@@ -10,8 +10,10 @@ use App\Task\Command\CreateTask\CreateTask;
 use App\Task\Command\CreateTask\CreateTaskCommand;
 use App\Task\Domain\TaskId;
 use App\User\SignUp\Domain\UserId;
+use App\User\SignUp\Domain\UserRole;
 use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -19,8 +21,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 /**
  * Ручка создания задачи
  */
-#[IsGranted('ROLE_USER')]
-#[Route('/tasks/create', methods: ['POST'])]
+#[IsGranted(UserRole::User->value)]
+#[Route('/tasks/create', methods: [Request::METHOD_POST])]
 #[AsController]
 final readonly class CreateTaskAction
 {

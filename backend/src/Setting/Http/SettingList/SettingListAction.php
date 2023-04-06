@@ -6,13 +6,14 @@ namespace App\Setting\Http\SettingList;
 
 use App\Setting\Domain\Settings;
 use Generator;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Ручка списка настроек
  */
-#[Route('/settings', methods: ['GET'])]
+#[Route('/settings', methods: [Request::METHOD_GET])]
 #[AsController]
 final readonly class SettingListAction
 {

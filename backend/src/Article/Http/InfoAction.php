@@ -6,13 +6,14 @@ namespace App\Article\Http;
 
 use App\Article\Domain\Articles;
 use App\Infrastructure\ApiException\ApiNotFoundException;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Ручка информации статьи
  */
-#[Route('/articles/{alias}', methods: ['GET'])]
+#[Route('/articles/{alias}', methods: [Request::METHOD_GET])]
 #[AsController]
 final readonly class InfoAction
 {

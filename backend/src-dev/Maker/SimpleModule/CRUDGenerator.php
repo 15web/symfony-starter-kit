@@ -10,6 +10,7 @@ use App\Infrastructure\ApiRequestResolver\ApiRequest;
 use App\Infrastructure\AsService;
 use App\Infrastructure\Flush;
 use App\Infrastructure\SuccessResponse;
+use App\User\SignUp\Domain\UserRole;
 use Dev\Maker\EntityFieldsManipulator;
 use Dev\Maker\Vendor\CustomGenerator;
 use InvalidArgumentException;
@@ -100,6 +101,8 @@ final readonly class CRUDGenerator
             AsController::class,
             Route::class,
             IsGranted::class,
+            UserRole::class,
+            Request::class,
         ]);
 
         $route = '/api/'.lcfirst($shortEntityClass).'s/{id}';
@@ -110,7 +113,8 @@ final readonly class CRUDGenerator
                 'use_statements' => $useStatements,
                 'entity_classname' => $shortEntityClass,
                 'route_path' => $route,
-                'method' => 'methods: [\'GET\']',
+                'method' => 'methods: [Request::METHOD_GET]',
+                'role' => 'UserRole::User->value',
             ]
         );
     }
@@ -134,6 +138,8 @@ final readonly class CRUDGenerator
             IsGranted::class,
             Flush::class,
             SuccessResponse::class,
+            UserRole::class,
+            Request::class,
         ]);
 
         $route = '/api/'.lcfirst($shortEntityClass).'s/{id}/remove';
@@ -145,7 +151,8 @@ final readonly class CRUDGenerator
                 'entity_classname' => $shortEntityClass,
                 'repository_classname' => $repoClassName,
                 'route_path' => $route,
-                'method' => 'methods: [\'POST\']',
+                'method' => 'methods: [Request::METHOD_POST]',
+                'role' => 'UserRole::User->value',
             ]
         );
     }
@@ -172,6 +179,8 @@ final readonly class CRUDGenerator
             IsGranted::class,
             Flush::class,
             SuccessResponse::class,
+            UserRole::class,
+            Request::class,
         ]);
 
         $route = '/api/'.lcfirst($shortEntityClass).'s/create';
@@ -183,7 +192,8 @@ final readonly class CRUDGenerator
                 'entity_classname' => $shortEntityClass,
                 'repository_classname' => $repoClassName,
                 'route_path' => $route,
-                'method' => 'methods: [\'POST\']',
+                'method' => 'methods: [Request::METHOD_POST]',
+                'role' => 'UserRole::User->value',
             ]
         );
     }
@@ -230,6 +240,8 @@ final readonly class CRUDGenerator
             IsGranted::class,
             Flush::class,
             SuccessResponse::class,
+            UserRole::class,
+            Request::class,
         ]);
 
         $route = '/api/'.lcfirst($shortEntityClass).'s/{id}/update';
@@ -240,7 +252,8 @@ final readonly class CRUDGenerator
                 'use_statements' => $useStatements,
                 'entity_classname' => $shortEntityClass,
                 'route_path' => $route,
-                'method' => 'methods: [\'POST\']',
+                'method' => 'methods: [Request::METHOD_POST]',
+                'role' => 'UserRole::User->value',
             ]
         );
     }

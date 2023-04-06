@@ -8,7 +8,9 @@ use App\Infrastructure\Flush;
 use App\Infrastructure\SuccessResponse;
 use App\Task\Command\RemoveTask;
 use App\Task\Domain\Task;
+use App\User\SignUp\Domain\UserRole;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -16,8 +18,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 /**
  * Ручка удаления задачи
  */
-#[IsGranted('ROLE_USER')]
-#[Route('/tasks/{id}/remove', methods: ['POST'])]
+#[IsGranted(UserRole::User->value)]
+#[Route('/tasks/{id}/remove', methods: [Request::METHOD_POST])]
 #[AsController]
 final readonly class RemoveTaskAction
 {

@@ -27,7 +27,7 @@ use Webmozart\Assert\Assert;
 final class JsonLoginAuthenticator extends AbstractAuthenticator
 {
     public const SIGN_IN = 'sign-in';
-    public const SIGN_IN_METHODS = ['POST'];
+    public const SIGN_IN_METHODS = [Request::METHOD_POST];
     private const EMAIL_KEY = 'email';
     private const PASSWORD_KEY = 'password';
 

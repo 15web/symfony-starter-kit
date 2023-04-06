@@ -8,6 +8,8 @@ use App\Task\Query\Comment\FindAll\CommentData;
 use App\Task\Query\Comment\FindAll\FindAllCommentQuery;
 use App\Task\Query\Comment\FindAll\FindAllCommentsByTaskIdAndUserId;
 use App\User\SignUp\Domain\UserId;
+use App\User\SignUp\Domain\UserRole;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -16,8 +18,8 @@ use Symfony\Component\Uid\Uuid;
 /**
  * Ручка списка комментариев для задачи по пользователю
  */
-#[IsGranted('ROLE_USER')]
-#[Route('/tasks/{id}/comments', methods: ['GET'])]
+#[IsGranted(UserRole::User->value)]
+#[Route('/tasks/{id}/comments', methods: [Request::METHOD_GET])]
 #[AsController]
 final readonly class TaskCommentsListAction
 {
