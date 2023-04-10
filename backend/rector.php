@@ -10,6 +10,9 @@ use Rector\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
 use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
+use Rector\Symfony\Rector\MethodCall\WebTestCaseAssertIsSuccessfulRector;
+use Rector\Symfony\Rector\MethodCall\WebTestCaseAssertResponseCodeRector;
+use Rector\Symfony\Set\SymfonyLevelSetList;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->parallel();
@@ -27,6 +30,7 @@ return static function (RectorConfig $rectorConfig): void {
         SetList::EARLY_RETURN,
         SetList::TYPE_DECLARATION,
         LevelSetList::UP_TO_PHP_82,
+        SymfonyLevelSetList::UP_TO_SYMFONY_62,
     ]);
 
     $rectorConfig->skip([
@@ -34,6 +38,8 @@ return static function (RectorConfig $rectorConfig): void {
         InlineConstructorDefaultToPropertyRector::class,
         FlipTypeControlToUseExclusiveTypeRector::class,
         RemoveUnusedPrivatePropertyRector::class => [__DIR__.'/src/*/Domain/*'],
+        WebTestCaseAssertIsSuccessfulRector::class,
+        WebTestCaseAssertResponseCodeRector::class,
     ]);
 
     $rectorConfig->rule(OneFlushInClassRector::class);
