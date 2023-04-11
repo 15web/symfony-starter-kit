@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Task\Query\Task\FindAllByUserId;
 
 use App\Infrastructure\AsService;
-use DateTimeImmutable;
 use Doctrine\DBAL\Connection;
-use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
+use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 /**
  * Возвращает записи с limit и offset
@@ -17,7 +17,8 @@ final readonly class FindAllTasksByUserId
 {
     public function __construct(
         private Connection $connection,
-        private Filter $filter
+        private Filter $filter,
+        private DenormalizerInterface $denormalizer,
     ) {
     }
 
@@ -40,30 +41,10 @@ final readonly class FindAllTasksByUserId
 
         $items = $queryBuilder->executeQuery()->fetchAllAssociative();
 
-        $tasks = [];
-        foreach ($items as $item) {
-            /** @var string $id */
-            $id = $item['id'];
-
-            /** @var string $createdAt */
-            $createdAt = $item['createdAt'];
-
-            /** @var string $taskName */
-            $taskName = $item['taskName'];
-
-            /** @var bool $isCompleted */
-            $isCompleted = (bool) $item['isCompleted'];
-
-            /** @var DateTimeImmutable $date */
-            $date = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $createdAt);
-
-            $tasks[] = new TaskData(
-                Uuid::fromString($id),
-                $taskName,
-                $isCompleted,
-                $date
-            );
-        }
+        /** @var TaskData[] $tasks */
+        $tasks = $this->denormalizer->denormalize($items, TaskData::class.'[]', context: [
+            AbstractObjectNormalizer::DISABLE_TYPE_ENFORCEMENT => true,
+        ]);
 
         return $tasks;
     }
