@@ -10,6 +10,7 @@ use App\Infrastructure\SuccessResponse;
 use App\User\RecoveryPassword\Command\RecoverPassword;
 use App\User\RecoveryPassword\Command\RecoverPasswordCommand;
 use App\User\RecoveryPassword\Command\RecoveryTokenNotFoundException;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Uid\Uuid;
@@ -17,7 +18,7 @@ use Symfony\Component\Uid\Uuid;
 /**
  * Ручка восстановления пароля
  */
-#[Route('/recover-password/{recoveryToken}', methods: ['POST'])]
+#[Route('/recover-password/{recoveryToken}', methods: [Request::METHOD_POST])]
 #[AsController]
 final readonly class RecoverPasswordAction
 {

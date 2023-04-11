@@ -12,6 +12,7 @@ use App\Infrastructure\SuccessResponse;
 use App\User\SignUp\Command\ConfirmEmail;
 use App\User\SignUp\Domain\EmailAlreadyIsConfirmedException;
 use App\User\SignUp\Domain\UserNotFoundException;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Uid\Uuid;
@@ -19,7 +20,7 @@ use Symfony\Component\Uid\Uuid;
 /**
  * Ручка подтверждения почты
  */
-#[Route('/confirm-email/{confirmToken}', methods: ['GET'])]
+#[Route('/confirm-email/{confirmToken}', methods: [Request::METHOD_GET])]
 #[AsController]
 final readonly class ConfirmEmailAction
 {

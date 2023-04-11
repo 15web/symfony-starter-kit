@@ -10,6 +10,8 @@ use App\Task\Query\Task\FindAllByUserId\CountAllTasksByUserId;
 use App\Task\Query\Task\FindAllByUserId\FindAllTasksByUserId;
 use App\Task\Query\Task\FindAllByUserId\FindAllTasksByUserIdQuery;
 use App\User\SignUp\Domain\UserId;
+use App\User\SignUp\Domain\UserRole;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -17,8 +19,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 /**
  * Ручка списка задач
  */
-#[IsGranted('ROLE_USER')]
-#[Route('/tasks', methods: ['GET'])]
+#[IsGranted(UserRole::User->value)]
+#[Route('/tasks', methods: [Request::METHOD_GET])]
 #[AsController]
 final readonly class TaskListAction
 {

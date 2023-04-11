@@ -7,13 +7,14 @@ namespace App\Article\Http\ArticleList;
 use App\Article\Domain\Articles;
 use App\Infrastructure\Pagination\PaginationRequest;
 use App\Infrastructure\Pagination\PaginationResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Ручка списка статей
  */
-#[Route('/articles', methods: ['GET'])]
+#[Route('/articles', methods: [Request::METHOD_GET])]
 #[AsController]
 final readonly class ArticleListAction
 {

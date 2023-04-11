@@ -8,6 +8,8 @@ use App\Article\Domain\Article;
 use App\Article\Domain\Articles;
 use App\Infrastructure\Flush;
 use App\Infrastructure\SuccessResponse;
+use App\User\SignUp\Domain\UserRole;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -15,8 +17,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 /**
  * Ручка удаления статьи
  */
-#[IsGranted('ROLE_USER')]
-#[Route('/admin/articles/{id}/remove', methods: ['POST'])]
+#[IsGranted(UserRole::User->value)]
+#[Route('/admin/articles/{id}/remove', methods: [Request::METHOD_POST])]
 #[AsController]
 final readonly class RemoveAction
 {

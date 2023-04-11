@@ -10,13 +10,14 @@ use App\Infrastructure\SuccessResponse;
 use App\User\RecoveryPassword\Command\GenerateRecoveryToken;
 use App\User\RecoveryPassword\Command\GenerateRecoveryTokenCommand;
 use App\User\SignUp\Domain\UserNotFoundException;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Ручка запроса на восстановление пароля
  */
-#[Route('/request-password-recovery', methods: ['POST'])]
+#[Route('/request-password-recovery', methods: [Request::METHOD_POST])]
 #[AsController]
 final readonly class RequestPasswordRecoveryAction
 {

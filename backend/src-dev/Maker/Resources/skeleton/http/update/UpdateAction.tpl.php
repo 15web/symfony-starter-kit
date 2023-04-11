@@ -10,7 +10,7 @@ namespace <?php echo $namespace; ?>;
 /**
  * Ручка обновления <?php echo $entity_classname."\n"; ?>
  */
-#[IsGranted('ROLE_USER')]
+#[IsGranted(<?php echo $role; ?>)]
 #[Route('<?php echo $route_path; ?>', <?php echo $method; ?>)]
 #[AsController]
 final class UpdateAction

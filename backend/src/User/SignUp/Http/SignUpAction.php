@@ -13,13 +13,14 @@ use App\User\SignUp\Command\SignUp;
 use App\User\SignUp\Command\SignUpCommand;
 use App\User\SignUp\Command\UserAlreadyExistException;
 use InvalidArgumentException;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Ручка регистрации
  */
-#[Route('/sign-up', methods: ['POST'])]
+#[Route('/sign-up', methods: [Request::METHOD_POST])]
 #[AsController]
 final readonly class SignUpAction
 {

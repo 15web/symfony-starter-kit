@@ -8,7 +8,9 @@ use App\Infrastructure\ApiException\ApiBadResponseException;
 use App\Infrastructure\ApiException\ApiErrorCode;
 use App\Infrastructure\Pagination\PaginationRequest;
 use App\User\SignUp\Domain\UserId;
+use App\User\SignUp\Domain\UserRole;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -16,8 +18,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 /**
  * Ручка экспорта задач
  */
-#[IsGranted('ROLE_USER')]
-#[Route('/export/tasks.{format}', methods: ['GET'])]
+#[IsGranted(UserRole::User->value)]
+#[Route('/export/tasks.{format}', methods: [Request::METHOD_GET])]
 #[AsController]
 final readonly class ExportTaskAction
 {

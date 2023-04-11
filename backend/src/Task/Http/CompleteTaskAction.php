@@ -10,7 +10,9 @@ use App\Infrastructure\SuccessResponse;
 use App\Task\Command\CompleteTask;
 use App\Task\Domain\Task;
 use App\Task\Domain\TaskAlreadyIsDoneException;
+use App\User\SignUp\Domain\UserRole;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -18,8 +20,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 /**
  * Ручка завершения задачи
  */
-#[IsGranted('ROLE_USER')]
-#[Route('/tasks/{id}/complete', methods: ['POST'])]
+#[IsGranted(UserRole::User->value)]
+#[Route('/tasks/{id}/complete', methods: [Request::METHOD_POST])]
 #[AsController]
 final readonly class CompleteTaskAction
 {

@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Setting\Http\Admin;
 
 use App\Setting\Domain\Settings;
+use App\User\SignUp\Domain\UserRole;
 use Generator;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -13,8 +15,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 /**
  * Ручка списка настроек
  */
-#[IsGranted('ROLE_USER')]
-#[Route('/admin/settings', methods: ['GET'])]
+#[IsGranted(UserRole::User->value)]
+#[Route('/admin/settings', methods: [Request::METHOD_GET])]
 #[AsController]
 final readonly class ListAction
 {

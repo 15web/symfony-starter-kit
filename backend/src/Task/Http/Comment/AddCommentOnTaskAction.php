@@ -12,7 +12,9 @@ use App\Task\Command\Comment\Add\AddCommentOnTaskCommand;
 use App\Task\Domain\AddCommentToCompletedTaskException;
 use App\Task\Domain\Task;
 use App\Task\Domain\TaskCommentId;
+use App\User\SignUp\Domain\UserRole;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -20,8 +22,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 /**
  * Ручка добавления комментария для задачи
  */
-#[IsGranted('ROLE_USER')]
-#[Route('/tasks/{id}/add-comment', methods: ['POST'])]
+#[IsGranted(UserRole::User->value)]
+#[Route('/tasks/{id}/add-comment', methods: [Request::METHOD_POST])]
 #[AsController]
 final readonly class AddCommentOnTaskAction
 {
