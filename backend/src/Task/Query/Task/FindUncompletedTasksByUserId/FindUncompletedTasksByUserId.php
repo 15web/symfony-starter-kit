@@ -33,6 +33,9 @@ final readonly class FindUncompletedTasksByUserId
         $dqlQuery = $this->entityManager->createQuery($dql);
         $dqlQuery->setParameter('userId', $query->userId->toBinary());
 
-        return $dqlQuery->getResult();
+        /** @var TaskData[] $taskData */
+        $taskData = $dqlQuery->getResult();
+
+        return $taskData;
     }
 }

@@ -11,6 +11,7 @@ use App\User\SignUp\Domain\UserId;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Webmozart\Assert\Assert;
 
 /**
  * Экспорт задач пользователя в заданном формате
@@ -31,6 +32,10 @@ final class ExportTasks
         #[TaggedIterator(Exporter::class)]
         iterable $exporters,
     ) {
+        Assert::notEmpty($exporters);
+
+        $this->exporters = [];
+
         foreach ($exporters as $exporter) {
             $this->exporters[$exporter->getFormat()->value] = $exporter;
         }

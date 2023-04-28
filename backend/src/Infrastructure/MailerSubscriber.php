@@ -45,6 +45,6 @@ final readonly class MailerSubscriber implements EventSubscriberInterface
         }
 
         $email->from(new Address($this->fromEmail, $this->fromName));
-        $email->subject(sprintf('%s. %s', $this->fromName, $email->getSubject()));
+        $email->subject(sprintf('%s. %s', $this->fromName, $email->getSubject() ?? ''));
     }
 }

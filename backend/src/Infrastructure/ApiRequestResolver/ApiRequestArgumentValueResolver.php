@@ -32,12 +32,13 @@ final readonly class ApiRequestArgumentValueResolver implements ValueResolverInt
      */
     public function resolve(Request $request, ArgumentMetadata $argument): iterable
     {
-        if ($argument->getType() === null) {
+        /** @var class-string|null $className */
+        $className = $argument->getType();
+
+        if ($className === null) {
             return [];
         }
 
-        /** @var class-string $className */
-        $className = $argument->getType();
         $class = new ReflectionClass($className);
 
         $attributeApiRequest = $class->getAttributes(ApiRequest::class);
@@ -54,7 +55,7 @@ final readonly class ApiRequestArgumentValueResolver implements ValueResolverInt
             /** @var ApiRequest $requestObject */
             $requestObject = $this->serializer->deserialize(
                 $request->getContent(),
-                $argument->getType(),
+                $className,
                 JsonEncoder::FORMAT
             );
         } catch (InvalidArgumentException $e) {

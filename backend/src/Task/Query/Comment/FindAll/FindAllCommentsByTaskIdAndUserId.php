@@ -35,6 +35,9 @@ final readonly class FindAllCommentsByTaskIdAndUserId
         $dqlQuery->setParameter('taskId', $findAllQuery->taskId->toBinary());
         $dqlQuery->setParameter('userId', $findAllQuery->userId->toBinary());
 
-        return $dqlQuery->getResult();
+        /** @var CommentData[] $commentData */
+        $commentData = $dqlQuery->getResult();
+
+        return $commentData;
     }
 }
