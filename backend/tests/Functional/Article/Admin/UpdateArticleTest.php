@@ -8,18 +8,17 @@ use App\Tests\Functional\SDK\ApiWebTestCase;
 use App\Tests\Functional\SDK\Article;
 use App\Tests\Functional\SDK\User;
 use Iterator;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Component\Uid\Uuid;
 
 /**
  * @internal
- *
- * @testdox Админка, обновление статьи
  */
+#[TestDox('Админка, обновление статьи')]
 final class UpdateArticleTest extends ApiWebTestCase
 {
-    /**
-     * @testdox Статья обновлена
-     */
+    #[TestDox('Статья обновлена')]
     public function testSuccess(): void
     {
         $token = User::auth();
@@ -45,9 +44,7 @@ final class UpdateArticleTest extends ApiWebTestCase
         self::assertNotNull($articleResponse['updatedAt']);
     }
 
-    /**
-     * @testdox Статья не найдена
-     */
+    #[TestDox('Статья не найдена')]
     public function testNotFound(): void
     {
         $token = User::auth();
@@ -64,9 +61,7 @@ final class UpdateArticleTest extends ApiWebTestCase
         self::assertNotFound($response);
     }
 
-    /**
-     * @testdox Нельзя обновить статью, такой алиас уже существует
-     */
+    #[TestDox('Нельзя обновить статью, такой алиас уже существует')]
     public function testExistArticleWithSuchAlias(): void
     {
         $token = User::auth();
@@ -85,11 +80,8 @@ final class UpdateArticleTest extends ApiWebTestCase
         self::assertApiError($response, 2);
     }
 
-    /**
-     * @dataProvider notValidTokenDataProvider
-     *
-     * @testdox Доступ запрещен
-     */
+    #[DataProvider('notValidTokenDataProvider')]
+    #[TestDox('Доступ запрещен')]
     public function testAccessDenied(string $notValidToken): void
     {
         $token = User::auth();
@@ -106,11 +98,8 @@ final class UpdateArticleTest extends ApiWebTestCase
         self::assertAccessDenied($response);
     }
 
-    /**
-     * @dataProvider notValidRequestProvider
-     *
-     * @testdox Неправильный запрос
-     */
+    #[DataProvider('notValidRequestProvider')]
+    #[TestDox('Неправильный запрос')]
     public function testBadRequest(array $body): void
     {
         $token = User::auth();
@@ -128,7 +117,7 @@ final class UpdateArticleTest extends ApiWebTestCase
         self::assertBadRequest($response);
     }
 
-    public function notValidRequestProvider(): Iterator
+    public static function notValidRequestProvider(): Iterator
     {
         yield 'пустой запрос' => [['']];
 

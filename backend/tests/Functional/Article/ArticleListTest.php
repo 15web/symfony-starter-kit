@@ -7,17 +7,15 @@ namespace App\Tests\Functional\Article;
 use App\Tests\Functional\SDK\ApiWebTestCase;
 use App\Tests\Functional\SDK\Article;
 use App\Tests\Functional\SDK\User;
+use PHPUnit\Framework\Attributes\TestDox;
 
 /**
  * @internal
- *
- * @testdox Список статей
  */
+#[TestDox('Список статей')]
 final class ArticleListTest extends ApiWebTestCase
 {
-    /**
-     * @testdox Получен список из 1 созданной статьи
-     */
+    #[TestDox('Получен список из 1 созданной статьи')]
     public function testSuccess(): void
     {
         $token = User::auth();

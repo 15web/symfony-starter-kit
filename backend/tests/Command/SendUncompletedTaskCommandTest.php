@@ -7,20 +7,18 @@ namespace App\Tests\Command;
 use App\Tests\Functional\SDK\ApiWebTestCase;
 use App\Tests\Functional\SDK\Task;
 use App\Tests\Functional\SDK\User;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
  * @internal
- *
- * @testdox Консольная команда для отправки письма о незавершенных задачах
  */
+#[TestDox('Консольная команда для отправки письма о незавершенных задачах')]
 final class SendUncompletedTaskCommandTest extends KernelTestCase
 {
-    /**
-     * @testdox Отправлено письмо с 1 незавершенной задачей
-     */
+    #[TestDox('Отправлено письмо с 1 незавершенной задачей')]
     public function testExecute(): void
     {
         $token = User::auth();

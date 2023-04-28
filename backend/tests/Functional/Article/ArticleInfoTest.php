@@ -7,17 +7,15 @@ namespace App\Tests\Functional\Article;
 use App\Tests\Functional\SDK\ApiWebTestCase;
 use App\Tests\Functional\SDK\Article;
 use App\Tests\Functional\SDK\User;
+use PHPUnit\Framework\Attributes\TestDox;
 
 /**
  * @internal
- *
- * @testdox Получение информации по статье
  */
+#[TestDox('Получение информации по статье')]
 final class ArticleInfoTest extends ApiWebTestCase
 {
-    /**
-     * @testdox Статья создана, информация получена
-     */
+    #[TestDox('Статья создана, информация получена')]
     public function testSuccess(): void
     {
         $token = User::auth();
@@ -33,9 +31,7 @@ final class ArticleInfoTest extends ApiWebTestCase
         self::assertSame($article['body'], $content);
     }
 
-    /**
-     * @testdox Статья не найдена
-     */
+    #[TestDox('Статья не найдена')]
     public function testNotFound(): void
     {
         $token = User::auth();

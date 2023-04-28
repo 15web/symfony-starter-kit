@@ -7,18 +7,17 @@ namespace App\Tests\Functional\Task;
 use App\Tests\Functional\SDK\ApiWebTestCase;
 use App\Tests\Functional\SDK\Task;
 use App\Tests\Functional\SDK\User;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Component\Uid\Uuid;
 
 /**
  * @internal
- *
- * @testdox Комментирование задачи
  */
+#[TestDox('Комментирование задачи')]
 final class CreateCommentOnTaskTest extends ApiWebTestCase
 {
-    /**
-     * @testdox Комментарий добавлен
-     */
+    #[TestDox('Комментарий добавлен')]
     public function testSuccessfulCreationTask(): void
     {
         $token = User::auth();
@@ -42,9 +41,7 @@ final class CreateCommentOnTaskTest extends ApiWebTestCase
         self::assertNull($comments[0]['updatedAt']);
     }
 
-    /**
-     * @testdox Задача не найдена
-     */
+    #[TestDox('Задача не найдена')]
     public function testNotFound(): void
     {
         $token = User::auth();
@@ -60,9 +57,7 @@ final class CreateCommentOnTaskTest extends ApiWebTestCase
         self::assertNotFound($response);
     }
 
-    /**
-     * @testdox Нельзя комментировать выполненную задачу
-     */
+    #[TestDox('Нельзя комментировать выполненную задачу')]
     public function testAddCommentToCompletedTask(): void
     {
         $token = User::auth();
@@ -78,11 +73,8 @@ final class CreateCommentOnTaskTest extends ApiWebTestCase
         self::assertBadRequest($response);
     }
 
-    /**
-     * @dataProvider notValidTokenDataProvider
-     *
-     * @testdox Доступ запрещен
-     */
+    #[DataProvider('notValidTokenDataProvider')]
+    #[TestDox('Доступ запрещен')]
     public function testAccessDenied(string $notValidToken): void
     {
         $token = User::auth();
@@ -97,9 +89,7 @@ final class CreateCommentOnTaskTest extends ApiWebTestCase
         self::assertAccessDenied($response);
     }
 
-    /**
-     * @testdox Комментирование разрешено только автору
-     */
+    #[TestDox('Комментирование разрешено только автору')]
     public function testNoAccessAnotherUser(): void
     {
         $token = User::auth();

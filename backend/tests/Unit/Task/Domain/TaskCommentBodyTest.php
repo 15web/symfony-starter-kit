@@ -6,18 +6,16 @@ namespace App\Tests\Unit\Task\Domain;
 
 use App\Task\Domain\TaskCommentBody;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
- *
- * @testdox Комментарий задачи
  */
+#[TestDox('Комментарий задачи')]
 final class TaskCommentBodyTest extends TestCase
 {
-    /**
-     * @testdox Комментарии идентичны
-     */
+    #[TestDox('Комментарии идентичны')]
     public function testEquals(): void
     {
         $body1 = new TaskCommentBody('Комментарий');
@@ -26,9 +24,7 @@ final class TaskCommentBodyTest extends TestCase
         self::assertTrue($body1->equalTo($body2));
     }
 
-    /**
-     * @testdox Нельзя создать пустой комментарий
-     */
+    #[TestDox('Нельзя создать пустой комментарий')]
     public function testEmptyValue(): void
     {
         $this->expectException(InvalidArgumentException::class);

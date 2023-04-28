@@ -8,17 +8,16 @@ use App\Setting\Domain\SettingType;
 use App\Tests\Functional\SDK\ApiWebTestCase;
 use App\Tests\Functional\SDK\User;
 use Iterator;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 
 /**
  * @internal
- *
- * @testdox Сохранение настройки
  */
+#[TestDox('Сохранение настройки')]
 final class SettingSaveTest extends ApiWebTestCase
 {
-    /**
-     * @testdox Настройка сохранена
-     */
+    #[TestDox('Настройка сохранена')]
     public function testSuccess(): void
     {
         $token = User::auth();
@@ -46,9 +45,7 @@ final class SettingSaveTest extends ApiWebTestCase
         }
     }
 
-    /**
-     * @testdox Настройка не найдена в enum
-     */
+    #[TestDox('Настройка не найдена в enum')]
     public function testNotFound(): void
     {
         $token = User::auth();
@@ -62,11 +59,8 @@ final class SettingSaveTest extends ApiWebTestCase
         self::assertBadRequest($response);
     }
 
-    /**
-     * @dataProvider notValidTokenDataProvider
-     *
-     * @testdox Доступ запрещен
-     */
+    #[DataProvider('notValidTokenDataProvider')]
+    #[TestDox('Доступ запрещен')]
     public function testAccessDenied(string $notValidToken): void
     {
         $body = [];
@@ -79,11 +73,8 @@ final class SettingSaveTest extends ApiWebTestCase
         self::assertAccessDenied($response);
     }
 
-    /**
-     * @dataProvider notValidRequestProvider
-     *
-     * @testdox Неправильный запрос
-     */
+    #[DataProvider('notValidRequestProvider')]
+    #[TestDox('Неправильный запрос')]
     public function testBadRequest(array $body): void
     {
         $token = User::auth();
@@ -100,7 +91,7 @@ final class SettingSaveTest extends ApiWebTestCase
         self::assertBadRequest($response);
     }
 
-    public function notValidRequestProvider(): Iterator
+    public static function notValidRequestProvider(): Iterator
     {
         yield 'пустой запрос' => [['']];
 

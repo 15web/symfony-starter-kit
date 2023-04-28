@@ -8,6 +8,7 @@ use Rector\CodeQuality\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector;
 use Rector\Config\RectorConfig;
 use Rector\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
+use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
 use Rector\Symfony\Rector\MethodCall\WebTestCaseAssertIsSuccessfulRector;
@@ -31,6 +32,7 @@ return static function (RectorConfig $rectorConfig): void {
         SetList::TYPE_DECLARATION,
         LevelSetList::UP_TO_PHP_82,
         SymfonyLevelSetList::UP_TO_SYMFONY_62,
+        PHPUnitSetList::PHPUNIT_100,
     ]);
 
     $rectorConfig->skip([

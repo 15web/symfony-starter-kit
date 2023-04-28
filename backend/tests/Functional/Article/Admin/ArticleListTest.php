@@ -7,17 +7,16 @@ namespace App\Tests\Functional\Article\Admin;
 use App\Tests\Functional\SDK\ApiWebTestCase;
 use App\Tests\Functional\SDK\Article;
 use App\Tests\Functional\SDK\User;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 
 /**
  * @internal
- *
- * @testdox Админка, получение списка статей
  */
+#[TestDox('Админка, получение списка статей')]
 final class ArticleListTest extends ApiWebTestCase
 {
-    /**
-     * @testdox Получен список из созданных статей
-     */
+    #[TestDox('Получен список из созданных статей')]
     public function testSuccess(): void
     {
         $token = User::auth();
@@ -38,11 +37,8 @@ final class ArticleListTest extends ApiWebTestCase
         }
     }
 
-    /**
-     * @dataProvider notValidTokenDataProvider
-     *
-     * @testdox Доступ запрещен
-     */
+    #[DataProvider('notValidTokenDataProvider')]
+    #[TestDox('Доступ запрещен')]
     public function testAccessDenied(string $notValidToken): void
     {
         $response = self::request('GET', '/api/admin/articles', token: $notValidToken);

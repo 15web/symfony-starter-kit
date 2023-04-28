@@ -7,18 +7,17 @@ namespace App\Tests\Functional\Article\Admin;
 use App\Tests\Functional\SDK\ApiWebTestCase;
 use App\Tests\Functional\SDK\Article;
 use App\Tests\Functional\SDK\User;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Component\Uid\Uuid;
 
 /**
  * @internal
- *
- * @testdox Админка, удаление статьи
  */
+#[TestDox('Админка, удаление статьи')]
 final class RemoveArticleTest extends ApiWebTestCase
 {
-    /**
-     * @testdox Статья удалена
-     */
+    #[TestDox('Статья удалена')]
     public function testSuccess(): void
     {
         $token = User::auth();
@@ -35,9 +34,7 @@ final class RemoveArticleTest extends ApiWebTestCase
         self::assertSame($articleId2, $articles[0]['id']);
     }
 
-    /**
-     * @testdox Статья не найдена
-     */
+    #[TestDox('Статья не найдена')]
     public function testNotFound(): void
     {
         $token = User::auth();
@@ -49,11 +46,8 @@ final class RemoveArticleTest extends ApiWebTestCase
         self::assertNotFound($response);
     }
 
-    /**
-     * @dataProvider notValidTokenDataProvider
-     *
-     * @testdox Доступ запрещен
-     */
+    #[DataProvider('notValidTokenDataProvider')]
+    #[TestDox('Доступ запрещен')]
     public function testAccessDenied(string $notValidToken): void
     {
         $token = User::auth();

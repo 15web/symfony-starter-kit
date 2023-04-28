@@ -7,18 +7,17 @@ namespace App\Tests\Functional\Task;
 use App\Tests\Functional\SDK\ApiWebTestCase;
 use App\Tests\Functional\SDK\Task;
 use App\Tests\Functional\SDK\User;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Component\Uid\Uuid;
 
 /**
  * @internal
- *
- * @testdox Удаление задачи
  */
+#[TestDox('Удаление задачи')]
 final class RemoveTaskTest extends ApiWebTestCase
 {
-    /**
-     * @testdox Задача удалена
-     */
+    #[TestDox('Задача удалена')]
     public function testSuccess(): void
     {
         $token = User::auth();
@@ -36,9 +35,7 @@ final class RemoveTaskTest extends ApiWebTestCase
         self::assertSame($task2Id, $tasks[0]['id']);
     }
 
-    /**
-     * @testdox Задача не найдена
-     */
+    #[TestDox('Задача не найдена')]
     public function testNotFound(): void
     {
         $token = User::auth();
@@ -50,11 +47,8 @@ final class RemoveTaskTest extends ApiWebTestCase
         self::assertNotFound($response);
     }
 
-    /**
-     * @dataProvider notValidTokenDataProvider
-     *
-     * @testdox Доступ запрещен
-     */
+    #[DataProvider('notValidTokenDataProvider')]
+    #[TestDox('Доступ запрещен')]
     public function testAccessDenied(string $notValidToken): void
     {
         $token = User::auth();
@@ -65,9 +59,7 @@ final class RemoveTaskTest extends ApiWebTestCase
         self::assertAccessDenied($response);
     }
 
-    /**
-     * @testdox Удалять может только автор задачи
-     */
+    #[TestDox('Удалять может только автор задачи')]
     public function testNoAccessAnotherUser(): void
     {
         $token = User::auth();

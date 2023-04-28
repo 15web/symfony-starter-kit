@@ -7,21 +7,20 @@ namespace App\Tests\Functional\Task;
 use App\Tests\Functional\SDK\ApiWebTestCase;
 use App\Tests\Functional\SDK\Task;
 use App\Tests\Functional\SDK\User;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 
 /**
  * @internal
- *
- * @testdox Список задач
  */
+#[TestDox('Список задач')]
 final class TaskListTest extends ApiWebTestCase
 {
     private const TASK_DATA_KEY = 'data';
     private const PAGINATION_KEY = 'pagination';
     private const TOTAL = 'total';
 
-    /**
-     * @testdox Получение списка из 2 созданных задач
-     */
+    #[TestDox('Получение списка из 2 созданных задач')]
     public function testSuccess(): void
     {
         $token = User::auth();
@@ -43,9 +42,7 @@ final class TaskListTest extends ApiWebTestCase
         }
     }
 
-    /**
-     * @testdox Пустой запрос
-     */
+    #[TestDox('Пустой запрос')]
     public function testEmptyResult(): void
     {
         $token = User::auth();
@@ -58,9 +55,7 @@ final class TaskListTest extends ApiWebTestCase
         self::assertSame(0, $pagination[self::TOTAL]);
     }
 
-    /**
-     * @testdox Создано 2 статьи, limit = 1, получена 1 статья
-     */
+    #[TestDox('Создано 2 статьи, limit = 1, получена 1 статья')]
     public function testLimit(): void
     {
         $token = User::auth();
@@ -76,9 +71,7 @@ final class TaskListTest extends ApiWebTestCase
         self::assertSame(2, $pagination[self::TOTAL]);
     }
 
-    /**
-     * @testdox Создано 2 статьи, limit = 10, offset = 3, получено 0 статей
-     */
+    #[TestDox('Создано 2 статьи, limit = 10, offset = 3, получено 0 статей')]
     public function testOffsetEmptyResult(): void
     {
         $token = User::auth();
@@ -94,9 +87,7 @@ final class TaskListTest extends ApiWebTestCase
         self::assertSame(2, $pagination[self::TOTAL]);
     }
 
-    /**
-     * @testdox Создано 3 статьи, limit = 1, offset = 2, получена 1 статья
-     */
+    #[TestDox('Создано 3 статьи, limit = 1, offset = 2, получена 1 статья')]
     public function testOffsetNotEmptyResult(): void
     {
         $token = User::auth();
@@ -113,9 +104,7 @@ final class TaskListTest extends ApiWebTestCase
         self::assertSame(3, $pagination[self::TOTAL]);
     }
 
-    /**
-     * @testdox Доступ разрешен только автору
-     */
+    #[TestDox('Доступ разрешен только автору')]
     public function testNoAccessAnotherUser(): void
     {
         $token = User::auth();
@@ -141,11 +130,8 @@ final class TaskListTest extends ApiWebTestCase
         }
     }
 
-    /**
-     * @dataProvider notValidTokenDataProvider
-     *
-     * @testdox Доступ запрещен
-     */
+    #[DataProvider('notValidTokenDataProvider')]
+    #[TestDox('Доступ запрещен')]
     public function testAccessDenied(string $notValidToken): void
     {
         $response = self::request('GET', '/api/tasks', token: $notValidToken);

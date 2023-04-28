@@ -7,17 +7,16 @@ namespace App\Tests\Functional\Setting\Admin;
 use App\Setting\Domain\SettingType;
 use App\Tests\Functional\SDK\ApiWebTestCase;
 use App\Tests\Functional\SDK\Setting;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 
 /**
  * @internal
- *
- * @testdox Список публичных настроек
  */
+#[TestDox('Список публичных настроек')]
 final class ListTest extends ApiWebTestCase
 {
-    /**
-     * @testdox Получение списка
-     */
+    #[TestDox('Получение списка')]
     public function testSuccess(): void
     {
         $settings = Setting::list();
@@ -30,11 +29,8 @@ final class ListTest extends ApiWebTestCase
         }
     }
 
-    /**
-     * @dataProvider notValidTokenDataProvider
-     *
-     * @testdox Доступ запрещен
-     */
+    #[DataProvider('notValidTokenDataProvider')]
+    #[TestDox('Доступ запрещен')]
     public function testAccessDenied(string $notValidToken): void
     {
         $response = self::request('GET', '/api/admin/settings', token: $notValidToken);

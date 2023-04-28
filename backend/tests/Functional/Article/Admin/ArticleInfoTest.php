@@ -7,18 +7,17 @@ namespace App\Tests\Functional\Article\Admin;
 use App\Tests\Functional\SDK\ApiWebTestCase;
 use App\Tests\Functional\SDK\Article;
 use App\Tests\Functional\SDK\User;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Component\Uid\Uuid;
 
 /**
  * @internal
- *
- * @testdox Админка, получение информации о статье
  */
+#[TestDox('Админка, получение информации о статье')]
 final class ArticleInfoTest extends ApiWebTestCase
 {
-    /**
-     * @testdox Получена информация по созданной статье
-     */
+    #[TestDox('Получена информация по созданной статье')]
     public function testSuccess(): void
     {
         $token = User::auth();
@@ -38,9 +37,7 @@ final class ArticleInfoTest extends ApiWebTestCase
         self::assertNull($articleResponse['updatedAt']);
     }
 
-    /**
-     * @testdox Статья не найдена
-     */
+    #[TestDox('Статья не найдена')]
     public function testNotFound(): void
     {
         $token = User::auth();
@@ -51,11 +48,8 @@ final class ArticleInfoTest extends ApiWebTestCase
         self::assertNotFound($response);
     }
 
-    /**
-     * @dataProvider notValidTokenDataProvider
-     *
-     * @testdox Доступ запрещен
-     */
+    #[DataProvider('notValidTokenDataProvider')]
+    #[TestDox('Доступ запрещен')]
     public function testAccessDenied(string $notValidToken): void
     {
         $token = User::auth();

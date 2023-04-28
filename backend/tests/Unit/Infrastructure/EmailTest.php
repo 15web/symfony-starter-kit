@@ -6,18 +6,16 @@ namespace App\Tests\Unit\Infrastructure;
 
 use App\Infrastructure\Email;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
- *
- * @testdox Email
  */
+#[TestDox('Email')]
 final class EmailTest extends TestCase
 {
-    /**
-     * @testdox Создание корректного email
-     */
+    #[TestDox('Создание корректного email')]
     public function testCorrectValue(): void
     {
         $userEmail = new Email($expectedEmail = 'test@example.com');
@@ -25,9 +23,7 @@ final class EmailTest extends TestCase
         self::assertSame($expectedEmail, $userEmail->value);
     }
 
-    /**
-     * @testdox Нельзя создать пустой email
-     */
+    #[TestDox('Нельзя создать пустой email')]
     public function testEmptyEmail(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -35,9 +31,7 @@ final class EmailTest extends TestCase
         new Email('');
     }
 
-    /**
-     * @testdox Невалидный формат email
-     */
+    #[TestDox('Невалидный формат email')]
     public function testInvalidEmail(): void
     {
         $this->expectException(InvalidArgumentException::class);

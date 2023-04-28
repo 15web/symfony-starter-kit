@@ -8,17 +8,16 @@ use App\Tests\Functional\SDK\ApiWebTestCase;
 use App\Tests\Functional\SDK\Article;
 use App\Tests\Functional\SDK\User;
 use Iterator;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 
 /**
  * @internal
- *
- * @testdox Админка, создание статьи
  */
+#[TestDox('Админка, создание статьи')]
 final class CreateArticleTest extends ApiWebTestCase
 {
-    /**
-     * @testdox Статья создана
-     */
+    #[TestDox('Статья создана')]
     public function testSuccess(): void
     {
         $token = User::auth();
@@ -36,9 +35,7 @@ final class CreateArticleTest extends ApiWebTestCase
         self::assertNull($articleResponse['updatedAt']);
     }
 
-    /**
-     * @testdox Нельзя создать статьи с одинаковым алиасом
-     */
+    #[TestDox('Нельзя создать статьи с одинаковым алиасом')]
     public function testExistArticleWithSuchAlias(): void
     {
         $token = User::auth();
@@ -50,11 +47,8 @@ final class CreateArticleTest extends ApiWebTestCase
         self::assertApiError($response, 2);
     }
 
-    /**
-     * @dataProvider notValidTokenDataProvider
-     *
-     * @testdox Доступ запрещен
-     */
+    #[DataProvider('notValidTokenDataProvider')]
+    #[TestDox('Доступ запрещен')]
     public function testAccessDenied(string $notValidToken): void
     {
         $response = Article::create('Статья', 'statya', '<p>Контент</p>', $notValidToken);
@@ -62,11 +56,8 @@ final class CreateArticleTest extends ApiWebTestCase
         self::assertAccessDenied($response);
     }
 
-    /**
-     * @dataProvider notValidRequestProvider
-     *
-     * @testdox Неправильный запрос
-     */
+    #[DataProvider('notValidRequestProvider')]
+    #[TestDox('Неправильный запрос')]
     public function testBadRequest(array $body): void
     {
         $token = User::auth();
@@ -76,7 +67,7 @@ final class CreateArticleTest extends ApiWebTestCase
         self::assertBadRequest($response);
     }
 
-    public function notValidRequestProvider(): Iterator
+    public static function notValidRequestProvider(): Iterator
     {
         yield 'пустой запрос' => [['']];
 

@@ -6,18 +6,16 @@ namespace App\Tests\Unit\Task\Domain;
 
 use App\Task\Domain\TaskName;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
- *
- * @testdox Наименование задачи
  */
+#[TestDox('Наименование задачи')]
 final class TaskNameTest extends TestCase
 {
-    /**
-     * @testdox Наименования идентичны
-     */
+    #[TestDox('Наименования идентичны')]
     public function testEquals(): void
     {
         $taskName1 = new TaskName('new task');
@@ -26,9 +24,7 @@ final class TaskNameTest extends TestCase
         self::assertTrue($taskName1->equalTo($taskName2));
     }
 
-    /**
-     * @testdox Нельзя создать пустое наименование задачи
-     */
+    #[TestDox('Нельзя создать пустое наименование задачи')]
     public function testEmptyName(): void
     {
         $this->expectException(InvalidArgumentException::class);

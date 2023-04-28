@@ -5,18 +5,16 @@ declare(strict_types=1);
 namespace App\Tests\Unit\Task\Domain;
 
 use App\Task\Domain\TaskCommentId;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
- *
- * @testdox ID комментария
  */
+#[TestDox('ID комментария')]
 final class TaskCommentIdTest extends TestCase
 {
-    /**
-     * @testdox Классы объектов-значений идентичны
-     */
+    #[TestDox('Классы объектов-значений идентичны')]
     public function testEquals(): void
     {
         $taskCommentId1 = new TaskCommentId();

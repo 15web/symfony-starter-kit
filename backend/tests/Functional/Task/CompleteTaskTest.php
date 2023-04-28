@@ -7,18 +7,17 @@ namespace App\Tests\Functional\Task;
 use App\Tests\Functional\SDK\ApiWebTestCase;
 use App\Tests\Functional\SDK\Task;
 use App\Tests\Functional\SDK\User;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Component\Uid\Uuid;
 
 /**
  * @internal
- *
- * @testdox Выполнение задачи
  */
+#[TestDox('Выполнение задачи')]
 final class CompleteTaskTest extends ApiWebTestCase
 {
-    /**
-     * @testdox Задача выполнена
-     */
+    #[TestDox('Задача выполнена')]
     public function testSuccess(): void
     {
         $token = User::auth();
@@ -36,9 +35,7 @@ final class CompleteTaskTest extends ApiWebTestCase
         self::assertNotNull($task['completedAt']);
     }
 
-    /**
-     * @testdox Нельзя повторно выполнить задачу
-     */
+    #[TestDox('Нельзя повторно выполнить задачу')]
     public function testTaskHasAlreadyBeenCompleted(): void
     {
         $token = User::auth();
@@ -51,9 +48,7 @@ final class CompleteTaskTest extends ApiWebTestCase
         self::assertBadRequest($response);
     }
 
-    /**
-     * @testdox Задача не найдена
-     */
+    #[TestDox('Задача не найдена')]
     public function testTaskNotFound(): void
     {
         $token = User::auth();
@@ -65,11 +60,8 @@ final class CompleteTaskTest extends ApiWebTestCase
         self::assertNotFound($response);
     }
 
-    /**
-     * @dataProvider notValidTokenDataProvider
-     *
-     * @testdox Доступ запрещен
-     */
+    #[DataProvider('notValidTokenDataProvider')]
+    #[TestDox('Доступ запрещен')]
     public function testAccessDenied(string $notValidToken): void
     {
         $token = User::auth();
@@ -84,9 +76,7 @@ final class CompleteTaskTest extends ApiWebTestCase
         self::assertAccessDenied($response);
     }
 
-    /**
-     * @testdox Выполнить задачу может только автор
-     */
+    #[TestDox('Выполнить задачу может только автор')]
     public function testNoAccessAnotherUser(): void
     {
         $token = User::auth();

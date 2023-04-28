@@ -6,18 +6,16 @@ namespace App\Tests\Functional\User\SignUp;
 
 use App\Infrastructure\ApiException\ApiErrorCode;
 use App\Tests\Functional\SDK\ApiWebTestCase;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 
 /**
  * @internal
- *
- * @testdox Регистрация пользователя
  */
+#[TestDox('Регистрация пользователя')]
 final class SignUpTest extends ApiWebTestCase
 {
-    /**
-     * @testdox Регистрация выполнена, токен получен
-     */
+    #[TestDox('Регистрация выполнена, токен получен')]
     public function testCorrectSignUp(): void
     {
         $body = [];
@@ -37,9 +35,7 @@ final class SignUpTest extends ApiWebTestCase
         self::assertNotEmpty($confirmToken);
     }
 
-    /**
-     * @testdox Пользователь с таким email уже существует
-     */
+    #[TestDox('Пользователь с таким email уже существует')]
     public function testCreationUserWithSameEmail(): void
     {
         $body = [];
@@ -53,9 +49,7 @@ final class SignUpTest extends ApiWebTestCase
         self::assertApiError($response, ApiErrorCode::UserAlreadyExist->value);
     }
 
-    /**
-     * @testdox Неправильный запрос
-     */
+    #[TestDox('Неправильный запрос')]
     public function testBadRequest(): void
     {
         $body = json_encode(['email' => 'test', 'password' => '123456'], JSON_THROW_ON_ERROR);

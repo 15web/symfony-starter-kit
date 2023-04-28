@@ -7,19 +7,18 @@ namespace App\Tests\Functional\User\Profile;
 use App\Tests\Functional\SDK\ApiWebTestCase;
 use App\Tests\Functional\SDK\Profile;
 use App\Tests\Functional\SDK\User;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 
 /**
  * @internal
- *
- * @testdox Получение информации по профилю
  */
+#[TestDox('Получение информации по профилю')]
 final class ProfileInfoTest extends ApiWebTestCase
 {
     private const PHONE_NUMBER = '89272222222';
 
-    /**
-     * @testdox Создан профиль, получена информация по нему
-     */
+    #[TestDox('Создан профиль, получена информация по нему')]
     public function testSuccess(): void
     {
         $token = User::auth();
@@ -39,9 +38,7 @@ final class ProfileInfoTest extends ApiWebTestCase
         self::assertSame($profileName, $profile['name']);
     }
 
-    /**
-     * @testdox Пустые данные профиля
-     */
+    #[TestDox('Пустые данные профиля')]
     public function testEmpty(): void
     {
         $token = User::auth();
@@ -55,11 +52,8 @@ final class ProfileInfoTest extends ApiWebTestCase
         self::assertNull($profile['name']);
     }
 
-    /**
-     * @dataProvider notValidTokenDataProvider
-     *
-     * @testdox Доступ запрещен
-     */
+    #[DataProvider('notValidTokenDataProvider')]
+    #[TestDox('Доступ запрещен')]
     public function testAccessDenied(string $notValidToken): void
     {
         $token = User::auth();

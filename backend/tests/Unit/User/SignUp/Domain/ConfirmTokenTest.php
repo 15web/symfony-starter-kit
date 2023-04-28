@@ -5,19 +5,17 @@ declare(strict_types=1);
 namespace App\Tests\Unit\User\SignUp\Domain;
 
 use App\User\SignUp\Domain\ConfirmToken;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Uid\UuidV4;
 
 /**
  * @internal
- *
- * @testdox Токен подтверждения регистрации
  */
+#[TestDox('Токен подтверждения регистрации')]
 final class ConfirmTokenTest extends TestCase
 {
-    /**
-     * @testdox Токены идентичны
-     */
+    #[TestDox('Токены идентичны')]
     public function testEquals(): void
     {
         $uuid = new UuidV4();
@@ -27,9 +25,7 @@ final class ConfirmTokenTest extends TestCase
         self::assertTrue($confirmToken1->equalTo($confirmToken2));
     }
 
-    /**
-     * @testdox Разные токены
-     */
+    #[TestDox('Разные токены')]
     public function testNotEquals(): void
     {
         $confirmToken1 = new ConfirmToken(new UuidV4());

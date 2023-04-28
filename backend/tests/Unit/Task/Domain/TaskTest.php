@@ -13,18 +13,16 @@ use App\Task\Domain\TaskCommentId;
 use App\Task\Domain\TaskId;
 use App\Task\Domain\TaskName;
 use App\User\SignUp\Domain\UserId;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
- *
- * @testdox Тестирование задачи
  */
+#[TestDox('Тестирование задачи')]
 final class TaskTest extends TestCase
 {
-    /**
-     * @testdox Нельзя выполнить уже выполненную задачу
-     */
+    #[TestDox('Нельзя выполнить уже выполненную задачу')]
     public function testAlreadyCompletedTask(): void
     {
         $task = new Task(new TaskId(), new TaskName('new task'), new UserId());
@@ -34,9 +32,7 @@ final class TaskTest extends TestCase
         $task->markAsDone();
     }
 
-    /**
-     * @testdox Нельзя комментировать выполненную задачу
-     */
+    #[TestDox('Нельзя комментировать выполненную задачу')]
     public function testAddCommentToCompletedTask(): void
     {
         $task = new Task(new TaskId(), new TaskName('new task'), new UserId());

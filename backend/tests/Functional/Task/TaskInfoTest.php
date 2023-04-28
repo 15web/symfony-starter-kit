@@ -7,18 +7,17 @@ namespace App\Tests\Functional\Task;
 use App\Tests\Functional\SDK\ApiWebTestCase;
 use App\Tests\Functional\SDK\Task;
 use App\Tests\Functional\SDK\User;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Component\Uid\Uuid;
 
 /**
  * @internal
- *
- * @testdox Получение информации по задаче
  */
+#[TestDox('Получение информации по задаче')]
 final class TaskInfoTest extends ApiWebTestCase
 {
-    /**
-     * @testdox Создана задача, получена по ней информация
-     */
+    #[TestDox('Создана задача, получена по ней информация')]
     public function testSuccess(): void
     {
         $token = User::auth();
@@ -43,9 +42,7 @@ final class TaskInfoTest extends ApiWebTestCase
         self::assertNull($task['updatedAt']);
     }
 
-    /**
-     * @testdox Задача не найдена
-     */
+    #[TestDox('Задача не найдена')]
     public function testNotFound(): void
     {
         $token = User::auth();
@@ -57,9 +54,7 @@ final class TaskInfoTest extends ApiWebTestCase
         self::assertNotFound($response);
     }
 
-    /**
-     * @testdox Получение информации по задаче доступно только автору
-     */
+    #[TestDox('Получение информации по задаче доступно только автору')]
     public function testNoAccessAnotherUser(): void
     {
         $token = User::auth();
@@ -73,11 +68,8 @@ final class TaskInfoTest extends ApiWebTestCase
         self::assertNotFound($response);
     }
 
-    /**
-     * @dataProvider notValidTokenDataProvider
-     *
-     * @testdox Доступ запрещен
-     */
+    #[DataProvider('notValidTokenDataProvider')]
+    #[TestDox('Доступ запрещен')]
     public function testAccessDenied(string $notValidToken): void
     {
         $token = User::auth();

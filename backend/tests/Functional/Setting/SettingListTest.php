@@ -6,17 +6,15 @@ namespace App\Tests\Functional\Setting;
 
 use App\Tests\Functional\SDK\ApiWebTestCase;
 use App\Tests\Functional\SDK\Setting;
+use PHPUnit\Framework\Attributes\TestDox;
 
 /**
  * @internal
- *
- * @testdox Список публичных настроек
  */
+#[TestDox('Список публичных настроек')]
 final class SettingListTest extends ApiWebTestCase
 {
-    /**
-     * @testdox Получение списка
-     */
+    #[TestDox('Получение списка')]
     public function testSuccess(): void
     {
         $filteredSettings = array_filter(

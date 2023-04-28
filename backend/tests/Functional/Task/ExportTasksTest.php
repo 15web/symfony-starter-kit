@@ -8,20 +8,19 @@ use App\Infrastructure\ApiException\ApiErrorCode;
 use App\Tests\Functional\SDK\ApiWebTestCase;
 use App\Tests\Functional\SDK\Task;
 use App\Tests\Functional\SDK\User;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\Serializer\Encoder\CsvEncoder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 
 /**
  * @internal
- *
- * @testdox Экспорт задач в разные форматы
  */
+#[TestDox('Экспорт задач в разные форматы')]
 final class ExportTasksTest extends ApiWebTestCase
 {
-    /**
-     * @testdox Экспорт в формате csv
-     */
+    #[TestDox('Экспорт в формате csv')]
     public function testCsvExport(): void
     {
         $token = User::auth();
@@ -45,9 +44,7 @@ final class ExportTasksTest extends ApiWebTestCase
         }
     }
 
-    /**
-     * @testdox Экспорт в формате xml
-     */
+    #[TestDox('Экспорт в формате xml')]
     public function testXmlExport(): void
     {
         $token = User::auth();
@@ -73,9 +70,7 @@ final class ExportTasksTest extends ApiWebTestCase
         }
     }
 
-    /**
-     * @testdox Создано 3 статьи, limit = 2, экспортированы 2 статьи
-     */
+    #[TestDox('Создано 3 статьи, limit = 2, экспортированы 2 статьи')]
     public function testLimit(): void
     {
         $token = User::auth();
@@ -95,9 +90,7 @@ final class ExportTasksTest extends ApiWebTestCase
         self::assertCount(2, $tasks);
     }
 
-    /**
-     * @testdox Создано 3 статьи, limit = 2, offset = 2, экспортирована 1 статья
-     */
+    #[TestDox('Создано 3 статьи, limit = 2, offset = 2, экспортирована 1 статья')]
     public function testOffset(): void
     {
         $token = User::auth();
@@ -117,9 +110,7 @@ final class ExportTasksTest extends ApiWebTestCase
         self::assertCount(1, $tasks);
     }
 
-    /**
-     * @testdox Ошибка при пустом экспорте в формате csv
-     */
+    #[TestDox('Ошибка при пустом экспорте в формате csv')]
     public function testEmptyCsvExport(): void
     {
         $token = User::auth();
@@ -129,9 +120,7 @@ final class ExportTasksTest extends ApiWebTestCase
         self::assertApiError($response, ApiErrorCode::NotFoundTasksForExport->value);
     }
 
-    /**
-     * @testdox Ошибка при пустом экспорте в формате xml
-     */
+    #[TestDox('Ошибка при пустом экспорте в формате xml')]
     public function testEmptyXmlExport(): void
     {
         $token = User::auth();
@@ -141,11 +130,8 @@ final class ExportTasksTest extends ApiWebTestCase
         self::assertApiError($response, ApiErrorCode::NotFoundTasksForExport->value);
     }
 
-    /**
-     * @dataProvider notValidTokenDataProvider
-     *
-     * @testdox Доступ запрещен
-     */
+    #[DataProvider('notValidTokenDataProvider')]
+    #[TestDox('Доступ запрещен')]
     public function testAccessDenied(string $notValidToken): void
     {
         $token = User::auth();
@@ -160,9 +146,7 @@ final class ExportTasksTest extends ApiWebTestCase
         self::assertAccessDenied($response);
     }
 
-    /**
-     * @testdox Пользователь может экспортировать только свои задачи
-     */
+    #[TestDox('Пользователь может экспортировать только свои задачи')]
     public function testNoAccessAnotherUser(): void
     {
         $token = User::auth();

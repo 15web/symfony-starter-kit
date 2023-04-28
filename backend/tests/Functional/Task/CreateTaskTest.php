@@ -7,17 +7,16 @@ namespace App\Tests\Functional\Task;
 use App\Tests\Functional\SDK\ApiWebTestCase;
 use App\Tests\Functional\SDK\Task;
 use App\Tests\Functional\SDK\User;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 
 /**
  * @internal
- *
- * @testdox Создание задачи
  */
+#[TestDox('Создание задачи')]
 final class CreateTaskTest extends ApiWebTestCase
 {
-    /**
-     * @testdox Задача создана
-     */
+    #[TestDox('Задача создана')]
     public function testSuccess(): void
     {
         $token = User::auth();
@@ -37,11 +36,8 @@ final class CreateTaskTest extends ApiWebTestCase
         self::assertFalse($tasks[0]['isCompleted']);
     }
 
-    /**
-     * @dataProvider notValidTokenDataProvider
-     *
-     * @testdox Доступ запрещен
-     */
+    #[DataProvider('notValidTokenDataProvider')]
+    #[TestDox('Доступ запрещен')]
     public function testAccessDenied(string $notValidToken): void
     {
         $response = Task::create('Тестовая задача', $notValidToken);
@@ -49,9 +45,7 @@ final class CreateTaskTest extends ApiWebTestCase
         self::assertAccessDenied($response);
     }
 
-    /**
-     * @testdox Неверный запрос
-     */
+    #[TestDox('Неверный запрос')]
     public function testBadRequests(): void
     {
         $token = User::auth();

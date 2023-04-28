@@ -7,19 +7,18 @@ namespace App\Tests\Functional\User\Profile;
 use App\Tests\Functional\SDK\ApiWebTestCase;
 use App\Tests\Functional\SDK\Profile;
 use App\Tests\Functional\SDK\User;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 
 /**
  * @internal
- *
- * @testdox Сохранение профиля
  */
+#[TestDox('Сохранение профиля')]
 final class ProfileSaveTest extends ApiWebTestCase
 {
     private const PHONE_NUMBER = '89272222222';
 
-    /**
-     * @testdox Профиль сохранен
-     */
+    #[TestDox('Профиль сохранен')]
     public function testSuccess(): void
     {
         $token = User::auth();
@@ -35,9 +34,7 @@ final class ProfileSaveTest extends ApiWebTestCase
         self::assertSame($name, $profileInfo['name']);
     }
 
-    /**
-     * @testdox Профиль сохранен 2 раза, данные изменились
-     */
+    #[TestDox('Профиль сохранен 2 раза, данные изменились')]
     public function testReSave(): void
     {
         $token = User::auth();
@@ -56,11 +53,8 @@ final class ProfileSaveTest extends ApiWebTestCase
         self::assertNotSame($name1, $profileInfo['name']);
     }
 
-    /**
-     * @dataProvider notValidTokenDataProvider
-     *
-     * @testdox Доступ запрещен
-     */
+    #[DataProvider('notValidTokenDataProvider')]
+    #[TestDox('Доступ запрещен')]
     public function testAccessDenied(string $notValidToken): void
     {
         $response = Profile::save('Тестовый профиль', self::PHONE_NUMBER, $notValidToken);
@@ -68,9 +62,7 @@ final class ProfileSaveTest extends ApiWebTestCase
         self::assertAccessDenied($response);
     }
 
-    /**
-     * @testdox Неверный запрос
-     */
+    #[TestDox('Неверный запрос')]
     public function testBadRequests(): void
     {
         $token = User::auth();

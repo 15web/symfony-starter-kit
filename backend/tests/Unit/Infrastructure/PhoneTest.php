@@ -7,18 +7,17 @@ namespace App\Tests\Unit\Infrastructure;
 use App\Infrastructure\Phone;
 use InvalidArgumentException;
 use Iterator;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
- *
- * @testdox Тестирование телефона
  */
+#[TestDox('Тестирование телефона')]
 final class PhoneTest extends TestCase
 {
-    /**
-     * @testdox Телефоны идентичны
-     */
+    #[TestDox('Телефоны идентичны')]
     public function testEquals(): void
     {
         $profilePhone1 = new Phone('89272222222');
@@ -27,11 +26,8 @@ final class PhoneTest extends TestCase
         self::assertTrue($profilePhone1->equalTo($profilePhone2));
     }
 
-    /**
-     * @dataProvider incorrectPhones
-     *
-     * @testdox Невалидный номер телефона
-     */
+    #[DataProvider('incorrectPhones')]
+    #[TestDox('Невалидный номер телефона')]
     public function testIncorrectNumber(string $phone): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -39,7 +35,7 @@ final class PhoneTest extends TestCase
         new Phone($phone);
     }
 
-    public function incorrectPhones(): Iterator
+    public static function incorrectPhones(): Iterator
     {
         yield 'Неверный формат' => ['неправильный телефон'];
 

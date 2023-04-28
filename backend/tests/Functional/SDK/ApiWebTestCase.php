@@ -107,7 +107,7 @@ abstract class ApiWebTestCase extends WebTestCase
         static::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
     }
 
-    final public function notValidTokenDataProvider(): Iterator
+    final public static function notValidTokenDataProvider(): Iterator
     {
         yield 'пустая строка' => [''];
 

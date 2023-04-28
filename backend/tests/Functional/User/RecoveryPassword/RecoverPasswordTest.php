@@ -6,18 +6,17 @@ namespace App\Tests\Functional\User\RecoveryPassword;
 
 use App\Tests\Functional\SDK\ApiWebTestCase;
 use Iterator;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Component\Uid\Uuid;
 
 /**
  * @internal
- *
- * @testdox Восстановление пароля
  */
+#[TestDox('Восстановление пароля')]
 final class RecoverPasswordTest extends ApiWebTestCase
 {
-    /**
-     * @testdox Отправлен запрос на восстановление пароля, получено письмо с токеном, пароль восстановлен
-     */
+    #[TestDox('Отправлен запрос на восстановление пароля, получено письмо с токеном, пароль восстановлен')]
     public function testSuccess(): void
     {
         $body = [];
@@ -58,9 +57,7 @@ final class RecoverPasswordTest extends ApiWebTestCase
         self::assertSuccessResponse($response);
     }
 
-    /**
-     * @testdox Пользователь не найден
-     */
+    #[TestDox('Пользователь не найден')]
     public function testUserNotFound(): void
     {
         $body = [
@@ -74,11 +71,8 @@ final class RecoverPasswordTest extends ApiWebTestCase
         self::assertNotFound($response);
     }
 
-    /**
-     * @dataProvider notValidEmailDataProvider
-     *
-     * @testdox Неверный запрос
-     */
+    #[DataProvider('notValidEmailDataProvider')]
+    #[TestDox('Неверный запрос')]
     public function testBadRequest(?string $email): void
     {
         $body = ['email' => $email];
@@ -88,7 +82,7 @@ final class RecoverPasswordTest extends ApiWebTestCase
         self::assertBadRequest($response);
     }
 
-    public function notValidEmailDataProvider(): Iterator
+    public static function notValidEmailDataProvider(): Iterator
     {
         yield 'null' => [null];
 

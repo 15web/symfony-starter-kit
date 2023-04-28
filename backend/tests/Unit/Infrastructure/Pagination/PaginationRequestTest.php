@@ -6,18 +6,16 @@ namespace App\Tests\Unit\Infrastructure\Pagination;
 
 use App\Infrastructure\Pagination\PaginationRequest;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
- *
- * @testdox Тестирование запроса пагинации
  */
+#[TestDox('Тестирование запроса пагинации')]
 final class PaginationRequestTest extends TestCase
 {
-    /**
-     * @testdox Проверка настроек по умолчанию
-     */
+    #[TestDox('Проверка настроек по умолчанию')]
     public function testSuccessDefault(): void
     {
         $paginationRequest = new PaginationRequest();
@@ -26,9 +24,7 @@ final class PaginationRequestTest extends TestCase
         self::assertSame(10, $paginationRequest->limit);
     }
 
-    /**
-     * @testdox Проверка аргументов
-     */
+    #[TestDox('Проверка аргументов')]
     public function testSuccess(): void
     {
         $paginationRequest = new PaginationRequest(3, 15);
@@ -37,18 +33,14 @@ final class PaginationRequestTest extends TestCase
         self::assertSame(15, $paginationRequest->limit);
     }
 
-    /**
-     * @testdox Неверный лимит
-     */
+    #[TestDox('Неверный лимит')]
     public function testIncorrectLimit(): void
     {
         $this->expectException(InvalidArgumentException::class);
         new PaginationRequest(0, -1);
     }
 
-    /**
-     * @testdox Неверный оффсет
-     */
+    #[TestDox('Неверный оффсет')]
     public function testIncorrectPerPage(): void
     {
         $this->expectException(InvalidArgumentException::class);

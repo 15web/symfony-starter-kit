@@ -7,18 +7,17 @@ namespace App\Tests\Functional\Task;
 use App\Tests\Functional\SDK\ApiWebTestCase;
 use App\Tests\Functional\SDK\Task;
 use App\Tests\Functional\SDK\User;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Component\Uid\Uuid;
 
 /**
  * @internal
- *
- * @testdox Смена наименования задачи
  */
+#[TestDox('Смена наименования задачи')]
 final class ChangeTaskNameTest extends ApiWebTestCase
 {
-    /**
-     * @testdox Имя изменено
-     */
+    #[TestDox('Имя изменено')]
     public function testSuccess(): void
     {
         $token = User::auth();
@@ -38,9 +37,7 @@ final class ChangeTaskNameTest extends ApiWebTestCase
         self::assertNotNull($task['updatedAt']);
     }
 
-    /**
-     * @testdox Задача не найдена
-     */
+    #[TestDox('Задача не найдена')]
     public function testNotFound(): void
     {
         $token = User::auth();
@@ -55,9 +52,7 @@ final class ChangeTaskNameTest extends ApiWebTestCase
         self::assertNotFound($response);
     }
 
-    /**
-     * @testdox Неправильный запрос
-     */
+    #[TestDox('Неправильный запрос')]
     public function testBadRequests(): void
     {
         $token = User::auth();
@@ -66,11 +61,8 @@ final class ChangeTaskNameTest extends ApiWebTestCase
         $this->assertBadRequests(['taskName' => ''], $token);
     }
 
-    /**
-     * @dataProvider notValidTokenDataProvider
-     *
-     * @testdox Доступ запрещен
-     */
+    #[DataProvider('notValidTokenDataProvider')]
+    #[TestDox('Доступ запрещен')]
     public function testAccessDenied(string $notValidToken): void
     {
         $token = User::auth();
@@ -90,9 +82,7 @@ final class ChangeTaskNameTest extends ApiWebTestCase
         self::assertAccessDenied($response);
     }
 
-    /**
-     * @testdox Менять наименование разрешено только автору задачи
-     */
+    #[TestDox('Менять наименование разрешено только автору задачи')]
     public function testNoAccessAnotherUser(): void
     {
         $userToken = User::auth();

@@ -5,18 +5,16 @@ declare(strict_types=1);
 namespace App\Tests\Unit\Task\Domain;
 
 use App\Task\Domain\TaskId;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
- *
- * @testdox ID задачи
  */
+#[TestDox('ID задачи')]
 final class TaskIdTest extends TestCase
 {
-    /**
-     * @testdox Идентификаторы идентичны
-     */
+    #[TestDox('Идентификаторы идентичны')]
     public function testEquals(): void
     {
         $taskId1 = new TaskId();
