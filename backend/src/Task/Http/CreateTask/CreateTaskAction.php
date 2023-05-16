@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Task\Http\CreateTask;
 
 use App\Infrastructure\ApiException\ApiBadRequestException;
+use App\Infrastructure\ApiRequestResolver\ApiRequest;
 use App\Infrastructure\Flush;
 use App\Task\Command\CreateTask\CreateTask;
 use App\Task\Command\CreateTask\CreateTaskCommand;
@@ -33,7 +34,7 @@ final readonly class CreateTaskAction
     ) {
     }
 
-    public function __invoke(CreateTaskCommand $createTaskCommand, UserId $userId): TaskData
+    public function __invoke(#[ApiRequest] CreateTaskCommand $createTaskCommand, UserId $userId): TaskData
     {
         try {
             $taskId = new TaskId();

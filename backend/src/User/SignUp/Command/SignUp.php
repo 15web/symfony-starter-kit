@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\User\SignUp\Command;
 
+use App\Infrastructure\ApiRequestResolver\ApiRequest;
 use App\Infrastructure\AsService;
 use App\Infrastructure\Email;
 use App\Mailer\Notification\EmailConfirmation\ConfirmEmailMessage;
@@ -30,7 +31,7 @@ final readonly class SignUp
     ) {
     }
 
-    public function __invoke(SignUpCommand $signUpCommand): void
+    public function __invoke(#[ApiRequest] SignUpCommand $signUpCommand): void
     {
         $user = $this->users->findByEmail($signUpCommand->email);
         if ($user !== null) {

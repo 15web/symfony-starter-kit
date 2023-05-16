@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\User\Profile\Http;
 
 use App\Infrastructure\ApiException\ApiBadRequestException;
+use App\Infrastructure\ApiRequestResolver\ApiRequest;
 use App\Infrastructure\Flush;
 use App\User\Profile\Command\SaveProfile\SaveProfile;
 use App\User\Profile\Command\SaveProfile\SaveProfileCommand;
@@ -34,7 +35,7 @@ final readonly class ProfileSaveAction
     ) {
     }
 
-    public function __invoke(SaveProfileCommand $command, UserId $userId): ProfileData
+    public function __invoke(#[ApiRequest] SaveProfileCommand $command, UserId $userId): ProfileData
     {
         try {
             ($this->saveProfile)($command, $userId);

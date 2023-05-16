@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\User\RecoveryPassword\Command;
 
+use App\Infrastructure\ApiRequestResolver\ApiRequest;
 use App\Infrastructure\AsService;
 use App\User\RecoveryPassword\Domain\RecoveryTokens;
 use App\User\SignUp\Domain\UserPassword;
@@ -24,7 +25,7 @@ final readonly class RecoverPassword
     ) {
     }
 
-    public function __invoke(Uuid $recoveryToken, RecoverPasswordCommand $recoverPasswordCommand): void
+    public function __invoke(Uuid $recoveryToken, #[ApiRequest] RecoverPasswordCommand $recoverPasswordCommand): void
     {
         $token = $this->recoveryTokens->findByToken($recoveryToken);
 

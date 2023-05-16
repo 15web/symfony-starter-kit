@@ -19,7 +19,7 @@ final class CreateAction
     {
     }
 
-    public function __invoke(CreateRequest $createRequest): SuccessResponse
+    public function __invoke(#[ApiRequest] CreateRequest $createRequest): SuccessResponse
     {
         // TODO: создать сущность
         $entity = new <?php echo $entity_classname; ?>();

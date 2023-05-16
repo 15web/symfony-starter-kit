@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace App\Article\Http\Admin;
 
-use App\Infrastructure\ApiRequestResolver\ApiRequest;
 use Webmozart\Assert\Assert;
 
 /**
  * Объект запроса для обновления статьи
  */
-#[ApiRequest]
 final readonly class UpdateRequest
 {
     public function __construct(

@@ -181,6 +181,7 @@ final readonly class CRUDGenerator
             SuccessResponse::class,
             UserRole::class,
             Request::class,
+            ApiRequest::class,
         ]);
 
         $route = '/api/'.lcfirst($shortEntityClass).'s/create';
@@ -207,7 +208,6 @@ final readonly class CRUDGenerator
 
         $shortEntityClass = Str::getShortClassName($entityClass->getShortName());
         $useStatements = new UseStatementGenerator([
-            ApiRequest::class,
             Assert::class,
         ]);
 
@@ -242,6 +242,7 @@ final readonly class CRUDGenerator
             SuccessResponse::class,
             UserRole::class,
             Request::class,
+            ApiRequest::class,
         ]);
 
         $route = '/api/'.lcfirst($shortEntityClass).'s/{id}/update';
@@ -267,7 +268,6 @@ final readonly class CRUDGenerator
 
         $shortEntityClass = Str::getShortClassName($entityClass->getShortName());
         $useStatements = new UseStatementGenerator([
-            ApiRequest::class,
             Assert::class,
         ]);
 

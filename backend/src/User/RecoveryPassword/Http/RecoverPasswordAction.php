@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\User\RecoveryPassword\Http;
 
 use App\Infrastructure\ApiException\ApiNotFoundException;
+use App\Infrastructure\ApiRequestResolver\ApiRequest;
 use App\Infrastructure\Flush;
 use App\Infrastructure\SuccessResponse;
 use App\User\RecoveryPassword\Command\RecoverPassword;
@@ -26,7 +27,7 @@ final readonly class RecoverPasswordAction
     {
     }
 
-    public function __invoke(Uuid $recoveryToken, RecoverPasswordCommand $recoverPasswordCommand): SuccessResponse
+    public function __invoke(Uuid $recoveryToken, #[ApiRequest] RecoverPasswordCommand $recoverPasswordCommand): SuccessResponse
     {
         try {
             ($this->recoverPassword)($recoveryToken, $recoverPasswordCommand);

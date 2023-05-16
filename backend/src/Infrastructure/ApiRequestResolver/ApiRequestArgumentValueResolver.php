@@ -7,7 +7,6 @@ namespace App\Infrastructure\ApiRequestResolver;
 use App\Infrastructure\ApiException\ApiBadRequestException;
 use App\Infrastructure\AsService;
 use InvalidArgumentException;
-use ReflectionClass;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
@@ -34,21 +33,21 @@ final readonly class ApiRequestArgumentValueResolver implements ValueResolverInt
     {
         /** @var class-string|null $className */
         $className = $argument->getType();
-
         if ($className === null) {
             return [];
         }
 
-        $class = new ReflectionClass($className);
-
-        $attributeApiRequest = $class->getAttributes(ApiRequest::class);
-
-        if ($attributeApiRequest === []) {
+        $attributes = $argument->getAttributesOfType(ApiRequest::class, ArgumentMetadata::IS_INSTANCEOF);
+        if ($attributes === []) {
             return [];
         }
 
         if ($request->getContentTypeFormat() !== JsonEncoder::FORMAT) {
             throw new ApiBadRequestException('Укажите json');
+        }
+
+        if ($request->getContent() === '') {
+            throw new ApiBadRequestException('Укажите контент запроса');
         }
 
         try {
