@@ -1,9 +1,6 @@
 .PHONY: all
 
-MAKEFLAGS := --jobs=$(shell nproc)
-Arguments := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
-
-init: #Запуск проекта и установка зависимостей
+init: # Запуск проекта и установка зависимостей
 	./setup_envs.bash
 	docker compose build
 	docker compose run --rm backend-cli composer install --no-scripts --prefer-dist
@@ -11,7 +8,7 @@ init: #Запуск проекта и установка зависимосте�
 	docker compose run --rm backend-cli bin/console doctrine:migrations:migrate --no-interaction
 	docker compose run --rm backend-cli bin/console messenger:setup-transports
 
-install-test: #Запуск проекта и подготовка тестового окружения
+install-test: # Запуск проекта и подготовка тестового окружения
 	./setup_envs.bash
 	docker compose build backend mysql
 	docker compose run --rm backend-cli composer install --no-scripts --prefer-dist --no-progress
@@ -25,41 +22,41 @@ install-test: #Запуск проекта и подготовка тестов�
   		docker compose run --rm backend-cli bash -c "TEST_TOKEN=$$i bin/console --env=test doctrine:migrations:migrate --no-interaction"; \
 	done
 
-check: composer-validate composer-audit cache-clear lint test check-openapi-diff check-openapi-schema	#Запуск проверок
+check: composer-validate composer-audit cache-clear lint test check-openapi-diff check-openapi-schema	# Запуск проверок
 
-fix: fixer-fix rector-fix	#Запуск фиксеров
+fix: fixer-fix rector-fix	# Запуск фиксеров
 
-up:	#Запуск докера
+up:	# Запуск докера
 	./setup_envs.bash
 	docker compose up -d --force-recreate --remove-orphans
 
-down:	#Остановка докера
+down:	# Остановка докера
 	./setup_envs.bash
 	docker compose down --remove-orphans
 
-update:	#Обновление зависимостей
+update:	# Обновление зависимостей
 	docker compose run --rm backend-cli composer update
 
-build:	#Билд образов и установка зависимостей
+build:	# Билд образов и установка зависимостей
 	./setup_envs.bash
 	docker compose build
 	docker compose run --rm backend-cli composer install --no-scripts --prefer-dist
 	docker compose up -d --force-recreate --remove-orphans
 
-run-backend:	#Выполнение команды на бэкенде, пример: make run-backend echo "hello"
+run-backend:	# Выполнение команды на бэкенде, пример: make run-backend echo "hello"
 	./setup_envs.bash
 	@docker compose run --rm backend-cli $(Arguments)
 
-logs:	#Просмотр логов сервиса, пример: make logs backend
+logs:	# Просмотр логов сервиса, пример: make logs backend
 	./setup_envs.bash
 	@docker compose logs $(Arguments)
 
-test-verbose:	#Запуск тестов
+test-verbose:	# Запуск тестов
 	./setup_envs.bash
 	docker compose run --rm backend-cli bin/console --env=test cache:clear
 	docker compose run --rm backend-cli bash -c 'APP_ENV=test vendor/bin/phpunit --testdox'
 
-lint: container-lint validate-doctrine-schema twig-lint stan fixer-check rector-check cache-prod-check deptrac-check deptrac-check-unassigned
+lint: container-lint validate-doctrine-schema twig-lint fixer-check rector-check phpstan psalm deptrac-check deptrac-check-unassigned cache-prod-check
 
 composer-validate:
 	docker compose run -T --rm backend-cli composer validate --strict
@@ -79,8 +76,11 @@ validate-doctrine-schema:
 twig-lint:
 	docker compose run -T --rm backend-cli bin/console lint:twig src/Mailer/templates
 
-stan:
+phpstan:	# Запустить phpstan
 	docker compose run -T --rm backend-cli vendor/bin/phpstan analyse -c phpstan-config.neon --memory-limit 2G
+
+psalm:	# Запустить psalm
+	docker compose run -T --rm backend-cli vendor/bin/psalm
 
 fixer-check:
 	docker compose run -T --rm backend-cli vendor/bin/php-cs-fixer --config=php-cs-fixer-config.php fix --dry-run --diff
