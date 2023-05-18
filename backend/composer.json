@@ -41,8 +41,6 @@
         "webmozart/assert": "^1.11"
     },
     "require-dev": {
-        "brianium/paratest": "^7.1",
-        "dama/doctrine-test-bundle": "^7.2",
         "friendsofphp/php-cs-fixer": "^3.16",
         "league/openapi-psr7-validator": "^0.21",
         "nyholm/psr7": "^1.5",
@@ -50,6 +48,8 @@
         "phpstan/phpstan-doctrine": "^1.3",
         "phpstan/phpstan-strict-rules": "^1.5",
         "phpunit/phpunit": "^10.1",
+        "brianium/paratest": "^7.1",
+        "dama/doctrine-test-bundle": "^7.2",
         "qossmic/deptrac-shim": "^1.0.2",
         "rector/rector": "^0.15.8",
         "symfony/browser-kit": "6.2.*",
@@ -59,16 +59,13 @@
         "symfony/psr-http-message-bridge": "^2.1",
         "symfony/stopwatch": "6.2.*",
         "symfony/web-profiler-bundle": "6.2.*",
-        "veewee/composer-run-parallel": "^1.2",
         "vimeo/psalm": "^5.9"
     },
     "config": {
         "allow-plugins": {
             "composer/package-versions-deprecated": true,
             "symfony/flex": true,
-            "symfony/runtime": true,
-            "dealerdirect/phpcodesniffer-composer-installer": true,
-            "veewee/composer-run-parallel": true
+            "symfony/runtime": true
         },
         "optimize-autoloader": true,
         "preferred-install": {
@@ -109,22 +106,7 @@
         ],
         "post-update-cmd": [
             "@auto-scripts"
-        ],
-        "phpstan": "vendor/bin/phpstan analyse -c phpstan-config.neon --ansi --memory-limit 2G",
-        "psalm": "vendor/bin/psalm",
-        "fixer-check": "php-cs-fixer --config=php-cs-fixer-config.php fix --dry-run --diff --ansi -v",
-        "fixer-fix": "php-cs-fixer --config=php-cs-fixer-config.php fix --ansi -v",
-        "twig-lint": "bin/console lint:twig src/Mailer/templates",
-        "container-lint": "bin/console lint:container",
-        "validate-doctrine-schema": "bin/console doctrine:schema:validate -v",
-        "cache-prod-check": "bin/console cache:clear --env=prod",
-        "deptrac-check": "vendor/bin/deptrac analyse --fail-on-uncovered --report-uncovered --config-file=deptrac.yaml --cache-file=var/cache/.deptrac.cache",
-        "deptrac-check-unassigned": "vendor/bin/deptrac debug:unassigned --config-file=deptrac.yaml --cache-file=var/cache/.deptrac.cache | tee /dev/stderr | grep 'There are no unassigned tokens'",
-        "deprecations-check": "bin/console debug:container --deprecations",
-        "rector-check": "vendor/bin/rector process --dry-run",
-        "rector-fix": "vendor/bin/rector process --clear-cache",
-        "check": "@parallel container-lint validate-doctrine-schema twig-lint fixer-check rector-check phpstan psalm cache-prod-check deptrac-check deptrac-check-unassigned",
-        "fix": ["@fixer-fix", "@rector-fix"]
+        ]
     },
     "conflict": {
         "symfony/symfony": "*"

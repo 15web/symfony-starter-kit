@@ -10,7 +10,9 @@ services:
             - ../backend:/app/
             - composer_cache:/home/dev/.composer
         env_file: backend/.env
-        depends_on: [ mysql ]
+        depends_on:
+            mysql:
+                condition: service_healthy
     backend-cli:
         <<: *backend
         depends_on: [ ]
@@ -25,7 +27,9 @@ services:
         volumes:
             - ../backend:/app/
         env_file: backend/.env
-        depends_on: [ mysql ]
+        depends_on:
+            mysql:
+                condition: service_healthy
     cron:
         build:
             context: ./backend/
@@ -50,6 +54,11 @@ services:
         ports:
             - ${MYSQL_PORT}:3306
         env_file: ./mysql/.env
+        healthcheck:
+            test: "mysql --user=$$MYSQL_USER --password=$$MYSQL_PASSWORD --execute='select 1;'"
+            interval: 1s
+            timeout: 100s
+            retries: 50
     mailhog:
         image: mailhog/mailhog:v1.0.1
     docs:

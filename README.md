@@ -11,13 +11,13 @@ git clone git@github.com:15web/symfony-starter-kit.git your-folder-name
 
 cd ./your-folder-name/
 
-./manage.bash i
+make init
 
 ```
 
 Порты настраиваются в файле `./.env`
 
-После настройки портов запустить `./manage.bash i`
+После настройки портов запустить `make install`
 
 Документация OpenAPI доступна по адресу http://localhost:8088/docs
 
@@ -27,11 +27,15 @@ cd ./your-folder-name/
 
 Предварительно нужно выполнить настройку тестового окружения:
 ```shell
-./manage.bash install-test
+make install-test
 ```
 Запуск проверок:
 ```shell
-./manage.bash c
+make check
+```
+Показать список доступных команд:
+```shell
+make help
 ```
 
 ## Генерация кода
