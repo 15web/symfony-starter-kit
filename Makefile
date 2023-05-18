@@ -77,16 +77,16 @@ twig-lint:
 	docker compose run -T --rm backend-cli bin/console lint:twig src/Mailer/templates
 
 phpstan:	# Запустить phpstan
-	docker compose run -T --rm backend-cli vendor/bin/phpstan analyse -c phpstan-config.neon --memory-limit 2G
+	docker compose run -T --rm backend-cli vendor/bin/phpstan analyse -c phpstan-config.neon --memory-limit 2G --ansi
 
 psalm:	# Запустить psalm
 	docker compose run -T --rm backend-cli vendor/bin/psalm
 
 fixer-check:
-	docker compose run -T --rm backend-cli vendor/bin/php-cs-fixer --config=php-cs-fixer-config.php fix --dry-run --diff
+	docker compose run -T --rm backend-cli vendor/bin/php-cs-fixer --config=php-cs-fixer-config.php fix --dry-run --diff --ansi
 
 rector-check:
-	docker compose run -T --rm backend-cli vendor/bin/rector process --dry-run
+	docker compose run -T --rm backend-cli vendor/bin/rector process --dry-run --ansi
 
 cache-prod-check:
 	docker compose run -T --rm backend-cli bin/console cache:clear --env=prod
