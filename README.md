@@ -11,7 +11,7 @@ git clone git@github.com:15web/symfony-starter-kit.git your-folder-name
 
 cd ./your-folder-name/
 
-make install
+make init
 
 ```
 
