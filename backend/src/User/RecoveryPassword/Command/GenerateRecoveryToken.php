@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\User\RecoveryPassword\Command;
 
+use App\Infrastructure\ApiRequestResolver\ApiRequest;
 use App\Infrastructure\AsService;
 use App\Mailer\Notification\PasswordRecovery\RecoveryPasswordMessage;
 use App\User\RecoveryPassword\Domain\RecoveryToken;
@@ -26,7 +27,7 @@ final readonly class GenerateRecoveryToken
     ) {
     }
 
-    public function __invoke(GenerateRecoveryTokenCommand $command): void
+    public function __invoke(#[ApiRequest] GenerateRecoveryTokenCommand $command): void
     {
         $user = $this->users->findByEmail($command->email);
 

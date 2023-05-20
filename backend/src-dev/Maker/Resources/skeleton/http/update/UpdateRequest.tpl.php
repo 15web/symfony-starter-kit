@@ -10,7 +10,6 @@ namespace <?php echo $namespace; ?>;
 /**
  * Объект запроса для обновления <?php echo $entity_classname."\n"; ?>
  */
-#[ApiRequest]
 final class UpdateRequest
 {
     public function __construct(<?php echo $properties; ?>) {

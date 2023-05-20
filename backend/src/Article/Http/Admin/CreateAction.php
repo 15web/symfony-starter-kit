@@ -8,6 +8,7 @@ use App\Article\Domain\Article;
 use App\Article\Domain\Articles;
 use App\Infrastructure\ApiException\ApiBadResponseException;
 use App\Infrastructure\ApiException\ApiErrorCode;
+use App\Infrastructure\ApiRequestResolver\ApiRequest;
 use App\Infrastructure\Flush;
 use App\User\SignUp\Domain\UserRole;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,7 +28,7 @@ final readonly class CreateAction
     {
     }
 
-    public function __invoke(CreateRequest $createRequest): Article
+    public function __invoke(#[ApiRequest] CreateRequest $createRequest): Article
     {
         $sameArticle = $this->articles->findByAlias($createRequest->alias);
         if ($sameArticle !== null) {

@@ -6,6 +6,7 @@ namespace App\Setting\Http\Admin;
 
 use App\Infrastructure\ApiException\ApiBadRequestException;
 use App\Infrastructure\ApiException\ApiNotFoundException;
+use App\Infrastructure\ApiRequestResolver\ApiRequest;
 use App\Infrastructure\Flush;
 use App\Infrastructure\SuccessResponse;
 use App\Setting\Command\SaveSetting;
@@ -34,7 +35,7 @@ final readonly class SettingSaveAction
     ) {
     }
 
-    public function __invoke(SaveSettingCommand $saveSettingCommand): SuccessResponse
+    public function __invoke(#[ApiRequest] SaveSettingCommand $saveSettingCommand): SuccessResponse
     {
         try {
             $setting = ($this->saveSetting)($saveSettingCommand);

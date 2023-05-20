@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Setting\Command;
 
+use App\Infrastructure\ApiRequestResolver\ApiRequest;
 use App\Infrastructure\AsService;
 use App\Setting\Domain\Setting;
 use App\Setting\Domain\SettingNotFoundException;
@@ -22,7 +23,7 @@ final readonly class SaveSetting
     /**
      * @throws SettingNotFoundException
      */
-    public function __invoke(SaveSettingCommand $command): Setting
+    public function __invoke(#[ApiRequest] SaveSettingCommand $command): Setting
     {
         $setting = $this->settings->getByType($command->type);
 

@@ -19,7 +19,7 @@ final class UpdateAction
     {
     }
 
-    public function __invoke(<?php echo $entity_classname; ?> $entity, UpdateRequest $updateRequest): SuccessResponse
+    public function __invoke(<?php echo $entity_classname; ?> $entity, #[ApiRequest] UpdateRequest $updateRequest): SuccessResponse
     {
         // TODO: обновить сущность
         ($this->flush)();

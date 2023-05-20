@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace App\User\Profile\Command\SaveProfile;
 
-use App\Infrastructure\ApiRequestResolver\ApiRequest;
 use Webmozart\Assert\Assert;
 
 /**
  * Команда сохранения профиля
  */
-#[ApiRequest]
 final readonly class SaveProfileCommand
 {
     public function __construct(

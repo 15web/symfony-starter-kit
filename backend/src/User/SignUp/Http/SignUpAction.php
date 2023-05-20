@@ -7,6 +7,7 @@ namespace App\User\SignUp\Http;
 use App\Infrastructure\ApiException\ApiBadRequestException;
 use App\Infrastructure\ApiException\ApiBadResponseException;
 use App\Infrastructure\ApiException\ApiErrorCode;
+use App\Infrastructure\ApiRequestResolver\ApiRequest;
 use App\Infrastructure\Flush;
 use App\Infrastructure\SuccessResponse;
 use App\User\SignUp\Command\SignUp;
@@ -30,7 +31,7 @@ final readonly class SignUpAction
     ) {
     }
 
-    public function __invoke(SignUpCommand $signUpCommand): SuccessResponse
+    public function __invoke(#[ApiRequest] SignUpCommand $signUpCommand): SuccessResponse
     {
         try {
             ($this->signUp)($signUpCommand);

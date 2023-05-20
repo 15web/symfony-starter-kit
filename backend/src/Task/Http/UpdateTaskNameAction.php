@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Task\Http;
 
 use App\Infrastructure\ApiException\ApiBadRequestException;
+use App\Infrastructure\ApiRequestResolver\ApiRequest;
 use App\Infrastructure\Flush;
 use App\Infrastructure\SuccessResponse;
 use App\Task\Command\UpdateTaskName\UpdateTaskName;
@@ -33,7 +34,7 @@ final readonly class UpdateTaskNameAction
     ) {
     }
 
-    public function __invoke(Task $task, UpdateTaskNameCommand $command): SuccessResponse
+    public function __invoke(Task $task, #[ApiRequest] UpdateTaskNameCommand $command): SuccessResponse
     {
         try {
             ($this->updateTaskName)($task, $command);
