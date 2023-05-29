@@ -14,6 +14,7 @@ use Rector\Set\ValueObject\SetList;
 use Rector\Symfony\Rector\MethodCall\WebTestCaseAssertIsSuccessfulRector;
 use Rector\Symfony\Rector\MethodCall\WebTestCaseAssertResponseCodeRector;
 use Rector\Symfony\Set\SymfonyLevelSetList;
+use Rector\Symfony\Set\SymfonySetList;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->parallel();
@@ -37,6 +38,7 @@ return static function (RectorConfig $rectorConfig): void {
         SetList::TYPE_DECLARATION,
         LevelSetList::UP_TO_PHP_82,
         SymfonyLevelSetList::UP_TO_SYMFONY_62,
+        SymfonySetList::SYMFONY_CODE_QUALITY,
         PHPUnitSetList::PHPUNIT_100,
     ]);
 

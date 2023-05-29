@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Dev\PHPCsFixer\PhpUnit;
 
-use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\DocBlock\DocBlock;
 use PhpCsFixer\Tokenizer\Analyzer\WhitespacesAnalyzer;
+use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
 use PhpCsFixer\WhitespacesFixerConfig;
 
