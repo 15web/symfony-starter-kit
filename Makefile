@@ -16,9 +16,9 @@ install-test: # Запуск проекта и подготовка тестов
 	docker compose run --rm backend-cli bin/console doctrine:migrations:migrate --no-interaction
 	docker compose run --rm backend-cli bin/console messenger:setup-transports
 	@for i in 1 2 3 4 ; do \
-  		docker compose exec -T mysql mysql -proot -e "drop database if exists db_name_test$$i;"; \
-  		docker compose exec -T mysql mysql -proot -e "create database if not exists db_name_test$$i;"; \
-  		docker compose exec -T mysql mysql -proot -e "GRANT ALL PRIVILEGES ON db_name_test$$i.* TO 'db_user'@'%';"; \
+  		docker compose exec mysql mysql -proot -e "drop database if exists db_name_test$$i;"; \
+  		docker compose exec mysql mysql -proot -e "create database if not exists db_name_test$$i;"; \
+  		docker compose exec mysql mysql -proot -e "GRANT ALL PRIVILEGES ON db_name_test$$i.* TO 'db_user'@'%';"; \
   		docker compose run --rm backend-cli bash -c "TEST_TOKEN=$$i bin/console --env=test doctrine:migrations:migrate --no-interaction"; \
 	done
 
@@ -59,62 +59,62 @@ test-verbose:	# Запуск тестов
 lint: container-lint validate-doctrine-schema twig-lint fixer-check rector-check phpstan psalm deptrac-check deptrac-check-unassigned cache-prod-check
 
 composer-validate:
-	docker compose run -T --rm backend-cli composer validate --strict
+	docker compose run --rm backend-cli composer validate --strict
 
 composer-audit:
-	docker compose run -T --rm backend-cli composer audit --format=plain
+	docker compose run --rm backend-cli composer audit --format=plain
 
 cache-clear:
-	docker compose run -T --rm backend-cli bin/console cache:clear
+	docker compose run --rm backend-cli bin/console cache:clear
 
 container-lint:
-	docker compose run -T --rm backend-cli bin/console lint:container
+	docker compose run --rm backend-cli bin/console lint:container
 
 validate-doctrine-schema:
-	docker compose run -T --rm backend-cli bin/console doctrine:schema:validate -v
+	docker compose run --rm backend-cli bin/console doctrine:schema:validate -v
 
 twig-lint:
-	docker compose run -T --rm backend-cli bin/console lint:twig src/Mailer/templates
+	docker compose run --rm backend-cli bin/console lint:twig src/Mailer/templates
 
 phpstan:	# Запустить phpstan
-	docker compose run -T --rm backend-cli vendor/bin/phpstan analyse -c phpstan-config.neon --memory-limit 2G --ansi
+	docker compose run --rm backend-cli vendor/bin/phpstan analyse -c phpstan-config.neon --memory-limit 2G --ansi
 
 psalm:	# Запустить psalm
-	docker compose run -T --rm backend-cli vendor/bin/psalm
+	docker compose run --rm backend-cli vendor/bin/psalm
 
 fixer-check:
-	docker compose run -T --rm backend-cli vendor/bin/php-cs-fixer --config=php-cs-fixer-config.php fix --dry-run --diff --ansi
+	docker compose run --rm backend-cli vendor/bin/php-cs-fixer --config=php-cs-fixer-config.php fix --dry-run --diff --ansi
 
 rector-check:
-	docker compose run -T --rm backend-cli vendor/bin/rector process --dry-run --ansi
+	docker compose run --rm backend-cli vendor/bin/rector process --dry-run --ansi
 
 cache-prod-check:
-	docker compose run -T --rm backend-cli bin/console cache:clear --env=prod
+	docker compose run --rm backend-cli bin/console cache:clear --env=prod
 
 deptrac-check:
-	docker compose run -T --rm backend-cli vendor/bin/deptrac analyse --fail-on-uncovered --report-uncovered --config-file=deptrac.yaml --cache-file=var/cache/.deptrac.cache
+	docker compose run --rm backend-cli vendor/bin/deptrac analyse --fail-on-uncovered --report-uncovered --config-file=deptrac.yaml --cache-file=var/cache/.deptrac.cache
 
 deptrac-check-unassigned:
-	docker compose run -T --rm backend-cli vendor/bin/deptrac debug:unassigned --config-file=deptrac.yaml --cache-file=var/cache/.deptrac.cache | tee /dev/stderr | grep 'There are no unassigned tokens'
+	docker compose run --rm backend-cli vendor/bin/deptrac debug:unassigned --config-file=deptrac.yaml --cache-file=var/cache/.deptrac.cache | tee /dev/stderr | grep 'There are no unassigned tokens'
 
 test:
-	docker compose run -T --rm backend-cli bin/console --env=test cache:clear
-	docker compose run -T --rm backend-cli bash -c 'APP_ENV=test vendor/bin/paratest -p4'
+	docker compose run --rm backend-cli bin/console --env=test cache:clear
+	docker compose run --rm backend-cli bash -c 'APP_ENV=test vendor/bin/paratest -p4'
 
 check-openapi-diff:
-	docker compose run -T --rm backend-cli bin/console app:openapi-routes-diff ./openapi.yaml
+	docker compose run --rm backend-cli bin/console app:openapi-routes-diff ./openapi.yaml
 
 check-openapi-schema:
-	docker compose run -T --rm vacuum lint /app/openapi.yaml -d -e
+	docker compose run --rm vacuum lint /app/openapi.yaml -d -e
 
 fixer-fix:
-	docker compose run -T --rm backend-cli vendor/bin/php-cs-fixer --config=php-cs-fixer-config.php fix
+	docker compose run --rm backend-cli vendor/bin/php-cs-fixer --config=php-cs-fixer-config.php fix
 
 rector-fix:
-	docker compose run -T --rm backend-cli vendor/bin/rector process --clear-cache
+	docker compose run --rm backend-cli vendor/bin/rector process --clear-cache
 
 deprecations-check:
-	docker compose run -T --rm backend-cli bin/console debug:container --deprecations
+	docker compose run --rm backend-cli bin/console debug:container --deprecations
 
 help:	#Show this help
 	@grep -E '^[a-zA-Z0-9 -]+:.*#'  Makefile | sort | while read -r l; do printf "\033[1;32m$$(echo $$l | cut -f 1 -d':')\033[00m:$$(echo $$l | cut -f 2- -d'#')\n"; done
