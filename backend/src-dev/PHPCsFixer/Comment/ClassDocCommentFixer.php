@@ -28,7 +28,7 @@ final class ClassDocCommentFixer implements FixerInterface, WhitespacesAwareFixe
     }
 
     /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     * @param Tokens<Token> $tokens
      */
     public function isCandidate(Tokens $tokens): bool
     {
@@ -66,7 +66,7 @@ final class Sample
     }
 
     /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     * @param Tokens<Token> $tokens
      */
     public function fix(SplFileInfo $file, Tokens $tokens): void
     {
@@ -93,7 +93,7 @@ final class Sample
     }
 
     /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     * @param Tokens<Token> $tokens
      */
     private function findClasses(Tokens $tokens): iterable
     {
@@ -113,7 +113,7 @@ final class Sample
     }
 
     /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     * @param Tokens<Token> $tokens
      */
     private function applyFix(Tokens $tokens): void
     {
@@ -134,7 +134,7 @@ final class Sample
     }
 
     /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     * @param Tokens<Token> $tokens
      */
     private function addComment(Tokens $tokens, int $startIndex): void
     {
@@ -148,7 +148,7 @@ final class Sample
     }
 
     /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     * @param Tokens<Token> $tokens
      */
     private function createDocBlock(Tokens $tokens, int $docBlockIndex): void
     {
@@ -164,7 +164,7 @@ final class Sample
     }
 
     /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     * @param Tokens<Token> $tokens
      */
     private function getDocBlockIndex(Tokens $tokens, int $index): int
     {
@@ -190,7 +190,7 @@ final class Sample
     }
 
     /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     * @param Tokens<Token> $tokens
      */
     private function isPHPDoc(Tokens $tokens, int $index): bool
     {

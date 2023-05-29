@@ -25,6 +25,11 @@ return static function (RectorConfig $rectorConfig): void {
         __DIR__.'/tests',
     ]);
 
+    $rectorConfig->parallel(seconds: 360);
+
+    $rectorConfig->importNames();
+    $rectorConfig->importShortClasses(false);
+
     $rectorConfig->sets([
         SetList::DEAD_CODE,
         SetList::CODE_QUALITY,

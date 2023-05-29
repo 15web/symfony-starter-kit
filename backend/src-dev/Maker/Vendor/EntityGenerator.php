@@ -178,7 +178,7 @@ final readonly class EntityGenerator
     public function createEntityClassQuestion(string $questionText): Question
     {
         $question = new Question($questionText);
-        $question->setValidator(static fn (?string $value = null): string => \Symfony\Bundle\MakerBundle\Validator::notBlank($value));
+        $question->setValidator(static fn (?string $value = null): string => Validator::notBlank($value));
         $question->setAutocompleterValues($this->doctrineHelper->getEntitiesForAutocomplete());
 
         return $question;
@@ -267,13 +267,13 @@ final readonly class EntityGenerator
         $data = ['fieldName' => $fieldName, 'type' => $type];
         if ($type === 'string') {
             // default to 255, avoid the question
-            $data['length'] = $io->ask('Field length', '255', static fn ($length) => \Symfony\Bundle\MakerBundle\Validator::validateLength($length));
+            $data['length'] = $io->ask('Field length', '255', static fn ($length) => Validator::validateLength($length));
         } elseif ($type === 'decimal') {
             // 10 is the default value given in \Doctrine\DBAL\Schema\Column::$_precision
-            $data['precision'] = $io->ask('Precision (total number of digits stored: 100.00 would be 5)', 10, static fn ($precision) => \Symfony\Bundle\MakerBundle\Validator::validatePrecision($precision));
+            $data['precision'] = $io->ask('Precision (total number of digits stored: 100.00 would be 5)', 10, static fn ($precision) => Validator::validatePrecision($precision));
 
             // 0 is the default value given in \Doctrine\DBAL\Schema\Column::$_scale
-            $data['scale'] = $io->ask('Scale (number of decimals to store: 100.00 would be 2)', 0, static fn ($scale) => \Symfony\Bundle\MakerBundle\Validator::validateScale($scale));
+            $data['scale'] = $io->ask('Scale (number of decimals to store: 100.00 would be 2)', 0, static fn ($scale) => Validator::validateScale($scale));
         }
 
         if ($io->confirm('Can this field be null in the database (nullable)', false)) {

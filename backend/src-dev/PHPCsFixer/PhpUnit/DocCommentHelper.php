@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Dev\PHPCsFixer\PhpUnit;
 
+use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\DocBlock\DocBlock;
 use PhpCsFixer\Tokenizer\Analyzer\WhitespacesAnalyzer;
 use PhpCsFixer\Tokenizer\Tokens;
@@ -19,7 +20,7 @@ final readonly class DocCommentHelper
     }
 
     /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     * @param Tokens<Token> $tokens
      */
     public function getDocBlockIndex(Tokens $tokens, int $index): int
     {
@@ -31,7 +32,7 @@ final readonly class DocCommentHelper
     }
 
     /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     * @param Tokens<Token> $tokens
      */
     public function isPHPDoc(Tokens $tokens, int $index): bool
     {
@@ -39,12 +40,12 @@ final readonly class DocCommentHelper
     }
 
     /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     * @param Tokens<Token> $tokens
      */
     public function makeDocBlockMultiLineIfNeeded(DocBlock $doc, Tokens $tokens, int $docBlockIndex): DocBlock
     {
         $lines = $doc->getLines();
-        if (\count($lines) === 1 && empty($doc->getAnnotationsOfType('testdox'))) {
+        if ((is_countable($lines) ? \count($lines) : 0) === 1 && empty($doc->getAnnotationsOfType('testdox'))) {
             $indent = WhitespacesAnalyzer::detectIndent($tokens, $tokens->getNextNonWhitespace($docBlockIndex));
             $doc->makeMultiLine($indent, $this->whitespacesConfig->getLineEnding());
 

@@ -23,7 +23,7 @@ final readonly class TestdoxForMethods
     }
 
     /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     * @param Tokens<Token> $tokens
      */
     public function addTestdoxAnnotation(Tokens $tokens, int $startIndex, int $endIndex): void
     {
@@ -44,7 +44,7 @@ final readonly class TestdoxForMethods
     }
 
     /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     * @param Tokens<Token> $tokens
      */
     private function addTestdox(Tokens $tokens, int $docBlockIndex): void
     {
@@ -60,7 +60,7 @@ final readonly class TestdoxForMethods
     }
 
     /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     * @param Tokens<Token> $tokens
      */
     private function updateDocBlockIfNeeded(Tokens $tokens, int $docBlockIndex): void
     {
@@ -76,7 +76,7 @@ final readonly class TestdoxForMethods
     }
 
     /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     * @param Tokens<Token> $tokens
      */
     private function updateDocBlock(DocBlock $docBlock, Tokens $tokens, int $docBlockIndex): array
     {
@@ -90,7 +90,7 @@ final readonly class TestdoxForMethods
     }
 
     /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     * @param Tokens<Token> $tokens
      */
     private function isTestMethod(Tokens $tokens, int $index): bool
     {
@@ -114,7 +114,7 @@ final readonly class TestdoxForMethods
     }
 
     /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     * @param Tokens<Token> $tokens
      */
     private function isMethod(Tokens $tokens, int $index): bool
     {
