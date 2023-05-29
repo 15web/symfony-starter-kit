@@ -24,9 +24,6 @@ final readonly class AuthenticationEntryPoint implements AuthenticationEntryPoin
     {
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function start(Request $request, ?AuthenticationException $authException = null): Response
     {
         return ($this->createExceptionJsonResponse)(new ApiUnauthorizedException());

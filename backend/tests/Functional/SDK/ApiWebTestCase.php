@@ -66,45 +66,45 @@ abstract class ApiWebTestCase extends WebTestCase
 
     final public static function assertSuccessResponse(Response $response): void
     {
-        static::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
     }
 
     final public static function assertSuccessContentResponse(Response $response): void
     {
-        static::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
 
         $response = self::jsonDecode($response->getContent());
-        static::assertTrue($response['success']);
+        self::assertTrue($response['success']);
     }
 
     final public static function assertBadRequest(Response $response): void
     {
-        static::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
     }
 
     final public static function assertApiError(Response $response, int $apiErrorCode): void
     {
-        static::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
 
         $response = self::jsonDecode($response->getContent());
-        static::assertTrue($response['error']);
-        static::assertSame($response['code'], $apiErrorCode);
-        static::assertNotEmpty($response['errorMessage']);
+        self::assertTrue($response['error']);
+        self::assertSame($response['code'], $apiErrorCode);
+        self::assertNotEmpty($response['errorMessage']);
     }
 
     final public static function assertAccessDenied(Response $response): void
     {
-        static::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
     }
 
     final public static function assertNotFound(Response $response): void
     {
-        static::assertSame(Response::HTTP_NOT_FOUND, $response->getStatusCode());
+        self::assertSame(Response::HTTP_NOT_FOUND, $response->getStatusCode());
     }
 
     final public static function assertForbidden(Response $response): void
     {
-        static::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
     }
 
     final public static function notValidTokenDataProvider(): Iterator

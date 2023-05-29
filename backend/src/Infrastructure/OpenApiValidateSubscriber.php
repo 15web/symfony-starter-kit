@@ -41,9 +41,6 @@ final readonly class OpenApiValidateSubscriber implements EventSubscriberInterfa
         $this->responseValidator = $validatorBuilder->getResponseValidator();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public static function getSubscribedEvents(): array
     {
         return [

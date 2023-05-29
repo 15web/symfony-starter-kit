@@ -24,9 +24,6 @@ final class MakerExtension extends Extension
      */
     private const TEST_MAKER_DEPRECATION_MESSAGE = 'The "%service_id%" service is deprecated, use "Maker.Maker.make_test" instead.';
 
-    /**
-     * {@inheritdoc}
-     */
     public function load(array $configs, ContainerBuilder $container): void
     {
         $loader = new Loader\XmlFileLoader($container, new FileLocator([
