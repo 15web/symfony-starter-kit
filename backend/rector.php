@@ -7,6 +7,7 @@ use Rector\CodeQuality\Rector\Class_\InlineConstructorDefaultToPropertyRector;
 use Rector\CodeQuality\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector;
 use Rector\Config\RectorConfig;
 use Rector\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector;
+use Rector\Doctrine\Set\DoctrineSetList;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
 use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Set\ValueObject\LevelSetList;
@@ -14,6 +15,7 @@ use Rector\Set\ValueObject\SetList;
 use Rector\Symfony\Rector\MethodCall\WebTestCaseAssertIsSuccessfulRector;
 use Rector\Symfony\Rector\MethodCall\WebTestCaseAssertResponseCodeRector;
 use Rector\Symfony\Set\SymfonyLevelSetList;
+use Rector\Symfony\Set\SymfonySetList;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->parallel();
@@ -25,6 +27,11 @@ return static function (RectorConfig $rectorConfig): void {
         __DIR__.'/tests',
     ]);
 
+    $rectorConfig->parallel(seconds: 360);
+
+    $rectorConfig->importNames();
+    $rectorConfig->importShortClasses(false);
+
     $rectorConfig->sets([
         SetList::DEAD_CODE,
         SetList::CODE_QUALITY,
@@ -32,6 +39,9 @@ return static function (RectorConfig $rectorConfig): void {
         SetList::TYPE_DECLARATION,
         LevelSetList::UP_TO_PHP_82,
         SymfonyLevelSetList::UP_TO_SYMFONY_62,
+        SymfonySetList::SYMFONY_CODE_QUALITY,
+        DoctrineSetList::DOCTRINE_CODE_QUALITY,
+        DoctrineSetList::ANNOTATIONS_TO_ATTRIBUTES,
         PHPUnitSetList::PHPUNIT_100,
     ]);
 

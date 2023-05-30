@@ -59,7 +59,7 @@ final class TestdoxFixer implements FixerInterface, WhitespacesAwareFixerInterfa
     }
 
     /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     * @param Tokens<Token> $tokens
      */
     public function isCandidate(Tokens $tokens): bool
     {
@@ -72,7 +72,7 @@ final class TestdoxFixer implements FixerInterface, WhitespacesAwareFixerInterfa
     }
 
     /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     * @param Tokens<Token> $tokens
      */
     public function fix(SplFileInfo $file, Tokens $tokens): void
     {
@@ -179,7 +179,7 @@ final class ExampleTest
     }
 
     /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     * @param Tokens<Token> $tokens
      */
     private function applyFix(SplFileInfo $file, Tokens $tokens): void
     {
@@ -191,7 +191,7 @@ final class ExampleTest
     }
 
     /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     * @param Tokens<Token> $tokens
      */
     private function applyPhpUnitClassFix(Tokens $tokens, SplFileInfo $file, int $startIndex, int $endIndex): void
     {
@@ -213,7 +213,7 @@ final class ExampleTest
     }
 
     /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     * @param Tokens<Token> $tokens
      */
     private function isAllowedByConfiguration(Tokens $tokens, SplFileInfo $file, int $i): bool
     {
@@ -230,7 +230,7 @@ final class ExampleTest
     }
 
     /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     * @param Tokens<Token> $tokens
      */
     private function createDocBlock(Tokens $tokens, int $docBlockIndex): void
     {
@@ -247,7 +247,7 @@ final class ExampleTest
     }
 
     /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     * @param Tokens<Token> $tokens
      */
     private function updateDocBlockIfNeeded(Tokens $tokens, int $docBlockIndex): void
     {
@@ -263,7 +263,7 @@ final class ExampleTest
     }
 
     /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     * @param Tokens<Token> $tokens
      *
      * @return Line[]
      */

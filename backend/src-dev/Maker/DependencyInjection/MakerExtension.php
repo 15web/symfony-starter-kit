@@ -9,7 +9,7 @@ use Symfony\Bundle\MakerBundle\MakerInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\Loader;
+use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 /**
@@ -26,7 +26,7 @@ final class MakerExtension extends Extension
 
     public function load(array $configs, ContainerBuilder $container): void
     {
-        $loader = new Loader\XmlFileLoader($container, new FileLocator([
+        $loader = new XmlFileLoader($container, new FileLocator([
             __DIR__.'/../Resources/config',
             __DIR__.'/../../../vendor/symfony/maker-bundle/src/Resources/config',
         ]));

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Article\Domain;
 
 use DateTimeImmutable;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV7;
@@ -26,7 +27,7 @@ class Article
     #[ORM\Column]
     private string $alias;
 
-    #[ORM\Column(type: 'text')]
+    #[ORM\Column(type: Types::TEXT)]
     private string $body;
 
     #[ORM\Column]
