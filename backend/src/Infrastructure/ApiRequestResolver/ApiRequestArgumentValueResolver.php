@@ -16,6 +16,8 @@ use Throwable;
 
 /**
  * Преобразует Request в нужный для ручки объект запроса
+ *
+ * @template TApiRequest of object
  */
 #[AsService]
 final readonly class ApiRequestArgumentValueResolver implements ValueResolverInterface
@@ -25,13 +27,13 @@ final readonly class ApiRequestArgumentValueResolver implements ValueResolverInt
     }
 
     /**
-     * @return iterable<ApiRequest>
+     * @return iterable<TApiRequest>
      *
      * @throws ApiBadRequestException
      */
     public function resolve(Request $request, ArgumentMetadata $argument): iterable
     {
-        /** @var class-string|null $className */
+        /** @var class-string<TApiRequest>|null $className */
         $className = $argument->getType();
         if ($className === null) {
             return [];
@@ -51,7 +53,6 @@ final readonly class ApiRequestArgumentValueResolver implements ValueResolverInt
         }
 
         try {
-            /** @var ApiRequest $requestObject */
             $requestObject = $this->serializer->deserialize(
                 $request->getContent(),
                 $className,
