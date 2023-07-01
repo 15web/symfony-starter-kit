@@ -18,7 +18,6 @@ use Rector\Symfony\Set\SymfonyLevelSetList;
 use Rector\Symfony\Set\SymfonySetList;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->parallel();
     $rectorConfig->cacheDirectory(__DIR__.'/var/cache/rector');
     $rectorConfig->paths([
         __DIR__.'/src',
