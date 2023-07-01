@@ -5,12 +5,9 @@ declare(strict_types=1);
 namespace Dev\PHPCsFixer\PhpUnit;
 
 use InvalidArgumentException;
-use PhpCsFixer\ConfigurationException\InvalidFixerConfigurationException;
 use PhpCsFixer\ConfigurationException\InvalidForEnvFixerConfigurationException;
 use PhpCsFixer\ConfigurationException\RequiredFixerConfigurationException;
 use PhpCsFixer\Console\Application;
-use PhpCsFixer\DocBlock\DocBlock;
-use PhpCsFixer\DocBlock\Line;
 use PhpCsFixer\Fixer\ConfigurableFixerInterface;
 use PhpCsFixer\Fixer\FixerInterface;
 use PhpCsFixer\Fixer\WhitespacesAwareFixerInterface;
@@ -23,18 +20,16 @@ use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
 use PhpCsFixer\FixerDefinition\FixerDefinitionInterface;
 use PhpCsFixer\Indicator\PhpUnitTestCaseIndicator;
-use PhpCsFixer\Tokenizer\Analyzer\WhitespacesAnalyzer;
 use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
 use PhpCsFixer\Utils;
 use PhpCsFixer\WhitespacesFixerConfig;
 use SplFileInfo;
-use Symfony\Component\OptionsResolver\Exception\ExceptionInterface;
 use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
 use Symfony\Component\OptionsResolver\Options;
 
 /**
- * Добавляет всем классам тестов аннотацию testdox
+ * Добавляет всем классам тестов атрибут testdox
  */
 final class TestdoxFixer implements FixerInterface, WhitespacesAwareFixerInterface, ConfigurableFixerInterface
 {
@@ -55,7 +50,7 @@ final class TestdoxFixer implements FixerInterface, WhitespacesAwareFixerInterfa
         $this->whitespacesConfig = $this->getDefaultWhitespacesFixerConfig();
 
         $this->commentHelper = new DocCommentHelper($this->whitespacesConfig);
-        $this->testdoxForMethods = new TestdoxForMethods($this->whitespacesConfig, $this->commentHelper);
+        $this->testdoxForMethods = new TestdoxForMethods($this->commentHelper);
     }
 
     /**
@@ -91,7 +86,7 @@ final class TestdoxFixer implements FixerInterface, WhitespacesAwareFixerInterfa
     public function getDefinition(): FixerDefinitionInterface
     {
         return new FixerDefinition(
-            'The test must have the testdox annotation.',
+            'The test must have the testdox attribute.',
             [
                 new CodeSample(
                     '<?php
@@ -114,7 +109,7 @@ final class ExampleTest
 
     public function getPriority(): int
     {
-        return 67;
+        return -31;
     }
 
     public function supports(SplFileInfo $file): bool
@@ -160,12 +155,6 @@ final class ExampleTest
                 sprintf('Invalid configuration for env: %s', $exception->getMessage()),
                 $exception
             );
-        } catch (ExceptionInterface $exception) {
-            throw new InvalidFixerConfigurationException(
-                $this->getName(),
-                sprintf('Invalid configuration: %s', $exception->getMessage()),
-                $exception
-            );
         }
     }
 
@@ -203,10 +192,8 @@ final class ExampleTest
 
         $docBlockIndex = $this->commentHelper->getDocBlockIndex($tokens, $classIndex);
 
-        if ($this->commentHelper->isPHPDoc($tokens, $docBlockIndex)) {
-            $this->updateDocBlockIfNeeded($tokens, $docBlockIndex);
-        } else {
-            $this->createDocBlock($tokens, $docBlockIndex);
+        if (!$this->commentHelper->hasTestDoxAttribute($tokens, $docBlockIndex)) {
+            $this->commentHelper->addTestDoxAttribute($tokens, $docBlockIndex);
         }
 
         $this->testdoxForMethods->addTestdoxAnnotation($tokens, $startIndex, $endIndex);
@@ -227,55 +214,6 @@ final class ExampleTest
         }
 
         return $tokens[$typeIndex]->isGivenKind(T_ABSTRACT);
-    }
-
-    /**
-     * @param Tokens<Token> $tokens
-     */
-    private function createDocBlock(Tokens $tokens, int $docBlockIndex): void
-    {
-        $lineEnd = $this->whitespacesConfig->getLineEnding();
-        $originalIndent = WhitespacesAnalyzer::detectIndent($tokens, $tokens->getNextNonWhitespace($docBlockIndex));
-        $toInsert = [
-            new Token([T_DOC_COMMENT,
-                '/**'.$lineEnd."{$originalIndent} * @testdox TODO: опиши что проверяет класс".$lineEnd.
-                "{$originalIndent} */"]),
-            new Token([T_WHITESPACE, $lineEnd.$originalIndent]),
-        ];
-        $index = $tokens->getNextMeaningfulToken($docBlockIndex);
-        $tokens->insertAt($index, $toInsert);
-    }
-
-    /**
-     * @param Tokens<Token> $tokens
-     */
-    private function updateDocBlockIfNeeded(Tokens $tokens, int $docBlockIndex): void
-    {
-        $doc = new DocBlock($tokens[$docBlockIndex]->getContent());
-        if (!empty($doc->getAnnotationsOfType('testdox'))) {
-            return;
-        }
-        $doc = $this->commentHelper->makeDocBlockMultiLineIfNeeded($doc, $tokens, $docBlockIndex);
-        $lines = $this->addTestdoxAnnotation($doc, $tokens, $docBlockIndex);
-        $lines = implode('', $lines);
-
-        $tokens[$docBlockIndex] = new Token([T_DOC_COMMENT, $lines]);
-    }
-
-    /**
-     * @param Tokens<Token> $tokens
-     *
-     * @return Line[]
-     */
-    private function addTestdoxAnnotation(DocBlock $docBlock, Tokens $tokens, int $docBlockIndex): array
-    {
-        $lines = $docBlock->getLines();
-        $originalIndent = WhitespacesAnalyzer::detectIndent($tokens, $docBlockIndex);
-        $lineEnd = $this->whitespacesConfig->getLineEnding();
-        array_splice($lines, -1, 0, $originalIndent.' *'.$lineEnd.$originalIndent.
-            ' * @testdox TODO: опиши что проверяет класс'.$lineEnd);
-
-        return $lines;
     }
 
     private function getDefaultWhitespacesFixerConfig(): WhitespacesFixerConfig

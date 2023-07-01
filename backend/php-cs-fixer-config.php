@@ -17,7 +17,7 @@ return (new PhpCsFixer\Config())
     ->setRiskyAllowed(true)
     ->registerCustomFixers([
         new \Dev\PHPCsFixer\Comment\ClassDocCommentFixer(),
-        //        new \Dev\PHPCsFixer\PhpUnit\TestdoxFixer(),
+        new \Dev\PHPCsFixer\PhpUnit\TestdoxFixer(),
     ])
     ->setRules([
         '@PER' => true,
@@ -52,6 +52,6 @@ return (new PhpCsFixer\Config())
         'php_unit_test_class_requires_covers' => false,
 
         'ClassDocComment/class_doc_comment' => true,
-        //        'Testdox/test_requires_testdox' => ['exclude' => 'SDK'],
+        'Testdox/test_requires_testdox' => ['exclude' => 'SDK'],
     ])
     ->setFinder($finder);
