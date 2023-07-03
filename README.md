@@ -55,7 +55,7 @@ make help
 - Задания `cron` из файла `docker/backend/cron/crontab`
 - Разделы документации из файла `backend/openapi.yaml`
 - Слои и правила `deptrac` из файла `backend/deptrac.yaml`
-- Убрать секцию `paths` в конфиге `translation` из файла `backend/config/packages/translation.yaml`
+- Убрать секцию `paths` в конфиге `twig` из файла `backend/config/packages/twig.yaml`
 
 ### Copyright and license
 
