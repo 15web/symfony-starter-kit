@@ -4,6 +4,15 @@
 
 Заготовка для старта проектов на Symfony 6, PHP 8.2, Mysql 8
 
+## Список модулей
+
+- [Infrastructure - инфраструктура](backend/src/Infrastructure/README.md)
+- [Article - CRUD на примере блога](backend/src/Article/README.md)
+- [Mailer - отправка электронной почты](backend/src/Mailer/README.md)
+- [Setting - пользовательские настройки приложения](backend/src/Setting/README.md)
+- [Task - CQS на примере трекера задач](backend/src/Task/README.md)
+- [User - CQS на примере управления пользователями](backend/src/User/README.md)
+
 ## Запуск
 
 ```shell
