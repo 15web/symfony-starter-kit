@@ -12,10 +12,10 @@ use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
 use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
-use Rector\Symfony\Rector\MethodCall\WebTestCaseAssertIsSuccessfulRector;
-use Rector\Symfony\Rector\MethodCall\WebTestCaseAssertResponseCodeRector;
 use Rector\Symfony\Set\SymfonyLevelSetList;
 use Rector\Symfony\Set\SymfonySetList;
+use Rector\Symfony\Symfony43\Rector\MethodCall\WebTestCaseAssertIsSuccessfulRector;
+use Rector\Symfony\Symfony43\Rector\MethodCall\WebTestCaseAssertResponseCodeRector;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->cacheDirectory(__DIR__.'/var/cache/rector');

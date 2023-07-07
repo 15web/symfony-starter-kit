@@ -24,6 +24,7 @@ final class OneFlushInClassRector extends AbstractRector
 {
     private const FLUSHER_CLASS = Flush::class;
     private const FLUSH_METHOD = 'flush';
+    public $nodeRemover;
 
     public function getRuleDefinition(): RuleDefinition
     {

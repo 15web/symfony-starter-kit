@@ -13,7 +13,7 @@ use Webmozart\Assert\Assert;
 #[ORM\Embeddable]
 final class Phone implements ValueObject
 {
-    private const PHONE_NUMBER_REGEX = '/^[0-9]{11}+$/';
+    private const PHONE_NUMBER_REGEX = '/^\d{11}+$/';
 
     #[ORM\Column]
     private readonly string $value;
