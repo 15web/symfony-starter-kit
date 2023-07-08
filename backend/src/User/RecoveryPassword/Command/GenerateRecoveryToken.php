@@ -6,7 +6,7 @@ namespace App\User\RecoveryPassword\Command;
 
 use App\Infrastructure\ApiRequestResolver\ApiRequest;
 use App\Infrastructure\AsService;
-use App\Mailer\Notification\PasswordRecovery\RecoveryPasswordMessage;
+use App\Mailer\PasswordRecovery\Command\RecoveryPasswordMessage;
 use App\User\RecoveryPassword\Domain\RecoveryToken;
 use App\User\RecoveryPassword\Domain\RecoveryTokens;
 use App\User\SignUp\Domain\UserNotFoundException;

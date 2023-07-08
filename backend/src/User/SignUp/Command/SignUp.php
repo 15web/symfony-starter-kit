@@ -7,7 +7,7 @@ namespace App\User\SignUp\Command;
 use App\Infrastructure\ApiRequestResolver\ApiRequest;
 use App\Infrastructure\AsService;
 use App\Infrastructure\Email;
-use App\Mailer\Notification\EmailConfirmation\ConfirmEmailMessage;
+use App\Mailer\EmailConfirmation\Command\ConfirmEmailMessage;
 use App\User\SignUp\Domain\ConfirmToken;
 use App\User\SignUp\Domain\User;
 use App\User\SignUp\Domain\UserId;

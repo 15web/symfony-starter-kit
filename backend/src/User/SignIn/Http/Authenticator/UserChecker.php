@@ -7,7 +7,7 @@ namespace App\User\SignIn\Http\Authenticator;
 use App\Infrastructure\ApiException\ApiBadResponseException;
 use App\Infrastructure\ApiException\ApiErrorCode;
 use App\Infrastructure\AsService;
-use App\Mailer\Notification\EmailConfirmation\ConfirmEmailMessage;
+use App\Mailer\EmailConfirmation\Command\ConfirmEmailMessage;
 use App\User\SignUp\Domain\User;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Security\Core\User\UserCheckerInterface;

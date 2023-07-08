@@ -1,0 +1,39 @@
+parameters:
+    paths:
+        - ./src
+    exclude_files:
+        - '#.*test.*#i'
+    layers:
+        -   name: Mailer
+            collectors:
+                -   type: className
+                    regex: App\\Mailer\\.*
+        -   name: User
+            collectors:
+                -   type: className
+                    regex: App\\User\\.*
+        -
+            name: Article
+            collectors:
+                -
+                    type: className
+                    regex: App\\Article\\.*
+        -   name: Setting
+            collectors:
+                -   type: className
+                    regex: App\\Setting\\.*
+        -   name: Task
+            collectors:
+                -   type: className
+                    regex: App\\Task\\.*
+    ruleset:
+        Mailer: ~
+        User:
+            - Mailer
+        Article:
+            - User
+        Setting:
+            - User
+        Task:
+            - Mailer
+            - User
