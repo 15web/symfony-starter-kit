@@ -9,8 +9,10 @@ use App\Task\Query\Comment\FindAll\FindAllCommentQuery;
 use App\Task\Query\Comment\FindAll\FindAllCommentsByTaskIdAndUserId;
 use App\User\SignUp\Domain\UserId;
 use App\User\SignUp\Domain\UserRole;
+use App\User\SignUp\Http\UserIdArgumentValueResolver;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Uid\Uuid;
@@ -30,7 +32,7 @@ final readonly class TaskCommentsListAction
     /**
      * @return CommentData[]
      */
-    public function __invoke(Uuid $id, UserId $userId): array
+    public function __invoke(Uuid $id, #[ValueResolver(UserIdArgumentValueResolver::class)] UserId $userId): array
     {
         return ($this->findAllComments)(new FindAllCommentQuery($id, $userId->value));
     }

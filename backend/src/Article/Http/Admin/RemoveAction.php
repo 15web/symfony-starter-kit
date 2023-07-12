@@ -11,6 +11,7 @@ use App\Infrastructure\SuccessResponse;
 use App\User\SignUp\Domain\UserRole;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -26,7 +27,7 @@ final readonly class RemoveAction
     {
     }
 
-    public function __invoke(Article $article): SuccessResponse
+    public function __invoke(#[ValueResolver(ArticleArgumentValueResolver::class)] Article $article): SuccessResponse
     {
         $this->articles->remove($article);
         ($this->flush)();

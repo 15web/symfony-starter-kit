@@ -12,10 +12,12 @@ use App\Task\Command\CreateTask\CreateTaskCommand;
 use App\Task\Domain\TaskId;
 use App\User\SignUp\Domain\UserId;
 use App\User\SignUp\Domain\UserRole;
+use App\User\SignUp\Http\UserIdArgumentValueResolver;
 use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -34,8 +36,10 @@ final readonly class CreateTaskAction
     ) {
     }
 
-    public function __invoke(#[ApiRequest] CreateTaskCommand $createTaskCommand, UserId $userId): TaskData
-    {
+    public function __invoke(
+        #[ApiRequest] CreateTaskCommand $createTaskCommand,
+        #[ValueResolver(UserIdArgumentValueResolver::class)] UserId $userId,
+    ): TaskData {
         try {
             $taskId = new TaskId();
             ($this->createTask)($createTaskCommand, $taskId, $userId);

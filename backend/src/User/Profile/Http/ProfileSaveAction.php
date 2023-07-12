@@ -14,9 +14,11 @@ use App\User\Profile\Query\FindByUserId\FindProfileByUserIdQuery;
 use App\User\Profile\Query\FindByUserId\ProfileData;
 use App\User\SignUp\Domain\UserId;
 use App\User\SignUp\Domain\UserRole;
+use App\User\SignUp\Http\UserIdArgumentValueResolver;
 use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -35,8 +37,10 @@ final readonly class ProfileSaveAction
     ) {
     }
 
-    public function __invoke(#[ApiRequest] SaveProfileCommand $command, UserId $userId): ProfileData
-    {
+    public function __invoke(
+        #[ApiRequest] SaveProfileCommand $command,
+        #[ValueResolver(UserIdArgumentValueResolver::class)] UserId $userId,
+    ): ProfileData {
         try {
             ($this->saveProfile)($command, $userId);
 
