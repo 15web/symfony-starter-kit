@@ -24,7 +24,7 @@ final readonly class FunctionalTestsGenerator
 
     public function __construct(
         private string $path,
-        private CustomGenerator $generator
+        private CustomGenerator $generator,
     ) {
         $this->entityFieldsManipulator = new EntityFieldsManipulator();
     }
