@@ -41,6 +41,10 @@ deptrac:
             collectors:
                 -   type: classLike
                     value: App\\.*\\Service\\.*
+        -   name: Scheduler
+            collectors:
+                -   type: classLike
+                    value: App\\.*\\Scheduler\\.*
     ruleset:
         Http:
             - Domain

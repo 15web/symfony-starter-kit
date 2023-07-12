@@ -1,4 +1,0 @@
-SHELL=/bin/bash
-BASH_ENV=/docker.env
-
-15 21 */1 * * echo "$(date): Cron job app:task:send-uncompleted " >> /proc/1/fd/2 2>&1; su dev --command='/usr/local/bin/php /app/bin/console app:task:send-uncompleted' >> /proc/1/fd/2 2>&1;

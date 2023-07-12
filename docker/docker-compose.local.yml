@@ -37,16 +37,6 @@ services:
         depends_on:
             pgsql:
                 condition: service_healthy
-    cron:
-        build:
-            context: ./backend/
-            target: cron
-            args:
-                USER_ID: ${USER_ID}
-        volumes:
-            - ../backend:/app/
-        env_file: backend/.env
-        init: true
     nginx:
         build:
             context: ./nginx/
