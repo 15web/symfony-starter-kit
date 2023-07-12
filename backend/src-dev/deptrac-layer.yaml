@@ -56,6 +56,10 @@ parameters:
             collectors:
                 -   type: className
                     regex: App\\.*\\Service\\.*
+        -   name: Scheduler
+            collectors:
+                -   type: className
+                    regex: App\\.*\\Scheduler\\.*
     ruleset:
         Http:
             - Domain
@@ -89,4 +93,9 @@ parameters:
             - Vendor
         Infrastructure:
             - Vendor
+        Scheduler:
+            - Vendor
+            - Infrastructure
+            - Notification
+            - Query
         Vendor: ~
