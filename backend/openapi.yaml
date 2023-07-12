@@ -18,6 +18,8 @@ tags:
       description: Настройки
     - name: profile
       description: Профиль
+    - name: seo
+      description: SEO
 servers:
     - url: /api
 paths:
@@ -845,6 +847,62 @@ paths:
                                 error: true
                                 code: 404
                                 errorMessage: Настройка не найдена
+    /seo/{type}/{identity}:
+        get:
+            operationId: seoInfo
+            summary: Получить SEO параметры объекта
+            tags:
+                - seo
+            parameters:
+                -   $ref: '#/components/parameters/seoType'
+                -   $ref: '#/components/parameters/seoIdentity'
+            security: [ ]
+            responses:
+                '200':
+                    description: SEO параметры
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/seoInfoResponse'
+    /admin/seo/save:
+        post:
+            operationId: saveSeo
+            summary: Сохранить SEO параметры объекта
+            tags:
+                - seo
+            requestBody:
+                description: Запрос на сохранение
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/seoSaveRequest'
+            responses:
+                '200':
+                    description: Данные seo сохранены
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/successResponse'
+                '400':
+                    description: Ошибка запроса
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/errorResponse'
+                            example:
+                                error: true
+                                code: 400
+                                errorMessage: Неверный формат запроса
+                '401':
+                    description: Доступ запрещен
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/errorResponse'
+                            example:
+                                error: true
+                                code: 401
+                                errorMessage: Необходимо пройти аутентификацию
 components:
     securitySchemes:
         ApiTokenAuth:
@@ -1298,6 +1356,57 @@ components:
         settingIsPublic:
             type: boolean
             description: Публична ли настройка
+        seoInfoResponse:
+            type: object
+            description: SEO информация
+            properties:
+                title:
+                    type: string
+                    nullable: true
+                    description: Заголовок
+                    example: Первая статья
+                description:
+                    type: string
+                    nullable: true
+                    description: Описание
+                    example: Описание первой статьи
+                keywords:
+                    type: string
+                    nullable: true
+                    description: Ключевые слова
+                    example: ключевые слова
+        seoSaveRequest:
+            type: object
+            properties:
+                type:
+                    type: string
+                    description: Тип объекта
+                    enum:
+                        - article
+                        - task
+                identity:
+                    type: string
+                    description: Идентификатор объекта
+                    example: dc8dbada-b154-4ffb-b21c-da70162e2704
+                title:
+                    type: string
+                    nullable: true
+                    description: Заголовок
+                    example: Первая статья
+                description:
+                    type: string
+                    nullable: true
+                    description: Описание
+                    example: Описание первой статьи
+                keywords:
+                    type: string
+                    nullable: true
+                    description: Ключевые слова
+                    example: ключевые слова
+            additionalProperties: false
+            required:
+                - type
+                - identity
     parameters:
         articleAlias:
             in: path
@@ -1370,5 +1479,25 @@ components:
             schema:
                  type: string
                  format: uuid
+        seoType:
+            name: type
+            in: path
+            required: true
+            description: Тип объекта
+            example: article
+            schema:
+                type: string
+                enum:
+                    - article
+                    - task
+        seoIdentity:
+            name: identity
+            in: path
+            required: true
+            description: ID объекта
+            example: 123e4567-e89b-12d3-a456-426614174000
+            schema:
+                type: string
+                format: uuid
 security:
     - ApiTokenAuth: []
