@@ -4,15 +4,16 @@ init: ./setup_envs.bash build db-migrate setup-transports # Запуск про�
 
 install-test: # Запуск проекта и подготовка тестового окружения
 	./setup_envs.bash
-	docker compose build backend mysql
+	docker compose build backend db
 	docker compose run --rm backend-cli composer install --no-scripts --prefer-dist --no-progress
-	docker compose up --detach --force-recreate --remove-orphans backend mysql
+	docker compose up --detach --force-recreate --remove-orphans backend db
 	docker compose run --rm backend-cli bin/console doctrine:migrations:migrate --no-interaction
 	docker compose run --rm backend-cli bin/console messenger:setup-transports
 	@for i in 1 2 3 4 ; do \
-  		docker compose exec mysql mysql -proot -e "drop database if exists db_name_test$$i;"; \
-  		docker compose exec mysql mysql -proot -e "create database if not exists db_name_test$$i;"; \
-  		docker compose exec mysql mysql -proot -e "GRANT ALL PRIVILEGES ON db_name_test$$i.* TO 'db_user'@'%';"; \
+  		docker compose exec db psql --username db_user --dbname db_name --command "drop database if exists db_name_test$$i;"; \
+  		docker compose exec db psql --username db_user --dbname db_name --command "create database db_name_test$$i;"; \
+  		docker compose exec db psql --username db_user --dbname db_name_test$$i --command "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO db_user;"; \
+  		docker compose exec db psql --username db_user --dbname db_name_test$$i --command "GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO db_user;"; \
   		docker compose run --rm backend-cli bash -c "TEST_TOKEN=$$i bin/console --env=test doctrine:migrations:migrate --no-interaction"; \
 	done
 

@@ -11,7 +11,7 @@ services:
             - composer_cache:/home/dev/.composer
         env_file: backend/.env
         depends_on:
-            mysql:
+            db:
                 condition: service_healthy
     backend-cli:
         <<: *backend
@@ -28,7 +28,7 @@ services:
             - ../backend:/app/
         env_file: backend/.env
         depends_on:
-            mysql:
+            db:
                 condition: service_healthy
     cron:
         build:
@@ -46,16 +46,16 @@ services:
         ports:
             - ${NGINX_PORT}:80
         depends_on: [ backend ]
-    mysql:
+    db:
         build:
-            context: ./mysql/
+            context: ./postgres/
         volumes:
-            - mysql:/var/lib/mysql/
+            - db:/var/lib/postgresql/data
         ports:
-            - ${MYSQL_PORT}:3306
-        env_file: ./mysql/.env
+            - ${POSTGRES_PORT}:3306
+        env_file: ./postgres/.env
         healthcheck:
-            test: "mysql --user=$$MYSQL_USER --password=$$MYSQL_PASSWORD --execute='select 1;'"
+            test: "pg_isready -d $$POSTGRES_DB"
             interval: 1s
             timeout: 100s
             retries: 50
@@ -73,5 +73,5 @@ services:
         volumes:
             - ../backend/openapi.yaml:/app/openapi.yaml:ro
 volumes:
-    mysql:
+    db:
     composer_cache:

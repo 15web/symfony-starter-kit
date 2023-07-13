@@ -12,7 +12,7 @@ use Symfony\Component\Uid\Uuid;
  * Восстановление пароля
  */
 #[ORM\Entity]
-#[ORM\Index(fields: ['userId'], name: 'user_id_idx')]
+#[ORM\Index(fields: ['userId'], name: 'ix_recovery_token_user_id')]
 /** @final */
 class RecoveryToken
 {
