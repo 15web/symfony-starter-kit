@@ -1,12 +1,6 @@
 .PHONY: all
 
-init: # Запуск проекта и установка зависимостей
-	./setup_envs.bash
-	docker compose build
-	docker compose run --rm backend-cli composer install --no-scripts --prefer-dist
-	docker compose up --detach --force-recreate --remove-orphans
-	docker compose run --rm backend-cli bin/console doctrine:migrations:migrate --no-interaction
-	docker compose run --rm backend-cli bin/console messenger:setup-transports
+init: ./setup_envs.bash build db-migrate setup-transports # Запуск проекта и установка зависимостей
 
 install-test: # Запуск проекта и подготовка тестового окружения
 	./setup_envs.bash
@@ -42,6 +36,12 @@ build:	# Билд образов и установка зависимостей
 	docker compose build
 	docker compose run --rm backend-cli composer install --no-scripts --prefer-dist
 	docker compose up -d --force-recreate --remove-orphans
+
+db-migrate: # Миграции БД
+	docker compose run --rm backend-cli bin/console doctrine:migrations:migrate --no-interaction
+
+setup-transports:
+	docker compose run --rm backend-cli bin/console messenger:setup-transports
 
 run-backend:	# Выполнение команды на бэкенде, пример: make run-backend echo "hello"
 	./setup_envs.bash
