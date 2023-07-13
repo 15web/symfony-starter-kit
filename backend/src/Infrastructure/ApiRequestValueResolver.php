@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\ApiRequestResolver;
+namespace App\Infrastructure;
 
 use App\Infrastructure\ApiException\ApiBadRequestException;
-use App\Infrastructure\AsService;
 use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
@@ -20,7 +19,7 @@ use Throwable;
  * @template TApiRequest of object
  */
 #[AsService]
-final readonly class ApiRequestArgumentValueResolver implements ValueResolverInterface
+final readonly class ApiRequestValueResolver implements ValueResolverInterface
 {
     public function __construct(private SerializerInterface $serializer)
     {
@@ -36,11 +35,6 @@ final readonly class ApiRequestArgumentValueResolver implements ValueResolverInt
         /** @var class-string<TApiRequest>|null $className */
         $className = $argument->getType();
         if ($className === null) {
-            return [];
-        }
-
-        $attributes = $argument->getAttributesOfType(ApiRequest::class, ArgumentMetadata::IS_INSTANCEOF);
-        if ($attributes === []) {
             return [];
         }
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Task\Http\TaskList;
 
 use App\Infrastructure\Pagination\PaginationRequest;
+use App\Infrastructure\Pagination\PaginationRequestArgumentResolver;
 use App\Infrastructure\Pagination\PaginationResponse;
 use App\Task\Query\Task\FindAllByUserId\CountAllTasksByUserId;
 use App\Task\Query\Task\FindAllByUserId\FindAllTasksByUserId;
@@ -34,7 +35,7 @@ final readonly class TaskListAction
 
     public function __invoke(
         #[ValueResolver(UserIdArgumentValueResolver::class)] UserId $userId,
-        PaginationRequest $paginationRequest,
+        #[ValueResolver(PaginationRequestArgumentResolver::class)] PaginationRequest $paginationRequest,
     ): TaskListResponse {
         $query = new FindAllTasksByUserIdQuery(
             $userId->value,

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\User\Profile\Command\SaveProfile;
 
-use App\Infrastructure\ApiRequestResolver\ApiRequest;
 use App\Infrastructure\AsService;
 use App\User\Profile\Domain\Profiles;
 use App\User\SignUp\Domain\UserId;
@@ -22,8 +21,10 @@ final readonly class SaveProfile
     ) {
     }
 
-    public function __invoke(#[ApiRequest] SaveProfileCommand $command, UserId $userId): void
-    {
+    public function __invoke(
+        SaveProfileCommand $command,
+        UserId $userId,
+    ): void {
         $profile = $this->profiles->findByUserId($userId);
 
         if ($profile !== null) {

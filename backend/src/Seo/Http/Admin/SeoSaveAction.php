@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Seo\Http\Admin;
 
 use App\Infrastructure\ApiException\ApiBadRequestException;
-use App\Infrastructure\ApiRequestResolver\ApiRequest;
+use App\Infrastructure\ApiRequestValueResolver;
 use App\Infrastructure\Flush;
 use App\Infrastructure\SuccessResponse;
 use App\Seo\Command\SaveSeo;
@@ -15,6 +15,7 @@ use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -33,8 +34,9 @@ final readonly class SeoSaveAction
     ) {
     }
 
-    public function __invoke(#[ApiRequest] SaveSeoCommand $saveSeoCommand): SuccessResponse
-    {
+    public function __invoke(
+        #[ValueResolver(ApiRequestValueResolver::class)] SaveSeoCommand $saveSeoCommand,
+    ): SuccessResponse {
         try {
             $seo = ($this->saveSeo)($saveSeoCommand);
 

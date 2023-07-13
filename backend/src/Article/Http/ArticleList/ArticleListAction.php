@@ -6,9 +6,11 @@ namespace App\Article\Http\ArticleList;
 
 use App\Article\Domain\Articles;
 use App\Infrastructure\Pagination\PaginationRequest;
+use App\Infrastructure\Pagination\PaginationRequestArgumentResolver;
 use App\Infrastructure\Pagination\PaginationResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -22,8 +24,9 @@ final readonly class ArticleListAction
     {
     }
 
-    public function __invoke(PaginationRequest $paginationRequest): ArticleListResponse
-    {
+    public function __invoke(
+        #[ValueResolver(PaginationRequestArgumentResolver::class)] PaginationRequest $paginationRequest,
+    ): ArticleListResponse {
         $articles = $this->articles->getAll($paginationRequest->limit, $paginationRequest->offset);
         $articlesCount = $this->articles->countAll();
 

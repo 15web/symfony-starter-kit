@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Task\Http\Comment;
 
 use App\Infrastructure\ApiException\ApiBadRequestException;
-use App\Infrastructure\ApiRequestResolver\ApiRequest;
+use App\Infrastructure\ApiRequestValueResolver;
 use App\Infrastructure\Flush;
 use App\Infrastructure\SuccessResponse;
 use App\Task\Command\Comment\Add\AddCommentOnTask;
@@ -39,7 +39,7 @@ final readonly class AddCommentOnTaskAction
 
     public function __invoke(
         #[ValueResolver(TaskArgumentValueResolver::class)] Task $task,
-        #[ApiRequest] AddCommentOnTaskCommand $addCommentOnTaskCommand,
+        #[ValueResolver(ApiRequestValueResolver::class)] AddCommentOnTaskCommand $addCommentOnTaskCommand,
     ): SuccessResponse {
         try {
             $commentId = new TaskCommentId();
