@@ -13,6 +13,7 @@ use App\Infrastructure\Flush;
 use App\User\SignUp\Domain\UserRole;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -28,8 +29,10 @@ final readonly class UpdateAction
     {
     }
 
-    public function __invoke(Article $article, #[ApiRequest] UpdateRequest $updateRequest): Article
-    {
+    public function __invoke(
+        #[ValueResolver(ArticleArgumentValueResolver::class)] Article $article,
+        #[ApiRequest] UpdateRequest $updateRequest,
+    ): Article {
         $sameArticle = $this->articles->findByAlias($updateRequest->alias);
         if ($sameArticle !== null && $sameArticle->getId() !== $article->getId()) {
             throw new ApiBadResponseException('article.not_found_by_alias', ApiErrorCode::ArticleAlreadyExist);

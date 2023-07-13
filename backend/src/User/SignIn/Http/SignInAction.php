@@ -8,7 +8,9 @@ use App\Infrastructure\Flush;
 use App\User\SignIn\Command\CreateToken;
 use App\User\SignIn\Http\Authenticator\JsonLoginAuthenticator;
 use App\User\SignUp\Domain\UserId;
+use App\User\SignUp\Http\UserIdArgumentValueResolver;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Uid\UuidV7;
 
@@ -25,7 +27,7 @@ final readonly class SignInAction
     ) {
     }
 
-    public function __invoke(UserId $userId): UserResponse
+    public function __invoke(#[ValueResolver(UserIdArgumentValueResolver::class)] UserId $userId): UserResponse
     {
         $token = new UuidV7();
         ($this->createToken)($userId, $token);

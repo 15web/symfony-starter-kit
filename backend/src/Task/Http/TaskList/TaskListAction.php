@@ -11,8 +11,10 @@ use App\Task\Query\Task\FindAllByUserId\FindAllTasksByUserId;
 use App\Task\Query\Task\FindAllByUserId\FindAllTasksByUserIdQuery;
 use App\User\SignUp\Domain\UserId;
 use App\User\SignUp\Domain\UserRole;
+use App\User\SignUp\Http\UserIdArgumentValueResolver;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -30,8 +32,10 @@ final readonly class TaskListAction
     ) {
     }
 
-    public function __invoke(UserId $userId, PaginationRequest $paginationRequest): TaskListResponse
-    {
+    public function __invoke(
+        #[ValueResolver(UserIdArgumentValueResolver::class)] UserId $userId,
+        PaginationRequest $paginationRequest,
+    ): TaskListResponse {
         $query = new FindAllTasksByUserIdQuery(
             $userId->value,
             $paginationRequest->limit,

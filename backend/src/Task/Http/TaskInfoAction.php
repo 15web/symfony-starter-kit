@@ -11,8 +11,10 @@ use App\Task\Query\Task\FindById\TaskData;
 use App\Task\Query\Task\FindById\TaskNotFoundException;
 use App\User\SignUp\Domain\UserId;
 use App\User\SignUp\Domain\UserRole;
+use App\User\SignUp\Http\UserIdArgumentValueResolver;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Uid\Uuid;
@@ -29,7 +31,7 @@ final readonly class TaskInfoAction
     {
     }
 
-    public function __invoke(Uuid $id, UserId $userId): TaskData
+    public function __invoke(Uuid $id, #[ValueResolver(UserIdArgumentValueResolver::class)] UserId $userId): TaskData
     {
         try {
             $taskData = ($this->findTaskById)(new FindTaskByIdQuery($id, $userId->value));

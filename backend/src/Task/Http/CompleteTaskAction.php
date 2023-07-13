@@ -14,6 +14,7 @@ use App\User\SignUp\Domain\UserRole;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -32,7 +33,7 @@ final readonly class CompleteTaskAction
     ) {
     }
 
-    public function __invoke(Task $task): SuccessResponse
+    public function __invoke(#[ValueResolver(TaskArgumentValueResolver::class)] Task $task): SuccessResponse
     {
         try {
             ($this->completeTask)($task);

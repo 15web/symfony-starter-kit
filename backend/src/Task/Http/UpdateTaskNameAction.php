@@ -16,6 +16,7 @@ use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -34,8 +35,10 @@ final readonly class UpdateTaskNameAction
     ) {
     }
 
-    public function __invoke(Task $task, #[ApiRequest] UpdateTaskNameCommand $command): SuccessResponse
-    {
+    public function __invoke(
+        #[ValueResolver(TaskArgumentValueResolver::class)] Task $task,
+        #[ApiRequest] UpdateTaskNameCommand $command,
+    ): SuccessResponse {
         try {
             ($this->updateTaskName)($task, $command);
 
