@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\User\Profile\Command\SaveProfile;
 
-use App\Infrastructure\ApiRequestResolver\ApiRequest;
 use App\Infrastructure\AsService;
 use App\Infrastructure\Phone;
 use App\User\Profile\Domain\Profile;
@@ -22,8 +21,10 @@ final readonly class CreateProfile
     {
     }
 
-    public function __invoke(#[ApiRequest] SaveProfileCommand $command, UserId $userId): void
-    {
+    public function __invoke(
+        SaveProfileCommand $command,
+        UserId $userId,
+    ): void {
         $profile = new Profile(
             new ProfileId(),
             $userId,

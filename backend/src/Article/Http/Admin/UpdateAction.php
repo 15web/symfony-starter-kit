@@ -8,7 +8,7 @@ use App\Article\Domain\Article;
 use App\Article\Domain\Articles;
 use App\Infrastructure\ApiException\ApiBadResponseException;
 use App\Infrastructure\ApiException\ApiErrorCode;
-use App\Infrastructure\ApiRequestResolver\ApiRequest;
+use App\Infrastructure\ApiRequestValueResolver;
 use App\Infrastructure\Flush;
 use App\User\SignUp\Domain\UserRole;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,7 +31,7 @@ final readonly class UpdateAction
 
     public function __invoke(
         #[ValueResolver(ArticleArgumentValueResolver::class)] Article $article,
-        #[ApiRequest] UpdateRequest $updateRequest,
+        #[ValueResolver(ApiRequestValueResolver::class)] UpdateRequest $updateRequest,
     ): Article {
         $sameArticle = $this->articles->findByAlias($updateRequest->alias);
         if ($sameArticle !== null && $sameArticle->getId() !== $article->getId()) {

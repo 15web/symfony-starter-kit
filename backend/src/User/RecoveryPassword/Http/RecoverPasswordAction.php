@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\User\RecoveryPassword\Http;
 
 use App\Infrastructure\ApiException\ApiNotFoundException;
-use App\Infrastructure\ApiRequestResolver\ApiRequest;
+use App\Infrastructure\ApiRequestValueResolver;
 use App\Infrastructure\Flush;
 use App\Infrastructure\SuccessResponse;
 use App\User\RecoveryPassword\Command\RecoverPassword;
@@ -13,6 +13,7 @@ use App\User\RecoveryPassword\Command\RecoverPasswordCommand;
 use App\User\RecoveryPassword\Command\RecoveryTokenNotFoundException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Uid\Uuid;
 
@@ -27,8 +28,10 @@ final readonly class RecoverPasswordAction
     {
     }
 
-    public function __invoke(Uuid $recoveryToken, #[ApiRequest] RecoverPasswordCommand $recoverPasswordCommand): SuccessResponse
-    {
+    public function __invoke(
+        Uuid $recoveryToken,
+        #[ValueResolver(ApiRequestValueResolver::class)] RecoverPasswordCommand $recoverPasswordCommand,
+    ): SuccessResponse {
         try {
             ($this->recoverPassword)($recoveryToken, $recoverPasswordCommand);
 

@@ -7,6 +7,7 @@ namespace App\Task\Http\Export;
 use App\Infrastructure\ApiException\ApiBadResponseException;
 use App\Infrastructure\ApiException\ApiErrorCode;
 use App\Infrastructure\Pagination\PaginationRequest;
+use App\Infrastructure\Pagination\PaginationRequestArgumentResolver;
 use App\User\SignUp\Domain\UserId;
 use App\User\SignUp\Domain\UserRole;
 use App\User\SignUp\Http\UserIdArgumentValueResolver;
@@ -32,7 +33,7 @@ final readonly class ExportTaskAction
     public function __invoke(
         Format $format,
         #[ValueResolver(UserIdArgumentValueResolver::class)] UserId $userId,
-        PaginationRequest $paginationRequest,
+        #[ValueResolver(PaginationRequestArgumentResolver::class)] PaginationRequest $paginationRequest,
     ): BinaryFileResponse {
         try {
             return ($this->exportTasks)(

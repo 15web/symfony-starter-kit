@@ -6,7 +6,7 @@ namespace App\Setting\Http\Admin;
 
 use App\Infrastructure\ApiException\ApiBadRequestException;
 use App\Infrastructure\ApiException\ApiNotFoundException;
-use App\Infrastructure\ApiRequestResolver\ApiRequest;
+use App\Infrastructure\ApiRequestValueResolver;
 use App\Infrastructure\Flush;
 use App\Infrastructure\SuccessResponse;
 use App\Setting\Command\SaveSetting;
@@ -17,6 +17,7 @@ use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -35,8 +36,9 @@ final readonly class SettingSaveAction
     ) {
     }
 
-    public function __invoke(#[ApiRequest] SaveSettingCommand $saveSettingCommand): SuccessResponse
-    {
+    public function __invoke(
+        #[ValueResolver(ApiRequestValueResolver::class)] SaveSettingCommand $saveSettingCommand,
+    ): SuccessResponse {
         try {
             $setting = ($this->saveSetting)($saveSettingCommand);
 
