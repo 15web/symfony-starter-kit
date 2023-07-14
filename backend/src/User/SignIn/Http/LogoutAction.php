@@ -12,6 +12,8 @@ use App\User\SignIn\Http\Authenticator\ApiTokenAuthenticator;
 use App\User\SignUp\Domain\UserRole;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\HttpKernel\Attribute\ValueResolver;
+use Symfony\Component\HttpKernel\Controller\ArgumentResolver\RequestValueResolver;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Uid\Uuid;
@@ -30,8 +32,9 @@ final readonly class LogoutAction
     ) {
     }
 
-    public function __invoke(Request $request): SuccessResponse
-    {
+    public function __invoke(
+        #[ValueResolver(RequestValueResolver::class)] Request $request,
+    ): SuccessResponse {
         $apiToken = $request->headers->get(ApiTokenAuthenticator::TOKEN_NAME);
         if ($apiToken === null) {
             throw new ApiUnauthorizedException('Отсутствует токен в заголовках');

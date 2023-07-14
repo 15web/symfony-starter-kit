@@ -15,6 +15,7 @@ use App\User\SignUp\Http\UserIdArgumentValueResolver;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
+use Symfony\Component\HttpKernel\Controller\ArgumentResolver\UidValueResolver;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Uid\Uuid;
@@ -31,8 +32,10 @@ final readonly class TaskInfoAction
     {
     }
 
-    public function __invoke(Uuid $id, #[ValueResolver(UserIdArgumentValueResolver::class)] UserId $userId): TaskData
-    {
+    public function __invoke(
+        #[ValueResolver(UidValueResolver::class)] Uuid $id,
+        #[ValueResolver(UserIdArgumentValueResolver::class)] UserId $userId,
+    ): TaskData {
         try {
             $taskData = ($this->findTaskById)(new FindTaskByIdQuery($id, $userId->value));
         } catch (TaskNotFoundException $e) {

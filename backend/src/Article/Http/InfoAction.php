@@ -8,6 +8,8 @@ use App\Article\Domain\Articles;
 use App\Infrastructure\ApiException\ApiNotFoundException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\HttpKernel\Attribute\ValueResolver;
+use Symfony\Component\HttpKernel\Controller\ArgumentResolver\RequestAttributeValueResolver;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -21,7 +23,7 @@ final readonly class InfoAction
     {
     }
 
-    public function __invoke(string $alias): InfoData
+    public function __invoke(#[ValueResolver(RequestAttributeValueResolver::class)] string $alias): InfoData
     {
         $article = $this->articles->findByAlias($alias);
         if ($article === null) {

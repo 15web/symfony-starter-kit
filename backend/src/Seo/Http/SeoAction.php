@@ -7,6 +7,8 @@ namespace App\Seo\Http;
 use App\Seo\Domain\SeoCollection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\HttpKernel\Attribute\ValueResolver;
+use Symfony\Component\HttpKernel\Controller\ArgumentResolver\RequestAttributeValueResolver;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -20,8 +22,10 @@ final readonly class SeoAction
     {
     }
 
-    public function __invoke(string $type, string $identity): SeoData
-    {
+    public function __invoke(
+        #[ValueResolver(RequestAttributeValueResolver::class)] string $type,
+        #[ValueResolver(RequestAttributeValueResolver::class)] string $identity,
+    ): SeoData {
         $seo = $this->seoCollection->findOneByTypeAndIdentity($type, $identity);
 
         return new SeoData(

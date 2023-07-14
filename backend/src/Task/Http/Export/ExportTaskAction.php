@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
+use Symfony\Component\HttpKernel\Controller\ArgumentResolver\BackedEnumValueResolver;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -31,7 +32,7 @@ final readonly class ExportTaskAction
     }
 
     public function __invoke(
-        Format $format,
+        #[ValueResolver(BackedEnumValueResolver::class)] Format $format,
         #[ValueResolver(UserIdArgumentValueResolver::class)] UserId $userId,
         #[ValueResolver(PaginationRequestArgumentResolver::class)] PaginationRequest $paginationRequest,
     ): BinaryFileResponse {
