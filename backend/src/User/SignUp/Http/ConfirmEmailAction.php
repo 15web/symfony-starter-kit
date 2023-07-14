@@ -14,6 +14,8 @@ use App\User\SignUp\Domain\EmailAlreadyIsConfirmedException;
 use App\User\SignUp\Domain\UserNotFoundException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\HttpKernel\Attribute\ValueResolver;
+use Symfony\Component\HttpKernel\Controller\ArgumentResolver\UidValueResolver;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Uid\Uuid;
 
@@ -30,8 +32,9 @@ final readonly class ConfirmEmailAction
     ) {
     }
 
-    public function __invoke(Uuid $confirmToken): SuccessResponse
-    {
+    public function __invoke(
+        #[ValueResolver(UidValueResolver::class)] Uuid $confirmToken,
+    ): SuccessResponse {
         try {
             ($this->confirmEmail)($confirmToken);
             ($this->flush)();
