@@ -24,7 +24,6 @@ final class OneFlushInClassRector extends AbstractRector
 {
     private const FLUSHER_CLASS = Flush::class;
     private const FLUSH_METHOD = 'flush';
-    public $nodeRemover;
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -74,40 +73,39 @@ final class OneFlushInClassRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
+        $hasChanged = false;
         $hasOneFlush = false;
-        foreach ($node->getMethods() as $method) {
-            if (!is_iterable($method->stmts)) {
-                break;
+
+        $traverse = function (Node $node, &$hasChanged, &$hasOneFlush) use (&$traverse): void {
+            if (!is_iterable($node->stmts)) {
+                return;
             }
 
-            foreach ($method->stmts as $key => $stmt) {
-                if (!$stmt instanceof Expression) {
-                    continue;
-                }
+            foreach ($node->stmts as $key => $stmt) {
+                if ($stmt instanceof Expression && ($stmt->expr instanceof FuncCall || $stmt->expr instanceof MethodCall)) {
+                    $expr = $stmt->expr;
 
-                $expr = $stmt->expr;
-                if (!$expr instanceof FuncCall && !$expr instanceof MethodCall) {
-                    continue;
-                }
+                    if ($expr instanceof FuncCall && $this->getType($expr->name)->getClassName() === self::FLUSHER_CLASS
+                        || $expr instanceof MethodCall && $this->getName($expr->name) === self::FLUSH_METHOD) {
+                        if ($hasOneFlush === false) {
+                            $hasOneFlush = true;
 
-                if ($expr instanceof FuncCall && $this->getType($expr->name)->getClassName() === self::FLUSHER_CLASS) {
-                    if ($hasOneFlush === false) {
-                        $hasOneFlush = true;
+                            continue;
+                        }
 
-                        continue;
+                        $hasChanged = true;
+                        unset($node->stmts[$key]);
                     }
-                    $this->nodeRemover->removeStmt($method, $key);
                 }
 
-                if ($expr instanceof MethodCall && $this->getName($expr->name) === self::FLUSH_METHOD) {
-                    if ($hasOneFlush === false) {
-                        $hasOneFlush = true;
-
-                        continue;
-                    }
-                    $this->nodeRemover->removeStmt($method, $key);
-                }
+                $traverse($stmt, $hasChanged, $hasOneFlush);
             }
+        };
+
+        $traverse($node, $hasChanged, $hasOneFlush);
+
+        if ($hasChanged === false) {
+            return null;
         }
 
         return $node;
