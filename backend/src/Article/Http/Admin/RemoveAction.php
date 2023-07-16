@@ -27,8 +27,10 @@ final readonly class RemoveAction
     {
     }
 
-    public function __invoke(#[ValueResolver(ArticleArgumentValueResolver::class)] Article $article): SuccessResponse
-    {
+    public function __invoke(
+        #[ValueResolver(ArticleArgumentValueResolver::class)]
+        Article $article
+    ): SuccessResponse {
         $this->articles->remove($article);
         ($this->flush)();
 

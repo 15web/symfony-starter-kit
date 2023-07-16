@@ -93,8 +93,8 @@ final readonly class CRUDGenerator
     private function generateInfoAction(string $namespacePrefix, ClassNameDetails $entityClass): void
     {
         $createActionDetails = $this->generator->createClassNameDetails(
-            'InfoAction',
-            $namespacePrefix,
+            name: 'InfoAction',
+            namespacePrefix: $namespacePrefix,
         );
 
         $shortEntityClass = Str::getShortClassName($entityClass->getShortName());
@@ -110,9 +110,9 @@ final readonly class CRUDGenerator
 
         $route = '/api/'.lcfirst($shortEntityClass).'s/{id}';
         $this->generator->generateClass(
-            $createActionDetails->getFullName(),
-            'http/InfoAction.tpl.php',
-            [
+            className: $createActionDetails->getFullName(),
+            templateName: 'http/InfoAction.tpl.php',
+            variables: [
                 'use_statements' => $useStatements,
                 'entity_classname' => $shortEntityClass,
                 'route_path' => $route,
@@ -128,8 +128,8 @@ final readonly class CRUDGenerator
         ClassNameDetails $entityClass
     ): void {
         $createActionDetails = $this->generator->createClassNameDetails(
-            'RemoveAction',
-            $namespacePrefix,
+            name: 'RemoveAction',
+            namespacePrefix: $namespacePrefix,
         );
 
         $shortEntityClass = Str::getShortClassName($entityClass->getShortName());
@@ -148,9 +148,9 @@ final readonly class CRUDGenerator
 
         $route = '/api/'.lcfirst($shortEntityClass).'s/{id}/remove';
         $this->generator->generateClass(
-            $createActionDetails->getFullName(),
-            'http/RemoveAction.tpl.php',
-            [
+            className: $createActionDetails->getFullName(),
+            templateName: 'http/RemoveAction.tpl.php',
+            variables: [
                 'use_statements' => $useStatements,
                 'entity_classname' => $shortEntityClass,
                 'repository_classname' => $repoClassName,
@@ -170,8 +170,8 @@ final readonly class CRUDGenerator
         $this->generateCreateRequest($namespacePrefix, $entityClass, $fields);
 
         $createActionDetails = $this->generator->createClassNameDetails(
-            'CreateAction',
-            $namespacePrefix,
+            name: 'CreateAction',
+            namespacePrefix: $namespacePrefix,
         );
 
         $shortEntityClass = Str::getShortClassName($entityClass->getShortName());
@@ -191,9 +191,9 @@ final readonly class CRUDGenerator
 
         $route = '/api/'.lcfirst($shortEntityClass).'s/create';
         $this->generator->generateClass(
-            $createActionDetails->getFullName(),
-            'http/create/CreateAction.tpl.php',
-            [
+            className: $createActionDetails->getFullName(),
+            templateName: 'http/create/CreateAction.tpl.php',
+            variables: [
                 'use_statements' => $useStatements,
                 'entity_classname' => $shortEntityClass,
                 'repository_classname' => $repoClassName,
@@ -207,8 +207,8 @@ final readonly class CRUDGenerator
     private function generateCreateRequest(string $namespacePrefix, ClassNameDetails $entityClass, array $fields): void
     {
         $createActionDetails = $this->generator->createClassNameDetails(
-            'CreateRequest',
-            $namespacePrefix,
+            name: 'CreateRequest',
+            namespacePrefix: $namespacePrefix,
         );
 
         $shortEntityClass = Str::getShortClassName($entityClass->getShortName());
@@ -217,9 +217,9 @@ final readonly class CRUDGenerator
         ]);
 
         $this->generator->generateClass(
-            $createActionDetails->getFullName(),
-            'http/create/CreateRequest.tpl.php',
-            [
+            className: $createActionDetails->getFullName(),
+            templateName: 'http/create/CreateRequest.tpl.php',
+            variables: [
                 'use_statements' => $useStatements,
                 'entity_classname' => $shortEntityClass,
                 'entity_fields' => $fields,
@@ -233,8 +233,8 @@ final readonly class CRUDGenerator
         $this->generateUpdateRequest($namespacePrefix, $entityClass, $fields);
 
         $createActionDetails = $this->generator->createClassNameDetails(
-            'UpdateAction',
-            $namespacePrefix,
+            name: 'UpdateAction',
+            namespacePrefix: $namespacePrefix,
         );
 
         $shortEntityClass = Str::getShortClassName($entityClass->getShortName());
@@ -253,9 +253,9 @@ final readonly class CRUDGenerator
 
         $route = '/api/'.lcfirst($shortEntityClass).'s/{id}/update';
         $this->generator->generateClass(
-            $createActionDetails->getFullName(),
-            'http/update/UpdateAction.tpl.php',
-            [
+            className: $createActionDetails->getFullName(),
+            templateName: 'http/update/UpdateAction.tpl.php',
+            variables: [
                 'use_statements' => $useStatements,
                 'entity_classname' => $shortEntityClass,
                 'route_path' => $route,
@@ -268,8 +268,8 @@ final readonly class CRUDGenerator
     private function generateUpdateRequest(string $namespacePrefix, ClassNameDetails $entityClass, array $fields): void
     {
         $createActionDetails = $this->generator->createClassNameDetails(
-            'UpdateRequest',
-            $namespacePrefix,
+            name: 'UpdateRequest',
+            namespacePrefix: $namespacePrefix,
         );
 
         $shortEntityClass = Str::getShortClassName($entityClass->getShortName());
@@ -278,9 +278,9 @@ final readonly class CRUDGenerator
         ]);
 
         $this->generator->generateClass(
-            $createActionDetails->getFullName(),
-            'http/update/UpdateRequest.tpl.php',
-            [
+            className: $createActionDetails->getFullName(),
+            templateName: 'http/update/UpdateRequest.tpl.php',
+            variables: [
                 'use_statements' => $useStatements,
                 'entity_classname' => $shortEntityClass,
                 'entity_fields' => $fields,

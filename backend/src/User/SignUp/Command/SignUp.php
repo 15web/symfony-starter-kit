@@ -42,8 +42,8 @@ final readonly class SignUp
         $user = new User(new UserId(), $userEmail, new ConfirmToken($confirmToken), UserRole::User);
 
         $hashedPassword = $this->passwordHasher->hashPassword(
-            $user,
-            $signUpCommand->password
+            user: $user,
+            plainPassword: $signUpCommand->password
         );
 
         $user->applyHashedPassword(new UserPassword($hashedPassword));

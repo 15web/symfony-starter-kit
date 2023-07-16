@@ -38,12 +38,18 @@ final readonly class AddCommentOnTaskAction
     }
 
     public function __invoke(
-        #[ValueResolver(TaskArgumentValueResolver::class)] Task $task,
-        #[ValueResolver(ApiRequestValueResolver::class)] AddCommentOnTaskCommand $addCommentOnTaskCommand,
+        #[ValueResolver(TaskArgumentValueResolver::class)]
+        Task $task,
+        #[ValueResolver(ApiRequestValueResolver::class)]
+        AddCommentOnTaskCommand $addCommentOnTaskCommand,
     ): SuccessResponse {
         try {
             $commentId = new TaskCommentId();
-            ($this->addCommentOnTask)($addCommentOnTaskCommand, $task, $commentId);
+            ($this->addCommentOnTask)(
+                command: $addCommentOnTaskCommand,
+                task: $task,
+                commentId: $commentId,
+            );
 
             ($this->flush)();
 

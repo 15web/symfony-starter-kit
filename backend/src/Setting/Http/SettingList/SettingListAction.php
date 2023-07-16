@@ -29,7 +29,10 @@ final readonly class SettingListAction
         $settings = $this->settings->getAllForPublic();
 
         foreach ($settings as $setting) {
-            yield new SettingListData($setting->getType()->value, $setting->getValue());
+            yield new SettingListData(
+                type: $setting->getType()->value,
+                value: $setting->getValue(),
+            );
         }
     }
 }

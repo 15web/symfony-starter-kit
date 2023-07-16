@@ -20,8 +20,10 @@ final readonly class UpdateAction
     }
 
     public function __invoke(
-        #[ValueResolver(<?php echo $entity_classname; ?>ArgumentValueResolver::class)] <?php echo $entity_classname; ?> $entity,
-        #[ValueResolver(ApiRequestValueResolver::class)] UpdateRequest $updateRequest,
+        #[ValueResolver(<?php echo $entity_classname; ?>ArgumentValueResolver::class)]
+        <?php echo $entity_classname; ?> $entity,
+        #[ValueResolver(ApiRequestValueResolver::class)]
+        UpdateRequest $updateRequest,
     ): SuccessResponse {
         // TODO: обновить сущность
         ($this->flush)();

@@ -45,8 +45,8 @@ final readonly class FunctionalTestsGenerator
     private function generateSDK(ClassNameDetails $entityClassDetails, array $fields): void
     {
         $sdkDetails = $this->generator->createClassNameDetails(
-            $entityClassDetails->getShortName(),
-            $this->path.'\\SDK',
+            name: $entityClassDetails->getShortName(),
+            namespacePrefix: $this->path.'\\SDK',
         );
 
         $useStatements = new UseStatementGenerator([
@@ -54,9 +54,9 @@ final readonly class FunctionalTestsGenerator
         ]);
 
         $this->generator->generateClass(
-            $sdkDetails->getFullName(),
-            'tests/SDK.tpl.php',
-            [
+            className: $sdkDetails->getFullName(),
+            templateName: 'tests/SDK.tpl.php',
+            variables: [
                 'use_statements' => $useStatements,
                 'entity_classname' => $entityClassDetails->getShortName(),
                 'entity_classname_small' => lcfirst($entityClassDetails->getShortName()),
@@ -70,8 +70,8 @@ final readonly class FunctionalTestsGenerator
     {
         $testName = $entityClassDetails->getShortName().'InfoTest';
         $sdkDetails = $this->generator->createClassNameDetails(
-            $testName,
-            $this->path.'\\'.$moduleName,
+            name: $testName,
+            namespacePrefix: $this->path.'\\'.$moduleName,
         );
 
         $useStatements = new UseStatementGenerator([
@@ -85,9 +85,9 @@ final readonly class FunctionalTestsGenerator
         ]);
 
         $this->generator->generateClass(
-            $sdkDetails->getFullName(),
-            'tests/InfoTest.tpl.php',
-            [
+            className: $sdkDetails->getFullName(),
+            templateName: 'tests/InfoTest.tpl.php',
+            variables: [
                 'use_statements' => $useStatements,
                 'test_name' => $testName,
                 'entity_classname' => $entityClassDetails->getShortName(),
@@ -103,8 +103,8 @@ final readonly class FunctionalTestsGenerator
     {
         $testName = $entityClassDetails->getShortName().'CreateTest';
         $sdkDetails = $this->generator->createClassNameDetails(
-            $testName,
-            $this->path.'\\'.$moduleName,
+            name: $testName,
+            namespacePrefix: $this->path.'\\'.$moduleName,
         );
 
         $useStatements = new UseStatementGenerator([
@@ -117,9 +117,9 @@ final readonly class FunctionalTestsGenerator
         ]);
 
         $this->generator->generateClass(
-            $sdkDetails->getFullName(),
-            'tests/CreateTest.tpl.php',
-            [
+            className: $sdkDetails->getFullName(),
+            templateName: 'tests/CreateTest.tpl.php',
+            variables: [
                 'use_statements' => $useStatements,
                 'test_name' => $testName,
                 'entity_classname' => $entityClassDetails->getShortName(),
@@ -135,8 +135,8 @@ final readonly class FunctionalTestsGenerator
     {
         $testName = $entityClassDetails->getShortName().'RemoveTest';
         $sdkDetails = $this->generator->createClassNameDetails(
-            $testName,
-            $this->path.'\\'.$moduleName,
+            name: $testName,
+            namespacePrefix: $this->path.'\\'.$moduleName,
         );
 
         $useStatements = new UseStatementGenerator([
@@ -150,9 +150,9 @@ final readonly class FunctionalTestsGenerator
         ]);
 
         $this->generator->generateClass(
-            $sdkDetails->getFullName(),
-            'tests/RemoveTest.tpl.php',
-            [
+            className: $sdkDetails->getFullName(),
+            templateName: 'tests/RemoveTest.tpl.php',
+            variables: [
                 'use_statements' => $useStatements,
                 'test_name' => $testName,
                 'entity_classname' => $entityClassDetails->getShortName(),
@@ -167,8 +167,8 @@ final readonly class FunctionalTestsGenerator
     {
         $testName = $entityClassDetails->getShortName().'UpdateTest';
         $sdkDetails = $this->generator->createClassNameDetails(
-            $testName,
-            $this->path.'\\'.$moduleName,
+            name: $testName,
+            namespacePrefix: $this->path.'\\'.$moduleName,
         );
 
         $useStatements = new UseStatementGenerator([
@@ -183,9 +183,9 @@ final readonly class FunctionalTestsGenerator
         ]);
 
         $this->generator->generateClass(
-            $sdkDetails->getFullName(),
-            'tests/UpdateTest.tpl.php',
-            [
+            className: $sdkDetails->getFullName(),
+            templateName: 'tests/UpdateTest.tpl.php',
+            variables: [
                 'use_statements' => $useStatements,
                 'test_name' => $testName,
                 'entity_classname' => $entityClassDetails->getShortName(),

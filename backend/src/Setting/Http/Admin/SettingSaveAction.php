@@ -37,7 +37,8 @@ final readonly class SettingSaveAction
     }
 
     public function __invoke(
-        #[ValueResolver(ApiRequestValueResolver::class)] SaveSettingCommand $saveSettingCommand,
+        #[ValueResolver(ApiRequestValueResolver::class)]
+        SaveSettingCommand $saveSettingCommand,
     ): SuccessResponse {
         try {
             $setting = ($this->saveSetting)($saveSettingCommand);

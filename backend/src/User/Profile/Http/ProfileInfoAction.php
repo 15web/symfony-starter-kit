@@ -28,8 +28,14 @@ final readonly class ProfileInfoAction
     {
     }
 
-    public function __invoke(#[ValueResolver(UserIdArgumentValueResolver::class)] UserId $userId): ProfileData
-    {
-        return ($this->findProfileByUserId)(new FindProfileByUserIdQuery($userId->value));
+    public function __invoke(
+        #[ValueResolver(UserIdArgumentValueResolver::class)]
+        UserId $userId
+    ): ProfileData {
+        return ($this->findProfileByUserId)(
+            query: new FindProfileByUserIdQuery(
+                userId: $userId->value,
+            ),
+        );
     }
 }

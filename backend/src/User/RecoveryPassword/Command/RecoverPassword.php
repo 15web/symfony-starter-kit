@@ -26,7 +26,7 @@ final readonly class RecoverPassword
 
     public function __invoke(
         Uuid $recoveryToken,
-        RecoverPasswordCommand $recoverPasswordCommand
+        RecoverPasswordCommand $recoverPasswordCommand,
     ): void {
         $token = $this->recoveryTokens->findByToken($recoveryToken);
 
@@ -37,8 +37,8 @@ final readonly class RecoverPassword
         $user = $this->users->getById($token->getUserId());
 
         $hashedPassword = $this->passwordHasher->hashPassword(
-            $user,
-            $recoverPasswordCommand->password
+            user: $user,
+            plainPassword: $recoverPasswordCommand->password
         );
 
         $user->applyHashedPassword(new UserPassword($hashedPassword));

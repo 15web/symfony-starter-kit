@@ -38,8 +38,10 @@ final readonly class ProfileSaveAction
     }
 
     public function __invoke(
-        #[ValueResolver(ApiRequestValueResolver::class)] SaveProfileCommand $command,
-        #[ValueResolver(UserIdArgumentValueResolver::class)] UserId $userId,
+        #[ValueResolver(ApiRequestValueResolver::class)]
+        SaveProfileCommand $command,
+        #[ValueResolver(UserIdArgumentValueResolver::class)]
+        UserId $userId,
     ): ProfileData {
         try {
             ($this->saveProfile)($command, $userId);
@@ -49,6 +51,10 @@ final readonly class ProfileSaveAction
             throw new ApiBadRequestException($e->getMessage());
         }
 
-        return ($this->findProfileByUserId)(new FindProfileByUserIdQuery($userId->value));
+        return ($this->findProfileByUserId)(
+            query: new FindProfileByUserIdQuery(
+                userId: $userId->value,
+            ),
+        );
     }
 }

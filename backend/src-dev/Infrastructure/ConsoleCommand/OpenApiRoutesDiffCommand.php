@@ -29,7 +29,11 @@ final class OpenApiRoutesDiffCommand extends Command
 
     protected function configure(): void
     {
-        $this->addArgument(self::OPEN_API_FILE_ARGUMENT, InputArgument::REQUIRED, 'Файл OpenApi в формате yaml');
+        $this->addArgument(
+            name: self::OPEN_API_FILE_ARGUMENT,
+            mode: InputArgument::REQUIRED,
+            description: 'Файл OpenApi в формате yaml',
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

@@ -33,11 +33,11 @@ final readonly class ListAction
 
         foreach ($settings as $setting) {
             yield new SettingListData(
-                $setting->getType()->value,
-                $setting->getValue(),
-                $setting->isPublic(),
-                $setting->getCreatedAt(),
-                $setting->getUpdatedAt(),
+                type: $setting->getType()->value,
+                value: $setting->getValue(),
+                isPublic: $setting->isPublic(),
+                createdAt: $setting->getCreatedAt(),
+                updatedAt: $setting->getUpdatedAt(),
             );
         }
     }

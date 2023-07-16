@@ -23,15 +23,17 @@ final readonly class SeoAction
     }
 
     public function __invoke(
-        #[ValueResolver(RequestAttributeValueResolver::class)] string $type,
-        #[ValueResolver(RequestAttributeValueResolver::class)] string $identity,
+        #[ValueResolver(RequestAttributeValueResolver::class)]
+        string $type,
+        #[ValueResolver(RequestAttributeValueResolver::class)]
+        string $identity,
     ): SeoData {
         $seo = $this->seoCollection->findOneByTypeAndIdentity($type, $identity);
 
         return new SeoData(
-            $seo?->getTitle(),
-            $seo?->getDescription(),
-            $seo?->getKeywords(),
+            title: $seo?->getTitle(),
+            description: $seo?->getDescription(),
+            keywords: $seo?->getKeywords(),
         );
     }
 }

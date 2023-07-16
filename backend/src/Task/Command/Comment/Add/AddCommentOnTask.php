@@ -25,7 +25,12 @@ final class AddCommentOnTask
         Task $task,
         TaskCommentId $commentId,
     ): void {
-        $comment = new TaskComment($task, $commentId, new TaskCommentBody($command->commentBody));
+        $comment = new TaskComment(
+            task: $task,
+            commentId: $commentId,
+            taskCommentBody: new TaskCommentBody($command->commentBody)
+        );
+
         $task->addComment($comment);
     }
 }

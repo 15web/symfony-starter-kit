@@ -33,7 +33,8 @@ final readonly class ConfirmEmailAction
     }
 
     public function __invoke(
-        #[ValueResolver(UidValueResolver::class)] Uuid $confirmToken,
+        #[ValueResolver(UidValueResolver::class)]
+        Uuid $confirmToken,
     ): SuccessResponse {
         try {
             ($this->confirmEmail)($confirmToken);

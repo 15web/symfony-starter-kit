@@ -34,9 +34,16 @@ final readonly class TaskCommentsListAction
      * @return CommentData[]
      */
     public function __invoke(
-        #[ValueResolver(UidValueResolver::class)] Uuid $id,
-        #[ValueResolver(UserIdArgumentValueResolver::class)] UserId $userId,
+        #[ValueResolver(UidValueResolver::class)]
+        Uuid $id,
+        #[ValueResolver(UserIdArgumentValueResolver::class)]
+        UserId $userId,
     ): array {
-        return ($this->findAllComments)(new FindAllCommentQuery($id, $userId->value));
+        return ($this->findAllComments)(
+            findAllQuery: new FindAllCommentQuery(
+                taskId: $id,
+                userId: $userId->value,
+            ),
+        );
     }
 }

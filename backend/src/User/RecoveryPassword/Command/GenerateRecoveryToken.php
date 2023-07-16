@@ -38,6 +38,11 @@ final readonly class GenerateRecoveryToken
 
         $this->tokens->add($recoveryToken);
 
-        $this->messageBus->dispatch(new RecoveryPasswordMessage($recoveryToken->getToken(), $command->email));
+        $this->messageBus->dispatch(
+            message: new RecoveryPasswordMessage(
+                token: $recoveryToken->getToken(),
+                email: $command->email,
+            ),
+        );
     }
 }

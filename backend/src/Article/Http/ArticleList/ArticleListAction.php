@@ -25,7 +25,8 @@ final readonly class ArticleListAction
     }
 
     public function __invoke(
-        #[ValueResolver(PaginationRequestArgumentResolver::class)] PaginationRequest $paginationRequest,
+        #[ValueResolver(PaginationRequestArgumentResolver::class)]
+        PaginationRequest $paginationRequest,
     ): ArticleListResponse {
         $articles = $this->articles->getAll($paginationRequest->limit, $paginationRequest->offset);
         $articlesCount = $this->articles->countAll();

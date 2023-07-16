@@ -35,7 +35,8 @@ final readonly class SeoSaveAction
     }
 
     public function __invoke(
-        #[ValueResolver(ApiRequestValueResolver::class)] SaveSeoCommand $saveSeoCommand,
+        #[ValueResolver(ApiRequestValueResolver::class)]
+        SaveSeoCommand $saveSeoCommand,
     ): SuccessResponse {
         try {
             $seo = ($this->saveSeo)($saveSeoCommand);
