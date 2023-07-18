@@ -14,6 +14,7 @@ use App\User\RecoveryPassword\Command\RecoveryTokenNotFoundException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
+use Symfony\Component\HttpKernel\Controller\ArgumentResolver\UidValueResolver;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Uid\Uuid;
 
@@ -29,7 +30,7 @@ final readonly class RecoverPasswordAction
     }
 
     public function __invoke(
-        Uuid $recoveryToken,
+        #[ValueResolver(UidValueResolver::class)] Uuid $recoveryToken,
         #[ValueResolver(ApiRequestValueResolver::class)] RecoverPasswordCommand $recoverPasswordCommand,
     ): SuccessResponse {
         try {
