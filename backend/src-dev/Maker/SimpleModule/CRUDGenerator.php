@@ -29,6 +29,7 @@ use Webmozart\Assert\Assert;
 /**
  * Создает HTTP слой для модуля
  */
+#[AsService]
 final readonly class CRUDGenerator
 {
     public function __construct(
