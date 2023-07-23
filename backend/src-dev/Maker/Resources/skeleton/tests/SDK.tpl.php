@@ -36,6 +36,5 @@ final class <?php echo $entity_classname; ?> extends ApiWebTestCase
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
         return self::request('POST', '/api/<?php echo $entity_classname_small; ?>s/create', $body, token: $token);
-
     }
 }

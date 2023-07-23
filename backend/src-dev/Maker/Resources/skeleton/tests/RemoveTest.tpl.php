@@ -9,14 +9,11 @@ namespace <?php echo $namespace; ?>;
 
 /**
  * @internal
- *
- * @testdox Создание <?php echo $entity_classname."\n"; ?>
  */
+#[TestDox('Удаление <?php echo $entity_classname; ?>')]
 final class <?php echo $test_name; ?> extends ApiWebTestCase
 {
-    /**
-     * @testdox <?php echo $entity_classname; ?> удален
-     */
+    #[TestDox('<?php echo $entity_classname; ?> удален')]
     public function testSuccess(): void
     {
         $token = User::auth();
@@ -34,9 +31,7 @@ final class <?php echo $test_name; ?> extends ApiWebTestCase
         self::assertSuccessResponse($response);
     }
 
-    /**
-     * @testdox <?php echo $entity_classname; ?> не найден
-     */
+    #[TestDox('<?php echo $entity_classname; ?> не найден')]
     public function testNotFound(): void
     {
         $token = User::auth();
@@ -48,11 +43,8 @@ final class <?php echo $test_name; ?> extends ApiWebTestCase
         self::assertNotFound($response);
     }
 
-    /**
-     * @dataProvider notValidTokenDataProvider
-     *
-     * @testdox Доступ запрещен
-     */
+    #[DataProvider('notValidTokenDataProvider')]
+    #[TestDox('Доступ запрещен')]
     public function testAccessDenied(string $notValidToken): void
     {
         $token = User::auth();

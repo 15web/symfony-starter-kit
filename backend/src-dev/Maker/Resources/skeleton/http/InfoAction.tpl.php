@@ -13,9 +13,9 @@ namespace <?php echo $namespace; ?>;
 #[IsGranted(<?php echo $role; ?>)]
 #[Route('<?php echo $route_path; ?>', <?php echo $method; ?>)]
 #[AsController]
-final class InfoAction
+final readonly class InfoAction
 {
-    public function __invoke(<?php echo $entity_classname; ?> $entity): <?php echo $entity_classname."\n"; ?>
+    public function __invoke(#[ValueResolver(<?php echo $entity_classname; ?>ArgumentValueResolver::class)] <?php echo $entity_classname; ?> $entity): <?php echo $entity_classname."\n"; ?>
     {
         return $entity;
     }

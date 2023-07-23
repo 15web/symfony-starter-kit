@@ -13,14 +13,16 @@ namespace <?php echo $namespace; ?>;
 #[IsGranted(<?php echo $role; ?>)]
 #[Route('<?php echo $route_path; ?>', <?php echo $method; ?>)]
 #[AsController]
-final class UpdateAction
+final readonly class UpdateAction
 {
-    public function __construct(private readonly Flush $flush)
+    public function __construct(private Flush $flush)
     {
     }
 
-    public function __invoke(<?php echo $entity_classname; ?> $entity, #[ApiRequest] UpdateRequest $updateRequest): SuccessResponse
-    {
+    public function __invoke(
+        #[ValueResolver(<?php echo $entity_classname; ?>ArgumentValueResolver::class)] <?php echo $entity_classname; ?> $entity,
+        #[ValueResolver(ApiRequestValueResolver::class)] UpdateRequest $updateRequest,
+    ): SuccessResponse {
         // TODO: обновить сущность
         ($this->flush)();
 

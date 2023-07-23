@@ -9,14 +9,11 @@ namespace <?php echo $namespace; ?>;
 
 /**
  * @internal
- *
- * @testdox Получение информации о <?php echo $entity_classname."\n"; ?>
  */
+#[TestDox('Получение информации о <?php echo $entity_classname; ?>')]
 final class <?php echo $test_name; ?> extends ApiWebTestCase
 {
-    /**
-     * @testdox Получена информация по <?php echo $entity_classname."\n"; ?>
-     */
+    #[TestDox('Получена информация по <?php echo $entity_classname; ?>')]
     public function testSuccess(): void
     {
         $token = User::auth();
@@ -34,9 +31,7 @@ final class <?php echo $test_name; ?> extends ApiWebTestCase
 <?php } ?>
     }
 
-    /**
-     * @testdox <?php echo $entity_classname; ?> не найден
-     */
+    #[TestDox('<?php echo $entity_classname; ?> не найден')]
     public function testNotFound(): void
     {
         $token = User::auth();
@@ -47,12 +42,9 @@ final class <?php echo $test_name; ?> extends ApiWebTestCase
         self::assertNotFound($response);
     }
 
-    /**
-     * @dataProvider notValidTokenDataProvider
-     *
-     * @testdox Доступ запрещен
-     */
-    public function testAccessDenied(string $notValidToken): void
+    #[DataProvider('notValidTokenDataProvider')]
+    #[TestDox('Доступ запрещен')]
+    public static function testAccessDenied(string $notValidToken): void
     {
         $token = User::auth();
         $<?php echo $entity_classname_small; ?>Id = <?php echo $entity_classname; ?>::createAndReturnId(<?php echo $create_params; ?>, $token);

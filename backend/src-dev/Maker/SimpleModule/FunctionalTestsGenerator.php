@@ -9,6 +9,8 @@ use App\Tests\Functional\SDK\User;
 use Dev\Maker\EntityFieldsManipulator;
 use Dev\Maker\Vendor\CustomGenerator;
 use Iterator;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\MakerBundle\Util\ClassNameDetails;
 use Symfony\Bundle\MakerBundle\Util\UseStatementGenerator;
 use Symfony\Component\HttpFoundation\Response;
@@ -78,6 +80,8 @@ final readonly class FunctionalTestsGenerator
             User::class,
             Uuid::class,
             UuidV7::class,
+            DataProvider::class,
+            TestDox::class,
         ]);
 
         $this->generator->generateClass(
@@ -108,6 +112,8 @@ final readonly class FunctionalTestsGenerator
             'App\\Tests\\'.$this->path.'\\SDK\\'.$entityClassDetails->getShortName(), // SDK
             User::class,
             Iterator::class,
+            DataProvider::class,
+            TestDox::class,
         ]);
 
         $this->generator->generateClass(
@@ -139,6 +145,8 @@ final readonly class FunctionalTestsGenerator
             User::class,
             Uuid::class,
             UuidV7::class,
+            DataProvider::class,
+            TestDox::class,
         ]);
 
         $this->generator->generateClass(
@@ -170,6 +178,8 @@ final readonly class FunctionalTestsGenerator
             Uuid::class,
             UuidV7::class,
             Iterator::class,
+            DataProvider::class,
+            TestDox::class,
         ]);
 
         $this->generator->generateClass(

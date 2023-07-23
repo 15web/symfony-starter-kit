@@ -13,13 +13,13 @@ namespace <?php echo $namespace; ?>;
 #[IsGranted(<?php echo $role; ?>)]
 #[Route('<?php echo $route_path; ?>', <?php echo $method; ?>)]
 #[AsController]
-final class RemoveAction
+final readonly class RemoveAction
 {
-    public function __construct(private readonly <?php echo $repository_classname; ?> $repository, private readonly Flush $flush)
+    public function __construct(private <?php echo $repository_classname; ?> $repository, private Flush $flush)
     {
     }
 
-    public function __invoke(<?php echo $entity_classname; ?> $entity): SuccessResponse
+    public function __invoke(#[ValueResolver(<?php echo $entity_classname; ?>ArgumentValueResolver::class)] <?php echo $entity_classname; ?> $entity): SuccessResponse
     {
         $this->repository->remove($entity);
         ($this->flush)();

@@ -13,13 +13,13 @@ namespace <?php echo $namespace; ?>;
 #[IsGranted(<?php echo $role; ?>)]
 #[Route('<?php echo $route_path; ?>', <?php echo $method; ?>)]
 #[AsController]
-final class CreateAction
+final readonly class CreateAction
 {
-    public function __construct(private readonly <?php echo $repository_classname; ?> $repository, private readonly Flush $flush)
+    public function __construct(private <?php echo $repository_classname; ?> $repository, private Flush $flush)
     {
     }
 
-    public function __invoke(#[ApiRequest] CreateRequest $createRequest): SuccessResponse
+    public function __invoke(#[ValueResolver(ApiRequestValueResolver::class)] CreateRequest $createRequest): SuccessResponse
     {
         // TODO: создать сущность
         $entity = new <?php echo $entity_classname; ?>();

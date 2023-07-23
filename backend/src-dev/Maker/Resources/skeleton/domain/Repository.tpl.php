@@ -11,9 +11,9 @@ namespace <?php echo $namespace; ?>;
  * Репозиторий <?php echo $entity_class_name."\n"; ?>
  */
 #[AsService]
-final class <?php echo $class_name."\n"; ?>
+final readonly class <?php echo $class_name."\n"; ?>
 {
-    public function __construct(private readonly EntityManagerInterface $entityManager)
+    public function __construct(private EntityManagerInterface $entityManager)
     {
     }
 

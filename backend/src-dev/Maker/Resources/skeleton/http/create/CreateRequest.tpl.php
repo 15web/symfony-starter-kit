@@ -10,7 +10,7 @@ namespace <?php echo $namespace; ?>;
 /**
  * Объект запроса для создания <?php echo $entity_classname."\n"; ?>
  */
-final class CreateRequest
+final readonly class CreateRequest
 {
     public function __construct(<?php echo $properties; ?>) {
 <?php foreach ($entity_fields as $entity_field) { ?>
