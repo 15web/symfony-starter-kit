@@ -40,7 +40,12 @@ final readonly class CreateAction
             );
         }
 
-        $article = new Article($createRequest->title, $createRequest->alias, $createRequest->body);
+        $article = new Article(
+            title: $createRequest->title,
+            alias: $createRequest->alias,
+            body: $createRequest->body,
+        );
+
         $this->articles->add($article);
         ($this->flush)();
 

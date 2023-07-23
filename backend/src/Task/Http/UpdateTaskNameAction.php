@@ -42,7 +42,10 @@ final readonly class UpdateTaskNameAction
         UpdateTaskNameCommand $command,
     ): SuccessResponse {
         try {
-            ($this->updateTaskName)($task, $command);
+            ($this->updateTaskName)(
+                task: $task,
+                command: $command,
+            );
 
             ($this->flush)();
 

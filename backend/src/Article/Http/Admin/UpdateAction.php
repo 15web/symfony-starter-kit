@@ -43,7 +43,11 @@ final readonly class UpdateAction
             );
         }
 
-        $article->change($updateRequest->title, $updateRequest->alias, $updateRequest->body);
+        $article->change(
+            title: $updateRequest->title,
+            alias: $updateRequest->alias,
+            body: $updateRequest->body,
+        );
 
         ($this->flush)();
 

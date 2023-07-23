@@ -32,6 +32,9 @@ final readonly class InfoAction
             throw new ApiNotFoundException('Статья не найдена');
         }
 
-        return new InfoData($article->getTitle(), $article->getBody());
+        return new InfoData(
+            title: $article->getTitle(),
+            body: $article->getBody(),
+        );
     }
 }

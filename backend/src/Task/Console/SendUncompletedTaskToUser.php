@@ -52,7 +52,11 @@ final class SendUncompletedTaskToUser extends Command
                 continue;
             }
 
-            $this->messageBus->dispatch(new UncompletedTasksMessage($user->email, $uncompletedTasks));
+            $this->messageBus->dispatch(new UncompletedTasksMessage(
+                email: $user->email,
+                tasks: $uncompletedTasks,
+            ));
+
             ++$emailSent;
         }
 

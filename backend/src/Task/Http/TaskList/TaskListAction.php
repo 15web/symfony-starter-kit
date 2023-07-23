@@ -48,10 +48,11 @@ final readonly class TaskListAction
         $tasks = ($this->findAllTasksByUserId)($query);
         $allTasksCount = ($this->countAllTasksByUserId)($query);
 
-        $pagination = new PaginationResponse(
-            total: $allTasksCount
-        );
+        $pagination = new PaginationResponse($allTasksCount);
 
-        return new TaskListResponse($tasks, $pagination);
+        return new TaskListResponse(
+            data: $tasks,
+            pagination: $pagination,
+        );
     }
 }
