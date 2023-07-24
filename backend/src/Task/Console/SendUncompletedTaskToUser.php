@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Task\Console;
 
-use App\Mailer\Notification\UncompletedTasks\UncompletedTasksMessage;
+use App\Mailer\UncompletedTasks\Command\UncompletedTaskData as MailerTaskData;
+use App\Mailer\UncompletedTasks\Command\UncompletedTasksMessage;
 use App\Task\Query\Task\FindUncompletedTasksByUserId\FindUncompletedTasksByUserId;
 use App\Task\Query\Task\FindUncompletedTasksByUserId\FindUncompletedTasksByUserIdQuery;
+use App\Task\Query\Task\FindUncompletedTasksByUserId\TaskData;
 use App\User\SignUp\Query\FindAllUsers;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -49,7 +51,12 @@ final class SendUncompletedTaskToUser extends Command
                 continue;
             }
 
-            $this->messageBus->dispatch(new UncompletedTasksMessage($user->email, $uncompletedTasks));
+            $mailerUncompletedTasks = array_map(
+                static fn (TaskData $taskData): MailerTaskData => new MailerTaskData($taskData->taskName, $taskData->createdAt),
+                $uncompletedTasks
+            );
+
+            $this->messageBus->dispatch(new UncompletedTasksMessage($user->email, $mailerUncompletedTasks));
             ++$emailSent;
         }
 

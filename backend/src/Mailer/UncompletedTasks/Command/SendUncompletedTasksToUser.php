@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Mailer\Notification\UncompletedTasks;
+namespace App\Mailer\UncompletedTasks\Command;
 
 use App\Infrastructure\AsService;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;

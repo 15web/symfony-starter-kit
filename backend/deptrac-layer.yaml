@@ -1,0 +1,40 @@
+parameters:
+    paths:
+        - ./src
+    exclude_files:
+        - '#.*test.*#i'
+    layers:
+        -
+            name: Infrastructure
+            collectors:
+                -
+                    type: className
+                    regex: (App\\Infrastructure|Symfony|Sensio|Doctrine|Webmozart|Psr|League|Nyholm)\\.*
+        -
+            name: Query
+            collectors:
+                -
+                    type: className
+                    regex: App\\.*\\Query\\.*
+        -
+            name: Command
+            collectors:
+                -
+                    type: className
+                    regex: (App\\.*\\Command|App\\.*\\Domain)\\.*
+        -
+            name: App
+            collectors:
+                -
+                    type: className
+                    regex: (App\\.*\\Http|App\\.*\\Console)\\.*
+    ruleset:
+        Infrastructure: ~
+        Query:
+            - Infrastructure
+        Command:
+            - Infrastructure
+        App:
+            - Infrastructure
+            - Query
+            - Command

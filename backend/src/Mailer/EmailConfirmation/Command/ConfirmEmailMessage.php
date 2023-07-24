@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Mailer\Notification\EmailConfirmation;
+namespace App\Mailer\EmailConfirmation\Command;
 
 use App\Infrastructure\Message;
 use Symfony\Component\Uid\Uuid;

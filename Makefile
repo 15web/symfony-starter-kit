@@ -4,7 +4,7 @@ init: ./setup_envs.bash build db-migrate setup-transports # Запуск про�
 
 install-test: # Запуск проекта и подготовка тестового окружения
 	./setup_envs.bash
-	docker compose build backend mysql
+	docker compose build backend backend-cli mysql
 	docker compose run --rm backend-cli composer install --no-scripts --prefer-dist --no-progress
 	docker compose up --detach --force-recreate --remove-orphans backend mysql
 	docker compose run --rm backend-cli bin/console doctrine:migrations:migrate --no-interaction
@@ -56,7 +56,7 @@ test-verbose:	# Запуск тестов
 	docker compose run --rm backend-cli bin/console --env=test cache:clear
 	docker compose run --rm backend-cli bash -c 'APP_ENV=test vendor/bin/phpunit --testdox'
 
-lint: container-lint validate-doctrine-schema twig-lint fixer-check rector-check phpstan psalm deptrac-check deptrac-check-unassigned cache-prod-check
+lint: container-lint validate-doctrine-schema twig-lint fixer-check rector-check phpstan psalm deptrac-layer-check deptrac-layer-check-unassigned deptrac-module-check deptrac-module-check-unassigned cache-prod-check
 
 composer-validate:
 	docker compose run --rm backend-cli composer validate --strict
@@ -91,11 +91,17 @@ rector-check:
 cache-prod-check:
 	docker compose run --rm backend-cli bin/console cache:clear --env=prod
 
-deptrac-check:
-	docker compose run --rm backend-cli vendor/bin/deptrac analyse --fail-on-uncovered --report-uncovered --config-file=deptrac.yaml --cache-file=var/cache/.deptrac.cache
+deptrac-layer-check:
+	docker compose run --rm backend-cli vendor/bin/deptrac analyse --fail-on-uncovered --report-uncovered --config-file=deptrac-layer.yaml --cache-file=var/cache/.deptrac.cache
 
-deptrac-check-unassigned:
-	docker compose run --rm backend-cli vendor/bin/deptrac debug:unassigned --config-file=deptrac.yaml --cache-file=var/cache/.deptrac.cache | tee /dev/stderr | grep 'There are no unassigned tokens'
+deptrac-layer-check-unassigned:
+	docker compose run --rm backend-cli vendor/bin/deptrac debug:unassigned --config-file=deptrac-layer.yaml --cache-file=var/cache/.deptrac.cache | tee /dev/stderr | grep 'There are no unassigned tokens'
+
+deptrac-module-check:
+	docker compose run --rm backend-cli vendor/bin/deptrac analyse --config-file=deptrac-module.yaml --cache-file=var/cache/.deptrac.cache
+
+deptrac-module-check-unassigned:
+	./docker/bin/deptrac_check_module_unassigned.bash
 
 test:
 	docker compose run --rm backend-cli bin/console --env=test cache:clear
