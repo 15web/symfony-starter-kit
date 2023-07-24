@@ -32,7 +32,7 @@ final class CreateTaskTest extends ApiWebTestCase
 
         self::assertCount(1, $tasks);
         self::assertSame($taskName, $tasks[0]['taskName']);
-        self::assertNotNull($tasks[0]['id']);
+        self::assertNotEmpty($tasks[0]['id']);
         self::assertSame($taskInfo['id'], $tasks[0]['id']);
         self::assertFalse($tasks[0]['isCompleted']);
     }
@@ -60,6 +60,9 @@ final class CreateTaskTest extends ApiWebTestCase
         self::assertBadRequest($response);
     }
 
+    /**
+     * @param array<int|string> $body
+     */
     private function assertBadRequests(array $body, string $token): void
     {
         $body = json_encode($body, JSON_THROW_ON_ERROR);

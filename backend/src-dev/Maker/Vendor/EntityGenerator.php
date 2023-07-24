@@ -22,10 +22,10 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Question\Question;
 
 /**
- * Запрашивает информауию о генерируемой сущности, здесь фиксится захардкоденный код из MakeEntity
- * Копировался из MakeEntity(MakerBundle), создает сущность и репозиторий в нужном модуле
- * Содержит инфомарцию о генерируемых полях сущности (имя, тип, nullable)
- * Используется для генерации Domain слоя
+ * Запрашивает информацию о генерируемой сущности, здесь фиксится захардкоденный код из MakeEntity.
+ * Скопировано из MakeEntity(MakerBundle), создает сущность и репозиторий в нужном модуле.
+ * Содержит информацию о генерируемых полях сущности (имя, тип, nullable).
+ * Используется для генерации Domain слоя.
  */
 final readonly class EntityGenerator
 {

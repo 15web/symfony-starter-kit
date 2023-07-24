@@ -26,19 +26,27 @@ final class SettingSaveTest extends ApiWebTestCase
         $body = [];
         $body['type'] = SettingType::EMAIL_SITE;
         $body['value'] = 'symfony-starter-kit-test';
-        $body = json_encode($body, JSON_THROW_ON_ERROR);
+        $bodyJson = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request(Request::METHOD_POST, '/api/admin/setting/save', $body, token: $token);
+        $response = self::request(Request::METHOD_POST, '/api/admin/setting/save', $bodyJson, token: $token);
 
         self::assertSuccessResponse($response);
 
         $responseList = self::request(Request::METHOD_GET, '/api/admin/settings', token: $token);
         self::assertSuccessResponse($responseList);
 
+        /** @var array<int, array{
+         *     id: string,
+         *     type: string,
+         *     value: string,
+         *     isPublic: bool,
+         *     createdAt: string,
+         *     updatedAt: string|null,
+         * }> $settings */
         $settings = self::jsonDecode($responseList->getContent());
 
         foreach ($settings as $setting) {
-            if ($setting['type'] !== SettingType::EMAIL_SITE) {
+            if ($setting['type'] !== SettingType::EMAIL_SITE->value) {
                 continue;
             }
 
@@ -74,6 +82,9 @@ final class SettingSaveTest extends ApiWebTestCase
         self::assertAccessDenied($response);
     }
 
+    /**
+     * @param array<array<string>> $body
+     */
     #[DataProvider('notValidRequestProvider')]
     #[TestDox('Неправильный запрос')]
     public function testBadRequest(array $body): void

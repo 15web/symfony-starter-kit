@@ -27,9 +27,6 @@ final class ClassDocCommentFixer implements FixerInterface, WhitespacesAwareFixe
         $this->whitespacesConfig = $this->getDefaultWhitespacesFixerConfig();
     }
 
-    /**
-     * @param Tokens<Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAnyTokenKindsFound(Token::getClassyTokenKinds());
@@ -65,9 +62,6 @@ final class Sample
         return -30;
     }
 
-    /**
-     * @param Tokens<Token> $tokens
-     */
     public function fix(SplFileInfo $file, Tokens $tokens): void
     {
         if ($tokens->count() <= 0) {
@@ -93,7 +87,7 @@ final class Sample
     }
 
     /**
-     * @param Tokens<Token> $tokens
+     * @return iterable<int>
      */
     private function findClasses(Tokens $tokens): iterable
     {
@@ -112,17 +106,20 @@ final class Sample
         }
     }
 
-    /**
-     * @param Tokens<Token> $tokens
-     */
     private function applyFix(Tokens $tokens): void
     {
+        /**
+         * @var int $index
+         * @var Token $token
+         */
         foreach ($tokens as $index => $token) {
             if (!$token->isClassy()) {
                 continue;
             }
 
+            /** @var int $startBraceIndex */
             $startBraceIndex = $tokens->getNextTokenOfKind($index, ['{']);
+
             if (!$tokens[$startBraceIndex + 1]->isWhitespace()) {
                 continue;
             }
@@ -133,49 +130,57 @@ final class Sample
         }
     }
 
-    /**
-     * @param Tokens<Token> $tokens
-     */
     private function addComment(Tokens $tokens, int $startIndex): void
     {
+        /** @var int $classIndex */
         $classIndex = $tokens->getPrevTokenOfKind($startIndex, [[T_DECLARE], [T_NAMESPACE]]);
+
         $docBlockIndex = $this->getDocBlockIndex($tokens, $classIndex);
 
         if ($this->isPHPDoc($tokens, $docBlockIndex)) {
             return;
         }
+
         $this->createDocBlock($tokens, $docBlockIndex);
     }
 
-    /**
-     * @param Tokens<Token> $tokens
-     */
     private function createDocBlock(Tokens $tokens, int $docBlockIndex): void
     {
         $lineEnd = $this->whitespacesConfig->getLineEnding();
-        $originalIndent = WhitespacesAnalyzer::detectIndent($tokens, $tokens->getNextNonWhitespace($docBlockIndex));
+
+        /** @var int $nextBlockIndex */
+        $nextBlockIndex = $tokens->getNextNonWhitespace($docBlockIndex);
+
+        /**
+         * @psalm-suppress InternalClass
+         * @psalm-suppress InternalMethod
+         */
+        $originalIndent = WhitespacesAnalyzer::detectIndent($tokens, $nextBlockIndex);
         $toInsert = [
             new Token([T_DOC_COMMENT, '/**'.$lineEnd."{$originalIndent} * TODO: Опиши за что отвечает данный класс, ".
                 'какие проблемы решает'.$lineEnd."{$originalIndent} */"]),
             new Token([T_WHITESPACE, $lineEnd.$originalIndent]),
         ];
+
+        /** @var int $index */
         $index = $tokens->getNextMeaningfulToken($docBlockIndex);
+
         $tokens->insertAt($index, $toInsert);
     }
 
-    /**
-     * @param Tokens<Token> $tokens
-     */
     private function getDocBlockIndex(Tokens $tokens, int $index): int
     {
         // Иду до объявления final|abstract|interface|enum|trait|class, если по пути встречается атрибут, останавливаюсь на нём
         // Где бы не остановился, отдаю предыдущий индекс, который не является пробелом
         $isAttribute = false;
         do {
+            /** @var int $index */
             $index = $tokens->getNextNonWhitespace($index);
 
             if ($tokens[$index]->getContent() === '#[') {
                 $isAttribute = true;
+
+                /** @var int $index */
                 $index = $tokens->getPrevNonWhitespace($index);
 
                 break;
@@ -186,12 +191,12 @@ final class Sample
             return $index;
         }
 
-        return $tokens->getPrevNonWhitespace($index);
+        /** @var int $prevNonWhitespaceIndex */
+        $prevNonWhitespaceIndex = $tokens->getPrevNonWhitespace($index);
+
+        return $prevNonWhitespaceIndex;
     }
 
-    /**
-     * @param Tokens<Token> $tokens
-     */
     private function isPHPDoc(Tokens $tokens, int $index): bool
     {
         return $tokens[$index]->isGivenKind(T_DOC_COMMENT);
@@ -205,6 +210,9 @@ final class Sample
             $defaultWhitespacesFixerConfig = new WhitespacesFixerConfig('    ', "\n");
         }
 
-        return $defaultWhitespacesFixerConfig;
+        /** @var WhitespacesFixerConfig $whiteSpaceConfig */
+        $whiteSpaceConfig = $defaultWhitespacesFixerConfig;
+
+        return $whiteSpaceConfig;
     }
 }

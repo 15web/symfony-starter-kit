@@ -74,6 +74,8 @@ final class EntityFieldsManipulator
 
     /**
      * @param array<int, array<string, string>> $fields
+     *
+     * @return array<string, float|int|string|null>
      */
     public function getValuesWithType(array $fields): array
     {
@@ -85,9 +87,9 @@ final class EntityFieldsManipulator
         return $fieldsWithData;
     }
 
-    private function getTestValueByType($fieldType): mixed
+    private function getTestValueByType(string $fieldType): string|int|float
     {
-        $value = null;
+        $value = '';
 
         return match ($fieldType) {
             'string', 'text' => "'".$this->getRandomString()."'",
@@ -98,7 +100,7 @@ final class EntityFieldsManipulator
         };
     }
 
-    private function getVariableType($fieldType): string
+    private function getVariableType(string $fieldType): string
     {
         $type = '';
 

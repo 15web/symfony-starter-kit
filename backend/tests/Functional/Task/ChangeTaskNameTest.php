@@ -107,6 +107,9 @@ final class ChangeTaskNameTest extends ApiWebTestCase
         self::assertNotFound($response);
     }
 
+    /**
+     * @param array<int|string> $body
+     */
     private function assertBadRequests(array $body, string $token): void
     {
         $taskId = Task::createAndReturnId('Тестовая задача 1', $token);

@@ -1,4 +1,10 @@
 <?php declare(strict_types=1);
+
+/**
+ * @var non-empty-string $namespace
+ * @var non-empty-string $use_statements
+ * @var non-empty-string $class_name
+ */
 echo "<?php\n"; ?>
 
 declare(strict_types=1);

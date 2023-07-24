@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Dev\PHPCsFixer\PhpUnit;
 
-use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
 use PhpCsFixer\Tokenizer\TokensAnalyzer;
 
@@ -18,9 +17,6 @@ final readonly class TestdoxForMethods
     ) {
     }
 
-    /**
-     * @param Tokens<Token> $tokens
-     */
     public function addTestdoxAnnotation(Tokens $tokens, int $startIndex, int $endIndex): void
     {
         for ($index = $endIndex - 1; $index > $startIndex; --$index) {
@@ -28,24 +24,25 @@ final readonly class TestdoxForMethods
                 continue;
             }
 
+            /** @var int $testdoxIndex */
             $testdoxIndex = $tokens->getPrevNonWhitespace($index);
+
+            /** @var int $testdoxIndex */
             $testdoxIndex = $tokens->getPrevNonWhitespace($testdoxIndex);
 
             if (!$this->commentHelper->hasTestDoxAttribute($tokens, $testdoxIndex)) {
-                $this->commentHelper->addTestdoxAttribute($tokens, $testdoxIndex);
+                $this->commentHelper->addTestDoxAttribute($tokens, $testdoxIndex);
             }
         }
     }
 
-    /**
-     * @param Tokens<Token> $tokens
-     */
     private function isTestMethod(Tokens $tokens, int $index): bool
     {
         if (!$this->isMethod($tokens, $index)) {
             return false;
         }
 
+        /** @var int $functionNameIndex */
         $functionNameIndex = $tokens->getNextMeaningfulToken($index);
         $functionName = $tokens[$functionNameIndex]->getContent();
 
@@ -61,16 +58,20 @@ final readonly class TestdoxForMethods
         return str_contains($tokens[$docBlockIndex]->getContent(), '@test');
     }
 
-    /**
-     * @param Tokens<Token> $tokens
-     */
     private function isMethod(Tokens $tokens, int $index): bool
     {
+        /**
+         * @psalm-suppress InternalClass
+         * @psalm-suppress InternalMethod
+         */
         $tokensAnalyzer = new TokensAnalyzer($tokens);
         if (!$tokens[$index]->isGivenKind(T_FUNCTION)) {
             return false;
         }
 
+        /**
+         * @psalm-suppress InternalMethod
+         */
         return !$tokensAnalyzer->isLambda($index);
     }
 }

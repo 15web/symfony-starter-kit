@@ -33,12 +33,20 @@ final class CreateCommentOnTaskTest extends ApiWebTestCase
         self::assertSuccessResponse($response);
 
         $response = self::request(Request::METHOD_GET, "/api/tasks/{$taskId}/comments", token: $token);
+
+        /** @var array<int, array{
+         *     id: string,
+         *     body: string,
+         *     createdAt: string,
+         *     updatedAt: string|null,
+         * }> $comments
+         */
         $comments = self::jsonDecode($response->getContent());
 
         self::assertCount(1, $comments);
         self::assertSame($commentText, $comments[0]['body']);
-        self::assertNotNull($comments[0]['id']);
-        self::assertNotNull($comments[0]['createdAt']);
+        self::assertNotEmpty($comments[0]['id']);
+        self::assertNotEmpty($comments[0]['createdAt']);
         self::assertNull($comments[0]['updatedAt']);
     }
 
@@ -82,7 +90,7 @@ final class CreateCommentOnTaskTest extends ApiWebTestCase
         $taskId = Task::createAndReturnId('Тестовая задача 1', $token);
 
         $body = [];
-        $body['commentBody'] = $commentText = 'First comment';
+        $body['commentBody'] = 'First comment';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
         $response = self::request(Request::METHOD_POST, "/api/tasks/{$taskId}/add-comment", $body, token: $notValidToken);

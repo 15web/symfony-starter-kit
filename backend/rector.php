@@ -18,6 +18,7 @@ use Rector\Symfony\Set\SymfonyLevelSetList;
 use Rector\Symfony\Set\SymfonySetList;
 use Rector\Symfony\Symfony43\Rector\MethodCall\WebTestCaseAssertIsSuccessfulRector;
 use Rector\Symfony\Symfony43\Rector\MethodCall\WebTestCaseAssertResponseCodeRector;
+use Rector\TypeDeclaration\Rector\FunctionLike\AddParamTypeSplFixedArrayRector;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->cacheDirectory(__DIR__.'/var/cache/rector');
@@ -53,6 +54,10 @@ return static function (RectorConfig $rectorConfig): void {
         RemoveUnusedPrivatePropertyRector::class => [__DIR__.'/src/*/Domain/*'],
         WebTestCaseAssertIsSuccessfulRector::class,
         WebTestCaseAssertResponseCodeRector::class,
+        AddParamTypeSplFixedArrayRector::class => [
+            __DIR__ . '/src-dev/PHPCsFixer',
+        ],
+        __DIR__ . '/src-dev/Maker/Resources/skeleton',
     ]);
 
     $rectorConfig->rule(RequestMethodInsteadOfStringRector::class);

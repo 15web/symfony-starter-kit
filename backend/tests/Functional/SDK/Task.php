@@ -24,11 +24,25 @@ final class Task extends ApiWebTestCase
     public static function createAndReturnId(string $taskName, string $token): string
     {
         $response = self::create($taskName, $token);
+
+        /** @var array{
+         *     id: string
+         * } $taskInfo */
         $taskInfo = self::jsonDecode($response->getContent());
 
         return $taskInfo['id'];
     }
 
+    /**
+     * @return array{
+     *     data: array<int, array{
+     *          id: string,
+     *          taskName: string,
+     *          isCompleted: bool
+     *     }>,
+     *     pagination: array{total: int},
+     * }
+     */
     public static function list(string $token, int $limit = 10, int $offset = 0): array
     {
         $params = [
@@ -42,6 +56,17 @@ final class Task extends ApiWebTestCase
 
         self::assertSuccessResponse($response);
 
-        return self::jsonDecode($response->getContent());
+        /** @var array{
+         *     data: array<int, array{
+         *          id: string,
+         *          taskName: string,
+         *          isCompleted: bool
+         *     }>,
+         *     pagination: array{total: int},
+         * } $tasks
+         */
+        $tasks = self::jsonDecode($response->getContent());
+
+        return $tasks;
     }
 }

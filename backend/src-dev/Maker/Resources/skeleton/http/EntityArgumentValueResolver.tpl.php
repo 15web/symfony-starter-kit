@@ -1,4 +1,12 @@
 <?php declare(strict_types=1);
+
+/**
+ * @var non-empty-string $namespace
+ * @var non-empty-string $use_statements
+ * @var non-empty-string $entity_classname
+ * @var non-empty-string $class_name
+ * @var non-empty-string $entity_repository
+ */
 echo "<?php\n"; ?>
 
 declare(strict_types=1);
@@ -26,7 +34,7 @@ final readonly class <?php echo $class_name; ?> implements ValueResolverInterfac
             return [];
         }
 
-        /** @var string|null $id */
+        /** @var non-empty-string|null $id */
         $id = $request->attributes->get('id');
         if ($id === null) {
             throw new ApiBadRequestException('Укажите id');

@@ -39,6 +39,9 @@ final readonly class CRUDGenerator
     ) {
     }
 
+    /**
+     * @param list<array<string, string>> $fields
+     */
     public function generate(
         string $namespacePrefix,
         ClassNameDetails $entityClass,
@@ -161,6 +164,9 @@ final readonly class CRUDGenerator
         );
     }
 
+    /**
+     * @param list<array<string, string>> $fields
+     */
     private function generateCreateAction(
         string $namespacePrefix,
         string $repoClassName,
@@ -204,6 +210,9 @@ final readonly class CRUDGenerator
         );
     }
 
+    /**
+     * @param list<array<string, string>> $fields
+     */
     private function generateCreateRequest(string $namespacePrefix, ClassNameDetails $entityClass, array $fields): void
     {
         $createActionDetails = $this->generator->createClassNameDetails(
@@ -228,6 +237,9 @@ final readonly class CRUDGenerator
         );
     }
 
+    /**
+     * @param list<array<string, string>> $fields
+     */
     private function generateUpdateAction(string $namespacePrefix, ClassNameDetails $entityClass, array $fields): void
     {
         $this->generateUpdateRequest($namespacePrefix, $entityClass, $fields);
@@ -265,6 +277,9 @@ final readonly class CRUDGenerator
         );
     }
 
+    /**
+     * @param list<array<string, string>> $fields
+     */
     private function generateUpdateRequest(string $namespacePrefix, ClassNameDetails $entityClass, array $fields): void
     {
         $createActionDetails = $this->generator->createClassNameDetails(

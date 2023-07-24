@@ -77,6 +77,9 @@ final class ProfileSaveTest extends ApiWebTestCase
         self::assertBadRequest($response);
     }
 
+    /**
+     * @param array<mixed, string> $body
+     */
     private function assertBadRequests(array $body, string $token): void
     {
         $body = json_encode($body, JSON_THROW_ON_ERROR);

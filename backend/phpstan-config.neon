@@ -6,7 +6,10 @@ parameters:
     tmpDir: ./var/cache/phpstan
     paths:
         - src
+        - src-dev
+        - tests
     excludePaths:
+        - src-dev/Maker/Vendor/EntityGenerator.php
     doctrine:
         objectManagerLoader: src-dev/PHPStan/object-manager.php
 

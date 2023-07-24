@@ -1,4 +1,13 @@
 <?php declare(strict_types=1);
+
+/**
+ * @var non-empty-string $namespace
+ * @var non-empty-string $use_statements
+ * @var non-empty-string $entity_classname
+ * @var non-empty-string $create_params
+ * @var non-empty-string $entity_classname_small
+ * @var array<int, array<string, string>> $entity_fields
+ */
 echo "<?php\n"; ?>
 
 declare(strict_types=1);

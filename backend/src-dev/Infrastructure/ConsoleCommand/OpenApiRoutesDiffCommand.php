@@ -78,6 +78,9 @@ final class OpenApiRoutesDiffCommand extends Command
             throw new InvalidArgumentException('Invalid yaml file');
         }
 
+        /**
+         * @psalm-suppress MixedArgument
+         */
         $openApiPaths = array_keys($openApiValues['paths']);
 
         $result = [];

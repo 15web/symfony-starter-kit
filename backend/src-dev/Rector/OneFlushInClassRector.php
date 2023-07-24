@@ -68,25 +68,32 @@ final class OneFlushInClassRector extends AbstractRector
         return [Class_::class];
     }
 
-    /**
-     * @param Class_ $node
-     */
     public function refactor(Node $node): ?Node
     {
         $hasChanged = false;
         $hasOneFlush = false;
 
-        $traverse = function (Node $node, &$hasChanged, &$hasOneFlush) use (&$traverse): void {
-            if (!is_iterable($node->stmts)) {
-                return;
-            }
-
+        /** @var Class_ $node */
+        $traverse = function (Node $node, bool &$hasChanged, bool &$hasOneFlush) use (&$traverse): void {
+            /**
+             * @psalm-suppress NoInterfaceProperties
+             * @psalm-suppress MixedAssignment
+             *
+             * @phpstan-ignore-next-line
+             */
             foreach ($node->stmts as $key => $stmt) {
                 if ($stmt instanceof Expression && ($stmt->expr instanceof FuncCall || $stmt->expr instanceof MethodCall)) {
                     $expr = $stmt->expr;
+                    $type = $this->getType($expr->name);
 
-                    if ($expr instanceof FuncCall && $this->getType($expr->name)->getClassName() === self::FLUSHER_CLASS
-                        || $expr instanceof MethodCall && $this->getName($expr->name) === self::FLUSH_METHOD) {
+                    if ((
+                        $expr instanceof MethodCall
+                        && $this->getName($expr->name) === self::FLUSH_METHOD
+                    ) || (
+                        $expr instanceof FuncCall
+                        && method_exists($type, 'getClassName')
+                        && $type->getClassName() === self::FLUSHER_CLASS
+                    )) {
                         if ($hasOneFlush === false) {
                             $hasOneFlush = true;
 
@@ -94,10 +101,18 @@ final class OneFlushInClassRector extends AbstractRector
                         }
 
                         $hasChanged = true;
+
+                        /**
+                         * @phpstan-ignore-next-line
+                         *
+                         * @psalm-suppress MixedArrayOffset
+                         * @psalm-suppress MixedArrayAccess
+                         */
                         unset($node->stmts[$key]);
                     }
                 }
 
+                /** @var callable $traverse */
                 $traverse($stmt, $hasChanged, $hasOneFlush);
             }
         };

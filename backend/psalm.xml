@@ -9,13 +9,15 @@
 >
     <projectFiles>
         <directory name="src" />
+        <directory name="src-dev" />
+        <directory name="tests" />
         <ignoreFiles>
             <directory name="vendor" />
-            <directory name="tests"/>
             <file name="src/*/config.php" />
             <file name="src/*/*/config.php" />
             <file name="src/Infrastructure/Kernel.php" />
             <file name="src/Infrastructure/di.php" />
+            <file name="src-dev/Maker/Vendor/EntityGenerator.php" />
         </ignoreFiles>
     </projectFiles>
 
@@ -24,4 +26,25 @@
         <function name="dump"/>
         <function name="var_dump"/>
     </forbiddenFunctions>
+
+    <issueHandlers>
+        <InternalClass>
+            <errorLevel type="suppress">
+                <referencedClass name="Symfony\Bundle\MakerBundle\Util\UseStatementGenerator" />
+            </errorLevel>
+        </InternalClass>
+
+        <InternalMethod>
+            <errorLevel type="suppress">
+                <referencedMethod name="Symfony\Bundle\MakerBundle\Util\UseStatementGenerator::__construct" />
+            </errorLevel>
+        </InternalMethod>
+
+        <UnusedVariable>
+            <errorLevel type="suppress">
+                <file name="src-dev/Rector/OneFlushInClassRector.php" />
+            </errorLevel>
+        </UnusedVariable>
+        <PluginIssue name="IssueNameEmittedByPlugin" errorLevel="info" />
+    </issueHandlers>
 </psalm>

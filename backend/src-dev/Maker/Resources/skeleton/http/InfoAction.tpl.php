@@ -1,4 +1,13 @@
 <?php declare(strict_types=1);
+
+/**
+ * @var non-empty-string $namespace
+ * @var non-empty-string $use_statements
+ * @var non-empty-string $entity_classname
+ * @var non-empty-string $role
+ * @var non-empty-string $method
+ * @var non-empty-string $route_path
+ */
 echo "<?php\n"; ?>
 
 declare(strict_types=1);

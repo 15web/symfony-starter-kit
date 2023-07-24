@@ -16,9 +16,14 @@ use Symfony\Bundle\MakerBundle\Validator;
 /**
  * Подгружает наши ресурсы (шаблоны классов)
  * Полная копия Generator(MakerBundle) за исключением addOperation метода, где указывается наша директория с ресурсами
+ *
+ * @psalm-suppress
  */
 final class CustomGenerator
 {
+    /**
+     * @var array<string, array<string, mixed>>
+     */
     private array $pendingOperations = [];
 
     public function __construct(
@@ -38,7 +43,7 @@ final class CustomGenerator
      *
      * @param string $className The fully-qualified class name
      * @param string $templateName Template name in Resources/skeleton to use
-     * @param array $variables Array of variables to pass to the template
+     * @param array<string, mixed> $variables Array of variables to pass to the template
      *
      * @return string The path where the file will be created
      *
@@ -46,16 +51,16 @@ final class CustomGenerator
      */
     public function generateClass(string $className, string $templateName, array $variables = []): string
     {
+        /**
+         * @psalm-suppress InternalMethod
+         */
         $targetPath = $this->fileManager->getRelativePathForFutureClass($className);
 
         if ($targetPath === null) {
             throw new LogicException(sprintf('Could not determine where to locate the new class "%s", maybe try with a full namespace like "\\My\\Full\\Namespace\\%s"', $className, Str::getShortClassName($className)));
         }
 
-        $variables = array_merge($variables, [
-            'class_name' => Str::getShortClassName($className),
-            'namespace' => Str::getNamespace($className),
-        ]);
+        $variables = [...$variables, 'class_name' => Str::getShortClassName($className), 'namespace' => Str::getNamespace($className)];
 
         $this->addOperation($targetPath, $templateName, $variables);
 
@@ -75,13 +80,20 @@ final class CustomGenerator
             throw new RuntimeCommandException(sprintf('File "%s" is not in the Generator\'s pending operations', $targetPath));
         }
 
+        /** @var string $templatePath */
         $templatePath = $this->pendingOperations[$targetPath]['template'];
+
+        /** @var array<string, mixed> $parameters */
         $parameters = $this->pendingOperations[$targetPath]['variables'];
 
-        $templateParameters = array_merge($parameters, [
-            'relative_path' => $this->fileManager->relativizePath($targetPath),
-        ]);
+        /**
+         * @psalm-suppress InternalMethod
+         */
+        $templateParameters = [...$parameters, 'relative_path' => $this->fileManager->relativizePath($targetPath)];
 
+        /**
+         * @psalm-suppress InternalMethod
+         */
         return $this->fileManager->parseTemplate($templatePath, $templateParameters);
     }
 
@@ -122,11 +134,18 @@ final class CustomGenerator
             $className = rtrim($fullNamespacePrefix, '\\').'\\'.Str::asClassName($name, $suffix);
         }
 
+        /**
+         * @psalm-suppress InternalClass
+         * @psalm-suppress InternalMethod
+         */
         Validator::validateClassName($className, $validationErrorMessage);
 
         // if this is a custom class, we may be completely different than the namespace prefix
         // the best way can do, is find the PSR4 prefix and use that
         if (!str_starts_with($className, $fullNamespacePrefix)) {
+            /**
+             * @psalm-suppress InternalMethod
+             */
             $fullNamespacePrefix = $this->fileManager->getNamespacePrefixForClass($className);
         }
 
@@ -140,11 +159,20 @@ final class CustomGenerator
     {
         foreach ($this->pendingOperations as $targetPath => $templateData) {
             if (isset($templateData['contents'])) {
-                $this->fileManager->dumpFile($targetPath, $templateData['contents']);
+                /** @var string $content */
+                $content = $templateData['contents'];
+
+                /**
+                 * @psalm-suppress InternalMethod
+                 */
+                $this->fileManager->dumpFile($targetPath, $content);
 
                 continue;
             }
 
+            /**
+             * @psalm-suppress InternalMethod
+             */
             $this->fileManager->dumpFile(
                 $targetPath,
                 $this->getFileContentsForPendingOperation($targetPath)
@@ -154,12 +182,21 @@ final class CustomGenerator
         $this->pendingOperations = [];
     }
 
+    /**
+     * @param array<string, mixed> $variables
+     */
     private function addOperation(string $targetPath, string $templateName, array $variables): void
     {
+        /**
+         * @psalm-suppress InternalMethod
+         */
         if ($this->fileManager->fileExists($targetPath)) {
             throw new RuntimeCommandException(sprintf('The file "%s" can\'t be generated because it already exists.', $this->fileManager->relativizePath($targetPath)));
         }
 
+        /**
+         * @psalm-suppress InternalMethod
+         */
         $variables['relative_path'] = $this->fileManager->relativizePath($targetPath);
 
         $templatePath = $templateName;
