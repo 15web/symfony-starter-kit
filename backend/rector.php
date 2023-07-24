@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Dev\Rector\OneFlushInClassRector;
+use Dev\Rector\ResolversInActionRector;
 use Rector\CodeQuality\Rector\Class_\InlineConstructorDefaultToPropertyRector;
 use Rector\CodeQuality\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector;
 use Rector\Config\RectorConfig;
@@ -54,4 +55,5 @@ return static function (RectorConfig $rectorConfig): void {
     ]);
 
     $rectorConfig->rule(OneFlushInClassRector::class);
+    $rectorConfig->rule(ResolversInActionRector::class);
 };
