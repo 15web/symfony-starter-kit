@@ -22,7 +22,10 @@ final readonly class SaveSeo
 
     public function __invoke(SaveSeoCommand $command): Seo
     {
-        $seo = $this->seoCollection->findByTypeIdentity($command->type, $command->identity);
+        $seo = $this->seoCollection->findByTypeIdentity(
+            type: $command->type,
+            identity: $command->identity,
+        );
 
         if ($seo === null) {
             $seo = new Seo(

@@ -43,9 +43,7 @@ final readonly class ArticleListAction
             );
         }
 
-        $pagination = new PaginationResponse(
-            total: $articlesCount,
-        );
+        $pagination = new PaginationResponse($articlesCount);
 
         return new ArticleListResponse(
             data: $data,

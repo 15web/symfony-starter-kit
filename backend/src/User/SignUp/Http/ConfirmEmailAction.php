@@ -40,7 +40,10 @@ final readonly class ConfirmEmailAction
             ($this->confirmEmail)($confirmToken);
             ($this->flush)();
         } catch (EmailAlreadyIsConfirmedException $e) {
-            throw new ApiBadResponseException($e->getMessage(), ApiErrorCode::EmailAlreadyIsConfirmed);
+            throw new ApiBadResponseException(
+                errorMessage: $e->getMessage(),
+                apiCode: ApiErrorCode::EmailAlreadyIsConfirmed,
+            );
         } catch (UserNotFoundException $e) {
             throw new ApiNotFoundException($e->getMessage());
         }

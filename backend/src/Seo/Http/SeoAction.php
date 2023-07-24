@@ -28,7 +28,10 @@ final readonly class SeoAction
         #[ValueResolver(RequestAttributeValueResolver::class)]
         string $identity,
     ): SeoData {
-        $seo = $this->seoCollection->findOneByTypeAndIdentity($type, $identity);
+        $seo = $this->seoCollection->findOneByTypeAndIdentity(
+            type: $type,
+            identity: $identity,
+        );
 
         return new SeoData(
             title: $seo?->getTitle(),

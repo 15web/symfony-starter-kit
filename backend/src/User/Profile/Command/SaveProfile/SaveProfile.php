@@ -28,11 +28,17 @@ final readonly class SaveProfile
         $profile = $this->profiles->findByUserId($userId);
 
         if ($profile !== null) {
-            ($this->updateProfile)($command, $profile);
+            ($this->updateProfile)(
+                command: $command,
+                profile: $profile,
+            );
 
             return;
         }
 
-        ($this->createProfile)($command, $userId);
+        ($this->createProfile)(
+            command: $command,
+            userId: $userId,
+        );
     }
 }

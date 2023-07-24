@@ -44,7 +44,10 @@ final readonly class ProfileSaveAction
         UserId $userId,
     ): ProfileData {
         try {
-            ($this->saveProfile)($command, $userId);
+            ($this->saveProfile)(
+                command: $command,
+                userId: $userId,
+            );
 
             ($this->flush)();
         } catch (InvalidArgumentException $e) {

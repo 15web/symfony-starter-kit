@@ -32,7 +32,10 @@ final readonly class SignInAction
         UserId $userId
     ): UserResponse {
         $token = new UuidV7();
-        ($this->createToken)($userId, $token);
+        ($this->createToken)(
+            userId: $userId,
+            userTokenId: $token,
+        );
 
         ($this->flush)();
 

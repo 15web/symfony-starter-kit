@@ -41,7 +41,10 @@ final readonly class SignUpAction
         } catch (InvalidArgumentException $e) {
             throw new ApiBadRequestException($e->getMessage());
         } catch (UserAlreadyExistException $e) {
-            throw new ApiBadResponseException($e->getMessage(), ApiErrorCode::UserAlreadyExist);
+            throw new ApiBadResponseException(
+                errorMessage: $e->getMessage(),
+                apiCode: ApiErrorCode::UserAlreadyExist,
+            );
         }
 
         return new SuccessResponse();

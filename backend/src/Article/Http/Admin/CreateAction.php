@@ -30,7 +30,8 @@ final readonly class CreateAction
     }
 
     public function __invoke(
-        #[ValueResolver(ApiRequestValueResolver::class)] CreateRequest $createRequest,
+        #[ValueResolver(ApiRequestValueResolver::class)]
+        CreateRequest $createRequest,
     ): Article {
         $sameArticle = $this->articles->findByAlias($createRequest->alias);
         if ($sameArticle !== null) {
