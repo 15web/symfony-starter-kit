@@ -9,14 +9,11 @@ namespace <?php echo $namespace; ?>;
 
 /**
  * @internal
- *
- * @testdox Создание <?php echo $entity_classname."\n"; ?>
  */
+#[TestDox('Обновление <?php echo $entity_classname; ?>')]
 final class <?php echo $test_name; ?> extends ApiWebTestCase
 {
-    /**
-     * @testdox <?php echo $entity_classname; ?> обновлен
-     */
+    #[TestDox('<?php echo $entity_classname; ?> обновлен')]
     public function testSuccess(): void
     {
         $token = User::auth();
@@ -39,9 +36,7 @@ final class <?php echo $test_name; ?> extends ApiWebTestCase
 <?php } ?>
     }
 
-    /**
-     * @testdox <?php echo $entity_classname; ?> не найден
-     */
+    #[TestDox('<?php echo $entity_classname; ?> не найден')]
     public function testNotFound(): void
     {
         $token = User::auth();
@@ -58,11 +53,8 @@ final class <?php echo $test_name; ?> extends ApiWebTestCase
         self::assertNotFound($response);
     }
 
-    /**
-     * @dataProvider notValidTokenDataProvider
-     *
-     * @testdox Доступ запрещен
-     */
+    #[DataProvider('notValidTokenDataProvider')]
+    #[TestDox('Доступ запрещен')]
     public function testAccessDenied(string $notValidToken): void
     {
         $token = User::auth();
@@ -79,11 +71,8 @@ final class <?php echo $test_name; ?> extends ApiWebTestCase
         self::assertAccessDenied($response);
     }
 
-    /**
-     * @dataProvider notValidRequestProvider
-     *
-     * @testdox Неправильный запрос
-     */
+    #[DataProvider('notValidRequestProvider')]
+    #[TestDox('Неправильный запрос')]
     public function testBadRequest(array $body): void
     {
         $token = User::auth();
@@ -101,7 +90,7 @@ final class <?php echo $test_name; ?> extends ApiWebTestCase
         self::assertBadRequest($response);
     }
 
-    public function notValidRequestProvider(): Iterator
+    public static function notValidRequestProvider(): Iterator
     {
         yield 'пустой запрос' => [['']];
 

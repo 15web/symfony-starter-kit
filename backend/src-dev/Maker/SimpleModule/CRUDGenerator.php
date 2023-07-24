@@ -6,7 +6,7 @@ namespace Dev\Maker\SimpleModule;
 
 use App\Infrastructure\ApiException\ApiBadRequestException;
 use App\Infrastructure\ApiException\ApiNotFoundException;
-use App\Infrastructure\ApiRequestResolver\ApiRequest;
+use App\Infrastructure\ApiRequestValueResolver;
 use App\Infrastructure\AsService;
 use App\Infrastructure\Flush;
 use App\Infrastructure\SuccessResponse;
@@ -19,6 +19,7 @@ use Symfony\Bundle\MakerBundle\Util\ClassNameDetails;
 use Symfony\Bundle\MakerBundle\Util\UseStatementGenerator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Symfony\Component\Routing\Annotation\Route;
@@ -104,6 +105,7 @@ final readonly class CRUDGenerator
             IsGranted::class,
             UserRole::class,
             Request::class,
+            ValueResolver::class,
         ]);
 
         $route = '/api/'.lcfirst($shortEntityClass).'s/{id}';
@@ -141,6 +143,7 @@ final readonly class CRUDGenerator
             SuccessResponse::class,
             UserRole::class,
             Request::class,
+            ValueResolver::class,
         ]);
 
         $route = '/api/'.lcfirst($shortEntityClass).'s/{id}/remove';
@@ -182,7 +185,8 @@ final readonly class CRUDGenerator
             SuccessResponse::class,
             UserRole::class,
             Request::class,
-            ApiRequest::class,
+            ApiRequestValueResolver::class,
+            ValueResolver::class,
         ]);
 
         $route = '/api/'.lcfirst($shortEntityClass).'s/create';
@@ -243,7 +247,8 @@ final readonly class CRUDGenerator
             SuccessResponse::class,
             UserRole::class,
             Request::class,
-            ApiRequest::class,
+            ApiRequestValueResolver::class,
+            ValueResolver::class,
         ]);
 
         $route = '/api/'.lcfirst($shortEntityClass).'s/{id}/update';

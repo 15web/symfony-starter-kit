@@ -11,9 +11,9 @@ namespace <?php echo $namespace; ?>;
  * Резолвер для сущности <?php echo $entity_classname."\n"; ?>
  */
 #[AsService]
-final class <?php echo $class_name; ?> implements ValueResolverInterface
+final readonly class <?php echo $class_name; ?> implements ValueResolverInterface
 {
-    public function __construct(private readonly <?php echo $entity_repository; ?> $repository)
+    public function __construct(private <?php echo $entity_repository; ?> $repository)
     {
     }
 

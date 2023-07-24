@@ -18,10 +18,10 @@ final class EntityFieldsManipulator
         foreach ($fields as $field) {
             if (isset($field['nullable'])) {
                 // Отступы для конструктора
-                $properties .= '        public readonly ?'.$this->getVariableType($field['type']).
+                $properties .= '        public ?'.$this->getVariableType($field['type']).
                     ' $'.$field['fieldName'].' = null,'.PHP_EOL;
             } else {
-                $properties .= '        public readonly '.$this->getVariableType($field['type']).
+                $properties .= '        public '.$this->getVariableType($field['type']).
                     ' $'.$field['fieldName'].','.PHP_EOL;
             }
         }
