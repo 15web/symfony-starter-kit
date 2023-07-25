@@ -44,12 +44,19 @@ final class SendUncompletedTaskToUser extends Command
         $users = ($this->findAllUsers)();
         $emailSent = 0;
         foreach ($users as $user) {
-            $uncompletedTasks = ($this->findUncompletedTasksByUserId)(new FindUncompletedTasksByUserIdQuery($user->id));
+            $uncompletedTasks = ($this->findUncompletedTasksByUserId)(
+                query: new FindUncompletedTasksByUserIdQuery($user->id)
+            );
+
             if ($uncompletedTasks === []) {
                 continue;
             }
 
-            $this->messageBus->dispatch(new UncompletedTasksMessage($user->email, $uncompletedTasks));
+            $this->messageBus->dispatch(new UncompletedTasksMessage(
+                email: $user->email,
+                tasks: $uncompletedTasks,
+            ));
+
             ++$emailSent;
         }
 

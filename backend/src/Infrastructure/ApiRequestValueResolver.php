@@ -48,9 +48,9 @@ final readonly class ApiRequestValueResolver implements ValueResolverInterface
 
         try {
             $requestObject = $this->serializer->deserialize(
-                $request->getContent(),
-                $className,
-                JsonEncoder::FORMAT
+                data: $request->getContent(),
+                type: $className,
+                format: JsonEncoder::FORMAT
             );
         } catch (InvalidArgumentException $e) {
             throw new ApiBadRequestException($e->getMessage(), $e);

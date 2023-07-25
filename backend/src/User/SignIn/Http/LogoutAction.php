@@ -33,7 +33,8 @@ final readonly class LogoutAction
     }
 
     public function __invoke(
-        #[ValueResolver(RequestValueResolver::class)] Request $request,
+        #[ValueResolver(RequestValueResolver::class)]
+        Request $request,
     ): SuccessResponse {
         $apiToken = $request->headers->get(ApiTokenAuthenticator::TOKEN_NAME);
         if ($apiToken === null) {

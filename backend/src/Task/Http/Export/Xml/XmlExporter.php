@@ -37,14 +37,20 @@ final readonly class XmlExporter implements Exporter
      */
     public function export(array $tasks): BinaryFileResponse
     {
-        $xmlTaskData = $this->serializer->serialize($this->adaptData($tasks), XmlEncoder::FORMAT);
+        $xmlTaskData = $this->serializer->serialize(
+            data: $this->adaptData($tasks),
+            format: XmlEncoder::FORMAT,
+        );
 
         $file = $this->filesystem->tempnam('/tmp', 'user_');
         file_put_contents($file, $xmlTaskData);
 
         $response = new BinaryFileResponse($file);
         $response->headers->set('Content-Type', $response->getFile()->getMimeType());
-        $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, 'tasks.xml');
+        $response->setContentDisposition(
+            disposition: ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            filename: 'tasks.xml'
+        );
 
         return $response;
     }
@@ -58,10 +64,10 @@ final readonly class XmlExporter implements Exporter
     {
         foreach ($tasks as $task) {
             yield new XmlTaskData(
-                $task->id,
-                $task->createdAt,
-                $task->taskName,
-                $task->isCompleted,
+                id: $task->id,
+                createdAt: $task->createdAt,
+                taskName: $task->taskName,
+                isCompleted: $task->isCompleted,
             );
         }
     }

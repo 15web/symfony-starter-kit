@@ -23,12 +23,15 @@ use Symfony\Component\Routing\Annotation\Route;
 #[AsController]
 final readonly class RequestPasswordRecoveryAction
 {
-    public function __construct(private GenerateRecoveryToken $generateRecoveryToken, private Flush $flush)
-    {
+    public function __construct(
+        private GenerateRecoveryToken $generateRecoveryToken,
+        private Flush $flush,
+    ) {
     }
 
     public function __invoke(
-        #[ValueResolver(ApiRequestValueResolver::class)] GenerateRecoveryTokenCommand $command,
+        #[ValueResolver(ApiRequestValueResolver::class)]
+        GenerateRecoveryTokenCommand $command,
     ): SuccessResponse {
         try {
             ($this->generateRecoveryToken)($command);

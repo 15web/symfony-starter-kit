@@ -27,10 +27,15 @@ final readonly class SignInAction
     ) {
     }
 
-    public function __invoke(#[ValueResolver(UserIdArgumentValueResolver::class)] UserId $userId): UserResponse
-    {
+    public function __invoke(
+        #[ValueResolver(UserIdArgumentValueResolver::class)]
+        UserId $userId
+    ): UserResponse {
         $token = new UuidV7();
-        ($this->createToken)($userId, $token);
+        ($this->createToken)(
+            userId: $userId,
+            userTokenId: $token,
+        );
 
         ($this->flush)();
 

@@ -61,8 +61,8 @@ final readonly class TaskArgumentValueResolver implements ValueResolverInterface
             Assert::uuid($taskId, 'Укажите валидный id');
 
             $task = $this->tasks->findByIdAndUserId(
-                new TaskId(Uuid::fromString($taskId)),
-                $user->getUserId(),
+                taskId: new TaskId(Uuid::fromString($taskId)),
+                userId: $user->getUserId(),
             );
 
             if ($task === null) {

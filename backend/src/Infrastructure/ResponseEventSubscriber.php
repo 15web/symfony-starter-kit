@@ -47,8 +47,16 @@ final readonly class ResponseEventSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $controllerResult = $this->serializer->serialize($controllerResult, JsonEncoder::FORMAT);
-        $response = new JsonResponse($controllerResult, Response::HTTP_OK, [], true);
+        $controllerResult = $this->serializer->serialize(
+            data: $controllerResult,
+            format: JsonEncoder::FORMAT,
+        );
+        $response = new JsonResponse(
+            data: $controllerResult,
+            status: Response::HTTP_OK,
+            headers: [],
+            json: true,
+        );
 
         $event->setResponse($response);
     }

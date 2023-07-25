@@ -36,11 +36,16 @@ final readonly class UpdateTaskNameAction
     }
 
     public function __invoke(
-        #[ValueResolver(TaskArgumentValueResolver::class)] Task $task,
-        #[ValueResolver(ApiRequestValueResolver::class)] UpdateTaskNameCommand $command,
+        #[ValueResolver(TaskArgumentValueResolver::class)]
+        Task $task,
+        #[ValueResolver(ApiRequestValueResolver::class)]
+        UpdateTaskNameCommand $command,
     ): SuccessResponse {
         try {
-            ($this->updateTaskName)($task, $command);
+            ($this->updateTaskName)(
+                task: $task,
+                command: $command,
+            );
 
             ($this->flush)();
 

@@ -30,17 +30,23 @@ final readonly class CreateAction
     }
 
     public function __invoke(
-        #[ValueResolver(ApiRequestValueResolver::class)] CreateRequest $createRequest,
+        #[ValueResolver(ApiRequestValueResolver::class)]
+        CreateRequest $createRequest,
     ): Article {
         $sameArticle = $this->articles->findByAlias($createRequest->alias);
         if ($sameArticle !== null) {
             throw new ApiBadResponseException(
-                'article.not_found_by_alias',
-                ApiErrorCode::ArticleAlreadyExist
+                errorMessage: 'article.not_found_by_alias',
+                apiCode: ApiErrorCode::ArticleAlreadyExist
             );
         }
 
-        $article = new Article($createRequest->title, $createRequest->alias, $createRequest->body);
+        $article = new Article(
+            title: $createRequest->title,
+            alias: $createRequest->alias,
+            body: $createRequest->body,
+        );
+
         $this->articles->add($article);
         ($this->flush)();
 

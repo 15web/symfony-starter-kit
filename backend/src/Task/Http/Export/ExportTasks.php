@@ -51,10 +51,10 @@ final class ExportTasks
         }
 
         $tasks = ($this->findAllTasksByUserId)(
-            new FindAllTasksByUserIdQuery(
-                $userId->value,
-                $limit,
-                $offset,
+            query: new FindAllTasksByUserIdQuery(
+                userId: $userId->value,
+                limit: $limit,
+                offset: $offset,
             )
         );
 

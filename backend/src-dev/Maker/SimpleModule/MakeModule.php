@@ -30,7 +30,10 @@ final class MakeModule extends AbstractMaker implements InputAwareMakerInterface
         ?string $projectDirectory = null,
     ) {
         if ($projectDirectory !== null) {
-            @trigger_error('The $projectDirectory constructor argument is no longer used since 1.41.0', E_USER_DEPRECATED);
+            @trigger_error(
+                message: 'The $projectDirectory constructor argument is no longer used since 1.41.0',
+                error_level: E_USER_DEPRECATED
+            );
         }
     }
 
@@ -47,8 +50,22 @@ final class MakeModule extends AbstractMaker implements InputAwareMakerInterface
     public function configureCommand(Command $command, InputConfiguration $inputConfig): void
     {
         $command
-            ->addArgument('module-name', InputArgument::OPTIONAL, sprintf('Name of module (e.g. <fg=yellow>%s</>)', CustomStr::asClassName(CustomStr::getRandomTerm())))
-            ->addArgument('name', InputArgument::OPTIONAL, sprintf('Class name of the entity to create or update (e.g. <fg=yellow>%s</>)', Str::asClassName(Str::getRandomTerm())))
+            ->addArgument(
+                name: 'module-name',
+                mode: InputArgument::OPTIONAL,
+                description: sprintf(
+                    format: 'Name of module (e.g. <fg=yellow>%s</>)',
+                    values: CustomStr::asClassName(CustomStr::getRandomTerm()),
+                ),
+            )
+            ->addArgument(
+                name: 'name',
+                mode: InputArgument::OPTIONAL,
+                description: sprintf(
+                    format: 'Class name of the entity to create or update (e.g. <fg=yellow>%s</>)',
+                    values: Str::asClassName(Str::getRandomTerm()),
+                ),
+            )
             ->setHelp(file_get_contents(__DIR__.'/../Resources/help/MakeModule.txt'));
 
         $inputConfig->setArgumentAsNonInteractive('name');
@@ -75,10 +92,10 @@ final class MakeModule extends AbstractMaker implements InputAwareMakerInterface
         [$entityClassDetails, $fields] = $this->entityGenerator->generate($input, $io);
 
         $this->crudGenerator->generate(
-            $moduleName.'\\Http\\',
-            $entityClassDetails,
-            $entityClassDetails->getShortName().'s',
-            $fields
+            namespacePrefix: $moduleName.'\\Http\\',
+            entityClass: $entityClassDetails,
+            repoClassName: $entityClassDetails->getShortName().'s',
+            fields: $fields,
         );
 
         $this->functionalTestsGenerator->generate($moduleName, $entityClassDetails, $fields);

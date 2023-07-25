@@ -31,8 +31,10 @@ final readonly class RemoveTaskAction
     ) {
     }
 
-    public function __invoke(#[ValueResolver(TaskArgumentValueResolver::class)] Task $task): SuccessResponse
-    {
+    public function __invoke(
+        #[ValueResolver(TaskArgumentValueResolver::class)]
+        Task $task
+    ): SuccessResponse {
         ($this->removeTask)($task);
 
         ($this->flush)();

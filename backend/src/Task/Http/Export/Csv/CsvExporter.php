@@ -37,14 +37,20 @@ final readonly class CsvExporter implements Exporter
      */
     public function export(array $tasks): BinaryFileResponse
     {
-        $csvTaskData = $this->serializer->serialize($this->adaptData($tasks), CsvEncoder::FORMAT);
+        $csvTaskData = $this->serializer->serialize(
+            data: $this->adaptData($tasks),
+            format: CsvEncoder::FORMAT,
+        );
 
         $file = $this->filesystem->tempnam('/tmp', 'user_');
         file_put_contents($file, $csvTaskData);
 
         $response = new BinaryFileResponse($file);
         $response->headers->set('Content-Type', 'text/csv');
-        $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, 'tasks.csv');
+        $response->setContentDisposition(
+            disposition: ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            filename: 'tasks.csv',
+        );
 
         return $response;
     }
@@ -58,9 +64,9 @@ final readonly class CsvExporter implements Exporter
     {
         foreach ($tasks as $task) {
             yield new CsvTaskData(
-                $task->id,
-                $task->taskName,
-                $task->isCompleted,
+                id: $task->id,
+                taskName: $task->taskName,
+                isCompleted: $task->isCompleted,
             );
         }
     }

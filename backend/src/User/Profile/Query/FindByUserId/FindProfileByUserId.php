@@ -27,7 +27,10 @@ final readonly class FindProfileByUserId
             DQL;
 
         $dqlQuery = $this->entityManager->createQuery($dql);
-        $dqlQuery->setParameter('userId', $query->userId->toBinary());
+        $dqlQuery->setParameter(
+            key: 'userId',
+            value: $query->userId->toBinary(),
+        );
 
         /** @var ?ProfileData $result */
         $result = $dqlQuery->getOneOrNullResult();

@@ -42,9 +42,13 @@ final readonly class FindAllTasksByUserId
         $items = $queryBuilder->executeQuery()->fetchAllAssociative();
 
         /** @var TaskData[] $tasks */
-        $tasks = $this->denormalizer->denormalize($items, TaskData::class.'[]', context: [
-            AbstractObjectNormalizer::DISABLE_TYPE_ENFORCEMENT => true,
-        ]);
+        $tasks = $this->denormalizer->denormalize(
+            data: $items,
+            type: TaskData::class.'[]',
+            context: [
+                AbstractObjectNormalizer::DISABLE_TYPE_ENFORCEMENT => true,
+            ],
+        );
 
         return $tasks;
     }

@@ -34,7 +34,10 @@ final readonly class RecoverPasswordAction
         #[ValueResolver(ApiRequestValueResolver::class)] RecoverPasswordCommand $recoverPasswordCommand,
     ): SuccessResponse {
         try {
-            ($this->recoverPassword)($recoveryToken, $recoverPasswordCommand);
+            ($this->recoverPassword)(
+                recoveryToken: $recoveryToken,
+                recoverPasswordCommand: $recoverPasswordCommand,
+            );
 
             ($this->flush)();
         } catch (RecoveryTokenNotFoundException $e) {

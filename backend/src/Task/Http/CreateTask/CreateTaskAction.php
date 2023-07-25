@@ -37,12 +37,18 @@ final readonly class CreateTaskAction
     }
 
     public function __invoke(
-        #[ValueResolver(ApiRequestValueResolver::class)] CreateTaskCommand $createTaskCommand,
-        #[ValueResolver(UserIdArgumentValueResolver::class)] UserId $userId,
+        #[ValueResolver(ApiRequestValueResolver::class)]
+        CreateTaskCommand $createTaskCommand,
+        #[ValueResolver(UserIdArgumentValueResolver::class)]
+        UserId $userId,
     ): TaskData {
         try {
             $taskId = new TaskId();
-            ($this->createTask)($createTaskCommand, $taskId, $userId);
+            ($this->createTask)(
+                createTaskCommand: $createTaskCommand,
+                taskId: $taskId,
+                userId: $userId,
+            );
 
             ($this->flush)();
 

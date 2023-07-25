@@ -22,22 +22,25 @@ final readonly class SaveSeo
 
     public function __invoke(SaveSeoCommand $command): Seo
     {
-        $seo = $this->seoCollection->findByTypeIdentity($command->type, $command->identity);
+        $seo = $this->seoCollection->findByTypeIdentity(
+            type: $command->type,
+            identity: $command->identity,
+        );
 
         if ($seo === null) {
             $seo = new Seo(
-                SeoResourceType::from($command->type),
-                $command->identity,
-                $command->title,
+                type: SeoResourceType::from($command->type),
+                identity: $command->identity,
+                title: $command->title,
             );
 
             $this->seoCollection->add($seo);
         }
 
         $seo->change(
-            $command->title,
-            $command->description,
-            $command->keywords,
+            title: $command->title,
+            description: $command->description,
+            keywords: $command->keywords,
         );
 
         ($this->flush)();

@@ -32,9 +32,9 @@ final readonly class EntityClassGeneratorForModule
     public function generateEntityClass(string $moduleName, ClassNameDetails $entityClassDetails, bool $generateRepositoryClass = true): string
     {
         $repoClassDetails = $this->generator->createClassNameDetails(
-            $entityClassDetails->getRelativeName(),
-            $moduleName.'\\Domain\\',
-            's'
+            name: $entityClassDetails->getRelativeName(),
+            namespacePrefix: $moduleName.'\\Domain\\',
+            suffix: 's'
         );
 
         $tableName = $this->doctrineHelper->getPotentialTableName($entityClassDetails->getFullName());
@@ -46,9 +46,9 @@ final readonly class EntityClassGeneratorForModule
         ]);
 
         $entityPath = $this->generator->generateClass(
-            $entityClassDetails->getFullName(),
-            'domain/Entity.tpl.php',
-            [
+            className: $entityClassDetails->getFullName(),
+            templateName: 'domain/Entity.tpl.php',
+            variables: [
                 'use_statements' => $useStatements,
                 'repository_class_name' => $repoClassDetails->getShortName(),
                 'api_resource' => false,
@@ -60,8 +60,8 @@ final readonly class EntityClassGeneratorForModule
 
         if ($generateRepositoryClass) {
             $this->generateRepository(
-                $repoClassDetails->getFullName(),
-                $entityClassDetails->getFullName(),
+                repositoryClass: $repoClassDetails->getFullName(),
+                entityClass: $entityClassDetails->getFullName(),
             );
         }
 
@@ -88,9 +88,9 @@ final readonly class EntityClassGeneratorForModule
         ]);
 
         $this->generator->generateClass(
-            $repositoryClass,
-            'domain/Repository.tpl.php',
-            [
+            className: $repositoryClass,
+            templateName: 'domain/Repository.tpl.php',
+            variables: [
                 'use_statements' => $useStatements,
                 'entity_class_name' => $shortEntityClass,
                 'entity_alias' => $entityAlias,

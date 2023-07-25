@@ -33,8 +33,10 @@ final readonly class CompleteTaskAction
     ) {
     }
 
-    public function __invoke(#[ValueResolver(TaskArgumentValueResolver::class)] Task $task): SuccessResponse
-    {
+    public function __invoke(
+        #[ValueResolver(TaskArgumentValueResolver::class)]
+        Task $task
+    ): SuccessResponse {
         try {
             ($this->completeTask)($task);
 

@@ -30,15 +30,24 @@ final readonly class UpdateAction
     }
 
     public function __invoke(
-        #[ValueResolver(ArticleArgumentValueResolver::class)] Article $article,
-        #[ValueResolver(ApiRequestValueResolver::class)] UpdateRequest $updateRequest,
+        #[ValueResolver(ArticleArgumentValueResolver::class)]
+        Article $article,
+        #[ValueResolver(ApiRequestValueResolver::class)]
+        UpdateRequest $updateRequest,
     ): Article {
         $sameArticle = $this->articles->findByAlias($updateRequest->alias);
         if ($sameArticle !== null && $sameArticle->getId() !== $article->getId()) {
-            throw new ApiBadResponseException('article.not_found_by_alias', ApiErrorCode::ArticleAlreadyExist);
+            throw new ApiBadResponseException(
+                errorMessage: 'article.not_found_by_alias',
+                apiCode: ApiErrorCode::ArticleAlreadyExist
+            );
         }
 
-        $article->change($updateRequest->title, $updateRequest->alias, $updateRequest->body);
+        $article->change(
+            title: $updateRequest->title,
+            alias: $updateRequest->alias,
+            body: $updateRequest->body,
+        );
 
         ($this->flush)();
 

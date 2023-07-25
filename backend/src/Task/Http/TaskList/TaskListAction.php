@@ -34,22 +34,25 @@ final readonly class TaskListAction
     }
 
     public function __invoke(
-        #[ValueResolver(UserIdArgumentValueResolver::class)] UserId $userId,
-        #[ValueResolver(PaginationRequestArgumentResolver::class)] PaginationRequest $paginationRequest,
+        #[ValueResolver(UserIdArgumentValueResolver::class)]
+        UserId $userId,
+        #[ValueResolver(PaginationRequestArgumentResolver::class)]
+        PaginationRequest $paginationRequest,
     ): TaskListResponse {
         $query = new FindAllTasksByUserIdQuery(
-            $userId->value,
-            $paginationRequest->limit,
-            $paginationRequest->offset,
+            userId: $userId->value,
+            limit: $paginationRequest->limit,
+            offset: $paginationRequest->offset,
         );
 
         $tasks = ($this->findAllTasksByUserId)($query);
         $allTasksCount = ($this->countAllTasksByUserId)($query);
 
-        $pagination = new PaginationResponse(
-            total: $allTasksCount
-        );
+        $pagination = new PaginationResponse($allTasksCount);
 
-        return new TaskListResponse($tasks, $pagination);
+        return new TaskListResponse(
+            data: $tasks,
+            pagination: $pagination,
+        );
     }
 }

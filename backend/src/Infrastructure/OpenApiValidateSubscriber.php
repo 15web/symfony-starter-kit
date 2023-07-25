@@ -83,11 +83,11 @@ final readonly class OpenApiValidateSubscriber implements EventSubscriberInterfa
         $psrResponse = $psrHttpFactory->createResponse($event->getResponse());
 
         $this->responseValidator->validate(
-            new OperationAddress(
+            opAddr: new OperationAddress(
                 $request->getPathInfo(),
                 strtolower($request->getMethod())
             ),
-            $psrResponse
+            response: $psrResponse
         );
     }
 

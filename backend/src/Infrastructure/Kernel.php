@@ -65,19 +65,28 @@ final class Kernel extends BaseKernel implements CompilerPassInterface
             return;
         }
 
-        $attributeAsService = $class->getAttributes(AsService::class, ReflectionAttribute::IS_INSTANCEOF);
+        $attributeAsService = $class->getAttributes(
+            name: AsService::class,
+            flags: ReflectionAttribute::IS_INSTANCEOF,
+        );
 
         if ($attributeAsService !== []) {
             return;
         }
 
-        $attributeAsController = $class->getAttributes(AsController::class, ReflectionAttribute::IS_INSTANCEOF);
+        $attributeAsController = $class->getAttributes(
+            name: AsController::class,
+            flags: ReflectionAttribute::IS_INSTANCEOF,
+        );
 
         if ($attributeAsController !== []) {
             return;
         }
 
-        $attributeAsCommand = $class->getAttributes(AsCommand::class, ReflectionAttribute::IS_INSTANCEOF);
+        $attributeAsCommand = $class->getAttributes(
+            name: AsCommand::class,
+            flags: ReflectionAttribute::IS_INSTANCEOF,
+        );
 
         if ($attributeAsCommand !== []) {
             return;

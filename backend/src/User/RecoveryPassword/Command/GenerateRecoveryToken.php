@@ -34,10 +34,19 @@ final readonly class GenerateRecoveryToken
             throw new UserNotFoundException('Пользователь с таким email не найден');
         }
 
-        $recoveryToken = new RecoveryToken(new UuidV7(), $user->getUserId(), new UuidV7());
+        $recoveryToken = new RecoveryToken(
+            id: new UuidV7(),
+            userId: $user->getUserId(),
+            token: new UuidV7(),
+        );
 
         $this->tokens->add($recoveryToken);
 
-        $this->messageBus->dispatch(new RecoveryPasswordMessage($recoveryToken->getToken(), $command->email));
+        $this->messageBus->dispatch(
+            message: new RecoveryPasswordMessage(
+                token: $recoveryToken->getToken(),
+                email: $command->email,
+            ),
+        );
     }
 }

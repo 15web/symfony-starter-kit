@@ -26,10 +26,10 @@ final readonly class CreateProfile
         UserId $userId,
     ): void {
         $profile = new Profile(
-            new ProfileId(),
-            $userId,
-            new Phone($command->phone),
-            $command->name
+            profileId: new ProfileId(),
+            userId: $userId,
+            phone: new Phone($command->phone),
+            name: $command->name
         );
 
         $this->profiles->add($profile);

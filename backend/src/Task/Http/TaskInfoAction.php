@@ -33,11 +33,18 @@ final readonly class TaskInfoAction
     }
 
     public function __invoke(
-        #[ValueResolver(UidValueResolver::class)] Uuid $id,
-        #[ValueResolver(UserIdArgumentValueResolver::class)] UserId $userId,
+        #[ValueResolver(UidValueResolver::class)]
+        Uuid $id,
+        #[ValueResolver(UserIdArgumentValueResolver::class)]
+        UserId $userId,
     ): TaskData {
         try {
-            $taskData = ($this->findTaskById)(new FindTaskByIdQuery($id, $userId->value));
+            $taskData = ($this->findTaskById)(
+                query: new FindTaskByIdQuery(
+                    taskId: $id,
+                    userId: $userId->value,
+                ),
+            );
         } catch (TaskNotFoundException $e) {
             throw new ApiNotFoundException($e->getMessage());
         }

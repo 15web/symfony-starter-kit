@@ -25,20 +25,29 @@ final readonly class ArticleListAction
     }
 
     public function __invoke(
-        #[ValueResolver(PaginationRequestArgumentResolver::class)] PaginationRequest $paginationRequest,
+        #[ValueResolver(PaginationRequestArgumentResolver::class)]
+        PaginationRequest $paginationRequest,
     ): ArticleListResponse {
-        $articles = $this->articles->getAll($paginationRequest->limit, $paginationRequest->offset);
+        $articles = $this->articles->getAll(
+            limit: $paginationRequest->limit,
+            offset: $paginationRequest->offset,
+        );
         $articlesCount = $this->articles->countAll();
 
         $data = [];
         foreach ($articles as $article) {
-            $data[] = new ArticleListData($article->getTitle(), $article->getAlias(), $article->getBody());
+            $data[] = new ArticleListData(
+                title: $article->getTitle(),
+                alias: $article->getAlias(),
+                body: $article->getBody(),
+            );
         }
 
-        $pagination = new PaginationResponse(
-            total: $articlesCount,
-        );
+        $pagination = new PaginationResponse($articlesCount);
 
-        return new ArticleListResponse($data, $pagination);
+        return new ArticleListResponse(
+            data: $data,
+            pagination: $pagination,
+        );
     }
 }

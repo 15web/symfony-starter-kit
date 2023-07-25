@@ -39,17 +39,25 @@ final readonly class SignUp
 
         $confirmToken = new UuidV7();
         $userEmail = new Email($signUpCommand->email);
-        $user = new User(new UserId(), $userEmail, new ConfirmToken($confirmToken), UserRole::User);
+        $user = new User(
+            userId: new UserId(),
+            userEmail: $userEmail,
+            confirmToken: new ConfirmToken($confirmToken),
+            userRole: UserRole::User,
+        );
 
         $hashedPassword = $this->passwordHasher->hashPassword(
-            $user,
-            $signUpCommand->password
+            user: $user,
+            plainPassword: $signUpCommand->password,
         );
 
         $user->applyHashedPassword(new UserPassword($hashedPassword));
 
         $this->users->add($user);
 
-        $this->messageBus->dispatch(new ConfirmEmailMessage($confirmToken, $userEmail->value));
+        $this->messageBus->dispatch(new ConfirmEmailMessage(
+            confirmToken: $confirmToken,
+            email: $userEmail->value,
+        ));
     }
 }
