@@ -23,10 +23,16 @@ final class Kernel extends BaseKernel implements CompilerPassInterface
 {
     use MicroKernelTrait;
 
+    private const TAGGED_SERVICE = [
+        AsService::class,
+        AsController::class,
+        AsCommand::class,
+    ];
+
     public function process(ContainerBuilder $container): void
     {
-        foreach ($container->getDefinitions() as $id => $definition) {
-            $this->processClass($container, $definition, $id);
+        foreach ($container->getDefinitions() as $definitionId => $definition) {
+            $this->removeUntaggedServicesFromContainer($container, $definition, $definitionId);
         }
     }
 
@@ -49,8 +55,11 @@ final class Kernel extends BaseKernel implements CompilerPassInterface
         $routes->import('../../config/{routes}/*.yaml');
     }
 
-    private function processClass(ContainerBuilder $container, Definition $definition, string $id): void
-    {
+    private function removeUntaggedServicesFromContainer(
+        ContainerBuilder $container,
+        Definition $definition,
+        string $definitionId,
+    ): void {
         $class = $container->getReflectionClass($definition->getClass(), false);
 
         if ($class === null) {
@@ -61,37 +70,22 @@ final class Kernel extends BaseKernel implements CompilerPassInterface
         if ($namespace === '') {
             return;
         }
+
         if (!str_contains($namespace, 'App\\')) {
             return;
         }
 
-        $attributeAsService = $class->getAttributes(
-            name: AsService::class,
-            flags: ReflectionAttribute::IS_INSTANCEOF,
-        );
+        foreach (self::TAGGED_SERVICE as $serviceName) {
+            $attributeAsService = $class->getAttributes(
+                name: $serviceName,
+                flags: ReflectionAttribute::IS_INSTANCEOF,
+            );
 
-        if ($attributeAsService !== []) {
-            return;
+            if ($attributeAsService !== []) {
+                return;
+            }
         }
 
-        $attributeAsController = $class->getAttributes(
-            name: AsController::class,
-            flags: ReflectionAttribute::IS_INSTANCEOF,
-        );
-
-        if ($attributeAsController !== []) {
-            return;
-        }
-
-        $attributeAsCommand = $class->getAttributes(
-            name: AsCommand::class,
-            flags: ReflectionAttribute::IS_INSTANCEOF,
-        );
-
-        if ($attributeAsCommand !== []) {
-            return;
-        }
-
-        $container->removeDefinition($id);
+        $container->removeDefinition($definitionId);
     }
 }
