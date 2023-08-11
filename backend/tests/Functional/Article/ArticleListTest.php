@@ -8,6 +8,7 @@ use App\Tests\Functional\SDK\ApiWebTestCase;
 use App\Tests\Functional\SDK\Article;
 use App\Tests\Functional\SDK\User;
 use PHPUnit\Framework\Attributes\TestDox;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @internal
@@ -22,7 +23,7 @@ final class ArticleListTest extends ApiWebTestCase
 
         Article::create($title = 'Статья', $alias = 'statya', $content = '<p>Контент</p>', $token);
 
-        $response = self::request('GET', '/api/articles');
+        $response = self::request(Request::METHOD_GET, '/api/articles');
         self::assertSuccessResponse($response);
 
         $responseData = self::jsonDecode($response->getContent());

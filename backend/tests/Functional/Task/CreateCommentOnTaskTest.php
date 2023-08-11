@@ -9,6 +9,7 @@ use App\Tests\Functional\SDK\Task;
 use App\Tests\Functional\SDK\User;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -28,10 +29,10 @@ final class CreateCommentOnTaskTest extends ApiWebTestCase
         $body['commentBody'] = $commentText = 'First comment';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request('POST', "/api/tasks/{$taskId}/add-comment", $body, token: $token);
+        $response = self::request(Request::METHOD_POST, "/api/tasks/{$taskId}/add-comment", $body, token: $token);
         self::assertSuccessResponse($response);
 
-        $response = self::request('GET', "/api/tasks/{$taskId}/comments", token: $token);
+        $response = self::request(Request::METHOD_GET, "/api/tasks/{$taskId}/comments", token: $token);
         $comments = self::jsonDecode($response->getContent());
 
         self::assertCount(1, $comments);
@@ -53,7 +54,7 @@ final class CreateCommentOnTaskTest extends ApiWebTestCase
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
         $taskId = (string) Uuid::v4();
-        $response = self::request('POST', "/api/tasks/{$taskId}/add-comment", $body, token: $token);
+        $response = self::request(Request::METHOD_POST, "/api/tasks/{$taskId}/add-comment", $body, token: $token);
         self::assertNotFound($response);
     }
 
@@ -63,13 +64,13 @@ final class CreateCommentOnTaskTest extends ApiWebTestCase
         $token = User::auth();
         $taskId = Task::createAndReturnId('First task', $token);
 
-        self::request('POST', "/api/tasks/{$taskId}/complete", token: $token);
+        self::request(Request::METHOD_POST, "/api/tasks/{$taskId}/complete", token: $token);
 
         $body = [];
         $body['commentBody'] = 'First comment';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request('POST', "/api/tasks/{$taskId}/add-comment", $body, token: $token);
+        $response = self::request(Request::METHOD_POST, "/api/tasks/{$taskId}/add-comment", $body, token: $token);
         self::assertBadRequest($response);
     }
 
@@ -84,7 +85,7 @@ final class CreateCommentOnTaskTest extends ApiWebTestCase
         $body['commentBody'] = $commentText = 'First comment';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request('POST', "/api/tasks/{$taskId}/add-comment", $body, token: $notValidToken);
+        $response = self::request(Request::METHOD_POST, "/api/tasks/{$taskId}/add-comment", $body, token: $notValidToken);
 
         self::assertAccessDenied($response);
     }
@@ -103,7 +104,7 @@ final class CreateCommentOnTaskTest extends ApiWebTestCase
         $body['commentBody'] = 'First comment';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request('POST', "/api/tasks/{$taskId}/add-comment", $body, token: $token);
+        $response = self::request(Request::METHOD_POST, "/api/tasks/{$taskId}/add-comment", $body, token: $token);
 
         self::assertNotFound($response);
     }

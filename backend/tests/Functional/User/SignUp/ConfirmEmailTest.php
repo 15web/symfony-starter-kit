@@ -8,6 +8,7 @@ use App\Infrastructure\ApiException\ApiErrorCode;
 use App\Tests\Functional\SDK\ApiWebTestCase;
 use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -24,7 +25,7 @@ final class ConfirmEmailTest extends ApiWebTestCase
         $body['password'] = '123456';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request('POST', '/api/sign-up', $body, newClient: true);
+        $response = self::request(Request::METHOD_POST, '/api/sign-up', $body, newClient: true);
         self::assertSuccessResponse($response);
 
         self::assertEmailCount(1);
@@ -35,7 +36,7 @@ final class ConfirmEmailTest extends ApiWebTestCase
 
         self::assertNotEmpty($confirmToken);
 
-        $response = self::request('GET', "/api/confirm-email/{$confirmToken}");
+        $response = self::request(Request::METHOD_GET, "/api/confirm-email/{$confirmToken}");
         self::assertSuccessResponse($response);
     }
 
@@ -47,16 +48,16 @@ final class ConfirmEmailTest extends ApiWebTestCase
         $body['password'] = '123456';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        self::request('POST', '/api/sign-up', $body, newClient: true);
+        self::request(Request::METHOD_POST, '/api/sign-up', $body, newClient: true);
 
         /** @var TemplatedEmail $email */
         $email = self::getMailerMessage();
         $confirmToken = $email->getHeaders()->get('confirmToken')?->getBody();
 
         self::assertNotEmpty($confirmToken);
-        self::request('GET', "/api/confirm-email/{$confirmToken}");
+        self::request(Request::METHOD_GET, "/api/confirm-email/{$confirmToken}");
 
-        $response = self::request('GET', "/api/confirm-email/{$confirmToken}");
+        $response = self::request(Request::METHOD_GET, "/api/confirm-email/{$confirmToken}");
 
         self::assertApiError($response, ApiErrorCode::EmailAlreadyIsConfirmed->value);
     }
@@ -69,7 +70,7 @@ final class ConfirmEmailTest extends ApiWebTestCase
         $body['password'] = '123456';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request('POST', '/api/sign-up', $body, newClient: true);
+        $response = self::request(Request::METHOD_POST, '/api/sign-up', $body, newClient: true);
         self::assertSuccessResponse($response);
         self::assertEmailCount(1);
 
@@ -77,7 +78,7 @@ final class ConfirmEmailTest extends ApiWebTestCase
 
         self::assertNotEmpty($confirmToken);
 
-        $response = self::request('GET', "/api/confirm-email/{$confirmToken}");
+        $response = self::request(Request::METHOD_GET, "/api/confirm-email/{$confirmToken}");
         self::assertNotFound($response);
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional\SDK;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -29,6 +30,6 @@ final class Seo extends ApiWebTestCase
 
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        return self::request('POST', '/api/admin/seo/save', $body, token: $token);
+        return self::request(Request::METHOD_POST, '/api/admin/seo/save', $body, token: $token);
     }
 }

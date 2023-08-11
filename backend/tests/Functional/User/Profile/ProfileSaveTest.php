@@ -9,6 +9,7 @@ use App\Tests\Functional\SDK\Profile;
 use App\Tests\Functional\SDK\User;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @internal
@@ -72,7 +73,7 @@ final class ProfileSaveTest extends ApiWebTestCase
         $this->assertBadRequests(['name' => '', 'phone' => ''], $token);
 
         $badJson = '{"name"=1,"phone"=89272222222}';
-        $response = self::request('POST', '/api/profile-save', $badJson, token: $token, disableValidateRequestSchema: true);
+        $response = self::request(Request::METHOD_POST, '/api/profile-save', $badJson, token: $token, disableValidateRequestSchema: true);
         self::assertBadRequest($response);
     }
 
@@ -80,7 +81,7 @@ final class ProfileSaveTest extends ApiWebTestCase
     {
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request('POST', '/api/profile-save', $body, token: $token, disableValidateRequestSchema: true);
+        $response = self::request(Request::METHOD_POST, '/api/profile-save', $body, token: $token, disableValidateRequestSchema: true);
         self::assertBadRequest($response);
     }
 }

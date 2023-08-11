@@ -8,6 +8,7 @@ use App\Seo\Domain\SeoResourceType;
 use App\Tests\Functional\SDK\ApiWebTestCase;
 use App\Tests\Functional\SDK\Seo;
 use PHPUnit\Framework\Attributes\TestDox;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -27,7 +28,7 @@ final class SeoTest extends ApiWebTestCase
             keywords: $keywords = 'keywords'
         );
 
-        $response = self::request('GET', "/api/seo/{$type}/{$id}");
+        $response = self::request(Request::METHOD_GET, "/api/seo/{$type}/{$id}");
         self::assertSuccessResponse($response);
 
         $seo = self::jsonDecode($response->getContent());
@@ -40,7 +41,7 @@ final class SeoTest extends ApiWebTestCase
     #[TestDox('Получение seo данных с несуществующим идентификатором')]
     public function testNotFound(): void
     {
-        $response = self::request('GET', '/api/seo/'.SeoResourceType::ARTICLE->value.'/'.Uuid::v7());
+        $response = self::request(Request::METHOD_GET, '/api/seo/'.SeoResourceType::ARTICLE->value.'/'.Uuid::v7());
 
         self::assertSuccessResponse($response);
         $seo = self::jsonDecode($response->getContent());

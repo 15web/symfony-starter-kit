@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional\SDK;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -17,7 +18,7 @@ final class Task extends ApiWebTestCase
         $body['taskName'] = $taskName;
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        return self::request('POST', '/api/tasks/create', $body, token: $token);
+        return self::request(Request::METHOD_POST, '/api/tasks/create', $body, token: $token);
     }
 
     public static function createAndReturnId(string $taskName, string $token): string
@@ -37,7 +38,7 @@ final class Task extends ApiWebTestCase
 
         $uri = '/api/tasks?'.http_build_query($params);
 
-        $response = self::request('GET', $uri, token: $token);
+        $response = self::request(Request::METHOD_GET, $uri, token: $token);
 
         self::assertSuccessResponse($response);
 

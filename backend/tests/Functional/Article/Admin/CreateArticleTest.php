@@ -10,6 +10,7 @@ use App\Tests\Functional\SDK\User;
 use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @internal
@@ -63,7 +64,7 @@ final class CreateArticleTest extends ApiWebTestCase
         $token = User::auth();
 
         $body = json_encode($body, JSON_THROW_ON_ERROR);
-        $response = self::request('POST', '/api/admin/articles/create', $body, token: $token, disableValidateRequestSchema: true);
+        $response = self::request(Request::METHOD_POST, '/api/admin/articles/create', $body, token: $token, disableValidateRequestSchema: true);
         self::assertBadRequest($response);
     }
 

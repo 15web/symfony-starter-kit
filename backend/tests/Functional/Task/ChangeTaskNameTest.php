@@ -9,6 +9,7 @@ use App\Tests\Functional\SDK\Task;
 use App\Tests\Functional\SDK\User;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -27,10 +28,10 @@ final class ChangeTaskNameTest extends ApiWebTestCase
         $body['taskName'] = $secondName = 'Тестовая задача 2';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request('POST', "/api/tasks/{$taskId}/update-task-name", $body, token: $token);
+        $response = self::request(Request::METHOD_POST, "/api/tasks/{$taskId}/update-task-name", $body, token: $token);
         self::assertSuccessContentResponse($response);
 
-        $response = self::request('GET', "/api/tasks/{$taskId}", token: $token);
+        $response = self::request(Request::METHOD_GET, "/api/tasks/{$taskId}", token: $token);
         $task = self::jsonDecode($response->getContent());
 
         self::assertSame($secondName, $task['taskName']);
@@ -48,7 +49,7 @@ final class ChangeTaskNameTest extends ApiWebTestCase
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
         $taskId = (string) Uuid::v4();
-        $response = self::request('POST', "/api/tasks/{$taskId}/update-task-name", $body, token: $token);
+        $response = self::request(Request::METHOD_POST, "/api/tasks/{$taskId}/update-task-name", $body, token: $token);
         self::assertNotFound($response);
     }
 
@@ -73,7 +74,7 @@ final class ChangeTaskNameTest extends ApiWebTestCase
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
         $response = self::request(
-            'POST',
+            Request::METHOD_POST,
             "/api/tasks/{$taskId}/update-task-name",
             $body,
             token: $notValidToken
@@ -97,7 +98,7 @@ final class ChangeTaskNameTest extends ApiWebTestCase
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
         $response = self::request(
-            'POST',
+            Request::METHOD_POST,
             "/api/tasks/{$anotherTaskId}/update-task-name",
             $body,
             token: $userToken
@@ -113,7 +114,7 @@ final class ChangeTaskNameTest extends ApiWebTestCase
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
         $response = self::request(
-            'POST',
+            Request::METHOD_POST,
             "/api/tasks/{$taskId}/update-task-name",
             $body,
             token: $token,

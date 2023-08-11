@@ -11,6 +11,7 @@ use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @internal
@@ -25,7 +26,7 @@ final class SendUncompletedTaskCommandTest extends KernelTestCase
         Task::create($taskName1 = 'Тестовая задача для отправки писем №1', $token);
 
         $taskId2 = Task::createAndReturnId('Тестовая задача для отправки писем №2', $token);
-        ApiWebTestCase::request('POST', "/api/tasks/{$taskId2}/complete", token: $token);
+        ApiWebTestCase::request(Request::METHOD_POST, "/api/tasks/{$taskId2}/complete", token: $token);
 
         $kernel = self::bootKernel();
         $application = new Application($kernel);

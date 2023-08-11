@@ -9,6 +9,7 @@ use App\Tests\Functional\SDK\Profile;
 use App\Tests\Functional\SDK\User;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @internal
@@ -29,7 +30,7 @@ final class ProfileInfoTest extends ApiWebTestCase
             $token
         );
 
-        $response = self::request('GET', '/api/profile', token: $token);
+        $response = self::request(Request::METHOD_GET, '/api/profile', token: $token);
         self::assertSuccessResponse($response);
 
         $profile = self::jsonDecode($response->getContent());
@@ -43,7 +44,7 @@ final class ProfileInfoTest extends ApiWebTestCase
     {
         $token = User::auth();
 
-        $response = self::request('GET', '/api/profile', token: $token);
+        $response = self::request(Request::METHOD_GET, '/api/profile', token: $token);
         self::assertSuccessResponse($response);
 
         $profile = self::jsonDecode($response->getContent());
@@ -59,7 +60,7 @@ final class ProfileInfoTest extends ApiWebTestCase
         $token = User::auth();
         Profile::save('Имя 1', self::PHONE_NUMBER, $token);
 
-        $response = self::request('GET', '/api/profile', token: $notValidToken);
+        $response = self::request(Request::METHOD_GET, '/api/profile', token: $notValidToken);
 
         self::assertAccessDenied($response);
     }

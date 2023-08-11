@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Functional\SDK;
 
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @internal
@@ -24,20 +25,20 @@ final class User extends ApiWebTestCase
         $body['password'] = $password;
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        self::request('POST', '/api/sign-up', $body, newClient: true);
+        self::request(Request::METHOD_POST, '/api/sign-up', $body, newClient: true);
 
         /** @var TemplatedEmail $email */
         $email = self::getMailerMessage();
         $confirmToken = $email->getHeaders()->get('confirmToken')?->getBody();
 
-        self::request('GET', "/api/confirm-email/{$confirmToken}");
+        self::request(Request::METHOD_GET, "/api/confirm-email/{$confirmToken}");
 
         $body = [];
         $body['email'] = $userEmail;
         $body['password'] = $password;
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request('POST', '/api/sign-in', $body);
+        $response = self::request(Request::METHOD_POST, '/api/sign-in', $body);
 
         return self::jsonDecode($response->getContent())['token'];
     }

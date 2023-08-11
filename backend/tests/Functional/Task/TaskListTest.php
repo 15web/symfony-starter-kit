@@ -9,6 +9,7 @@ use App\Tests\Functional\SDK\Task;
 use App\Tests\Functional\SDK\User;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @internal
@@ -134,7 +135,7 @@ final class TaskListTest extends ApiWebTestCase
     #[TestDox('Доступ запрещен')]
     public function testAccessDenied(string $notValidToken): void
     {
-        $response = self::request('GET', '/api/tasks', token: $notValidToken);
+        $response = self::request(Request::METHOD_GET, '/api/tasks', token: $notValidToken);
 
         self::assertAccessDenied($response);
     }

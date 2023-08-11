@@ -11,6 +11,7 @@ use App\Tests\Functional\SDK\User;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Encoder\CsvEncoder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 
@@ -28,7 +29,7 @@ final class ExportTasksTest extends ApiWebTestCase
         Task::create('Тестовая задача 2', $token);
 
         /** @var BinaryFileResponse $response */
-        $response = self::request('GET', '/api/export/tasks.csv', token: $token);
+        $response = self::request(Request::METHOD_GET, '/api/export/tasks.csv', token: $token);
         self::assertSuccessResponse($response);
 
         $file = $response->getFile();
@@ -53,7 +54,7 @@ final class ExportTasksTest extends ApiWebTestCase
         Task::create('Тестовая задача 3', $token);
 
         /** @var BinaryFileResponse $response */
-        $response = self::request('GET', '/api/export/tasks.xml', token: $token);
+        $response = self::request(Request::METHOD_GET, '/api/export/tasks.xml', token: $token);
         self::assertSuccessResponse($response);
 
         $file = $response->getFile();
@@ -79,7 +80,7 @@ final class ExportTasksTest extends ApiWebTestCase
         Task::create('Тестовая задача 3', $token);
 
         /** @var BinaryFileResponse $response */
-        $response = self::request('GET', '/api/export/tasks.xml?limit=2', token: $token);
+        $response = self::request(Request::METHOD_GET, '/api/export/tasks.xml?limit=2', token: $token);
         self::assertSuccessResponse($response);
 
         $file = $response->getFile();
@@ -99,7 +100,7 @@ final class ExportTasksTest extends ApiWebTestCase
         Task::create('Тестовая задача 3', $token);
 
         /** @var BinaryFileResponse $response */
-        $response = self::request('GET', '/api/export/tasks.xml?limit=2&offset=2', token: $token);
+        $response = self::request(Request::METHOD_GET, '/api/export/tasks.xml?limit=2&offset=2', token: $token);
         self::assertSuccessResponse($response);
 
         $file = $response->getFile();
@@ -115,7 +116,7 @@ final class ExportTasksTest extends ApiWebTestCase
     {
         $token = User::auth();
 
-        $response = self::request('GET', '/api/export/tasks.csv', token: $token);
+        $response = self::request(Request::METHOD_GET, '/api/export/tasks.csv', token: $token);
 
         self::assertApiError($response, ApiErrorCode::NotFoundTasksForExport->value);
     }
@@ -125,7 +126,7 @@ final class ExportTasksTest extends ApiWebTestCase
     {
         $token = User::auth();
 
-        $response = self::request('GET', '/api/export/tasks.xml', token: $token);
+        $response = self::request(Request::METHOD_GET, '/api/export/tasks.xml', token: $token);
 
         self::assertApiError($response, ApiErrorCode::NotFoundTasksForExport->value);
     }
@@ -137,11 +138,11 @@ final class ExportTasksTest extends ApiWebTestCase
         $token = User::auth();
         Task::create('Тестовая задача 1', $token);
 
-        $response = self::request('GET', '/api/export/tasks.xml', token: $notValidToken);
+        $response = self::request(Request::METHOD_GET, '/api/export/tasks.xml', token: $notValidToken);
 
         self::assertAccessDenied($response);
 
-        $response = self::request('GET', '/api/export/tasks.csv', token: $notValidToken);
+        $response = self::request(Request::METHOD_GET, '/api/export/tasks.csv', token: $notValidToken);
 
         self::assertAccessDenied($response);
     }
@@ -159,7 +160,7 @@ final class ExportTasksTest extends ApiWebTestCase
         $taskId4 = Task::createAndReturnId($taskName4 = 'Тестовая задача 4', $tokenSecond);
 
         /** @var BinaryFileResponse $response */
-        $response = self::request('GET', '/api/export/tasks.csv', token: $token);
+        $response = self::request(Request::METHOD_GET, '/api/export/tasks.csv', token: $token);
         self::assertSuccessResponse($response);
 
         $file = $response->getFile();
