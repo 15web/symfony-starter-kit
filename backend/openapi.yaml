@@ -27,6 +27,7 @@ paths:
         post:
             operationId: signUp
             summary: Регистрация пользователя
+            description: Регистрация нового пользователя
             tags:
                 - auth
             security: []
@@ -59,6 +60,7 @@ paths:
         get:
             operationId: confirmEmail
             summary: Подтверждение email
+            description: Подтверждает email пользователя
             tags:
                 - auth
             security: []
@@ -87,6 +89,7 @@ paths:
         post:
             operationId: signIn
             summary: Аутентификация пользователя
+            description: Аутентификация пользователя
             tags:
                 - auth
             security: []
@@ -127,6 +130,7 @@ paths:
         get:
             operationId: logout
             summary: Выйти из приложения
+            description: Выполняет выход пользователя из приложения
             tags:
                 - auth
             responses:
@@ -150,6 +154,7 @@ paths:
         post:
             operationId: recoverPasswordRequest
             summary: Запрос на восстановление пароля
+            description: Запрос на восстановление пароля
             tags:
                 - auth
             security: [ ]
@@ -182,6 +187,7 @@ paths:
         post:
             operationId: recoverPassword
             summary: Восстановление пароля
+            description: Восстанавливает пароль пользователя
             tags:
                 - auth
             security: [ ]
@@ -206,6 +212,7 @@ paths:
         get:
             operationId: profileInfo
             summary: Подробная информация по профилю
+            description: Подробная информация по профилю
             tags:
                 - profile
             responses:
@@ -229,6 +236,7 @@ paths:
         post:
             operationId: saveProfile
             summary: Сохранить профиль
+            description: Сохранить профиль
             tags:
                 - profile
             requestBody:
@@ -268,6 +276,7 @@ paths:
         get:
             operationId: tasksList
             summary: Список задач
+            description: Список задач
             tags:
                 - tasks
             parameters:
@@ -294,6 +303,7 @@ paths:
         get:
             operationId: taskInfo
             summary: Подробная информация по задаче
+            description: Подробная информация по задаче
             tags:
                 - tasks
             parameters:
@@ -321,6 +331,7 @@ paths:
         post:
             operationId: createTask
             summary: Создать задачу
+            description: Создать задачу
             tags:
                 - tasks
             requestBody:
@@ -360,6 +371,7 @@ paths:
         post:
             operationId: updateTaskName
             summary: Обновить наименование задачи
+            description: Обновить наименование задачи
             tags:
                 - tasks
             parameters:
@@ -403,6 +415,7 @@ paths:
         post:
             operationId: removeTask
             summary: Удаляет задачу
+            description: Удаляет задачу
             tags:
                 - tasks
             parameters:
@@ -430,6 +443,7 @@ paths:
         post:
             operationId: completeTask
             summary: Завершает задачу
+            description: Завершает задачу
             tags:
                 - tasks
             parameters:
@@ -467,6 +481,7 @@ paths:
         post:
             operationId: addCommentToTask
             summary: Добавление комментария к задаче
+            description: Добавление комментария к задаче
             tags:
                 - tasks
             parameters:
@@ -510,6 +525,7 @@ paths:
         get:
             operationId: listTaskComments
             summary: Получить список комментариев к задаче
+            description: Получить список комментариев к задаче
             tags:
                 - tasks
             parameters:
@@ -525,6 +541,7 @@ paths:
         get:
             operationId: exportTasks
             summary: Экспорт задач в нужном формате
+            description: Экспорт задач в нужном формате
             tags:
                 - tasks
             parameters:
@@ -567,6 +584,7 @@ paths:
         get:
             operationId: articleList
             summary: Получить список статей
+            description: Получить список статей
             tags:
                 - articles
             parameters:
@@ -584,6 +602,7 @@ paths:
         get:
             operationId: articleInfo
             summary: Получить данные по статье
+            description: Получить данные по статье
             tags:
                 - articles
             security: []
@@ -602,6 +621,7 @@ paths:
         post:
             operationId: adminArticleCreate
             summary: Создать статью
+            description: Создать статью
             tags:
                 - articles
             requestBody:
@@ -643,6 +663,7 @@ paths:
         post:
             operationId: adminArticleUpdate
             summary: Обновить статью
+            description: Обновить статью
             tags:
                 - articles
             parameters:
@@ -688,6 +709,7 @@ paths:
         get:
             operationId: adminArticleList
             summary: Получить список статей
+            description: Получить список статей
             tags:
                 - articles
             responses:
@@ -711,6 +733,7 @@ paths:
         get:
             operationId: adminArticleInfo
             summary: Получить информацию по статье
+            description: Получить информацию по статье
             tags:
                 - articles
             parameters:
@@ -738,6 +761,7 @@ paths:
         post:
             operationId: adminArticleRemove
             summary: Удалить статью
+            description: Удалить статью
             tags:
                 - articles
             parameters:
@@ -765,6 +789,7 @@ paths:
         get:
             operationId: settingList
             summary: Получить список настроек
+            description: Получить список настроек
             tags:
                 - setting
             security: [ ]
@@ -779,6 +804,7 @@ paths:
         get:
             operationId: adminSettingList
             summary: Получить список настроек
+            description: Получить список настроек
             tags:
                 - setting
             responses:
@@ -802,6 +828,7 @@ paths:
         post:
             operationId: saveSetting
             summary: Сохранить изменения настройки
+            description: Сохранить изменения настройки
             tags:
                 - setting
             requestBody:
@@ -851,6 +878,7 @@ paths:
         get:
             operationId: seoInfo
             summary: Получить SEO параметры объекта
+            description: Получить SEO параметры объекта
             tags:
                 - seo
             parameters:
@@ -868,6 +896,7 @@ paths:
         post:
             operationId: saveSeo
             summary: Сохранить SEO параметры объекта
+            description: Сохранить SEO параметры объекта
             tags:
                 - seo
             requestBody:

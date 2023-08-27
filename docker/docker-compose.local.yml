@@ -72,6 +72,11 @@ services:
         image: dshanley/vacuum
         volumes:
             - ../backend/openapi.yaml:/app/openapi.yaml:ro
+    spectral:
+        image: stoplight/spectral
+        volumes:
+            - ../backend/openapi.yaml:/app/openapi.yaml:ro
+            - ../backend/.spectral.yaml:/app/.spectral.yaml:ro
 volumes:
     mysql:
     composer_cache:

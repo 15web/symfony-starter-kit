@@ -1,0 +1,19 @@
+extends:
+    - "spectral:oas"
+    - "spectral:asyncapi"
+rules:
+    path-casing: {
+        "given": [
+            "$.paths"
+        ],
+        "severity": "error",
+        "then": {
+            "function": "pattern",
+            "functionOptions": {
+                "match": "^(\/|[a-z0-9-.]+|{[a-zA-Z0-9]+})+$"
+            },
+            "field": "@key"
+        },
+        "description": "Paths must be `kebab-case`, with hyphens separating words.\n\n**Invalid Example**\n\n`userInfo` must be separated with a hyphen.\n\n```json\n{\n    \"/userInfo\": {\n        \"post: }\n       ....\n}\n``` \n\n**Valid Example**\n\n```json\n{\n    \"/user-info\": {\n       \"post: }\n       ....\n}\n```",
+        "message": "Paths must be kebab-case"
+    }
