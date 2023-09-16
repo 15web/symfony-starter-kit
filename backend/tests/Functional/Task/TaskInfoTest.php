@@ -9,6 +9,7 @@ use App\Tests\Functional\SDK\Task;
 use App\Tests\Functional\SDK\User;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -29,7 +30,7 @@ final class TaskInfoTest extends ApiWebTestCase
 
         self::assertCount(1, $tasks);
 
-        $response = self::request('GET', "/api/tasks/{$taskId}", token: $token);
+        $response = self::request(Request::METHOD_GET, "/api/tasks/{$taskId}", token: $token);
         self::assertSuccessResponse($response);
 
         $task = self::jsonDecode($response->getContent());
@@ -50,7 +51,7 @@ final class TaskInfoTest extends ApiWebTestCase
         Task::create('Тестовая задача 1', $token);
 
         $taskId = (string) Uuid::v4();
-        $response = self::request('GET', "/api/tasks/{$taskId}", token: $token);
+        $response = self::request(Request::METHOD_GET, "/api/tasks/{$taskId}", token: $token);
         self::assertNotFound($response);
     }
 
@@ -64,7 +65,7 @@ final class TaskInfoTest extends ApiWebTestCase
         $tokenSecond = User::auth('second@example.com');
         $taskId = Task::createAndReturnId('Тестовая задача №2 ', $tokenSecond);
 
-        $response = self::request('GET', "/api/tasks/{$taskId}", token: $token);
+        $response = self::request(Request::METHOD_GET, "/api/tasks/{$taskId}", token: $token);
         self::assertNotFound($response);
     }
 
@@ -75,7 +76,7 @@ final class TaskInfoTest extends ApiWebTestCase
         $token = User::auth();
         $taskId = Task::createAndReturnId('Тестовая задача 1', $token);
 
-        $response = self::request('GET', "/api/tasks/{$taskId}", token: $notValidToken);
+        $response = self::request(Request::METHOD_GET, "/api/tasks/{$taskId}", token: $notValidToken);
 
         self::assertAccessDenied($response);
     }

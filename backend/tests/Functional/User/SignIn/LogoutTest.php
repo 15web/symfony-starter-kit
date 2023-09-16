@@ -7,6 +7,7 @@ namespace App\Tests\Functional\User\SignIn;
 use App\Tests\Functional\SDK\ApiWebTestCase;
 use App\Tests\Functional\SDK\User;
 use PHPUnit\Framework\Attributes\TestDox;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @internal
@@ -19,10 +20,10 @@ final class LogoutTest extends ApiWebTestCase
     {
         $token = User::auth();
 
-        $response = self::request('GET', '/api/logout', token: $token);
+        $response = self::request(Request::METHOD_GET, '/api/logout', token: $token);
         self::assertSuccessResponse($response);
 
-        $response = self::request('GET', '/api/logout', token: $token);
+        $response = self::request(Request::METHOD_GET, '/api/logout', token: $token);
         self::assertAccessDenied($response);
     }
 }

@@ -8,6 +8,7 @@ use App\Infrastructure\ApiException\ApiErrorCode;
 use App\Tests\Functional\SDK\ApiWebTestCase;
 use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @internal
@@ -23,20 +24,20 @@ final class SignInTest extends ApiWebTestCase
         $password = $body['password'] = 'password';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        self::request('POST', '/api/sign-up', $body, newClient: true);
+        self::request(Request::METHOD_POST, '/api/sign-up', $body, newClient: true);
 
         /** @var TemplatedEmail $email */
         $email = self::getMailerMessage();
         $confirmToken = $email->getHeaders()->get('confirmToken')?->getBody();
 
-        self::request('GET', "/api/confirm-email/{$confirmToken}");
+        self::request(Request::METHOD_GET, "/api/confirm-email/{$confirmToken}");
 
         $body = [];
         $body['email'] = $userEmail;
         $body['password'] = $password;
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request('POST', '/api/sign-in', $body);
+        $response = self::request(Request::METHOD_POST, '/api/sign-in', $body);
         self::assertSuccessResponse($response);
 
         $response = self::jsonDecode($response->getContent());
@@ -52,20 +53,20 @@ final class SignInTest extends ApiWebTestCase
         $body['password'] = '123456';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        self::request('POST', '/api/sign-up', $body, true);
+        self::request(Request::METHOD_POST, '/api/sign-up', $body, true);
 
         /** @var TemplatedEmail $email */
         $email = self::getMailerMessage();
         $confirmToken = $email->getHeaders()->get('confirmToken')?->getBody();
 
-        self::request('GET', "/api/confirm-email/{$confirmToken}");
+        self::request(Request::METHOD_GET, "/api/confirm-email/{$confirmToken}");
 
         $body = [];
         $body['email'] = $userEmail;
         $body['password'] = 'password';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request('POST', '/api/sign-in', $body);
+        $response = self::request(Request::METHOD_POST, '/api/sign-in', $body);
         self::assertAccessDenied($response);
     }
 
@@ -77,20 +78,20 @@ final class SignInTest extends ApiWebTestCase
         $password = $body['password'] = 'password';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        self::request('POST', '/api/sign-up', $body, newClient: true);
+        self::request(Request::METHOD_POST, '/api/sign-up', $body, newClient: true);
 
         /** @var TemplatedEmail $email */
         $email = self::getMailerMessage();
         $confirmToken = $email->getHeaders()->get('confirmToken')?->getBody();
 
-        self::request('GET', "/api/confirm-email/{$confirmToken}");
+        self::request(Request::METHOD_GET, "/api/confirm-email/{$confirmToken}");
 
         $body = [];
         $body['email'] = 'invalid@example.com';
         $body['password'] = $password;
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request('POST', '/api/sign-in', $body);
+        $response = self::request(Request::METHOD_POST, '/api/sign-in', $body);
         self::assertAccessDenied($response);
     }
 
@@ -98,7 +99,7 @@ final class SignInTest extends ApiWebTestCase
     public function testBadRequest(): void
     {
         $body = json_encode(['email' => 'test', 'password' => ''], JSON_THROW_ON_ERROR);
-        $response = self::request('POST', '/api/sign-in', $body, newClient: true, disableValidateRequestSchema: true);
+        $response = self::request(Request::METHOD_POST, '/api/sign-in', $body, newClient: true, disableValidateRequestSchema: true);
 
         self::assertBadRequest($response);
     }
@@ -111,14 +112,14 @@ final class SignInTest extends ApiWebTestCase
         $password = $body['password'] = 'password';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        self::request('POST', '/api/sign-up', $body, newClient: true);
+        self::request(Request::METHOD_POST, '/api/sign-up', $body, newClient: true);
 
         $body = [];
         $body['email'] = $userEmail;
         $body['password'] = $password;
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request('POST', '/api/sign-in', $body);
+        $response = self::request(Request::METHOD_POST, '/api/sign-in', $body);
         self::assertApiError($response, ApiErrorCode::EmailIsNotConfirmed->value);
 
         self::assertEmailCount(1);

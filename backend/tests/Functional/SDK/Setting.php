@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional\SDK;
 
+use Symfony\Component\HttpFoundation\Request;
+
 /**
  * @internal
  */
@@ -13,7 +15,7 @@ final class Setting extends ApiWebTestCase
     {
         $token = User::auth();
 
-        $response = self::request('GET', '/api/admin/settings', token: $token);
+        $response = self::request(Request::METHOD_GET, '/api/admin/settings', token: $token);
 
         self::assertSuccessResponse($response);
 
@@ -22,7 +24,7 @@ final class Setting extends ApiWebTestCase
 
     public static function publicList(): array
     {
-        $response = self::request('GET', '/api/settings');
+        $response = self::request(Request::METHOD_GET, '/api/settings');
 
         self::assertSuccessResponse($response);
 

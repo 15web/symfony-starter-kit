@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional\SDK;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -19,7 +20,7 @@ final class Article extends ApiWebTestCase
         $body['body'] = $content;
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        return self::request('POST', '/api/admin/articles/create', $body, token: $token);
+        return self::request(Request::METHOD_POST, '/api/admin/articles/create', $body, token: $token);
     }
 
     public static function createAndReturnId(string $title, string $alias, string $content, string $token): string
@@ -30,7 +31,7 @@ final class Article extends ApiWebTestCase
         $body['body'] = $content;
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request('POST', '/api/admin/articles/create', $body, token: $token);
+        $response = self::request(Request::METHOD_POST, '/api/admin/articles/create', $body, token: $token);
 
         $article = self::jsonDecode($response->getContent());
 
@@ -39,7 +40,7 @@ final class Article extends ApiWebTestCase
 
     public static function list(string $token): array
     {
-        $response = self::request('GET', '/api/admin/articles', token: $token);
+        $response = self::request(Request::METHOD_GET, '/api/admin/articles', token: $token);
 
         self::assertSuccessResponse($response);
 

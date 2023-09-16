@@ -10,6 +10,7 @@ use App\Tests\Functional\SDK\User;
 use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -31,12 +32,12 @@ final class SeoSaveTest extends ApiWebTestCase
         $body['keywords'] = 'keywords';
         $bodyJson = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request('POST', '/api/admin/seo/save', $bodyJson, token: $token);
+        $response = self::request(Request::METHOD_POST, '/api/admin/seo/save', $bodyJson, token: $token);
         self::assertSuccessResponse($response);
 
         $url = '/api/seo/'.$body['type'].'/'.$body['identity'];
 
-        $response = self::request('GET', $url);
+        $response = self::request(Request::METHOD_GET, $url);
         self::assertSuccessResponse($response);
 
         $seo = self::jsonDecode($response->getContent());
@@ -58,7 +59,7 @@ final class SeoSaveTest extends ApiWebTestCase
         $body['keywords'] = 'keywords';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request('POST', '/api/admin/seo/save', $body, token: $notValidToken);
+        $response = self::request(Request::METHOD_POST, '/api/admin/seo/save', $body, token: $notValidToken);
 
         self::assertAccessDenied($response);
     }
@@ -71,7 +72,7 @@ final class SeoSaveTest extends ApiWebTestCase
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
         $response = self::request(
-            'POST',
+            Request::METHOD_POST,
             '/api/admin/seo/save',
             $body,
             token: $token,

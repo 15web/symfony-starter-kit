@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Dev\Rector\OneFlushInClassRector;
+use Dev\Rector\RequestMethodInsteadOfStringRector;
 use Dev\Rector\ResolversInActionRector;
 use Rector\CodeQuality\Rector\Class_\InlineConstructorDefaultToPropertyRector;
 use Rector\CodeQuality\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector;
@@ -54,6 +55,7 @@ return static function (RectorConfig $rectorConfig): void {
         WebTestCaseAssertResponseCodeRector::class,
     ]);
 
+    $rectorConfig->rule(RequestMethodInsteadOfStringRector::class);
     $rectorConfig->rule(OneFlushInClassRector::class);
     $rectorConfig->rule(ResolversInActionRector::class);
 };

@@ -10,6 +10,7 @@ use App\Tests\Functional\SDK\User;
 use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @internal
@@ -27,11 +28,11 @@ final class SettingSaveTest extends ApiWebTestCase
         $body['value'] = 'symfony-starter-kit-test';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request('POST', '/api/admin/setting/save', $body, token: $token);
+        $response = self::request(Request::METHOD_POST, '/api/admin/setting/save', $body, token: $token);
 
         self::assertSuccessResponse($response);
 
-        $responseList = self::request('GET', '/api/admin/settings', token: $token);
+        $responseList = self::request(Request::METHOD_GET, '/api/admin/settings', token: $token);
         self::assertSuccessResponse($responseList);
 
         $settings = self::jsonDecode($responseList->getContent());
@@ -55,7 +56,7 @@ final class SettingSaveTest extends ApiWebTestCase
         $body['value'] = 'symfony-starter-kit-test';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request('POST', '/api/admin/setting/save', $body, token: $token);
+        $response = self::request(Request::METHOD_POST, '/api/admin/setting/save', $body, token: $token);
         self::assertBadRequest($response);
     }
 
@@ -68,7 +69,7 @@ final class SettingSaveTest extends ApiWebTestCase
         $body['value'] = 'symfony-starter-kit-test';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request('POST', '/api/admin/setting/save', $body, token: $notValidToken);
+        $response = self::request(Request::METHOD_POST, '/api/admin/setting/save', $body, token: $notValidToken);
 
         self::assertAccessDenied($response);
     }
@@ -81,7 +82,7 @@ final class SettingSaveTest extends ApiWebTestCase
 
         $body = json_encode($body, JSON_THROW_ON_ERROR);
         $response = self::request(
-            'POST',
+            Request::METHOD_POST,
             '/api/admin/setting/save',
             $body,
             token: $token,

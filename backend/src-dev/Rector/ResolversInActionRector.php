@@ -80,7 +80,7 @@ final class ResolversInActionRector extends AbstractRector
     }
 
     /**
-     * Проверяет имеет ли класс атрибут #[AsController]
+     * Имеет ли класс атрибут #[AsController]
      */
     private function hasAsControllerAttribute(Class_ $classNode): bool
     {
@@ -96,7 +96,7 @@ final class ResolversInActionRector extends AbstractRector
     }
 
     /**
-     * Проверяет имеет ли параметр метода атрибут #[ValueResolver]
+     * Имеет ли параметр метода атрибут #[ValueResolver]
      */
     private function hasValueResolverAttribute(Param $param): bool
     {

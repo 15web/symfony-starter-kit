@@ -8,6 +8,7 @@ use App\Tests\Functional\SDK\ApiWebTestCase;
 use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -24,14 +25,14 @@ final class RecoverPasswordTest extends ApiWebTestCase
         $body['password'] = '123QWE';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request('POST', '/api/sign-up', $body, newClient: true);
+        $response = self::request(Request::METHOD_POST, '/api/sign-up', $body, newClient: true);
         self::assertSuccessResponse($response);
 
         $body = [];
         $body['email'] = $userEmail;
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request('POST', '/api/request-password-recovery', $body);
+        $response = self::request(Request::METHOD_POST, '/api/request-password-recovery', $body);
         self::assertSuccessResponse($response);
 
         self::assertEmailCount(1);
@@ -45,7 +46,7 @@ final class RecoverPasswordTest extends ApiWebTestCase
             'password' => $password = '123456',
         ], JSON_THROW_ON_ERROR);
 
-        $response = self::request('POST', "/api/recover-password/{$recoverToken}", $body);
+        $response = self::request(Request::METHOD_POST, "/api/recover-password/{$recoverToken}", $body);
         self::assertSuccessResponse($response);
 
         $body = [];
@@ -53,7 +54,7 @@ final class RecoverPasswordTest extends ApiWebTestCase
         $body['password'] = $password;
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request('POST', '/api/sign-in', $body);
+        $response = self::request(Request::METHOD_POST, '/api/sign-in', $body);
         self::assertSuccessResponse($response);
     }
 
@@ -66,7 +67,7 @@ final class RecoverPasswordTest extends ApiWebTestCase
         $token = Uuid::v7();
 
         $body = json_encode($body, JSON_THROW_ON_ERROR);
-        $response = self::request('POST', "/api/recover-password/{$token}", $body, disableValidateRequestSchema: true);
+        $response = self::request(Request::METHOD_POST, "/api/recover-password/{$token}", $body, disableValidateRequestSchema: true);
 
         self::assertNotFound($response);
     }
@@ -77,7 +78,7 @@ final class RecoverPasswordTest extends ApiWebTestCase
     {
         $body = ['email' => $email];
         $body = json_encode($body, JSON_THROW_ON_ERROR);
-        $response = self::request('POST', '/api/request-password-recovery', $body, disableValidateRequestSchema: true);
+        $response = self::request(Request::METHOD_POST, '/api/request-password-recovery', $body, disableValidateRequestSchema: true);
 
         self::assertBadRequest($response);
     }

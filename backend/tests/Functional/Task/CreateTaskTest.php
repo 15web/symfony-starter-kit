@@ -9,6 +9,7 @@ use App\Tests\Functional\SDK\Task;
 use App\Tests\Functional\SDK\User;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @internal
@@ -55,7 +56,7 @@ final class CreateTaskTest extends ApiWebTestCase
         $this->assertBadRequests(['taskName' => ''], $token);
 
         $badJson = '{"taskName"=1}';
-        $response = self::request('POST', '/api/tasks/create', $badJson, token: $token, disableValidateRequestSchema: true);
+        $response = self::request(Request::METHOD_POST, '/api/tasks/create', $badJson, token: $token, disableValidateRequestSchema: true);
         self::assertBadRequest($response);
     }
 
@@ -63,7 +64,7 @@ final class CreateTaskTest extends ApiWebTestCase
     {
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request('POST', '/api/tasks/create', $body, token: $token, disableValidateRequestSchema: true);
+        $response = self::request(Request::METHOD_POST, '/api/tasks/create', $body, token: $token, disableValidateRequestSchema: true);
         self::assertBadRequest($response);
     }
 }

@@ -10,6 +10,7 @@ use App\Tests\Functional\SDK\User;
 use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -30,7 +31,7 @@ final class UpdateArticleTest extends ApiWebTestCase
         $body['body'] = $content = 'Контент 2';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request('POST', "/api/admin/articles/{$articleId}/update", $body, token: $token);
+        $response = self::request(Request::METHOD_POST, "/api/admin/articles/{$articleId}/update", $body, token: $token);
 
         self::assertSuccessResponse($response);
 
@@ -57,7 +58,7 @@ final class UpdateArticleTest extends ApiWebTestCase
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
         $articleId = (string) Uuid::v4();
-        $response = self::request('POST', "/api/admin/articles/{$articleId}/update", $body, token: $token);
+        $response = self::request(Request::METHOD_POST, "/api/admin/articles/{$articleId}/update", $body, token: $token);
         self::assertNotFound($response);
     }
 
@@ -75,7 +76,7 @@ final class UpdateArticleTest extends ApiWebTestCase
         $body['body'] = 'Контент 2';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request('POST', "/api/admin/articles/{$articleId}/update", $body, token: $token);
+        $response = self::request(Request::METHOD_POST, "/api/admin/articles/{$articleId}/update", $body, token: $token);
 
         self::assertApiError($response, 2);
     }
@@ -93,7 +94,7 @@ final class UpdateArticleTest extends ApiWebTestCase
         $body['body'] = 'Контент 2';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request('POST', "/api/admin/articles/{$articleId}/update", $body, token: $notValidToken);
+        $response = self::request(Request::METHOD_POST, "/api/admin/articles/{$articleId}/update", $body, token: $notValidToken);
 
         self::assertAccessDenied($response);
     }
@@ -107,7 +108,7 @@ final class UpdateArticleTest extends ApiWebTestCase
 
         $body = json_encode($body, JSON_THROW_ON_ERROR);
         $response = self::request(
-            'POST',
+            Request::METHOD_POST,
             "/api/admin/articles/{$articleId}/update",
             $body,
             token: $token,

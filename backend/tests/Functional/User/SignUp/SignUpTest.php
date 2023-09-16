@@ -8,6 +8,7 @@ use App\Infrastructure\ApiException\ApiErrorCode;
 use App\Tests\Functional\SDK\ApiWebTestCase;
 use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @internal
@@ -23,7 +24,7 @@ final class SignUpTest extends ApiWebTestCase
         $body['password'] = '123456';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request('POST', '/api/sign-up', $body, newClient: true);
+        $response = self::request(Request::METHOD_POST, '/api/sign-up', $body, newClient: true);
         self::assertSuccessResponse($response);
 
         self::assertEmailCount(1);
@@ -43,8 +44,8 @@ final class SignUpTest extends ApiWebTestCase
         $body['password'] = '123456';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        self::request('POST', '/api/sign-up', $body);
-        $response = self::request('POST', '/api/sign-up', $body);
+        self::request(Request::METHOD_POST, '/api/sign-up', $body);
+        $response = self::request(Request::METHOD_POST, '/api/sign-up', $body);
 
         self::assertApiError($response, ApiErrorCode::UserAlreadyExist->value);
     }
@@ -53,7 +54,7 @@ final class SignUpTest extends ApiWebTestCase
     public function testBadRequest(): void
     {
         $body = json_encode(['email' => 'test', 'password' => '123456'], JSON_THROW_ON_ERROR);
-        $response = self::request('POST', '/api/sign-up', $body, newClient: true, disableValidateRequestSchema: true);
+        $response = self::request(Request::METHOD_POST, '/api/sign-up', $body, newClient: true, disableValidateRequestSchema: true);
         self::assertBadRequest($response);
     }
 }
