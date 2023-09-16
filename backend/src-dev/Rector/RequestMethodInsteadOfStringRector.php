@@ -14,7 +14,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * Заменяет строки 'GET' 'POST' на соответствующую констансту из класса Symfony Request
+ * Заменяет строки 'GET' 'POST' на соответствующую константу из класса Symfony Request
  */
 final class RequestMethodInsteadOfStringRector extends AbstractRector
 {
