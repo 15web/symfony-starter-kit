@@ -54,16 +54,16 @@ final class MakeModule extends AbstractMaker implements InputAwareMakerInterface
                 name: 'module-name',
                 mode: InputArgument::OPTIONAL,
                 description: sprintf(
-                    format: 'Name of module (e.g. <fg=yellow>%s</>)',
-                    values: CustomStr::asClassName(CustomStr::getRandomTerm()),
+                    'Name of module (e.g. <fg=yellow>%s</>)',
+                    CustomStr::asClassName(CustomStr::getRandomTerm()),
                 ),
             )
             ->addArgument(
                 name: 'name',
                 mode: InputArgument::OPTIONAL,
                 description: sprintf(
-                    format: 'Class name of the entity to create or update (e.g. <fg=yellow>%s</>)',
-                    values: Str::asClassName(Str::getRandomTerm()),
+                    'Class name of the entity to create or update (e.g. <fg=yellow>%s</>)',
+                    Str::asClassName(Str::getRandomTerm()),
                 ),
             )
             ->setHelp(file_get_contents(__DIR__.'/../Resources/help/MakeModule.txt'));

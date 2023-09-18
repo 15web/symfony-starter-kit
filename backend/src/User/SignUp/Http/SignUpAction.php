@@ -33,7 +33,8 @@ final readonly class SignUpAction
     }
 
     public function __invoke(
-        #[ValueResolver(ApiRequestValueResolver::class)] SignUpCommand $signUpCommand,
+        #[ValueResolver(ApiRequestValueResolver::class)]
+        SignUpCommand $signUpCommand,
     ): SuccessResponse {
         try {
             ($this->signUp)($signUpCommand);

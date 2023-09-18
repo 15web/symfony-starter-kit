@@ -30,8 +30,10 @@ final readonly class RecoverPasswordAction
     }
 
     public function __invoke(
-        #[ValueResolver(UidValueResolver::class)] Uuid $recoveryToken,
-        #[ValueResolver(ApiRequestValueResolver::class)] RecoverPasswordCommand $recoverPasswordCommand,
+        #[ValueResolver(UidValueResolver::class)]
+        Uuid $recoveryToken,
+        #[ValueResolver(ApiRequestValueResolver::class)]
+        RecoverPasswordCommand $recoverPasswordCommand,
     ): SuccessResponse {
         try {
             ($this->recoverPassword)(

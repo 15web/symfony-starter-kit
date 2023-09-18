@@ -54,5 +54,6 @@ return (new PhpCsFixer\Config())
         'ClassDocComment/class_doc_comment' => true,
         'Testdox/test_requires_testdox' => ['exclude' => 'SDK'],
         'declare_strict_types' => true,
+        'single_line_empty_body' => false,
     ])
     ->setFinder($finder);
