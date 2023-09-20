@@ -51,6 +51,11 @@ test-verbose: # Запуск тестов с детальным описание
 	docker compose run --rm backend-cli bin/console --env=test cache:clear
 	docker compose run --rm backend-cli bash -c 'APP_ENV=test vendor/bin/phpunit --testdox'
 
+test-single: # Запуск одного теста, пример: make test-single class=TaskCommentBodyTest
+	./setup_envs.bash
+	docker compose run --rm backend-cli bin/console --env=test cache:clear
+	@docker compose run --rm backend-cli bash -c "APP_ENV=test vendor/bin/phpunit --filter=$(class)"
+
 lint: container-lint validate-doctrine-schema twig-lint fixer-check rector-check phpstan psalm deptrac-check deptrac-check-unassigned cache-prod-check
 
 composer-install: # Установка пакетов
