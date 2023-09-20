@@ -17,18 +17,18 @@ use Symfony\Component\Uid\Uuid;
 /** @final */
 class UserToken
 {
-    #[ORM\Id, ORM\Column(type: 'uuid', unique: true)]
-    private readonly Uuid $id;
-
     #[ORM\Column(type: 'uuid')]
     private readonly Uuid $userId;
 
     #[ORM\Column]
     private readonly DateTimeImmutable $createdAt;
 
-    public function __construct(Uuid $id, UserId $userId)
-    {
-        $this->id = $id;
+    public function __construct(
+        #[ORM\Id,
+            ORM\Column(type: 'uuid', unique: true)]
+        private readonly Uuid $id,
+        UserId $userId
+    ) {
         $this->userId = $userId->value;
 
         $this->createdAt = new DateTimeImmutable();

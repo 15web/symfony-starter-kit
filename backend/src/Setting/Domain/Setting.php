@@ -20,31 +20,25 @@ class Setting
     #[ORM\Id, ORM\Column(type: 'uuid', unique: true)]
     private readonly Uuid $id;
 
-    #[ORM\Column(length: 255)]
-    private string $value;
-
-    #[ORM\Column(unique: true)]
-    private readonly SettingType $type;
-
-    #[ORM\Column]
-    private readonly bool $isPublic;
-
     #[ORM\Column]
     private readonly DateTimeImmutable $createdAt;
 
     #[ORM\Column(nullable: true)]
     private ?DateTimeImmutable $updatedAt;
 
-    public function __construct(SettingType $type, string $value, bool $isPublic)
-    {
+    public function __construct(
+        #[ORM\Column(unique: true)]
+        private readonly SettingType $type,
+        #[ORM\Column(length: 255)]
+        private string $value,
+        #[ORM\Column]
+        private readonly bool $isPublic
+    ) {
         Assert::notEmpty($type, 'Укажите тип');
         Assert::notEmpty($value, 'Укажите значение');
         Assert::inArray($type, array_column(SettingType::cases(), 'value'), 'Указан неверный тип');
 
         $this->id = new UuidV7();
-        $this->type = $type;
-        $this->value = $value;
-        $this->isPublic = $isPublic;
         $this->createdAt = new DateTimeImmutable();
         $this->updatedAt = null;
     }

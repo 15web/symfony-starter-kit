@@ -19,12 +19,6 @@ use Webmozart\Assert\Assert;
 /** @final */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    #[ORM\Embedded]
-    public readonly Email $userEmail;
-
-    #[ORM\Embedded]
-    public readonly ConfirmToken $confirmToken;
-
     #[ORM\Id, ORM\Column(type: 'uuid', unique: true)]
     private readonly Uuid $id;
 
@@ -35,22 +29,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private UserPassword $userPassword;
 
     #[ORM\Column]
-    private UserRole $userRole;
-
-    #[ORM\Column]
     private bool $isConfirmed;
 
     #[ORM\Column]
     private readonly DateTimeImmutable $createdAt;
 
-    public function __construct(UserId $userId, Email $userEmail, ConfirmToken $confirmToken, UserRole $userRole)
-    {
+    public function __construct(
+        UserId $userId,
+        #[ORM\Embedded]
+        public readonly Email $userEmail,
+        #[ORM\Embedded]
+        public readonly ConfirmToken $confirmToken,
+        #[ORM\Column]
+        private UserRole $userRole
+    ) {
         $this->id = $userId->value;
-        $this->userEmail = $userEmail;
-        $this->confirmToken = $confirmToken;
-        $this->userRole = $userRole;
         $this->userPassword = new UserPassword('empty');
-
         $this->isConfirmed = false;
         $this->createdAt = new DateTimeImmutable();
     }

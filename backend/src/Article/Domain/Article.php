@@ -22,29 +22,23 @@ class Article
     private readonly Uuid $id;
 
     #[ORM\Column]
-    private string $title;
-
-    #[ORM\Column]
-    private string $alias;
-
-    #[ORM\Column(type: Types::TEXT)]
-    private string $body;
-
-    #[ORM\Column]
     private readonly DateTimeImmutable $createdAt;
 
     #[ORM\Column(nullable: true)]
     private ?DateTimeImmutable $updatedAt;
 
-    public function __construct(string $title, string $alias, string $body = '')
-    {
+    public function __construct(
+        #[ORM\Column]
+        private string $title,
+        #[ORM\Column]
+        private string $alias,
+        #[ORM\Column(type: Types::TEXT)]
+        private string $body
+    ) {
         Assert::notEmpty($title, 'Укажите заголовок');
         Assert::notEmpty($alias, 'Укажите алиас');
 
         $this->id = new UuidV7();
-        $this->title = $title;
-        $this->alias = $alias;
-        $this->body = $body;
         $this->createdAt = new DateTimeImmutable();
         $this->updatedAt = null;
     }

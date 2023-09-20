@@ -23,22 +23,16 @@ class Profile
     #[ORM\Column(type: 'uuid')]
     private Uuid $userId;
 
-    #[ORM\Embedded]
-    private Phone $phone;
-
-    #[ORM\Column]
-    private string $name;
-
     public function __construct(
         ProfileId $profileId,
         UserId $userId,
-        Phone $phone,
-        string $name
+        #[ORM\Embedded]
+        private Phone $phone,
+        #[ORM\Column]
+        private string $name
     ) {
         $this->id = $profileId->value;
         $this->userId = $userId->value;
-        $this->phone = $phone;
-        $this->name = $name;
     }
 
     public function changePhone(Phone $phone): void

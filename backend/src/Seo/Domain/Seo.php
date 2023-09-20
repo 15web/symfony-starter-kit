@@ -21,15 +21,6 @@ class Seo
     #[ORM\Id, ORM\Column(type: 'uuid', unique: true)]
     private readonly Uuid $id;
 
-    #[ORM\Column(unique: true)]
-    private readonly SeoResourceType $type;
-
-    #[ORM\Column]
-    private string $identity;
-
-    #[ORM\Column]
-    private string $title;
-
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
@@ -43,9 +34,12 @@ class Seo
     private ?DateTimeImmutable $updatedAt;
 
     public function __construct(
-        SeoResourceType $type,
-        string $identity,
-        string $title,
+        #[ORM\Column(unique: true)]
+        private readonly SeoResourceType $type,
+        #[ORM\Column]
+        private string $identity,
+        #[ORM\Column]
+        private string $title,
     ) {
         Assert::notEmpty($type, 'Укажите тип');
         Assert::notEmpty($identity, 'Укажите идентификатор');
@@ -53,9 +47,6 @@ class Seo
         Assert::inArray($type->value, array_column(SeoResourceType::cases(), 'value'), 'Указан неверный тип');
 
         $this->id = new UuidV7();
-        $this->type = $type;
-        $this->identity = $identity;
-        $this->title = $title;
         $this->createdAt = new DateTimeImmutable();
         $this->updatedAt = null;
     }

@@ -25,9 +25,6 @@ class Task
     #[ORM\Column(type: 'uuid')]
     private Uuid $userId;
 
-    #[ORM\Embedded]
-    private TaskName $taskName;
-
     #[ORM\Column]
     private bool $isCompleted;
 
@@ -46,10 +43,13 @@ class Task
     #[ORM\Column(nullable: true)]
     private ?DateTimeImmutable $updatedAt;
 
-    public function __construct(TaskId $taskId, TaskName $taskName, UserId $userId)
-    {
+    public function __construct(
+        TaskId $taskId,
+        #[ORM\Embedded]
+        private TaskName $taskName,
+        UserId $userId
+    ) {
         $this->id = $taskId->value;
-        $this->taskName = $taskName;
         $this->userId = $userId->value;
         $this->createdAt = new DateTimeImmutable();
         $this->completedAt = null;
