@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional\SDK;
 
-use App\Infrastructure\OpenApiValidateSubscriber;
+use App\Infrastructure\EventSubscriber\OpenApiValidateSubscriber;
 use Iterator;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
