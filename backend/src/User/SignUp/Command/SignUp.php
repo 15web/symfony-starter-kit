@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\User\SignUp\Command;
 
 use App\Infrastructure\AsService;
-use App\Infrastructure\Email;
+use App\Infrastructure\ValueObject\Email;
 use App\Mailer\Notification\EmailConfirmation\ConfirmEmailMessage;
 use App\User\SignUp\Domain\ConfirmToken;
 use App\User\SignUp\Domain\User;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\Infrastructure;
 
-use App\Infrastructure\Phone;
+use App\Infrastructure\ValueObject\Phone;
 use InvalidArgumentException;
 use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;

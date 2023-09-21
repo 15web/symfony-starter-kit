@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\User\SignUp\Domain;
 
-use App\Infrastructure\Email;
+use App\Infrastructure\ValueObject\Email;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
