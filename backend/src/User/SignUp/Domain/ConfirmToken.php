@@ -14,12 +14,9 @@ use Symfony\Component\Uid\Uuid;
 #[ORM\Embeddable]
 final readonly class ConfirmToken implements ValueObject
 {
-    #[ORM\Column(type: 'uuid', unique: true)]
-    public Uuid $value;
-
-    public function __construct(Uuid $value)
+    public function __construct(#[ORM\Column(type: 'uuid', unique: true)]
+    public Uuid $value)
     {
-        $this->value = $value;
     }
 
     /**

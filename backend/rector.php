@@ -47,7 +47,6 @@ return static function (RectorConfig $rectorConfig): void {
     ]);
 
     $rectorConfig->skip([
-        ClassPropertyAssignToConstructorPromotionRector::class => [__DIR__.'/src/*/Domain/*'],
         InlineConstructorDefaultToPropertyRector::class,
         FlipTypeControlToUseExclusiveTypeRector::class,
         RemoveUnusedPrivatePropertyRector::class => [__DIR__.'/src/*/Domain/*'],
