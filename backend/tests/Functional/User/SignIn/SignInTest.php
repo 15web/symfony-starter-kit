@@ -105,7 +105,7 @@ final class SignInTest extends ApiWebTestCase
     public function testBadRequest(): void
     {
         $body = json_encode(['email' => 'test', 'password' => ''], JSON_THROW_ON_ERROR);
-        $response = self::request(Request::METHOD_POST, '/api/sign-in', $body, newClient: true, disableValidateRequestSchema: true);
+        $response = self::request(Request::METHOD_POST, '/api/sign-in', $body, newClient: true, validateRequestSchema: false);
 
         self::assertBadRequest($response);
     }

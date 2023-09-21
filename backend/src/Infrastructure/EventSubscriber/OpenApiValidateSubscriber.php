@@ -25,8 +25,8 @@ use Symfony\Component\HttpKernel\Event\ResponseEvent;
 #[When('test')]
 final readonly class OpenApiValidateSubscriber implements EventSubscriberInterface
 {
-    public const DISABLE_VALIDATE_REQUEST_KEY = 'disable_request_validate';
-    public const DISABLE_VALIDATE_RESPONSE_KEY = 'disable_response_validate';
+    public const VALIDATE_REQUEST_KEY = 'validate_request';
+    public const VALIDATE_RESPONSE_KEY = 'validate_response';
 
     private RequestValidator $requestValidator;
     private ResponseValidator $responseValidator;
@@ -36,6 +36,8 @@ final readonly class OpenApiValidateSubscriber implements EventSubscriberInterfa
         private string $appEnv,
         #[Autowire('%kernel.project_dir%%env(string:OPENAPI_YAML_FILE)%')]
         string $openApiFilePath,
+        #[Autowire('%env(bool:OPEN_API_VALIDATION)%')]
+        private bool $activateValidation
     ) {
         $validatorBuilder = (new ValidatorBuilder())->fromYamlFile($openApiFilePath);
         $this->requestValidator = $validatorBuilder->getRequestValidator();
@@ -60,7 +62,7 @@ final readonly class OpenApiValidateSubscriber implements EventSubscriberInterfa
         }
 
         $request = $event->getRequest();
-        if ($this->appEnv === 'test' && $request->request->get(self::DISABLE_VALIDATE_REQUEST_KEY) === '1') {
+        if ($this->appEnv === 'test' && $request->request->get(self::VALIDATE_REQUEST_KEY) !== '1') {
             return;
         }
 
@@ -76,7 +78,7 @@ final readonly class OpenApiValidateSubscriber implements EventSubscriberInterfa
         }
 
         $request = $event->getRequest();
-        if ($this->appEnv === 'test' && $request->request->get(self::DISABLE_VALIDATE_RESPONSE_KEY) === '1') {
+        if ($this->appEnv === 'test' && $request->request->get(self::VALIDATE_RESPONSE_KEY) !== '1') {
             return;
         }
 
@@ -94,7 +96,7 @@ final readonly class OpenApiValidateSubscriber implements EventSubscriberInterfa
 
     private function needValidate(ResponseEvent|RequestEvent $event): bool
     {
-        if (!$event->isMainRequest()) {
+        if (!$event->isMainRequest() || !$this->activateValidation) {
             return false;
         }
 

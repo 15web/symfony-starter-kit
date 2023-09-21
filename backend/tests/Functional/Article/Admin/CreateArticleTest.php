@@ -67,7 +67,7 @@ final class CreateArticleTest extends ApiWebTestCase
         $token = User::auth();
 
         $body = json_encode($body, JSON_THROW_ON_ERROR);
-        $response = self::request(Request::METHOD_POST, '/api/admin/articles/create', $body, token: $token, disableValidateRequestSchema: true);
+        $response = self::request(Request::METHOD_POST, '/api/admin/articles/create', $body, token: $token, validateRequestSchema: false);
         self::assertBadRequest($response);
     }
 

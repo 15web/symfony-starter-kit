@@ -79,7 +79,7 @@ final class SeoSaveTest extends ApiWebTestCase
             '/api/admin/seo/save',
             $body,
             token: $token,
-            disableValidateRequestSchema: true
+            validateRequestSchema: false
         );
 
         self::assertBadRequest($response);

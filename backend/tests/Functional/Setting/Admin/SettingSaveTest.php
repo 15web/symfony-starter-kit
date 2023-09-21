@@ -97,7 +97,7 @@ final class SettingSaveTest extends ApiWebTestCase
             '/api/admin/setting/save',
             $body,
             token: $token,
-            disableValidateRequestSchema: true
+            validateRequestSchema: false
         );
 
         self::assertBadRequest($response);
