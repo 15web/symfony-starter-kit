@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Article\Http;
 
 /**
- * Класс ответа ручки InfoAction
+ * Информация о статье
  */
 final readonly class InfoData
 {

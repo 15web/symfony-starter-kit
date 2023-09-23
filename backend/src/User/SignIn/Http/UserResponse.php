@@ -7,7 +7,7 @@ namespace App\User\SignIn\Http;
 use Symfony\Component\Uid\Uuid;
 
 /**
- * Ответ ручки SignInAction
+ * Токен аутентификации
  */
 final readonly class UserResponse
 {

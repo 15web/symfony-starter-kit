@@ -7,7 +7,7 @@ namespace App\Task\Http\CreateTask;
 use Symfony\Component\Uid\Uuid;
 
 /**
- * Ответ ручки создания задачи
+ * Ответ после создания задачи
  */
 final readonly class TaskData
 {

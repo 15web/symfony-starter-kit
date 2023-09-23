@@ -15,7 +15,7 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
- * Сериализует ответ ручки в JsonResponse
+ * Преобразовывает объект ответа контроллеров в JsonResponse
  */
 #[AsService]
 final readonly class ResponseEventSubscriber implements EventSubscriberInterface

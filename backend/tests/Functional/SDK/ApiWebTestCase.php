@@ -14,12 +14,14 @@ use Webmozart\Assert\Assert;
 
 /**
  * Содержит общие проверки на валидность (неверный токен, ошибка запроса, запрещенный доступ)
- * Отправляет запрос к ручкам
  */
 abstract class ApiWebTestCase extends WebTestCase
 {
     private static ?KernelBrowser $client = null;
 
+    /**
+     * Отправить запрос
+     */
     final public static function request(
         string $method,
         string $uri,

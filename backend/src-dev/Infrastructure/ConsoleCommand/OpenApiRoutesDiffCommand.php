@@ -15,9 +15,9 @@ use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Yaml\Yaml;
 
 /**
- * Проверяет расхождения ручек и документации OpenApi
+ * Проверяет расхождения endpoints и документации OpenApi
  */
-#[AsCommand(name: 'app:openapi-routes-diff', description: 'Находит расхождения ручек и документации openapi')]
+#[AsCommand(name: 'app:openapi-routes-diff', description: 'Находит расхождения endpoints и документации openapi')]
 final class OpenApiRoutesDiffCommand extends Command
 {
     private const OPEN_API_FILE_ARGUMENT = 'openApiFile';
@@ -51,17 +51,17 @@ final class OpenApiRoutesDiffCommand extends Command
         $missingOpenApiPaths = array_diff($appPaths, $openApiPaths);
 
         if ($missingAppPaths === [] && $missingOpenApiPaths === []) {
-            $io->success('Расхождения ручек и документации openapi не найдены');
+            $io->success('Расхождения endpoints и документации openapi не найдены');
 
             return Command::SUCCESS;
         }
 
         if ($missingAppPaths !== []) {
-            $io->info(['Найдены ручки, которые не реализованы в приложении:', ...$missingAppPaths]);
+            $io->info(['Найдены endpoints, которые не реализованы в приложении:', ...$missingAppPaths]);
         }
 
         if ($missingOpenApiPaths !== []) {
-            $io->info(["Найдены ручки, которые не описаны в {$file}:", ...$missingOpenApiPaths]);
+            $io->info(["Найдены endpoints, которые не описаны в {$file}:", ...$missingOpenApiPaths]);
         }
 
         return Command::FAILURE;

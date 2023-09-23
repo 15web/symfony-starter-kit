@@ -14,7 +14,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Throwable;
 
 /**
- * Преобразует Request в нужный для ручки объект запроса
+ * Преобразует Request в объект запроса
  *
  * @template TApiRequest of object
  */
