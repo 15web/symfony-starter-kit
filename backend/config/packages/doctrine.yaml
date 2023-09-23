@@ -18,6 +18,7 @@ doctrine:
                 dir: '%kernel.project_dir%/src/'
                 prefix: 'App\'
                 alias: App
+        report_fields_where_declared: true
 
 when@test:
     parameters:

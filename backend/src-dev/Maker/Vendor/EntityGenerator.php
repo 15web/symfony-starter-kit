@@ -270,10 +270,10 @@ final readonly class EntityGenerator
             $data['length'] = $io->ask('Field length', '255', static fn ($length) => Validator::validateLength($length));
         } elseif ($type === 'decimal') {
             // 10 is the default value given in \Doctrine\DBAL\Schema\Column::$_precision
-            $data['precision'] = $io->ask('Precision (total number of digits stored: 100.00 would be 5)', 10, static fn ($precision) => Validator::validatePrecision($precision));
+            $data['precision'] = $io->ask('Precision (total number of digits stored: 100.00 would be 5)', '10', static fn ($precision) => Validator::validatePrecision((int) $precision));
 
             // 0 is the default value given in \Doctrine\DBAL\Schema\Column::$_scale
-            $data['scale'] = $io->ask('Scale (number of decimals to store: 100.00 would be 2)', 0, static fn ($scale) => Validator::validateScale($scale));
+            $data['scale'] = $io->ask('Scale (number of decimals to store: 100.00 would be 2)', '0', static fn ($scale) => Validator::validateScale((int) $scale));
         }
 
         if ($io->confirm('Can this field be null in the database (nullable)', false)) {
@@ -398,7 +398,7 @@ final readonly class EntityGenerator
             $type = $this->askRelationType($io, $generatedEntityClass, $targetEntityClass);
         }
 
-        $askFieldName = fn (string $targetClass, string $defaultValue) => $io->ask(
+        $askFieldName = fn (string $targetClass, string $defaultValue): mixed => $io->ask(
             sprintf('New field name inside %s', Str::getShortClassName($targetClass)),
             $defaultValue,
             function ($name) use ($targetClass): string {
@@ -710,13 +710,6 @@ final readonly class EntityGenerator
 
     private function getTypesMap(): array
     {
-        $types = Type::getTypesMap();
-
-        // remove deprecated json_array if it exists
-        if (\defined(sprintf('%s::JSON_ARRAY', Type::class))) {
-            unset($types[Type::JSON_ARRAY]);
-        }
-
-        return $types;
+        return Type::getTypesMap();
     }
 }
