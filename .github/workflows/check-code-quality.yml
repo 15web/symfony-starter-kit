@@ -36,7 +36,7 @@ jobs:
         run: make check-openapi-diff
 
       - name: Check OpenApi schema
-        run: make check-openapi-schema
+        run: docker run --rm -v ${PWD}/backend:/app stoplight/spectral lint /app/openapi.yaml -F warn --ruleset=/app/.spectral.yaml
 
       - name: Run functional tests
         run: make test
