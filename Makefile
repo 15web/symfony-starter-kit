@@ -113,13 +113,10 @@ test: # Запуск тестов
 check-openapi-diff: # Валидация соответствия роутов и схемы openapi
 	docker compose run --rm backend-cli bin/console app:openapi-routes-diff ./openapi.yaml
 
-check-openapi-schema: vacuum spectral # Валидация openapi.yaml
-
-vacuum: # Валидация openapi.yaml с помощью vacuum
-	docker compose run --rm vacuum lint /app/openapi.yaml -d -e
+check-openapi-schema: spectral # Валидация openapi.yaml
 
 spectral: # Валидация openapi.yaml с помощью spectral
-	docker compose run --rm spectral lint /app/openapi.yaml --ruleset=/app/.spectral.yaml
+	docker run --rm -it -v ${PWD}/backend:/app stoplight/spectral lint /app/openapi.yaml -F warn --ruleset=/app/.spectral.yaml
 
 deprecations-check: # Проверка на устаревший функционал
 	docker compose run --rm backend-cli bin/console debug:container --deprecations
