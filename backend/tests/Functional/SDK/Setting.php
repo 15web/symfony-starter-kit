@@ -11,6 +11,16 @@ use Symfony\Component\HttpFoundation\Request;
  */
 final class Setting extends ApiWebTestCase
 {
+    /**
+     * @return array<int, array{
+     *     id: string,
+     *     type: string,
+     *     value: string,
+     *     isPublic: bool,
+     *     createdAt: string,
+     *     updatedAt: string|null,
+     * }>
+     */
     public static function list(): array
     {
         $token = User::auth();
@@ -19,15 +29,37 @@ final class Setting extends ApiWebTestCase
 
         self::assertSuccessResponse($response);
 
-        return self::jsonDecode($response->getContent());
+        /** @var array<int, array{
+         *     id: string,
+         *     type: string,
+         *     value: string,
+         *     isPublic: bool,
+         *     createdAt: string,
+         *     updatedAt: string|null,
+         * }> $settings */
+        $settings = self::jsonDecode($response->getContent());
+
+        return $settings;
     }
 
+    /**
+     * @return array<int, array{
+     *     type: string,
+     *     value: string,
+     * }>
+     */
     public static function publicList(): array
     {
         $response = self::request(Request::METHOD_GET, '/api/settings');
 
         self::assertSuccessResponse($response);
 
-        return self::jsonDecode($response->getContent());
+        /** @var array<int, array{
+         *     type: string,
+         *     value: string,
+         * }> $settings */
+        $settings = self::jsonDecode($response->getContent());
+
+        return $settings;
     }
 }

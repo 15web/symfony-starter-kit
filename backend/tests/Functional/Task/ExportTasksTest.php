@@ -35,6 +35,12 @@ final class ExportTasksTest extends ApiWebTestCase
         $file = $response->getFile();
         $csvEncoder = new CsvEncoder();
 
+        /** @var array<int, array{
+         *     id: string,
+         *     taskName: string,
+         *     isCompleted: string,
+         * }> $tasks
+         */
         $tasks = $csvEncoder->decode($file->getContent(), CsvEncoder::FORMAT);
 
         self::assertCount(2, $tasks);
@@ -60,6 +66,13 @@ final class ExportTasksTest extends ApiWebTestCase
         $file = $response->getFile();
         $xmlEncoder = new XmlEncoder();
 
+        /** @var array<int, array{
+         *     id: string,
+         *     taskName: string,
+         *     createdAt: string,
+         *     isCompleted: string,
+         * }> $tasks
+         */
         $tasks = $xmlEncoder->decode($file->getContent(), XmlEncoder::FORMAT);
 
         self::assertCount(3, $tasks);
@@ -86,6 +99,13 @@ final class ExportTasksTest extends ApiWebTestCase
         $file = $response->getFile();
         $xmlEncoder = new XmlEncoder();
 
+        /** @var array<int, array{
+         *     id: string,
+         *     taskName: string,
+         *     createdAt: string,
+         *     isCompleted: string,
+         * }> $tasks
+         */
         $tasks = $xmlEncoder->decode($file->getContent(), XmlEncoder::FORMAT);
 
         self::assertCount(2, $tasks);
@@ -106,6 +126,13 @@ final class ExportTasksTest extends ApiWebTestCase
         $file = $response->getFile();
         $xmlEncoder = new XmlEncoder();
 
+        /** @var array<int, array{
+         *     id: string,
+         *     taskName: string,
+         *     createdAt: string,
+         *     isCompleted: string,
+         * }> $tasks
+         */
         $tasks = $xmlEncoder->decode($file->getContent(), XmlEncoder::FORMAT);
 
         self::assertCount(1, $tasks);
@@ -166,6 +193,13 @@ final class ExportTasksTest extends ApiWebTestCase
         $file = $response->getFile();
         $csvEncoder = new CsvEncoder();
 
+        /** @var array<int, array{
+         *     id: string,
+         *     taskName: string,
+         *     createdAt: string,
+         *     isCompleted: string,
+         * }> $tasks
+         */
         $tasks = $csvEncoder->decode($file->getContent(), CsvEncoder::FORMAT);
 
         foreach ($tasks as $task) {

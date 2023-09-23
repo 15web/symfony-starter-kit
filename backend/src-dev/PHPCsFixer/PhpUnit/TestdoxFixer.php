@@ -20,7 +20,6 @@ use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
 use PhpCsFixer\FixerDefinition\FixerDefinitionInterface;
 use PhpCsFixer\Indicator\PhpUnitTestCaseIndicator;
-use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
 use PhpCsFixer\Utils;
 use PhpCsFixer\WhitespacesFixerConfig;
@@ -39,6 +38,10 @@ final class TestdoxFixer implements FixerInterface, WhitespacesAwareFixerInterfa
     private readonly DocCommentHelper $commentHelper;
     private WhitespacesFixerConfig $whitespacesConfig;
     private ?FixerConfigurationResolverInterface $configurationDefinition = null;
+
+    /**
+     * @var array<array-key, mixed>|null
+     */
     private ?array $configuration = null;
 
     public function __construct()
@@ -53,9 +56,6 @@ final class TestdoxFixer implements FixerInterface, WhitespacesAwareFixerInterfa
         $this->testdoxForMethods = new TestdoxForMethods($this->commentHelper);
     }
 
-    /**
-     * @param Tokens<Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAllTokenKindsFound([T_CLASS, T_STRING]);
@@ -66,9 +66,6 @@ final class TestdoxFixer implements FixerInterface, WhitespacesAwareFixerInterfa
         return false;
     }
 
-    /**
-     * @param Tokens<Token> $tokens
-     */
     public function fix(SplFileInfo $file, Tokens $tokens): void
     {
         if ($tokens->count() <= 0) {
@@ -122,6 +119,9 @@ final class ExampleTest
         $this->whitespacesConfig = $config;
     }
 
+    /**
+     * @param array<mixed> $configuration
+     */
     public function configure(array $configuration): void
     {
         foreach ($this->getConfigurationDefinition()->getOptions() as $option) {
@@ -131,10 +131,19 @@ final class ExampleTest
 
             $name = $option->getName();
             if (\array_key_exists($name, $configuration)) {
+                /**
+                 * @psalm-suppress DeprecatedClass
+                 * @psalm-suppress InternalClass
+                 * @psalm-suppress InternalMethod
+                 */
                 Utils::triggerDeprecation(new InvalidArgumentException(sprintf(
                     'Option "%s" for rule "%s" is deprecated and will be removed in version %d.0. %s',
                     $name,
                     $this->getName(),
+                    /**
+                     * @psalm-suppress InternalClass
+                     * @psalm-suppress InternalMethod
+                     */
                     Application::getMajorVersion() + 1,
                     str_replace('`', '"', $option->getDeprecationMessage())
                 )));
@@ -142,14 +151,23 @@ final class ExampleTest
         }
 
         try {
+            /** @var array<string, mixed> $configuration */
             $this->configuration = $this->getConfigurationDefinition()->resolve($configuration);
         } catch (MissingOptionsException $exception) {
+            /**
+             * @psalm-suppress InternalClass
+             * @psalm-suppress InternalMethod
+             */
             throw new RequiredFixerConfigurationException(
                 $this->getName(),
                 sprintf('Missing required configuration: %s', $exception->getMessage()),
                 $exception
             );
         } catch (InvalidOptionsForEnvException $exception) {
+            /**
+             * @psalm-suppress InternalClass
+             * @psalm-suppress InternalMethod
+             */
             throw new InvalidForEnvFixerConfigurationException(
                 $this->getName(),
                 sprintf('Invalid configuration for env: %s', $exception->getMessage()),
@@ -167,23 +185,24 @@ final class ExampleTest
         return $this->configurationDefinition;
     }
 
-    /**
-     * @param Tokens<Token> $tokens
-     */
     private function applyFix(SplFileInfo $file, Tokens $tokens): void
     {
+        /**
+         * @psalm-suppress InternalClass
+         */
         $phpUnitTestCaseIndicator = new PhpUnitTestCaseIndicator();
 
+        /**
+         * @psalm-suppress InternalMethod
+         */
         foreach ($phpUnitTestCaseIndicator->findPhpUnitClasses($tokens) as $indices) {
             $this->applyPhpUnitClassFix($tokens, $file, $indices[0], $indices[1]);
         }
     }
 
-    /**
-     * @param Tokens<Token> $tokens
-     */
     private function applyPhpUnitClassFix(Tokens $tokens, SplFileInfo $file, int $startIndex, int $endIndex): void
     {
+        /** @var int $classIndex */
         $classIndex = $tokens->getPrevTokenOfKind($startIndex, [[T_CLASS]]);
 
         if (!$this->isAllowedByConfiguration($tokens, $file, $classIndex)) {
@@ -199,15 +218,17 @@ final class ExampleTest
         $this->testdoxForMethods->addTestdoxAnnotation($tokens, $startIndex, $endIndex);
     }
 
-    /**
-     * @param Tokens<Token> $tokens
-     */
     private function isAllowedByConfiguration(Tokens $tokens, SplFileInfo $file, int $i): bool
     {
-        if (str_contains($file->getPathname(), (string) $this->configuration[self::EXCLUDE_KEY])) {
-            return false;
+        if ($this->configuration !== null) {
+            /** @var string $excludeKey */
+            $excludeKey = $this->configuration[self::EXCLUDE_KEY];
+            if (str_contains($file->getPathname(), $excludeKey)) {
+                return false;
+            }
         }
 
+        /** @var int $typeIndex */
         $typeIndex = $tokens->getPrevMeaningfulToken($i);
         if ($tokens[$typeIndex]->isGivenKind(T_FINAL)) {
             return true;
@@ -224,7 +245,10 @@ final class ExampleTest
             $defaultWhitespacesFixerConfig = new WhitespacesFixerConfig('    ', "\n");
         }
 
-        return $defaultWhitespacesFixerConfig;
+        /** @var WhitespacesFixerConfig $whitespacesFixerConfig */
+        $whitespacesFixerConfig = $defaultWhitespacesFixerConfig;
+
+        return $whitespacesFixerConfig;
     }
 
     private function createConfigurationDefinition(): FixerConfigurationResolver

@@ -14,6 +14,7 @@ use Symfony\Bundle\MakerBundle\InputAwareMakerInterface;
 use Symfony\Bundle\MakerBundle\InputConfiguration;
 use Symfony\Bundle\MakerBundle\Maker\AbstractMaker;
 use Symfony\Bundle\MakerBundle\Str;
+use Symfony\Bundle\MakerBundle\Util\ClassNameDetails;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -49,6 +50,9 @@ final class MakeModule extends AbstractMaker implements InputAwareMakerInterface
 
     public function configureCommand(Command $command, InputConfiguration $inputConfig): void
     {
+        /** @var non-empty-string $helpFile */
+        $helpFile = file_get_contents(__DIR__.'/../Resources/help/MakeModule.txt');
+
         $command
             ->addArgument(
                 name: 'module-name',
@@ -66,19 +70,21 @@ final class MakeModule extends AbstractMaker implements InputAwareMakerInterface
                     Str::asClassName(Str::getRandomTerm()),
                 ),
             )
-            ->setHelp(file_get_contents(__DIR__.'/../Resources/help/MakeModule.txt'));
+            ->setHelp($helpFile);
 
         $inputConfig->setArgumentAsNonInteractive('name');
     }
 
     public function interact(InputInterface $input, ConsoleStyle $io, Command $command): void
     {
-        if ($input->getArgument('name')) {
+        if ($input->getArgument('name') !== null) {
             return;
         }
 
         $argument = $command->getDefinition()->getArgument('name');
         $question = $this->entityGenerator->createEntityClassQuestion($argument->getDescription());
+
+        /** @var mixed $entityClassName */
         $entityClassName = $io->askQuestion($question);
 
         $input->setArgument('name', $entityClassName);
@@ -86,9 +92,15 @@ final class MakeModule extends AbstractMaker implements InputAwareMakerInterface
 
     public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator): void
     {
+        /** @var non-empty-string $moduleName */
         $moduleName = $input->getArgument('module-name');
 
-        // $fields - массив полей сущности (имя поля и ее тип)
+        /**
+         * $fields - массив полей сущности (имя поля и ее тип)
+         *
+         * @var ClassNameDetails $entityClassDetails
+         * @var list<array<string, string>> $fields
+         */
         [$entityClassDetails, $fields] = $this->entityGenerator->generate($input, $io);
 
         $this->crudGenerator->generate(
@@ -114,6 +126,10 @@ final class MakeModule extends AbstractMaker implements InputAwareMakerInterface
 
     public function configureDependencies(DependencyBuilder $dependencies, ?InputInterface $input = null): void
     {
+        /**
+         * @psalm-suppress InternalClass
+         * @psalm-suppress InternalMethod
+         */
         ORMDependencyBuilder::buildDependencies($dependencies);
     }
 }

@@ -37,14 +37,21 @@ final readonly class EntityClassGeneratorForModule
             suffix: 's'
         );
 
+        /** @psalm-suppress InternalMethod */
         $tableName = $this->doctrineHelper->getPotentialTableName($entityClassDetails->getFullName());
 
+        /**
+         * @psalm-suppress InvalidArgument
+         *
+         * @phpstan-ignore-next-line
+         */
         $useStatements = new UseStatementGenerator([
             Uuid::class,
             UuidV7::class,
             ['Doctrine\\ORM\\Mapping' => 'ORM'],
         ]);
 
+        /** @psalm-suppress InternalMethod */
         $entityPath = $this->generator->generateClass(
             className: $entityClassDetails->getFullName(),
             templateName: 'domain/Entity.tpl.php',

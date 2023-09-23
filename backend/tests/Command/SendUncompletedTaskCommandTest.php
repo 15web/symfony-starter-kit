@@ -41,6 +41,7 @@ final class SendUncompletedTaskCommandTest extends KernelTestCase
 
         $email = self::getMailerMessage();
 
+        self::assertNotNull($email);
         self::assertEmailTextBodyContains($email, $taskName1);
         self::assertEmailHtmlBodyContains($email, $taskName1);
     }

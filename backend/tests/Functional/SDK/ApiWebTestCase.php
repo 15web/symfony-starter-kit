@@ -55,6 +55,9 @@ abstract class ApiWebTestCase extends WebTestCase
         return self::$client->getResponse();
     }
 
+    /**
+     * @return array<mixed>
+     */
     final public static function jsonDecode(string|bool $content): array
     {
         if (\is_bool($content)) {

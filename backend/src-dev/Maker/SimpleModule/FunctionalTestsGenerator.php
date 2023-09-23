@@ -31,6 +31,10 @@ final readonly class FunctionalTestsGenerator
         $this->entityFieldsManipulator = new EntityFieldsManipulator();
     }
 
+    /**
+     * @param non-empty-string $moduleName
+     * @param list<array<string, string>> $fields
+     */
     public function generate(string $moduleName, ClassNameDetails $entityClassDetails, array $fields): void
     {
         $this->generateSDK($entityClassDetails, $fields);
@@ -42,6 +46,9 @@ final readonly class FunctionalTestsGenerator
         $this->generator->writeChanges();
     }
 
+    /**
+     * @param list<array<string, string>> $fields
+     */
     private function generateSDK(ClassNameDetails $entityClassDetails, array $fields): void
     {
         $sdkDetails = $this->generator->createClassNameDetails(
@@ -66,6 +73,9 @@ final readonly class FunctionalTestsGenerator
         );
     }
 
+    /**
+     * @param list<array<string, string>> $fields
+     */
     private function generateInfoTest(string $moduleName, ClassNameDetails $entityClassDetails, array $fields): void
     {
         $testName = $entityClassDetails->getShortName().'InfoTest';
@@ -99,6 +109,9 @@ final readonly class FunctionalTestsGenerator
         );
     }
 
+    /**
+     * @param list<array<string, string>> $fields
+     */
     private function generateCreateTest(string $moduleName, ClassNameDetails $entityClassDetails, array $fields): void
     {
         $testName = $entityClassDetails->getShortName().'CreateTest';
@@ -131,6 +144,9 @@ final readonly class FunctionalTestsGenerator
         );
     }
 
+    /**
+     * @param list<array<string, string>> $fields
+     */
     private function generateRemoveTest(string $moduleName, ClassNameDetails $entityClassDetails, array $fields): void
     {
         $testName = $entityClassDetails->getShortName().'RemoveTest';
@@ -163,6 +179,9 @@ final readonly class FunctionalTestsGenerator
         );
     }
 
+    /**
+     * @param list<array<string, string>> $fields
+     */
     private function generateUpdateTest(string $moduleName, ClassNameDetails $entityClassDetails, array $fields): void
     {
         $testName = $entityClassDetails->getShortName().'UpdateTest';

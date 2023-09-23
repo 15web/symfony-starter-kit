@@ -9,6 +9,7 @@ use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Mime\Message;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -37,7 +38,10 @@ final class RecoverPasswordTest extends ApiWebTestCase
 
         self::assertEmailCount(1);
 
+        /** @var Message $sentEmail */
         $sentEmail = self::getMailerMessage();
+
+        /** @var string $recoverToken */
         $recoverToken = $sentEmail->getHeaders()->get('recoverToken')?->getBody();
 
         self::assertNotEmpty($recoverToken);

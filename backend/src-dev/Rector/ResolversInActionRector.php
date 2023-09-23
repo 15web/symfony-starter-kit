@@ -10,7 +10,6 @@ use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
@@ -51,17 +50,15 @@ final class ResolversInActionRector extends AbstractRector
         return [Class_::class];
     }
 
-    /**
-     * @param Class_ $node
-     */
     public function refactor(Node $node): ?Node
     {
+        /** @var Class_ $node */
         if (!$this->hasAsControllerAttribute($node)) {
             return null;
         }
 
         foreach ($node->getMethods() as $method) {
-            if ($method instanceof ClassMethod && $method->name->toString() === '__invoke') {
+            if ($method->name->toString() === '__invoke') {
                 foreach ($method->params as $param) {
                     if ($this->hasValueResolverAttribute($param)) {
                         continue;
@@ -80,13 +77,15 @@ final class ResolversInActionRector extends AbstractRector
     }
 
     /**
-     * Имеет ли класс атрибут #[AsController]
+     * Проверяет имеет ли класс атрибут #[AsController]
+     *
+     * @param Class_ $classNode
      */
-    private function hasAsControllerAttribute(Class_ $classNode): bool
+    private function hasAsControllerAttribute(Node $classNode): bool
     {
         foreach ($classNode->attrGroups as $attrGroup) {
             foreach ($attrGroup->attrs as $attr) {
-                if ($attr->name instanceof Name && $attr->name->toString() === AsController::class) {
+                if ($attr->name->toString() === AsController::class) {
                     return true;
                 }
             }
@@ -102,7 +101,7 @@ final class ResolversInActionRector extends AbstractRector
     {
         foreach ($param->attrGroups as $attrGroup) {
             foreach ($attrGroup->attrs as $attr) {
-                if ($attr->name instanceof Name && $attr->name->toString() === ValueResolver::class) {
+                if ($attr->name->toString() === ValueResolver::class) {
                     return true;
                 }
             }
