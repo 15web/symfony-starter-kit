@@ -12,7 +12,7 @@ use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
- * Проверяет тип ошибки, проеобразовывает ее в JsonResponse
+ * Формирование ответа при ошибках
  */
 #[AsService]
 final readonly class ExceptionEventSubscriber implements EventSubscriberInterface
