@@ -29,8 +29,7 @@ final readonly class LogoutAction
     public function __construct(
         private DeleteToken $deleteToken,
         private Flush $flush,
-    ) {
-    }
+    ) {}
 
     public function __invoke(
         #[ValueResolver(RequestValueResolver::class)]

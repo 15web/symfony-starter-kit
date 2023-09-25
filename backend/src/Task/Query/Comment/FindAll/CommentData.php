@@ -17,6 +17,5 @@ final readonly class CommentData
         public string $body,
         public DateTimeImmutable $createdAt,
         public ?DateTimeImmutable $updatedAt,
-    ) {
-    }
+    ) {}
 }

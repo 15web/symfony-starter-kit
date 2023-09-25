@@ -34,8 +34,7 @@ final readonly class AddCommentOnTaskAction
         private AddCommentOnTask $addCommentOnTask,
         private Flush $flush,
         private LoggerInterface $logger,
-    ) {
-    }
+    ) {}
 
     public function __invoke(
         #[ValueResolver(TaskArgumentValueResolver::class)]

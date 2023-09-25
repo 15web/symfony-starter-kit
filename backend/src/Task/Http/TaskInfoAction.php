@@ -28,9 +28,7 @@ use Symfony\Component\Uid\Uuid;
 #[AsController]
 final readonly class TaskInfoAction
 {
-    public function __construct(private FindTaskById $findTaskById)
-    {
-    }
+    public function __construct(private FindTaskById $findTaskById) {}
 
     public function __invoke(
         #[ValueResolver(UidValueResolver::class)]

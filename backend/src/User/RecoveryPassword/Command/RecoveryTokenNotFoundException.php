@@ -9,6 +9,4 @@ use Exception;
 /**
  * Токен восстановления пароля не найден
  */
-final class RecoveryTokenNotFoundException extends Exception
-{
-}
+final class RecoveryTokenNotFoundException extends Exception {}

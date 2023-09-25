@@ -26,8 +26,7 @@ final readonly class RequestPasswordRecoveryAction
     public function __construct(
         private GenerateRecoveryToken $generateRecoveryToken,
         private Flush $flush,
-    ) {
-    }
+    ) {}
 
     public function __invoke(
         #[ValueResolver(ApiRequestValueResolver::class)]

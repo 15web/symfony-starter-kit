@@ -20,9 +20,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[AsController]
 final readonly class ListAction
 {
-    public function __construct(private Settings $settings)
-    {
-    }
+    public function __construct(private Settings $settings) {}
 
     /**
      * @return Generator<SettingListData>

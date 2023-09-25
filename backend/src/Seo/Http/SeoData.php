@@ -10,6 +10,5 @@ final class SeoData
         public ?string $title = null,
         public ?string $description = null,
         public ?string $keywords = null,
-    ) {
-    }
+    ) {}
 }

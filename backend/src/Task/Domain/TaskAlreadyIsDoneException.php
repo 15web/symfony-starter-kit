@@ -9,6 +9,4 @@ use Exception;
 /**
  * Нельзя завершить уже завершенную задачу
  */
-final class TaskAlreadyIsDoneException extends Exception
-{
-}
+final class TaskAlreadyIsDoneException extends Exception {}

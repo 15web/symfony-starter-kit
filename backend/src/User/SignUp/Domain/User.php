@@ -86,9 +86,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return [$this->userRole->value];
     }
 
-    public function eraseCredentials(): void
-    {
-    }
+    public function eraseCredentials(): void {}
 
     public function getUserIdentifier(): string
     {

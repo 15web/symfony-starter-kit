@@ -11,7 +11,5 @@ use Symfony\Component\Uid\Uuid;
  */
 final readonly class FindProfileByUserIdQuery
 {
-    public function __construct(public Uuid $userId)
-    {
-    }
+    public function __construct(public Uuid $userId) {}
 }

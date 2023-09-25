@@ -17,6 +17,5 @@ final readonly class ArticleListResponse
     public function __construct(
         public array $data,
         public PaginationResponse $pagination
-    ) {
-    }
+    ) {}
 }

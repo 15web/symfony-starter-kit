@@ -33,8 +33,7 @@ final readonly class CreateTaskAction
         private CreateTask $createTask,
         private Flush $flush,
         private LoggerInterface $logger,
-    ) {
-    }
+    ) {}
 
     public function __invoke(
         #[ValueResolver(ApiRequestValueResolver::class)]

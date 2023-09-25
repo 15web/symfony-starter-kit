@@ -15,9 +15,7 @@ use Symfony\Component\Uid\Uuid;
 #[AsService]
 final readonly class UserTokens
 {
-    public function __construct(private EntityManagerInterface $entityManager)
-    {
-    }
+    public function __construct(private EntityManagerInterface $entityManager) {}
 
     public function getById(Uuid $userTokenId): UserToken
     {

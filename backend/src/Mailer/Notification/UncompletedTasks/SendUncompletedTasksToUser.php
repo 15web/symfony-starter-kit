@@ -17,9 +17,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[AsMessageHandler]
 final readonly class SendUncompletedTasksToUser
 {
-    public function __construct(private MailerInterface $mailer, private TranslatorInterface $translator)
-    {
-    }
+    public function __construct(private MailerInterface $mailer, private TranslatorInterface $translator) {}
 
     public function __invoke(UncompletedTasksMessage $message): void
     {

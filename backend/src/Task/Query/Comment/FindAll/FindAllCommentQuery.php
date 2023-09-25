@@ -11,7 +11,5 @@ use Symfony\Component\Uid\Uuid;
  */
 final readonly class FindAllCommentQuery
 {
-    public function __construct(public Uuid $taskId, public Uuid $userId)
-    {
-    }
+    public function __construct(public Uuid $taskId, public Uuid $userId) {}
 }

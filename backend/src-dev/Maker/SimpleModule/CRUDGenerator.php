@@ -36,8 +36,7 @@ final readonly class CRUDGenerator
     public function __construct(
         private CustomGenerator $generator,
         private EntityFieldsManipulator $entityFieldsManipulator
-    ) {
-    }
+    ) {}
 
     /**
      * @param list<array<string, string>> $fields

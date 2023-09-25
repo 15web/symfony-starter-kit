@@ -20,9 +20,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 #[AsService]
 final readonly class ResponseEventSubscriber implements EventSubscriberInterface
 {
-    public function __construct(private SerializerInterface $serializer)
-    {
-    }
+    public function __construct(private SerializerInterface $serializer) {}
 
     /**
      * @return array<string, array{0: string, 1: int}|list<array{0: string, 1?: int}>|string>

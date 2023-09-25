@@ -9,6 +9,4 @@ use Exception;
 /**
  * Email уже занят, невозможно создать пользователя с такой почтой
  */
-final class UserAlreadyExistException extends Exception
-{
-}
+final class UserAlreadyExistException extends Exception {}

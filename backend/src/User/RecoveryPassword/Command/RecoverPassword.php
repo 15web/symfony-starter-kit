@@ -21,8 +21,7 @@ final readonly class RecoverPassword
         private RecoveryTokens $recoveryTokens,
         private Users $users,
         private UserPasswordHasherInterface $passwordHasher,
-    ) {
-    }
+    ) {}
 
     public function __invoke(
         Uuid $recoveryToken,

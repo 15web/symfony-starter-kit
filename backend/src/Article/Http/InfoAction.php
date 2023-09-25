@@ -19,9 +19,7 @@ use Symfony\Component\Routing\Annotation\Route;
 #[AsController]
 final readonly class InfoAction
 {
-    public function __construct(private Articles $articles)
-    {
-    }
+    public function __construct(private Articles $articles) {}
 
     public function __invoke(
         #[ValueResolver(RequestAttributeValueResolver::class)]

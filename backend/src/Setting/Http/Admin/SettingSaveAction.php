@@ -33,8 +33,7 @@ final readonly class SettingSaveAction
         private SaveSetting $saveSetting,
         private Flush $flush,
         private LoggerInterface $logger,
-    ) {
-    }
+    ) {}
 
     public function __invoke(
         #[ValueResolver(ApiRequestValueResolver::class)]

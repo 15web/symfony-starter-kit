@@ -24,9 +24,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[AsController]
 final readonly class ProfileInfoAction
 {
-    public function __construct(private FindProfileByUserId $findProfileByUserId)
-    {
-    }
+    public function __construct(private FindProfileByUserId $findProfileByUserId) {}
 
     public function __invoke(
         #[ValueResolver(UserIdArgumentValueResolver::class)]

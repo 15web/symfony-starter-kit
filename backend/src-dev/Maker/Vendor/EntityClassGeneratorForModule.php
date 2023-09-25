@@ -26,8 +26,7 @@ final readonly class EntityClassGeneratorForModule
     public function __construct(
         private CustomGenerator $generator,
         private DoctrineHelper $doctrineHelper,
-    ) {
-    }
+    ) {}
 
     public function generateEntityClass(string $moduleName, ClassNameDetails $entityClassDetails, bool $generateRepositoryClass = true): string
     {

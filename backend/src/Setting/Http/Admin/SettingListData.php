@@ -17,6 +17,5 @@ final readonly class SettingListData
         public bool $isPublic,
         public DateTimeImmutable $createdAt,
         public ?DateTimeImmutable $updatedAt,
-    ) {
-    }
+    ) {}
 }

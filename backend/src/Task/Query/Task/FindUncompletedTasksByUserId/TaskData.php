@@ -14,6 +14,5 @@ final readonly class TaskData
     public function __construct(
         public string $taskName,
         public DateTimeImmutable $createdAt,
-    ) {
-    }
+    ) {}
 }

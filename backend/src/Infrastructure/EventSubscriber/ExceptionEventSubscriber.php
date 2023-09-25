@@ -17,9 +17,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
 #[AsService]
 final readonly class ExceptionEventSubscriber implements EventSubscriberInterface
 {
-    public function __construct(private CreateExceptionJsonResponse $createExceptionJsonResponse)
-    {
-    }
+    public function __construct(private CreateExceptionJsonResponse $createExceptionJsonResponse) {}
 
     /**
      * @return array<string, array{0: string, 1: int}|list<array{0: string, 1?: int}>|string>

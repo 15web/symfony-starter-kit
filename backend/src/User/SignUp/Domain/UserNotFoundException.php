@@ -9,6 +9,4 @@ use Exception;
 /**
  * Пользователь не найден
  */
-final class UserNotFoundException extends Exception
-{
-}
+final class UserNotFoundException extends Exception {}

@@ -13,9 +13,7 @@ use Doctrine\ORM\EntityManagerInterface;
 #[AsService]
 final readonly class FindTaskById
 {
-    public function __construct(private EntityManagerInterface $entityManager)
-    {
-    }
+    public function __construct(private EntityManagerInterface $entityManager) {}
 
     public function __invoke(FindTaskByIdQuery $query): TaskData
     {

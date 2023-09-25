@@ -34,8 +34,7 @@ final readonly class EntityGenerator
         private DoctrineHelper $doctrineHelper,
         private CustomGenerator $generator,
         private EntityClassGeneratorForModule $entityClassGenerator,
-    ) {
-    }
+    ) {}
 
     public function generate(InputInterface $input, ConsoleStyle $io): array
     {

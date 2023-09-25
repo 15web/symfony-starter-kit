@@ -7,6 +7,4 @@ namespace App\Infrastructure;
 /**
  * Интерфейс для месседжей Notification
  */
-interface Message
-{
-}
+interface Message {}

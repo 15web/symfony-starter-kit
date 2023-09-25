@@ -14,9 +14,7 @@ use Doctrine\ORM\EntityManagerInterface;
 #[AsService]
 final readonly class Tasks
 {
-    public function __construct(private EntityManagerInterface $entityManager)
-    {
-    }
+    public function __construct(private EntityManagerInterface $entityManager) {}
 
     public function findByIdAndUserId(TaskId $taskId, UserId $userId): ?Task
     {

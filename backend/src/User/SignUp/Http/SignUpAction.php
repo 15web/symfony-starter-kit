@@ -29,8 +29,7 @@ final readonly class SignUpAction
     public function __construct(
         private SignUp $signUp,
         private Flush $flush,
-    ) {
-    }
+    ) {}
 
     public function __invoke(
         #[ValueResolver(ApiRequestValueResolver::class)]

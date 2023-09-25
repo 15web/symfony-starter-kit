@@ -16,8 +16,7 @@ final readonly class CountAllTasksByUserId
     public function __construct(
         private Connection $connection,
         private Filter $filter
-    ) {
-    }
+    ) {}
 
     public function __invoke(FindAllTasksByUserIdQuery $query): int
     {

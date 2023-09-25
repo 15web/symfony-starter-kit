@@ -25,9 +25,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[AsController]
 final readonly class UpdateAction
 {
-    public function __construct(private Articles $articles, private Flush $flush)
-    {
-    }
+    public function __construct(private Articles $articles, private Flush $flush) {}
 
     public function __invoke(
         #[ValueResolver(ArticleArgumentValueResolver::class)]

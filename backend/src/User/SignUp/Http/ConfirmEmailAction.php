@@ -29,8 +29,7 @@ final readonly class ConfirmEmailAction
     public function __construct(
         private ConfirmEmail $confirmEmail,
         private Flush $flush,
-    ) {
-    }
+    ) {}
 
     public function __invoke(
         #[ValueResolver(UidValueResolver::class)]

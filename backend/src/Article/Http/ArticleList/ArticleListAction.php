@@ -20,9 +20,7 @@ use Symfony\Component\Routing\Annotation\Route;
 #[AsController]
 final readonly class ArticleListAction
 {
-    public function __construct(private Articles $articles)
-    {
-    }
+    public function __construct(private Articles $articles) {}
 
     public function __invoke(
         #[ValueResolver(PaginationRequestArgumentResolver::class)]

@@ -17,9 +17,7 @@ use App\User\SignUp\Domain\UserId;
 #[AsService]
 final readonly class CreateTask
 {
-    public function __construct(private Tasks $tasks)
-    {
-    }
+    public function __construct(private Tasks $tasks) {}
 
     public function __invoke(
         CreateTaskCommand $createTaskCommand,

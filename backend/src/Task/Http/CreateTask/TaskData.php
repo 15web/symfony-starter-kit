@@ -11,7 +11,5 @@ use Symfony\Component\Uid\Uuid;
  */
 final readonly class TaskData
 {
-    public function __construct(public Uuid $id)
-    {
-    }
+    public function __construct(public Uuid $id) {}
 }

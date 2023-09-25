@@ -15,9 +15,7 @@ use App\Setting\Domain\Settings;
 #[AsService]
 final readonly class SaveSetting
 {
-    public function __construct(private Settings $settings)
-    {
-    }
+    public function __construct(private Settings $settings) {}
 
     /**
      * @throws SettingNotFoundException

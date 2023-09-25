@@ -13,6 +13,5 @@ final readonly class UserResponse
 {
     public function __construct(
         public Uuid $token,
-    ) {
-    }
+    ) {}
 }

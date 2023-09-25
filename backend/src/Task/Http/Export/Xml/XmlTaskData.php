@@ -17,6 +17,5 @@ final readonly class XmlTaskData
         public DateTimeImmutable $createdAt,
         public string $taskName,
         public bool $isCompleted,
-    ) {
-    }
+    ) {}
 }

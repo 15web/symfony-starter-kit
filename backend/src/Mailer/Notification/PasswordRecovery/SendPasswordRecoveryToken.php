@@ -16,9 +16,7 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 #[AsMessageHandler]
 final readonly class SendPasswordRecoveryToken
 {
-    public function __construct(private MailerInterface $mailer)
-    {
-    }
+    public function __construct(private MailerInterface $mailer) {}
 
     public function __invoke(RecoveryPasswordMessage $message): void
     {

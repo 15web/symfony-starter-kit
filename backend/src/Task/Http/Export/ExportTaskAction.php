@@ -27,9 +27,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[AsController]
 final readonly class ExportTaskAction
 {
-    public function __construct(private ExportTasks $exportTasks)
-    {
-    }
+    public function __construct(private ExportTasks $exportTasks) {}
 
     public function __invoke(
         #[ValueResolver(BackedEnumValueResolver::class)]
