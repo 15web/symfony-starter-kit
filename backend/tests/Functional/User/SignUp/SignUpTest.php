@@ -54,7 +54,7 @@ final class SignUpTest extends ApiWebTestCase
     public function testBadRequest(): void
     {
         $body = json_encode(['email' => 'test', 'password' => '123456'], JSON_THROW_ON_ERROR);
-        $response = self::request(Request::METHOD_POST, '/api/sign-up', $body, newClient: true, disableValidateRequestSchema: true);
+        $response = self::request(Request::METHOD_POST, '/api/sign-up', $body, newClient: true, validateRequestSchema: false);
         self::assertBadRequest($response);
     }
 }

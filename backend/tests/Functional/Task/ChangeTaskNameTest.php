@@ -121,7 +121,7 @@ final class ChangeTaskNameTest extends ApiWebTestCase
             "/api/tasks/{$taskId}/update-task-name",
             $body,
             token: $token,
-            disableValidateRequestSchema: true
+            validateRequestSchema: false
         );
         self::assertBadRequest($response);
     }

@@ -56,7 +56,7 @@ final class CreateTaskTest extends ApiWebTestCase
         $this->assertBadRequests(['taskName' => ''], $token);
 
         $badJson = '{"taskName"=1}';
-        $response = self::request(Request::METHOD_POST, '/api/tasks/create', $badJson, token: $token, disableValidateRequestSchema: true);
+        $response = self::request(Request::METHOD_POST, '/api/tasks/create', $badJson, token: $token, validateRequestSchema: false);
         self::assertBadRequest($response);
     }
 
@@ -67,7 +67,7 @@ final class CreateTaskTest extends ApiWebTestCase
     {
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request(Request::METHOD_POST, '/api/tasks/create', $body, token: $token, disableValidateRequestSchema: true);
+        $response = self::request(Request::METHOD_POST, '/api/tasks/create', $body, token: $token, validateRequestSchema: false);
         self::assertBadRequest($response);
     }
 }

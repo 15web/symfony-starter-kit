@@ -115,7 +115,7 @@ final class UpdateArticleTest extends ApiWebTestCase
             "/api/admin/articles/{$articleId}/update",
             $body,
             token: $token,
-            disableValidateRequestSchema: true
+            validateRequestSchema: false
         );
 
         self::assertBadRequest($response);

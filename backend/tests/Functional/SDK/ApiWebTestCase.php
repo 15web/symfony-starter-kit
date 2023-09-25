@@ -28,8 +28,8 @@ abstract class ApiWebTestCase extends WebTestCase
         ?string $body = null,
         bool $newClient = false,
         ?string $token = null,
-        bool $disableValidateRequestSchema = false,
-        bool $disableValidateResponseSchema = false,
+        bool $validateRequestSchema = true,
+        bool $validateResponseSchema = true,
     ): Response {
         Assert::notEmpty($method);
         Assert::notEmpty($uri);
@@ -49,9 +49,9 @@ abstract class ApiWebTestCase extends WebTestCase
 
         self::$client->xmlHttpRequest($method, $uri, [
             // передаем признак в OpenApiValidateSubscriber что не нужно проверять запрос
-            OpenApiValidateSubscriber::DISABLE_VALIDATE_REQUEST_KEY => $disableValidateRequestSchema,
+            OpenApiValidateSubscriber::VALIDATE_REQUEST_KEY => $validateRequestSchema,
             // передаем признак в OpenApiValidateSubscriber что не нужно проверять ответ
-            OpenApiValidateSubscriber::DISABLE_VALIDATE_RESPONSE_KEY => $disableValidateResponseSchema,
+            OpenApiValidateSubscriber::VALIDATE_RESPONSE_KEY => $validateResponseSchema,
         ], [], $headers, $body);
 
         return self::$client->getResponse();
