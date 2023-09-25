@@ -13,9 +13,7 @@ use Symfony\Component\Uid\UuidV7;
  */
 final readonly class TaskId implements ValueObject
 {
-    public function __construct(public Uuid $value = new UuidV7())
-    {
-    }
+    public function __construct(public Uuid $value = new UuidV7()) {}
 
     public function equalTo(ValueObject $other): bool
     {

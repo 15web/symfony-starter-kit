@@ -34,8 +34,7 @@ final readonly class ProfileSaveAction
         private SaveProfile $saveProfile,
         private FindProfileByUserId $findProfileByUserId,
         private Flush $flush,
-    ) {
-    }
+    ) {}
 
     public function __invoke(
         #[ValueResolver(ApiRequestValueResolver::class)]

@@ -10,6 +10,4 @@ use Attribute;
  * Классы, помеченные этим атрибутом, являются сервисами в DI
  */
 #[Attribute(Attribute::TARGET_CLASS)]
-final class AsService
-{
-}
+final class AsService {}

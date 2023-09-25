@@ -17,9 +17,7 @@ use App\User\SignUp\Domain\UserId;
 #[AsService]
 final readonly class CreateProfile
 {
-    public function __construct(private Profiles $profiles)
-    {
-    }
+    public function __construct(private Profiles $profiles) {}
 
     public function __invoke(
         SaveProfileCommand $command,

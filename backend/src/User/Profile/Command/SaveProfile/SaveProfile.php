@@ -18,8 +18,7 @@ final readonly class SaveProfile
         private CreateProfile $createProfile,
         private UpdateProfile $updateProfile,
         private Profiles $profiles,
-    ) {
-    }
+    ) {}
 
     public function __invoke(
         SaveProfileCommand $command,

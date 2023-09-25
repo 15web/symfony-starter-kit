@@ -33,8 +33,7 @@ final class ApiTokenAuthenticator extends AbstractAuthenticator
         private readonly UserTokens $userTokens,
         private readonly Users $users,
         private readonly CreateExceptionJsonResponse $createExceptionJsonResponse,
-    ) {
-    }
+    ) {}
 
     public function supports(Request $request): ?bool
     {

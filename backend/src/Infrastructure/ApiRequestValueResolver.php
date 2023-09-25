@@ -21,9 +21,7 @@ use Throwable;
 #[AsService]
 final readonly class ApiRequestValueResolver implements ValueResolverInterface
 {
-    public function __construct(private SerializerInterface $serializer)
-    {
-    }
+    public function __construct(private SerializerInterface $serializer) {}
 
     /**
      * @return iterable<TApiRequest>

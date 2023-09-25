@@ -30,8 +30,7 @@ final readonly class CompleteTaskAction
         private CompleteTask $completeTask,
         private Flush $flush,
         private LoggerInterface $logger,
-    ) {
-    }
+    ) {}
 
     public function __invoke(
         #[ValueResolver(TaskArgumentValueResolver::class)]

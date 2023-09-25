@@ -14,9 +14,7 @@ use Symfony\Component\Uid\Uuid;
 #[AsService]
 final readonly class DeleteToken
 {
-    public function __construct(private UserTokens $userTokens)
-    {
-    }
+    public function __construct(private UserTokens $userTokens) {}
 
     public function __invoke(Uuid $userTokenId): void
     {

@@ -31,9 +31,7 @@ final class JsonLoginAuthenticator extends AbstractAuthenticator
     private const EMAIL_KEY = 'email';
     private const PASSWORD_KEY = 'password';
 
-    public function __construct(private readonly CreateExceptionJsonResponse $createExceptionJsonResponse)
-    {
-    }
+    public function __construct(private readonly CreateExceptionJsonResponse $createExceptionJsonResponse) {}
 
     public function supports(Request $request): ?bool
     {

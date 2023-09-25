@@ -13,9 +13,7 @@ use Doctrine\ORM\EntityManagerInterface;
 #[AsService]
 final readonly class FindAllCommentsByTaskIdAndUserId
 {
-    public function __construct(private EntityManagerInterface $entityManager)
-    {
-    }
+    public function __construct(private EntityManagerInterface $entityManager) {}
 
     /**
      * @return CommentData[]

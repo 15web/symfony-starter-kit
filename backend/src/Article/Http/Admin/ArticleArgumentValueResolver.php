@@ -22,9 +22,7 @@ use Webmozart\Assert\Assert;
 #[AsService]
 final readonly class ArticleArgumentValueResolver implements ValueResolverInterface
 {
-    public function __construct(private Articles $articles)
-    {
-    }
+    public function __construct(private Articles $articles) {}
 
     /**
      * @return iterable<Article>

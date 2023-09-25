@@ -28,8 +28,7 @@ final readonly class RemoveTaskAction
         private RemoveTask $removeTask,
         private Flush $flush,
         private LoggerInterface $logger,
-    ) {
-    }
+    ) {}
 
     public function __invoke(
         #[ValueResolver(TaskArgumentValueResolver::class)]

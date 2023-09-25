@@ -16,9 +16,7 @@ use Symfony\Component\Uid\Uuid;
 #[AsService]
 final readonly class ConfirmEmail
 {
-    public function __construct(private Users $users)
-    {
-    }
+    public function __construct(private Users $users) {}
 
     /**
      * @throws EmailAlreadyIsConfirmedException|UserNotFoundException

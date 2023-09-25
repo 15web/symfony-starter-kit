@@ -12,9 +12,7 @@ use Doctrine\ORM\EntityManagerInterface;
 #[AsService]
 final readonly class Flush
 {
-    public function __construct(private EntityManagerInterface $entityManager)
-    {
-    }
+    public function __construct(private EntityManagerInterface $entityManager) {}
 
     public function __invoke(): void
     {

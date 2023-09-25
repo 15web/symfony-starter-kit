@@ -14,7 +14,5 @@ final readonly class UncompletedTasksMessage
     /**
      * @param TaskData[] $tasks
      */
-    public function __construct(public string $email, public array $tasks)
-    {
-    }
+    public function __construct(public string $email, public array $tasks) {}
 }

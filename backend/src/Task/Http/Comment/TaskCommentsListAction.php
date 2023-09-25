@@ -26,9 +26,7 @@ use Symfony\Component\Uid\Uuid;
 #[AsController]
 final readonly class TaskCommentsListAction
 {
-    public function __construct(private FindAllCommentsByTaskIdAndUserId $findAllComments)
-    {
-    }
+    public function __construct(private FindAllCommentsByTaskIdAndUserId $findAllComments) {}
 
     /**
      * @return CommentData[]

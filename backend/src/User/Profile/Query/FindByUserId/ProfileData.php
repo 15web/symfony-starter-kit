@@ -12,6 +12,5 @@ final readonly class ProfileData
     public function __construct(
         public ?string $phone = null,
         public ?string $name = null
-    ) {
-    }
+    ) {}
 }

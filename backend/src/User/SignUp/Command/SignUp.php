@@ -27,8 +27,7 @@ final readonly class SignUp
         private Users $users,
         private MessageBusInterface $messageBus,
         private UserPasswordHasherInterface $passwordHasher,
-    ) {
-    }
+    ) {}
 
     public function __invoke(SignUpCommand $signUpCommand): void
     {

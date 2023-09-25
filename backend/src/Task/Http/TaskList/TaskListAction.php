@@ -30,8 +30,7 @@ final readonly class TaskListAction
     public function __construct(
         private CountAllTasksByUserId $countAllTasksByUserId,
         private FindAllTasksByUserId $findAllTasksByUserId,
-    ) {
-    }
+    ) {}
 
     public function __invoke(
         #[ValueResolver(UserIdArgumentValueResolver::class)]

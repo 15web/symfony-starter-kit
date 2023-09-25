@@ -20,8 +20,7 @@ final readonly class SendEmailConfirmToken
     public function __construct(
         private MailerInterface $mailer,
         private TranslatorInterface $translator
-    ) {
-    }
+    ) {}
 
     public function __invoke(ConfirmEmailMessage $message): void
     {

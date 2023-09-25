@@ -14,9 +14,7 @@ use App\Task\Domain\Tasks;
 #[AsService]
 final readonly class RemoveTask
 {
-    public function __construct(private Tasks $tasks)
-    {
-    }
+    public function __construct(private Tasks $tasks) {}
 
     public function __invoke(Task $task): void
     {

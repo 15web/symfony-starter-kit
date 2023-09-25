@@ -14,6 +14,5 @@ final readonly class FindTaskByIdQuery
     public function __construct(
         public Uuid $taskId,
         public Uuid $userId,
-    ) {
-    }
+    ) {}
 }

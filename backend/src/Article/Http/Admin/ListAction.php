@@ -20,9 +20,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[AsController]
 final readonly class ListAction
 {
-    public function __construct(private Articles $articles)
-    {
-    }
+    public function __construct(private Articles $articles) {}
 
     /**
      * @return Article[]

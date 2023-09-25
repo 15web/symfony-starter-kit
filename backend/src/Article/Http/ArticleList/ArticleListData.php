@@ -13,6 +13,5 @@ final readonly class ArticleListData
         public string $title,
         public string $alias,
         public string $body,
-    ) {
-    }
+    ) {}
 }

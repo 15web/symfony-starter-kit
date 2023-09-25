@@ -19,8 +19,7 @@ final readonly class FindAllTasksByUserId
         private Connection $connection,
         private Filter $filter,
         private DenormalizerInterface $denormalizer,
-    ) {
-    }
+    ) {}
 
     /**
      * @return TaskData[]

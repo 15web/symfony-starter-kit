@@ -22,8 +22,7 @@ final readonly class MailerSubscriber implements EventSubscriberInterface
         private string $fromEmail,
         #[Autowire('%env(string:MAILER_FROM_NAME)%')]
         private string $fromName
-    ) {
-    }
+    ) {}
 
     /**
      * @return array<class-string, string>

@@ -23,8 +23,7 @@ final readonly class GenerateRecoveryToken
         private Users $users,
         private RecoveryTokens $tokens,
         private MessageBusInterface $messageBus,
-    ) {
-    }
+    ) {}
 
     public function __invoke(GenerateRecoveryTokenCommand $command): void
     {

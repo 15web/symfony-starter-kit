@@ -19,9 +19,7 @@ use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 #[AsService]
 final readonly class UserIdArgumentValueResolver implements ValueResolverInterface
 {
-    public function __construct(private Security $security)
-    {
-    }
+    public function __construct(private Security $security) {}
 
     /**
      * @return iterable<UserId>

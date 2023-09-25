@@ -15,6 +15,5 @@ final readonly class CsvTaskData
         public Uuid $id,
         public string $taskName,
         public bool $isCompleted,
-    ) {
-    }
+    ) {}
 }

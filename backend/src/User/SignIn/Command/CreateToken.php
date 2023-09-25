@@ -16,9 +16,7 @@ use Symfony\Component\Uid\Uuid;
 #[AsService]
 final readonly class CreateToken
 {
-    public function __construct(private UserTokens $userTokens)
-    {
-    }
+    public function __construct(private UserTokens $userTokens) {}
 
     public function __invoke(UserId $userId, Uuid $userTokenId): void
     {

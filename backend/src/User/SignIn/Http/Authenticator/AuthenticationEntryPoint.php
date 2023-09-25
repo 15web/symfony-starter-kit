@@ -20,9 +20,7 @@ use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface
 #[AsService]
 final readonly class AuthenticationEntryPoint implements AuthenticationEntryPointInterface
 {
-    public function __construct(private CreateExceptionJsonResponse $createExceptionJsonResponse)
-    {
-    }
+    public function __construct(private CreateExceptionJsonResponse $createExceptionJsonResponse) {}
 
     public function start(Request $request, ?AuthenticationException $authException = null): Response
     {

@@ -16,9 +16,7 @@ use App\Seo\Domain\SeoResourceType;
 #[AsService]
 final readonly class SaveSeo
 {
-    public function __construct(private SeoCollection $seoCollection, private Flush $flush)
-    {
-    }
+    public function __construct(private SeoCollection $seoCollection, private Flush $flush) {}
 
     public function __invoke(SaveSeoCommand $command): Seo
     {

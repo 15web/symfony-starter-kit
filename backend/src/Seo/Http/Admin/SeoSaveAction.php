@@ -31,8 +31,7 @@ final readonly class SeoSaveAction
         private SaveSeo $saveSeo,
         private Flush $flush,
         private LoggerInterface $logger,
-    ) {
-    }
+    ) {}
 
     public function __invoke(
         #[ValueResolver(ApiRequestValueResolver::class)]

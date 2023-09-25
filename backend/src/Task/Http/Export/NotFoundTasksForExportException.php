@@ -9,6 +9,4 @@ use Exception;
 /**
  * Нет задач для экспорта
  */
-final class NotFoundTasksForExportException extends Exception
-{
-}
+final class NotFoundTasksForExportException extends Exception {}

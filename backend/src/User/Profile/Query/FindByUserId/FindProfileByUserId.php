@@ -13,9 +13,7 @@ use Doctrine\ORM\EntityManagerInterface;
 #[AsService]
 final readonly class FindProfileByUserId
 {
-    public function __construct(private EntityManagerInterface $entityManager)
-    {
-    }
+    public function __construct(private EntityManagerInterface $entityManager) {}
 
     public function __invoke(FindProfileByUserIdQuery $query): ProfileData
     {

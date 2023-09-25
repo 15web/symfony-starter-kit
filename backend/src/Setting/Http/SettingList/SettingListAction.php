@@ -17,9 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
 #[AsController]
 final readonly class SettingListAction
 {
-    public function __construct(private Settings $settings)
-    {
-    }
+    public function __construct(private Settings $settings) {}
 
     /**
      * @return Generator<SettingListData>

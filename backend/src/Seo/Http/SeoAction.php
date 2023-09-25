@@ -18,9 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
 #[AsController]
 final readonly class SeoAction
 {
-    public function __construct(private SeoCollection $seoCollection)
-    {
-    }
+    public function __construct(private SeoCollection $seoCollection) {}
 
     public function __invoke(
         #[ValueResolver(RequestAttributeValueResolver::class)]

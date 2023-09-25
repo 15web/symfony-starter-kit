@@ -9,6 +9,4 @@ use Exception;
 /**
  * Нельзя подтвердить уже подтвержденный email
  */
-final class EmailAlreadyIsConfirmedException extends Exception
-{
-}
+final class EmailAlreadyIsConfirmedException extends Exception {}

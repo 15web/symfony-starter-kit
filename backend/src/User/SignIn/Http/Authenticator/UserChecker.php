@@ -21,9 +21,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[AsService]
 final readonly class UserChecker implements UserCheckerInterface
 {
-    public function __construct(private MessageBusInterface $messageBus)
-    {
-    }
+    public function __construct(private MessageBusInterface $messageBus) {}
 
     public function checkPreAuth(UserInterface $user): void
     {
@@ -48,7 +46,5 @@ final readonly class UserChecker implements UserCheckerInterface
         );
     }
 
-    public function checkPostAuth(UserInterface $user): void
-    {
-    }
+    public function checkPostAuth(UserInterface $user): void {}
 }

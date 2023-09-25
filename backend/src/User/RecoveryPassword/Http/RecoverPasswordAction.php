@@ -25,9 +25,7 @@ use Symfony\Component\Uid\Uuid;
 #[AsController]
 final readonly class RecoverPasswordAction
 {
-    public function __construct(private RecoverPassword $recoverPassword, private Flush $flush)
-    {
-    }
+    public function __construct(private RecoverPassword $recoverPassword, private Flush $flush) {}
 
     public function __invoke(
         #[ValueResolver(UidValueResolver::class)]

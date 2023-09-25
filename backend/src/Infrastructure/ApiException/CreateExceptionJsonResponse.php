@@ -19,8 +19,7 @@ final readonly class CreateExceptionJsonResponse
     public function __construct(
         private SerializerInterface $serializer,
         private TranslatorInterface $translator
-    ) {
-    }
+    ) {}
 
     public function __invoke(ApiException $e): JsonResponse
     {

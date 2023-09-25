@@ -18,6 +18,5 @@ final readonly class TaskListResponse
     public function __construct(
         public array $data,
         public PaginationResponse $pagination
-    ) {
-    }
+    ) {}
 }

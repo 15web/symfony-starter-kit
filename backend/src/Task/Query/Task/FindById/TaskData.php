@@ -19,6 +19,5 @@ final readonly class TaskData
         public DateTimeImmutable $createdAt,
         public ?DateTimeImmutable $completedAt,
         public ?DateTimeImmutable $updatedAt,
-    ) {
-    }
+    ) {}
 }

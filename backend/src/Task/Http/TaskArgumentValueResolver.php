@@ -29,8 +29,7 @@ final readonly class TaskArgumentValueResolver implements ValueResolverInterface
     public function __construct(
         private Security $security,
         private Tasks $tasks,
-    ) {
-    }
+    ) {}
 
     /**
      * @return iterable<Task>

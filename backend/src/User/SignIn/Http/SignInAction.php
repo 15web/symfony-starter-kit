@@ -24,8 +24,7 @@ final readonly class SignInAction
     public function __construct(
         private CreateToken $createToken,
         private Flush $flush,
-    ) {
-    }
+    ) {}
 
     public function __invoke(
         #[ValueResolver(UserIdArgumentValueResolver::class)]

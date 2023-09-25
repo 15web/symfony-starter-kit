@@ -24,8 +24,7 @@ final readonly class XmlExporter implements Exporter
     public function __construct(
         private SerializerInterface $serializer,
         private Filesystem $filesystem,
-    ) {
-    }
+    ) {}
 
     public function getFormat(): Format
     {

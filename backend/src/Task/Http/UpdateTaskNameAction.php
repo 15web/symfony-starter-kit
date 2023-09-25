@@ -32,8 +32,7 @@ final readonly class UpdateTaskNameAction
         private UpdateTaskName $updateTaskName,
         private Flush $flush,
         private LoggerInterface $logger,
-    ) {
-    }
+    ) {}
 
     public function __invoke(
         #[ValueResolver(TaskArgumentValueResolver::class)]

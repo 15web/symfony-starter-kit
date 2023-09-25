@@ -9,6 +9,4 @@ use Exception;
 /**
  * Нельзя добавить комментарий в завершенную задачу
  */
-final class AddCommentToCompletedTaskException extends Exception
-{
-}
+final class AddCommentToCompletedTaskException extends Exception {}
