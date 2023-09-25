@@ -3,7 +3,7 @@ FROM php:8.2.7-fpm as base
 RUN apt-get update; \
     apt-get install -y --no-install-recommends unzip git;
 
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2.6.3 /usr/bin/composer /usr/bin/composer
 
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 RUN install-php-extensions pdo_mysql pdo_pgsql intl sysvsem
