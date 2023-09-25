@@ -23,6 +23,7 @@ return (new PhpCsFixer\Config())
         '@PER' => true,
         '@PER:risky' => true,
         '@DoctrineAnnotation' => true,
+        '@PHP80Migration:risky' => true,
         '@PHP82Migration' => true,
         '@PhpCsFixer' => true,
         '@PhpCsFixer:risky' => true,
@@ -60,7 +61,5 @@ return (new PhpCsFixer\Config())
 
         'ClassDocComment/class_doc_comment' => true,
         'Testdox/test_requires_testdox' => ['exclude' => 'SDK'],
-        'declare_strict_types' => true,
-        'single_line_empty_body' => true,
     ])
     ->setFinder($finder);
