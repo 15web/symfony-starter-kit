@@ -34,9 +34,9 @@ final readonly class UserChecker implements UserCheckerInterface
         }
 
         $this->messageBus->dispatch(
-            message: new ConfirmEmailMessage(
+            new ConfirmEmailMessage(
                 confirmToken: $user->confirmToken->value,
-                email: $user->userEmail->value,
+                email: $user->userEmail,
             ),
         );
 

@@ -17,10 +17,11 @@ final readonly class TaskName implements ValueObject
     #[ORM\Column]
     private string $value;
 
+    /**
+     * @param non-empty-string $value
+     */
     public function __construct(string $value)
     {
-        Assert::notEmpty($value);
-
         $this->value = $value;
     }
 

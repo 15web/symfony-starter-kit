@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\User\SignUp\Domain;
 
 use App\Infrastructure\AsService;
+use App\Infrastructure\ValueObject\Email;
 use Doctrine\ORM\EntityManagerInterface;
 use DomainException;
 use Symfony\Component\Uid\Uuid;
@@ -30,10 +31,10 @@ final readonly class Users
         return $user;
     }
 
-    public function findByEmail(string $email): ?User
+    public function findByEmail(Email $email): ?User
     {
         return $this->entityManager->getRepository(User::class)->findOneBy([
-            'userEmail.value' => $email,
+            'userEmail.value' => $email->value,
         ]);
     }
 

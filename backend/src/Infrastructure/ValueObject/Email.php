@@ -13,15 +13,14 @@ use Webmozart\Assert\Assert;
 #[ORM\Embeddable]
 final readonly class Email implements ValueObject
 {
-    #[ORM\Column]
-    public string $value;
-
-    public function __construct(string $value)
-    {
-        Assert::notEmpty($value);
+    /**
+     * @param non-empty-string $value
+     */
+    public function __construct(
+        #[ORM\Column]
+        public string $value,
+    ) {
         Assert::email($value);
-
-        $this->value = $value;
     }
 
     /**
