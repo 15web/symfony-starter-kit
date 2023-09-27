@@ -28,6 +28,10 @@ final class EmailTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
+        /**
+         * @phpstan-ignore-next-line
+         * @psalm-suppress InvalidArgument
+         */
         new Email('');
     }
 

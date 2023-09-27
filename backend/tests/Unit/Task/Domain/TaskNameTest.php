@@ -29,6 +29,10 @@ final class TaskNameTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
+        /**
+         * @phpstan-ignore-next-line
+         * @psalm-suppress InvalidArgument
+         */
         new TaskName('');
     }
 }

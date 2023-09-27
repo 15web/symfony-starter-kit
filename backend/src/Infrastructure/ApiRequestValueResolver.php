@@ -8,6 +8,7 @@ use App\Infrastructure\ApiException\ApiBadRequestException;
 use CuyZ\Valinor\Mapper\MappingError;
 use CuyZ\Valinor\Mapper\Source\Exception\InvalidSource;
 use CuyZ\Valinor\Mapper\Source\JsonSource;
+use CuyZ\Valinor\Mapper\Tree\Message\ErrorMessage;
 use CuyZ\Valinor\Mapper\Tree\Message\MessageBuilder;
 use CuyZ\Valinor\Mapper\Tree\Message\Messages;
 use CuyZ\Valinor\MapperBuilder;
@@ -25,8 +26,6 @@ use Webmozart\Assert\InvalidArgumentException;
 #[AsService]
 final readonly class ApiRequestValueResolver implements ValueResolverInterface
 {
-    public function __construct() {}
-
     /**
      * @return iterable<TApiRequest>
      *
@@ -42,7 +41,7 @@ final readonly class ApiRequestValueResolver implements ValueResolverInterface
 
         try {
             $requestObject = (new MapperBuilder())
-                ->filterExceptions(function (Throwable $exception) {
+                ->filterExceptions(static function (Throwable $exception): ErrorMessage {
                     if ($exception instanceof InvalidArgumentException) {
                         return MessageBuilder::from($exception);
                     }
@@ -53,10 +52,8 @@ final readonly class ApiRequestValueResolver implements ValueResolverInterface
                 ->map(
                     signature: $className,
                     source: new JsonSource($request->getContent()),
-                )
-            ;
+                );
         } catch (MappingError $e) {
-
             $messages = Messages::flattenFromNode(
                 node: $e->node()
             );
@@ -65,9 +62,9 @@ final readonly class ApiRequestValueResolver implements ValueResolverInterface
 
             $allMessages = '';
             foreach ($errorMessages as $message) {
-                $allMessages .= ' '. $message
-                        ->withParameter('source_value', $message->node()->path())
-                        ->toString();
+                $allMessages .= ' '.$message
+                    ->withParameter('source_value', $message->node()->path())
+                    ->toString();
             }
 
             throw new ApiBadRequestException($allMessages, $e);

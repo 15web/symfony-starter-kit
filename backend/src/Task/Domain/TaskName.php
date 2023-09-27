@@ -6,7 +6,6 @@ namespace App\Task\Domain;
 
 use App\Infrastructure\ValueObject\ValueObject;
 use Doctrine\ORM\Mapping as ORM;
-use Webmozart\Assert\Assert;
 
 /**
  * Наименование задачи
