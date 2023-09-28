@@ -43,6 +43,9 @@ final readonly class SignUp
             userRole: UserRole::User,
         );
 
+        /**
+         * @var non-empty-string $hashedPassword
+         */
         $hashedPassword = $this->passwordHasher->hashPassword(
             user: $user,
             plainPassword: $signUpCommand->password,

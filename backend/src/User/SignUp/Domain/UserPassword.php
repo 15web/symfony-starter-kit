@@ -6,7 +6,6 @@ namespace App\User\SignUp\Domain;
 
 use App\Infrastructure\ValueObject\ValueObject;
 use Doctrine\ORM\Mapping as ORM;
-use Webmozart\Assert\Assert;
 
 /**
  * Пароль пользователя
@@ -17,10 +16,11 @@ final readonly class UserPassword implements ValueObject
     #[ORM\Column]
     public string $value;
 
+    /**
+     * @param non-empty-string $hashedPassword
+     */
     public function __construct(string $hashedPassword)
     {
-        Assert::notEmpty($hashedPassword);
-
         $this->value = $hashedPassword;
     }
 

@@ -12,5 +12,13 @@ use Symfony\Component\Uid\Uuid;
  */
 final readonly class UserData
 {
-    public function __construct(public Uuid $id, public Email $email) {}
+    public Email $email;
+
+    /**
+     * @param non-empty-string $email
+     */
+    public function __construct(public Uuid $id, string $email)
+    {
+        $this->email = new Email($email);
+    }
 }

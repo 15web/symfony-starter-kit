@@ -4,19 +4,18 @@ declare(strict_types=1);
 
 namespace App\Article\Http\Admin;
 
-use Webmozart\Assert\Assert;
-
 /**
  * Объект запроса на создание статьи
  */
 final readonly class CreateRequest
 {
+    /**
+     * @param non-empty-string $title
+     * @param non-empty-string $alias
+     */
     public function __construct(
         public string $title,
         public string $alias,
         public string $body = '',
-    ) {
-        Assert::notEmpty($title, 'Укажите заголовок');
-        Assert::notEmpty($alias, 'Укажите алиас');
-    }
+    ) {}
 }

@@ -12,6 +12,13 @@ use Webmozart\Assert\Assert;
  */
 final readonly class SaveSeoCommand
 {
+    /**
+     * @param non-empty-string $type
+     * @param non-empty-string $identity
+     * @param non-empty-string $title
+     * @param non-empty-string|null $description
+     * @param non-empty-string|null $keywords
+     */
     public function __construct(
         public string $type,
         public string $identity,
@@ -19,11 +26,6 @@ final readonly class SaveSeoCommand
         public ?string $description,
         public ?string $keywords,
     ) {
-        Assert::notEmpty($type, 'Укажите тип');
-        Assert::notEmpty($identity, 'Укажите идентификатор');
-        Assert::notEmpty($title, 'Укажите заголовок');
         Assert::inArray($type, array_column(SeoResourceType::cases(), 'value'), 'Указан неверный тип');
-        Assert::nullOrNotEmpty($description, 'Укажите описание');
-        Assert::nullOrNotEmpty($keywords, 'Укажите ключевые слова');
     }
 }

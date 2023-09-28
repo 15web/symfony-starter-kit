@@ -35,6 +35,9 @@ final readonly class RecoverPassword
 
         $user = $this->users->getById($token->getUserId());
 
+        /**
+         * @var non-empty-string $hashedPassword
+         */
         $hashedPassword = $this->passwordHasher->hashPassword(
             user: $user,
             plainPassword: $recoverPasswordCommand->password

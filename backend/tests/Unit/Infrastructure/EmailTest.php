@@ -23,18 +23,6 @@ final class EmailTest extends TestCase
         self::assertSame($expectedEmail, $userEmail->value);
     }
 
-    #[TestDox('Нельзя создать пустой email')]
-    public function testEmptyEmail(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-
-        /**
-         * @phpstan-ignore-next-line
-         * @psalm-suppress InvalidArgument
-         */
-        new Email('');
-    }
-
     #[TestDox('Невалидный формат email')]
     public function testInvalidEmail(): void
     {
