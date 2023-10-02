@@ -2,22 +2,27 @@
 
 declare(strict_types=1);
 
-$finder = (new PhpCsFixer\Finder())
+use Dev\PHPCsFixer\Comment\ClassDocCommentFixer;
+use Dev\PHPCsFixer\PhpUnit\TestdoxFixer;
+use PhpCsFixer\Config;
+use PhpCsFixer\Finder;
+
+$finder = (new Finder())
     ->in([
-        __DIR__.'/src',
-        __DIR__.'/src-dev',
-        __DIR__.'/tests',
+        __DIR__.'/../src',
+        __DIR__.'/../src-dev',
+        __DIR__.'/../tests',
     ])
     ->append([
         __FILE__,
     ]);
 
-return (new PhpCsFixer\Config())
-    ->setCacheFile(__DIR__.'/var/cache/.php-cs-fixer-cache')
+return (new Config())
+    ->setCacheFile(__DIR__.'/../var/cache/.php-cs-fixer-cache')
     ->setRiskyAllowed(true)
     ->registerCustomFixers([
-        new \Dev\PHPCsFixer\Comment\ClassDocCommentFixer(),
-        new \Dev\PHPCsFixer\PhpUnit\TestdoxFixer(),
+        new ClassDocCommentFixer(),
+        new TestdoxFixer(),
     ])
     ->setRules([
         '@PER' => true,

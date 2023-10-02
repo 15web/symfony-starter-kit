@@ -54,7 +54,7 @@ test-verbose: # Запуск тестов с детальным описание
 test-single: # Запуск одного теста, пример: make test-single class=TaskCommentBodyTest
 	./setup_envs.bash
 	docker compose run --rm backend-cli bin/console --env=test cache:clear
-	@docker compose run --rm backend-cli bash -c "APP_ENV=test vendor/bin/phpunit --filter=$(class)"
+	@docker compose run --rm backend-cli bash -c "APP_ENV=test vendor/bin/phpunit --configuration=src-dev/phpunit.xml --filter=$(class)"
 
 lint: container-lint validate-doctrine-schema twig-lint fixer-check rector-check phpstan psalm deptrac-check deptrac-check-unassigned cache-prod-check
 
@@ -80,43 +80,43 @@ twig-lint: # Линтер твиг-шаблонов
 	docker compose run --rm backend-cli bin/console lint:twig src/Mailer/templates
 
 phpstan: # Запустить phpstan
-	docker compose run --rm backend-cli vendor/bin/phpstan analyse -c phpstan-config.neon --memory-limit 2G --ansi
+	docker compose run --rm backend-cli vendor/bin/phpstan analyse -c src-dev/phpstan-config.neon --memory-limit 2G --ansi
 
 psalm:	# Запустить psalm
-	docker compose run --rm backend-cli vendor/bin/psalm
+	docker compose run --rm backend-cli vendor/bin/psalm --config=src-dev/psalm.xml
 
 fixer-check: # Проверка стиля написания кода
-	docker compose run --rm backend-cli vendor/bin/php-cs-fixer --config=php-cs-fixer-config.php fix --dry-run --diff --ansi
+	docker compose run --rm backend-cli vendor/bin/php-cs-fixer --config=src-dev/php-cs-fixer-config.php fix --dry-run --diff --ansi
 
 fixer-fix: # Фикс стиля написания кода
-	docker compose run --rm backend-cli vendor/bin/php-cs-fixer --config=php-cs-fixer-config.php fix
+	docker compose run --rm backend-cli vendor/bin/php-cs-fixer --config=src-dev/php-cs-fixer-config.php fix
 
 rector-check: # Какой код необходимо отрефакторить
-	docker compose run --rm backend-cli vendor/bin/rector process --dry-run --ansi
+	docker compose run --rm backend-cli vendor/bin/rector process --config=src-dev/rector.php --dry-run --ansi
 
 rector-fix: # Рефакторинг кода
-	docker compose run --rm backend-cli vendor/bin/rector process --clear-cache
+	docker compose run --rm backend-cli vendor/bin/rector process --config=src-dev/rector.php --clear-cache
 
 cache-prod-check: # Очистка кода для прода
 	docker compose run --rm backend-cli bin/console cache:clear --env=prod
 
 deptrac-check: # Контроль зависимостей
-	docker compose run --rm backend-cli vendor/bin/deptrac analyse --fail-on-uncovered --report-uncovered --config-file=deptrac.yaml --cache-file=var/cache/.deptrac.cache
+	docker compose run --rm backend-cli vendor/bin/deptrac analyse --fail-on-uncovered --report-uncovered --config-file=src-dev/deptrac.yaml --cache-file=var/cache/.deptrac.cache
 
 deptrac-check-unassigned: # Покрытие кода с deptrac
-	docker compose run --rm backend-cli vendor/bin/deptrac debug:unassigned --config-file=deptrac.yaml --cache-file=var/cache/.deptrac.cache | tee /dev/stderr | grep 'There are no unassigned tokens'
+	docker compose run --rm backend-cli vendor/bin/deptrac debug:unassigned --config-file=src-dev/deptrac.yaml --cache-file=var/cache/.deptrac.cache | tee /dev/stderr | grep 'There are no unassigned tokens'
 
 test: # Запуск тестов
 	docker compose run --rm backend-cli bin/console --env=test cache:clear
-	docker compose run --rm backend-cli bash -c 'APP_ENV=test vendor/bin/paratest -p4'
+	docker compose run --rm backend-cli bash -c 'APP_ENV=test vendor/bin/paratest --configuration=src-dev/phpunit.xml -p4'
 
 check-openapi-diff: # Валидация соответствия роутов и схемы openapi
-	docker compose run --rm backend-cli bin/console app:openapi-routes-diff ./openapi.yaml
+	docker compose run --rm backend-cli bin/console app:openapi-routes-diff ./src-dev/openapi.yaml
 
 check-openapi-schema: spectral # Валидация openapi.yaml
 
 spectral: # Валидация openapi.yaml с помощью spectral
-	docker run --rm -it -v ${PWD}/backend:/app stoplight/spectral lint /app/openapi.yaml -F warn --ruleset=/app/.spectral.yaml
+	docker run --rm -it -v ${PWD}/backend:/app stoplight/spectral lint /app/src-dev/openapi.yaml -F warn --ruleset=/app/src-dev/.spectral.yaml
 
 deprecations-check: # Проверка на устаревший функционал
 	docker compose run --rm backend-cli bin/console debug:container --deprecations

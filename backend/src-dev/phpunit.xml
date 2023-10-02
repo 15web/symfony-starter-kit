@@ -2,11 +2,11 @@
 
 <!-- https://phpunit.readthedocs.io/en/latest/configuration.html -->
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         xsi:noNamespaceSchemaLocation="../vendor/phpunit/phpunit/phpunit.xsd"
          backupGlobals="false"
          colors="true"
-         bootstrap="tests/bootstrap.php"
-         cacheResultFile="./var/cache/.phpunit.result.cache"
+         bootstrap="../tests/bootstrap.php"
+         cacheResultFile="../www/var/cache/.phpunit.result.cache"
 >
     <php>
         <ini name="display_errors" value="1" />
@@ -20,7 +20,7 @@
 
     <testsuites>
         <testsuite name="Project Test Suite">
-            <directory>tests</directory>
+            <directory>../tests</directory>
         </testsuite>
     </testsuites>
 
