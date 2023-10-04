@@ -79,6 +79,6 @@ final class ApiTokenAuthenticator extends AbstractAuthenticator
          */
         $message = strtr($exception->getMessageKey(), $exception->getMessageData());
 
-        return ($this->createExceptionJsonResponse)(new ApiUnauthorizedException($message));
+        return ($this->createExceptionJsonResponse)(new ApiUnauthorizedException([$message]));
     }
 }

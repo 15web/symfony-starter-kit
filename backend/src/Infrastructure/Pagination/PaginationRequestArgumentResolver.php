@@ -37,7 +37,7 @@ final class PaginationRequestArgumentResolver implements ValueResolverInterface
         try {
             $paginationRequest = new PaginationRequest($offset, $limit);
         } catch (InvalidArgumentException $exception) {
-            throw new ApiBadRequestException($exception->getMessage());
+            throw new ApiBadRequestException([$exception->getMessage()]);
         }
 
         return [$paginationRequest];

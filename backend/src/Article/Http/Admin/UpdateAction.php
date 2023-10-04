@@ -36,7 +36,7 @@ final readonly class UpdateAction
         $sameArticle = $this->articles->findByAlias($updateRequest->alias);
         if ($sameArticle !== null && $sameArticle->getId() !== $article->getId()) {
             throw new ApiBadResponseException(
-                errorMessage: 'article.not_found_by_alias',
+                errors: ['article.not_found_by_alias'],
                 apiCode: ApiErrorCode::ArticleAlreadyExist
             );
         }

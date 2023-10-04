@@ -48,7 +48,7 @@ final readonly class SeoSaveAction
                 self::class => __FUNCTION__,
             ]);
         } catch (InvalidArgumentException $e) {
-            throw new ApiBadRequestException($e->getMessage());
+            throw new ApiBadRequestException([$e->getMessage()]);
         }
 
         return new SuccessResponse();

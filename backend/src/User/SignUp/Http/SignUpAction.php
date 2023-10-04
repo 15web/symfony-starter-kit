@@ -39,10 +39,10 @@ final readonly class SignUpAction
             ($this->signUp)($signUpCommand);
             ($this->flush)();
         } catch (InvalidArgumentException $e) {
-            throw new ApiBadRequestException($e->getMessage());
+            throw new ApiBadRequestException([$e->getMessage()]);
         } catch (UserAlreadyExistException $e) {
             throw new ApiBadResponseException(
-                errorMessage: $e->getMessage(),
+                errors: [$e->getMessage()],
                 apiCode: ApiErrorCode::UserAlreadyExist,
             );
         }

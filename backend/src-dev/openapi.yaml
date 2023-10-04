@@ -953,7 +953,8 @@ components:
             required:
                 - error
                 - code
-                - errorMessage
+                - message
+                - errors
             additionalProperties: false
             properties:
                 error:
@@ -961,12 +962,15 @@ components:
                     example: true
                 code:
                     type: integer
-                errorMessage:
+                message:
                     type: string
+                errors:
+                    type: array
             example:
                 error: true
                 code: 1
-                errorMessage: Ошибка валидации
+                message: Ошибка валидации
+                errors: ['entity.invalid_name']
         authResponse:
             type: object
             required:

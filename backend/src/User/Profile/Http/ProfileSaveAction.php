@@ -50,7 +50,7 @@ final readonly class ProfileSaveAction
 
             ($this->flush)();
         } catch (InvalidArgumentException $e) {
-            throw new ApiBadRequestException($e->getMessage());
+            throw new ApiBadRequestException([$e->getMessage()]);
         }
 
         return ($this->findProfileByUserId)(

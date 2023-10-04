@@ -53,7 +53,7 @@ final readonly class UpdateTaskNameAction
                 self::class => __FUNCTION__,
             ]);
         } catch (InvalidArgumentException $e) {
-            throw new ApiBadRequestException($e->getMessage());
+            throw new ApiBadRequestException([$e->getMessage()]);
         }
 
         return new SuccessResponse();

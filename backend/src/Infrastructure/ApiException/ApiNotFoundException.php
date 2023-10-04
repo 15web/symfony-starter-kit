@@ -12,14 +12,19 @@ use Symfony\Component\HttpFoundation\Response;
  */
 final class ApiNotFoundException extends Exception implements ApiException
 {
-    public function __construct(private readonly string $errorMessage = 'Запись не найдена')
+    private const MESSAGE = 'Запись не найдена';
+
+    /**
+     * @param non-empty-list<non-empty-string> $errors
+     */
+    public function __construct(private readonly array $errors)
     {
         parent::__construct();
     }
 
     public function getErrorMessage(): string
     {
-        return $this->errorMessage;
+        return self::MESSAGE;
     }
 
     public function getHttpCode(): int
@@ -30,5 +35,13 @@ final class ApiNotFoundException extends Exception implements ApiException
     public function getApiCode(): int
     {
         return Response::HTTP_NOT_FOUND;
+    }
+
+    /**
+     * @return non-empty-list<non-empty-string>
+     */
+    public function getErrors(): array
+    {
+        return $this->errors;
     }
 }

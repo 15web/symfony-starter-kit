@@ -56,7 +56,7 @@ final class JsonLoginAuthenticator extends AbstractAuthenticator
 
             $password = $data[self::PASSWORD_KEY];
         } catch (Throwable $e) {
-            throw new ApiBadRequestException(previous: $e);
+            throw new ApiBadRequestException(errors: [$e->getMessage()], previous: $e);
         }
 
         return new Passport(
@@ -77,6 +77,6 @@ final class JsonLoginAuthenticator extends AbstractAuthenticator
             $message = 'Неверный логин или пароль';
         }
 
-        return ($this->createExceptionJsonResponse)(new ApiUnauthorizedException($message));
+        return ($this->createExceptionJsonResponse)(new ApiUnauthorizedException([$message]));
     }
 }

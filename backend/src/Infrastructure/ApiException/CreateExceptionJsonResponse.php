@@ -23,8 +23,10 @@ final readonly class CreateExceptionJsonResponse
 
     public function __invoke(ApiException $e): JsonResponse
     {
+        $translatedErrors = array_map(fn (string $error): string => $this->translator->trans($error), $e->getErrors());
+
         $content = $this->serializer->serialize(
-            new ApiErrorResponse($this->translator->trans($e->getErrorMessage()), $e->getApiCode()),
+            new ApiErrorResponse($this->translator->trans($e->getErrorMessage()), $translatedErrors, $e->getApiCode()),
             JsonEncoder::FORMAT
         );
 

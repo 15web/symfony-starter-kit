@@ -36,7 +36,7 @@ final readonly class ArticleArgumentValueResolver implements ValueResolverInterf
         /** @var string|null $id */
         $id = $request->attributes->get('id');
         if ($id === null) {
-            throw new ApiBadRequestException('Укажите id');
+            throw new ApiBadRequestException(['Укажите id']);
         }
 
         try {
@@ -45,10 +45,10 @@ final readonly class ArticleArgumentValueResolver implements ValueResolverInterf
             $article = $this->articles->findById(Uuid::fromString($id));
 
             if ($article === null) {
-                throw new ApiNotFoundException('Статья не найдена');
+                throw new ApiNotFoundException(['Статья не найдена']);
             }
         } catch (InvalidArgumentException $exception) {
-            throw new ApiBadRequestException($exception->getMessage());
+            throw new ApiBadRequestException([$exception->getMessage()]);
         }
 
         return [$article];

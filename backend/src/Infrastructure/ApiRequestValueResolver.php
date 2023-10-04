@@ -60,16 +60,14 @@ final readonly class ApiRequestValueResolver implements ValueResolverInterface
 
             $errorMessages = $messages->errors();
 
-            $allMessages = '';
+            $allMessages = [];
             foreach ($errorMessages as $message) {
-                $allMessages .= ' '.$message
-                    ->withParameter('source_value', $message->node()->path())
-                    ->toString();
+                $allMessages[] = $message->withParameter('source_value', $message->node()->path())->toString();
             }
 
             throw new ApiBadRequestException($allMessages, $e);
         } catch (InvalidSource $e) {
-            throw new ApiBadRequestException($e->getMessage(), $e);
+            throw new ApiBadRequestException([$e->getMessage()], $e);
         }
 
         return [$requestObject];

@@ -46,7 +46,7 @@ final readonly class ExportTaskAction
             );
         } catch (NotFoundTasksForExportException $e) {
             throw new ApiBadResponseException(
-                errorMessage: $e->getMessage(),
+                errors: [$e->getMessage()],
                 apiCode: ApiErrorCode::NotFoundTasksForExport,
             );
         }

@@ -41,7 +41,7 @@ final readonly class RecoverPasswordAction
 
             ($this->flush)();
         } catch (RecoveryTokenNotFoundException $e) {
-            throw new ApiNotFoundException($e->getMessage());
+            throw new ApiNotFoundException([$e->getMessage()]);
         }
 
         return new SuccessResponse();

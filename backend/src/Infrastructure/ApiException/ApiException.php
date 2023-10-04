@@ -14,4 +14,6 @@ interface ApiException
     public function getApiCode(): int;
 
     public function getErrorMessage(): string;
+
+    public function getErrors(): array;
 }

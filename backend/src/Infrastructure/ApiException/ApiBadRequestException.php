@@ -13,8 +13,13 @@ use Throwable;
  */
 final class ApiBadRequestException extends Exception implements ApiException
 {
+    private const MESSAGE = 'Укажите корректный запрос';
+
+    /**
+     * @param non-empty-list<non-empty-string> $errors
+     */
     public function __construct(
-        private readonly string $errorMessage = 'Укажите корректный запрос',
+        private readonly array $errors,
         ?Throwable $previous = null,
     ) {
         parent::__construct(previous: $previous);
@@ -22,7 +27,7 @@ final class ApiBadRequestException extends Exception implements ApiException
 
     public function getErrorMessage(): string
     {
-        return $this->errorMessage;
+        return self::MESSAGE;
     }
 
     public function getHttpCode(): int
@@ -33,5 +38,13 @@ final class ApiBadRequestException extends Exception implements ApiException
     public function getApiCode(): int
     {
         return Response::HTTP_BAD_REQUEST;
+    }
+
+    /**
+     * @return non-empty-list<non-empty-string>
+     */
+    public function getErrors(): array
+    {
+        return $this->errors;
     }
 }

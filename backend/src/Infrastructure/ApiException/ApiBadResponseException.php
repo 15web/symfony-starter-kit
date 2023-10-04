@@ -12,14 +12,19 @@ use Symfony\Component\HttpFoundation\Response;
  */
 final class ApiBadResponseException extends Exception implements ApiException
 {
-    public function __construct(private readonly string $errorMessage, private readonly ApiErrorCode $apiCode)
+    private const MESSAGE = 'Ошибка';
+
+    /**
+     * @param non-empty-list<non-empty-string> $errors
+     */
+    public function __construct(private readonly array $errors, private readonly ApiErrorCode $apiCode)
     {
         parent::__construct();
     }
 
     public function getErrorMessage(): string
     {
-        return $this->errorMessage;
+        return self::MESSAGE;
     }
 
     public function getHttpCode(): int
@@ -30,5 +35,13 @@ final class ApiBadResponseException extends Exception implements ApiException
     public function getApiCode(): int
     {
         return $this->apiCode->value;
+    }
+
+    /**
+     * @return non-empty-list<non-empty-string>
+     */
+    public function getErrors(): array
+    {
+        return $this->errors;
     }
 }

@@ -58,7 +58,7 @@ final readonly class AddCommentOnTaskAction
                 self::class => __FUNCTION__,
             ]);
         } catch (AddCommentToCompletedTaskException $exception) {
-            throw new ApiBadRequestException($exception->getMessage());
+            throw new ApiBadRequestException([$exception->getMessage()]);
         }
 
         return new SuccessResponse();

@@ -44,7 +44,7 @@ final readonly class TaskInfoAction
                 ),
             );
         } catch (TaskNotFoundException $e) {
-            throw new ApiNotFoundException($e->getMessage());
+            throw new ApiNotFoundException([$e->getMessage()]);
         }
 
         return $taskData;

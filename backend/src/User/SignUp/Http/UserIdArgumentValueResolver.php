@@ -34,12 +34,8 @@ final readonly class UserIdArgumentValueResolver implements ValueResolverInterfa
 
         $user = $this->security->getUser();
 
-        if ($user === null) {
-            throw new ApiUnauthorizedException();
-        }
-
         if (!$user instanceof User) {
-            throw new ApiUnauthorizedException();
+            throw new ApiUnauthorizedException(['Необходимо пройти аутентификацию']);
         }
 
         return [$user->getUserId()];

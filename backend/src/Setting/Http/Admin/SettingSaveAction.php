@@ -51,9 +51,9 @@ final readonly class SettingSaveAction
                 self::class => __FUNCTION__,
             ]);
         } catch (SettingNotFoundException $e) {
-            throw new ApiNotFoundException($e->getMessage());
+            throw new ApiNotFoundException([$e->getMessage()]);
         } catch (InvalidArgumentException $e) {
-            throw new ApiBadRequestException($e->getMessage());
+            throw new ApiBadRequestException([$e->getMessage()]);
         }
 
         return new SuccessResponse();
