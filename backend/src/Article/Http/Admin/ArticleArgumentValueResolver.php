@@ -40,15 +40,15 @@ final readonly class ArticleArgumentValueResolver implements ValueResolverInterf
         }
 
         try {
-            Assert::uuid($id, 'Укажите валидный id');
+            Assert::uuid($id);
 
             $article = $this->articles->findById(Uuid::fromString($id));
 
             if ($article === null) {
                 throw new ApiNotFoundException(['Статья не найдена']);
             }
-        } catch (InvalidArgumentException $exception) {
-            throw new ApiBadRequestException([$exception->getMessage()]);
+        } catch (InvalidArgumentException) {
+            throw new ApiBadRequestException(['Укажите валидный id']);
         }
 
         return [$article];

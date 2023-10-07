@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace App\Infrastructure;
 
 use App\Infrastructure\ApiException\ApiBadRequestException;
+use App\Infrastructure\ApiException\BuildMappingErrorMessages;
 use CuyZ\Valinor\Mapper\MappingError;
 use CuyZ\Valinor\Mapper\Source\Exception\InvalidSource;
 use CuyZ\Valinor\Mapper\Source\JsonSource;
 use CuyZ\Valinor\Mapper\Tree\Message\ErrorMessage;
 use CuyZ\Valinor\Mapper\Tree\Message\MessageBuilder;
-use CuyZ\Valinor\Mapper\Tree\Message\Messages;
 use CuyZ\Valinor\MapperBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
@@ -26,6 +26,8 @@ use Webmozart\Assert\InvalidArgumentException;
 #[AsService]
 final readonly class ApiRequestValueResolver implements ValueResolverInterface
 {
+    public function __construct(private BuildMappingErrorMessages $buildMappingErrorMessages) {}
+
     /**
      * @return iterable<TApiRequest>
      *
@@ -54,20 +56,11 @@ final readonly class ApiRequestValueResolver implements ValueResolverInterface
                     source: new JsonSource($request->getContent()),
                 );
         } catch (MappingError $e) {
-            $messages = Messages::flattenFromNode(
-                node: $e->node()
-            );
+            $errorMessages = ($this->buildMappingErrorMessages)($e);
 
-            $errorMessages = $messages->errors();
-
-            $allMessages = [];
-            foreach ($errorMessages as $message) {
-                $allMessages[] = $message->withParameter('source_value', $message->node()->path())->toString();
-            }
-
-            throw new ApiBadRequestException($allMessages, $e);
+            throw new ApiBadRequestException($errorMessages, $e);
         } catch (InvalidSource $e) {
-            throw new ApiBadRequestException([$e->getMessage()], $e);
+            throw new ApiBadRequestException(['Невалидный json'], $e);
         }
 
         return [$requestObject];

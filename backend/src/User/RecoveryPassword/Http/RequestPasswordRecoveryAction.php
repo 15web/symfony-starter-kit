@@ -36,8 +36,8 @@ final readonly class RequestPasswordRecoveryAction
             ($this->generateRecoveryToken)($command);
 
             ($this->flush)();
-        } catch (UserNotFoundException $e) {
-            throw new ApiNotFoundException([$e->getMessage()]);
+        } catch (UserNotFoundException) {
+            throw new ApiNotFoundException(['Пользователь не найден']);
         }
 
         return new SuccessResponse();

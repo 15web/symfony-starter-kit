@@ -15,5 +15,8 @@ interface ApiException
 
     public function getErrorMessage(): string;
 
+    /**
+     * @return non-empty-list<non-empty-string>
+     */
     public function getErrors(): array;
 }

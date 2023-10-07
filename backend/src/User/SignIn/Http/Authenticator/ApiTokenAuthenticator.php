@@ -76,6 +76,8 @@ final class ApiTokenAuthenticator extends AbstractAuthenticator
         /**
          * Генерирует сообщение об ошибке по шаблону, например:
          * strtr('Too many failed login attempts, please try again in %minutes% minute', ['%minutes%' => $value])
+         *
+         * @var non-empty-string $message
          */
         $message = strtr($exception->getMessageKey(), $exception->getMessageData());
 

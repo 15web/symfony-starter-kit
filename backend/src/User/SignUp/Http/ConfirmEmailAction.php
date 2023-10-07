@@ -38,13 +38,13 @@ final readonly class ConfirmEmailAction
         try {
             ($this->confirmEmail)($confirmToken);
             ($this->flush)();
-        } catch (EmailAlreadyIsConfirmedException $e) {
+        } catch (EmailAlreadyIsConfirmedException) {
             throw new ApiBadResponseException(
-                errors: [$e->getMessage()],
+                errors: ['Нельзя подтвердить уже подтвержденный email'],
                 apiCode: ApiErrorCode::EmailAlreadyIsConfirmed,
             );
-        } catch (UserNotFoundException $e) {
-            throw new ApiNotFoundException([$e->getMessage()]);
+        } catch (UserNotFoundException) {
+            throw new ApiNotFoundException(['Пользователь не найден']);
         }
 
         return new SuccessResponse();

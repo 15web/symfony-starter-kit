@@ -43,8 +43,8 @@ final readonly class TaskInfoAction
                     userId: $userId->value,
                 ),
             );
-        } catch (TaskNotFoundException $e) {
-            throw new ApiNotFoundException([$e->getMessage()]);
+        } catch (TaskNotFoundException) {
+            throw new ApiNotFoundException(['Задача не найдена']);
         }
 
         return $taskData;

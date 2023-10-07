@@ -19,6 +19,7 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordC
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Throwable;
 use Webmozart\Assert\Assert;
+use Webmozart\Assert\InvalidArgumentException;
 
 /**
  * Аутентификатор по почте и паролю
@@ -55,8 +56,10 @@ final class JsonLoginAuthenticator extends AbstractAuthenticator
             Assert::email($email);
 
             $password = $data[self::PASSWORD_KEY];
+        } catch (InvalidArgumentException $e) {
+            throw new ApiBadRequestException(errors: ['Некорректный email'], previous: $e);
         } catch (Throwable $e) {
-            throw new ApiBadRequestException(errors: [$e->getMessage()], previous: $e);
+            throw new ApiBadRequestException(errors: ['Невалидный json'], previous: $e);
         }
 
         return new Passport(

@@ -57,8 +57,8 @@ final readonly class AddCommentOnTaskAction
                 'commentId' => $commentId->getValue(),
                 self::class => __FUNCTION__,
             ]);
-        } catch (AddCommentToCompletedTaskException $exception) {
-            throw new ApiBadRequestException([$exception->getMessage()]);
+        } catch (AddCommentToCompletedTaskException) {
+            throw new ApiBadRequestException(['Нельзя добавить комментарий в завершенную задачу']);
         }
 
         return new SuccessResponse();

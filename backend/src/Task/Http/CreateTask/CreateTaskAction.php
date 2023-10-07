@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Task\Http\CreateTask;
 
-use App\Infrastructure\ApiException\ApiBadRequestException;
 use App\Infrastructure\ApiRequestValueResolver;
 use App\Infrastructure\Flush;
 use App\Task\Command\CreateTask\CreateTask;
@@ -13,7 +12,6 @@ use App\Task\Domain\TaskId;
 use App\User\SignUp\Domain\UserId;
 use App\User\SignUp\Domain\UserRole;
 use App\User\SignUp\Http\UserIdArgumentValueResolver;
-use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -41,23 +39,19 @@ final readonly class CreateTaskAction
         #[ValueResolver(UserIdArgumentValueResolver::class)]
         UserId $userId,
     ): TaskData {
-        try {
-            $taskId = new TaskId();
-            ($this->createTask)(
-                createTaskCommand: $createTaskCommand,
-                taskId: $taskId,
-                userId: $userId,
-            );
+        $taskId = new TaskId();
+        ($this->createTask)(
+            createTaskCommand: $createTaskCommand,
+            taskId: $taskId,
+            userId: $userId,
+        );
 
-            ($this->flush)();
+        ($this->flush)();
 
-            $this->logger->info('Задача создана', [
-                'id' => $taskId,
-                self::class => __FUNCTION__,
-            ]);
-        } catch (InvalidArgumentException $e) {
-            throw new ApiBadRequestException([$e->getMessage()]);
-        }
+        $this->logger->info('Задача создана', [
+            'id' => $taskId,
+            self::class => __FUNCTION__,
+        ]);
 
         return new TaskData($taskId->value);
     }

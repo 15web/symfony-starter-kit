@@ -18,7 +18,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Symfony\Component\Uid\Uuid;
-use Webmozart\Assert\Assert;
 
 /**
  * Резолвер нахождения задачи по айди и пользователю
@@ -53,8 +52,6 @@ final readonly class TaskArgumentValueResolver implements ValueResolverInterface
         }
 
         try {
-            Assert::uuid($taskId, 'Укажите валидный id');
-
             $task = $this->tasks->findByIdAndUserId(
                 taskId: new TaskId(Uuid::fromString($taskId)),
                 userId: $user->getUserId(),
@@ -63,8 +60,8 @@ final readonly class TaskArgumentValueResolver implements ValueResolverInterface
             if ($task === null) {
                 throw new ApiNotFoundException(['Задача не найдена']);
             }
-        } catch (InvalidArgumentException $exception) {
-            throw new ApiBadRequestException([$exception->getMessage()]);
+        } catch (InvalidArgumentException) {
+            throw new ApiBadRequestException(['Укажите валидный id']);
         }
 
         return [$task];
