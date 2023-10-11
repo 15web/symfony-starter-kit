@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Dev\Rector;
+namespace Dev\Rector\Rules;
 
 use App\Infrastructure\Flush;
 use PhpParser\Node;
