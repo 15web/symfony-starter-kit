@@ -8,7 +8,6 @@ use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV7;
-use Webmozart\Assert\Assert;
 
 /**
  * Настройки
@@ -40,8 +39,6 @@ class Setting
      */
     public function __construct(SettingType $type, string $value, bool $isPublic)
     {
-        Assert::inArray($type, array_column(SettingType::cases(), 'value'), 'Указан неверный тип');
-
         $this->id = new UuidV7();
         $this->type = $type;
         $this->value = $value;

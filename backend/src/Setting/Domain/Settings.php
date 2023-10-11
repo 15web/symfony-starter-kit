@@ -23,9 +23,10 @@ final readonly class Settings
     /**
      * @throws SettingNotFoundException
      */
-    public function getByType(string $type): Setting
+    public function getByType(SettingType $type): Setting
     {
-        $setting = $this->entityManager->getRepository(Setting::class)->findOneBy(['type' => $type]);
+        $setting = $this->entityManager->getRepository(Setting::class)
+            ->findOneBy(['type' => $type->value]);
 
         if ($setting === null) {
             throw new SettingNotFoundException();

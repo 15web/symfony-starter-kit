@@ -8,7 +8,6 @@ use App\Infrastructure\AsService;
 use App\Infrastructure\Flush;
 use App\Seo\Domain\Seo;
 use App\Seo\Domain\SeoCollection;
-use App\Seo\Domain\SeoResourceType;
 
 /**
  * Хендлер сохранения SEO
@@ -27,7 +26,7 @@ final readonly class SaveSeo
 
         if ($seo === null) {
             $seo = new Seo(
-                type: SeoResourceType::from($command->type),
+                type: $command->type,
                 identity: $command->identity,
                 title: $command->title,
             );

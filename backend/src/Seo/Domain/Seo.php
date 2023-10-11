@@ -9,7 +9,6 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV7;
-use Webmozart\Assert\Assert;
 
 /**
  * SEO
@@ -51,8 +50,6 @@ class Seo
         string $identity,
         string $title,
     ) {
-        Assert::inArray($type->value, array_column(SeoResourceType::cases(), 'value'), 'Указан неверный тип');
-
         $this->id = new UuidV7();
         $this->type = $type;
         $this->identity = $identity;
