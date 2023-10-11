@@ -9,16 +9,17 @@ use PhpCsFixer\Finder;
 
 $finder = (new Finder())
     ->in([
-        __DIR__.'/../src',
-        __DIR__.'/../src-dev',
-        __DIR__.'/../tests',
+        __DIR__.'/../../src',
+        __DIR__.'/../../src-dev',
+        __DIR__.'/../../tests',
     ])
+    ->exclude('cache')
     ->append([
         __FILE__,
     ]);
 
 return (new Config())
-    ->setCacheFile(__DIR__.'/../var/cache/.php-cs-fixer-cache')
+    ->setCacheFile(__DIR__.'/../cache/.php-cs-fixer-cache')
     ->setRiskyAllowed(true)
     ->registerCustomFixers([
         new ClassDocCommentFixer(),

@@ -1,0 +1,29 @@
+parameters:
+    level: 9
+    fileExtensions:
+        - php
+    paths:
+        - ../../src
+        - ../
+        - ../../tests
+    tmpDir: ../cache/phpstan
+    excludePaths:
+        - ../Maker/Vendor/EntityGenerator.php
+        - ../cache
+    scanDirectories:
+        - ../../var/cache/dev/Symfony
+    parallel:
+        maximumNumberOfProcesses: 8
+    checkUninitializedProperties: true
+    doctrine:
+        objectManagerLoader: object-manager.php
+
+includes:
+    - ../../vendor/phpstan/phpstan/conf/bleedingEdge.neon
+    - ../../vendor/phpstan/phpstan-doctrine/extension.neon
+    - ../../vendor/phpstan/phpstan-doctrine/rules.neon
+    - ../../vendor/phpstan/phpstan-strict-rules/rules.neon
+    - phpstan-baseline.neon
+
+rules:
+    - PHPStan\Rules\Doctrine\ORM\EntityNotFinalRule

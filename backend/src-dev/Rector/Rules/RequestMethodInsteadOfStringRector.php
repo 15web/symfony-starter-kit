@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Dev\Rector;
+namespace Dev\Rector\Rules;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ConstFetch;

@@ -8,3 +8,5 @@
 /vendor/
 ###< symfony/framework-bundle ###
 
+/src-dev/cache/*
+!/src-dev/cache/.gitkeep
