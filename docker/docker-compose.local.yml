@@ -1,6 +1,6 @@
 version: '3.8'
 services:
-    backend:  &backend
+    backend:
         build:
             context: ./backend/
             target: base
@@ -14,10 +14,18 @@ services:
             mysql:
                 condition: service_healthy
     backend-cli:
-        <<: *backend
+        build:
+            context: ./backend/cli/
+            args:
+                USER_ID: ${USER_ID}
+        volumes:
+            - ../backend:/app/
+            - composer_cache:/home/dev/.composer
+        env_file: backend/.env
         depends_on: [ ]
         entrypoint: [ "" ]
         command: [ "php", "-v" ]
+
     messenger:
         build:
             context: ./backend/
