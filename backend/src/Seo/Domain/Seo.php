@@ -9,7 +9,6 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV7;
-use Webmozart\Assert\Assert;
 
 /**
  * SEO
@@ -42,16 +41,15 @@ class Seo
     #[ORM\Column(nullable: true)]
     private ?DateTimeImmutable $updatedAt;
 
+    /**
+     * @param non-empty-string $identity
+     * @param non-empty-string $title
+     */
     public function __construct(
         SeoResourceType $type,
         string $identity,
         string $title,
     ) {
-        Assert::notEmpty($type, 'Укажите тип');
-        Assert::notEmpty($identity, 'Укажите идентификатор');
-        Assert::notEmpty($title, 'Укажите заголовок');
-        Assert::inArray($type->value, array_column(SeoResourceType::cases(), 'value'), 'Указан неверный тип');
-
         $this->id = new UuidV7();
         $this->type = $type;
         $this->identity = $identity;
@@ -60,13 +58,14 @@ class Seo
         $this->updatedAt = null;
     }
 
+    /**
+     * @param non-empty-string $title
+     */
     public function change(
         string $title,
         ?string $description,
         ?string $keywords
     ): void {
-        Assert::notEmpty($title, 'Укажите заголовок');
-
         $this->title = $title;
         $this->description = $description;
         $this->keywords = $keywords;

@@ -5,13 +5,16 @@ declare(strict_types=1);
 namespace App\Infrastructure\ApiException;
 
 /**
- * Сообщение ошибки
+ * Список ошибок
  */
 final readonly class ApiErrorResponse
 {
     private bool $isError;
 
-    public function __construct(private string $errorMessage, private int $code)
+    /**
+     * @param non-empty-list<non-empty-string> $errors
+     */
+    public function __construct(private string $message, private array $errors, private int $code)
     {
         $this->isError = true;
     }
@@ -26,8 +29,16 @@ final readonly class ApiErrorResponse
         return $this->code;
     }
 
-    public function getErrorMessage(): string
+    public function getMessage(): string
     {
-        return $this->errorMessage;
+        return $this->message;
+    }
+
+    /**
+     * @return non-empty-list<non-empty-string>
+     */
+    public function getErrors(): array
+    {
+        return $this->errors;
     }
 }

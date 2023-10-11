@@ -11,9 +11,11 @@ use Webmozart\Assert\Assert;
  */
 final readonly class RecoverPasswordCommand
 {
+    /**
+     * @param non-empty-string $password
+     */
     public function __construct(public string $password)
     {
-        Assert::notEmpty($password);
         Assert::minLength($password, 6);
     }
 }

@@ -18,9 +18,11 @@ final class Phone implements ValueObject
     #[ORM\Column]
     private readonly string $value;
 
+    /**
+     * @param non-empty-string $value
+     */
     public function __construct(string $value)
     {
-        Assert::notEmpty($value);
         Assert::regex($value, self::PHONE_NUMBER_REGEX, 'Укажите телефон в правильном формате');
 
         $this->value = $value;

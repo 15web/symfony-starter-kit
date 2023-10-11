@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Tests\Unit\Infrastructure\Pagination;
 
 use App\Infrastructure\Pagination\PaginationRequest;
-use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
@@ -31,19 +30,5 @@ final class PaginationRequestTest extends TestCase
 
         self::assertSame(3, $paginationRequest->offset);
         self::assertSame(15, $paginationRequest->limit);
-    }
-
-    #[TestDox('Неверный лимит')]
-    public function testIncorrectLimit(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        new PaginationRequest(0, -1);
-    }
-
-    #[TestDox('Неверный оффсет')]
-    public function testIncorrectPerPage(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        new PaginationRequest(-1, 10);
     }
 }

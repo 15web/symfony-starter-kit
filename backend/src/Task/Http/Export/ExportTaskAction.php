@@ -44,9 +44,9 @@ final readonly class ExportTaskAction
                 limit: $paginationRequest->limit,
                 offset: $paginationRequest->offset
             );
-        } catch (NotFoundTasksForExportException $e) {
+        } catch (NotFoundTasksForExportException) {
             throw new ApiBadResponseException(
-                errorMessage: $e->getMessage(),
+                errors: ['Задачи для экспорта не найдены'],
                 apiCode: ApiErrorCode::NotFoundTasksForExport,
             );
         }

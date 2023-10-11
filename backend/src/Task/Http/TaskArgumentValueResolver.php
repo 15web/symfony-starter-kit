@@ -18,7 +18,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Symfony\Component\Uid\Uuid;
-use Webmozart\Assert\Assert;
 
 /**
  * Резолвер нахождения задачи по айди и пользователю
@@ -42,33 +41,27 @@ final readonly class TaskArgumentValueResolver implements ValueResolverInterface
 
         $user = $this->security->getUser();
 
-        if ($user === null) {
-            throw new ApiUnauthorizedException();
-        }
-
         if (!$user instanceof User) {
-            throw new ApiUnauthorizedException();
+            throw new ApiUnauthorizedException(['Необходимо пройти аутентификацию']);
         }
 
         /** @var string|null $taskId */
         $taskId = $request->attributes->get('id');
         if ($taskId === null) {
-            throw new ApiBadRequestException('Укажите id');
+            throw new ApiBadRequestException(['Укажите id']);
         }
 
         try {
-            Assert::uuid($taskId, 'Укажите валидный id');
-
             $task = $this->tasks->findByIdAndUserId(
                 taskId: new TaskId(Uuid::fromString($taskId)),
                 userId: $user->getUserId(),
             );
 
             if ($task === null) {
-                throw new ApiNotFoundException('Задача не найдена');
+                throw new ApiNotFoundException(['Задача не найдена']);
             }
-        } catch (InvalidArgumentException $exception) {
-            throw new ApiBadRequestException($exception->getMessage());
+        } catch (InvalidArgumentException) {
+            throw new ApiBadRequestException(['Укажите валидный id']);
         }
 
         return [$task];

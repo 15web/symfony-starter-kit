@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\User\SignUp\Http;
 
-use App\Infrastructure\ApiException\ApiBadRequestException;
 use App\Infrastructure\ApiException\ApiBadResponseException;
 use App\Infrastructure\ApiException\ApiErrorCode;
 use App\Infrastructure\ApiRequestValueResolver;
@@ -13,7 +12,6 @@ use App\Infrastructure\SuccessResponse;
 use App\User\SignUp\Command\SignUp;
 use App\User\SignUp\Command\SignUpCommand;
 use App\User\SignUp\Command\UserAlreadyExistException;
-use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
@@ -38,11 +36,9 @@ final readonly class SignUpAction
         try {
             ($this->signUp)($signUpCommand);
             ($this->flush)();
-        } catch (InvalidArgumentException $e) {
-            throw new ApiBadRequestException($e->getMessage());
-        } catch (UserAlreadyExistException $e) {
+        } catch (UserAlreadyExistException) {
             throw new ApiBadResponseException(
-                errorMessage: $e->getMessage(),
+                errors: ['Email уже занят, невозможно создать пользователя с такой почтой'],
                 apiCode: ApiErrorCode::UserAlreadyExist,
             );
         }

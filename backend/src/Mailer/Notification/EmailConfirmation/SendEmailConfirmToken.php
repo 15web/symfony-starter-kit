@@ -25,14 +25,14 @@ final readonly class SendEmailConfirmToken
     public function __invoke(ConfirmEmailMessage $message): void
     {
         $email = (new TemplatedEmail())
-            ->to($message->getEmail())
+            ->to($message->email->value)
             ->subject($this->translator->trans('user.mail.confirm_email_subject'))
             ->htmlTemplate('@mails/emails/confirm.html.twig')
             ->context([
-                'confirmToken' => $message->getConfirmToken(),
+                'confirmToken' => $message->confirmToken,
             ]);
 
-        $email->getHeaders()->addTextHeader('confirmToken', (string) $message->getConfirmToken());
+        $email->getHeaders()->addTextHeader('confirmToken', (string) $message->confirmToken);
 
         $this->mailer->send($email);
     }

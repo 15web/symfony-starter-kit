@@ -94,7 +94,8 @@ abstract class ApiWebTestCase extends WebTestCase
         $response = self::jsonDecode($response->getContent());
         self::assertTrue($response['error']);
         self::assertSame($response['code'], $apiErrorCode);
-        self::assertNotEmpty($response['errorMessage']);
+        self::assertNotEmpty($response['message']);
+        self::assertNotEmpty($response['errors']);
     }
 
     final public static function assertAccessDenied(Response $response): void

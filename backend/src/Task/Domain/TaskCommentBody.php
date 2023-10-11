@@ -6,7 +6,6 @@ namespace App\Task\Domain;
 
 use App\Infrastructure\ValueObject\ValueObject;
 use Doctrine\ORM\Mapping as ORM;
-use Webmozart\Assert\Assert;
 
 /**
  * Текст комментария задачи
@@ -17,10 +16,11 @@ final readonly class TaskCommentBody implements ValueObject
     #[ORM\Column]
     private string $value;
 
+    /**
+     * @param non-empty-string $value
+     */
     public function __construct(string $value)
     {
-        Assert::notEmpty($value);
-
         $this->value = $value;
     }
 

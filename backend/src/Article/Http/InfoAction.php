@@ -27,7 +27,7 @@ final readonly class InfoAction
     ): InfoData {
         $article = $this->articles->findByAlias($alias);
         if ($article === null) {
-            throw new ApiNotFoundException('Статья не найдена');
+            throw new ApiNotFoundException(['Статья не найдена']);
         }
 
         return new InfoData(

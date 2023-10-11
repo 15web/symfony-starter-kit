@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\User\Profile\Http;
 
-use App\Infrastructure\ApiException\ApiBadRequestException;
 use App\Infrastructure\ApiRequestValueResolver;
 use App\Infrastructure\Flush;
 use App\User\Profile\Command\SaveProfile\SaveProfile;
@@ -15,7 +14,6 @@ use App\User\Profile\Query\FindByUserId\ProfileData;
 use App\User\SignUp\Domain\UserId;
 use App\User\SignUp\Domain\UserRole;
 use App\User\SignUp\Http\UserIdArgumentValueResolver;
-use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
@@ -42,16 +40,12 @@ final readonly class ProfileSaveAction
         #[ValueResolver(UserIdArgumentValueResolver::class)]
         UserId $userId,
     ): ProfileData {
-        try {
-            ($this->saveProfile)(
-                command: $command,
-                userId: $userId,
-            );
+        ($this->saveProfile)(
+            command: $command,
+            userId: $userId,
+        );
 
-            ($this->flush)();
-        } catch (InvalidArgumentException $e) {
-            throw new ApiBadRequestException($e->getMessage());
-        }
+        ($this->flush)();
 
         return ($this->findProfileByUserId)(
             query: new FindProfileByUserIdQuery(

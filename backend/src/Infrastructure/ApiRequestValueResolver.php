@@ -5,13 +5,18 @@ declare(strict_types=1);
 namespace App\Infrastructure;
 
 use App\Infrastructure\ApiException\ApiBadRequestException;
-use InvalidArgumentException;
+use App\Infrastructure\ApiException\BuildMappingErrorMessages;
+use CuyZ\Valinor\Mapper\MappingError;
+use CuyZ\Valinor\Mapper\Source\Exception\InvalidSource;
+use CuyZ\Valinor\Mapper\Source\JsonSource;
+use CuyZ\Valinor\Mapper\Tree\Message\ErrorMessage;
+use CuyZ\Valinor\Mapper\Tree\Message\MessageBuilder;
+use CuyZ\Valinor\MapperBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\SerializerInterface;
 use Throwable;
+use Webmozart\Assert\InvalidArgumentException;
 
 /**
  * Преобразует Request в объект запроса
@@ -21,7 +26,7 @@ use Throwable;
 #[AsService]
 final readonly class ApiRequestValueResolver implements ValueResolverInterface
 {
-    public function __construct(private SerializerInterface $serializer) {}
+    public function __construct(private BuildMappingErrorMessages $buildMappingErrorMessages) {}
 
     /**
      * @return iterable<TApiRequest>
@@ -36,24 +41,26 @@ final readonly class ApiRequestValueResolver implements ValueResolverInterface
             return [];
         }
 
-        if ($request->getContentTypeFormat() !== JsonEncoder::FORMAT) {
-            throw new ApiBadRequestException('Укажите json');
-        }
-
-        if ($request->getContent() === '') {
-            throw new ApiBadRequestException('Укажите контент запроса');
-        }
-
         try {
-            $requestObject = $this->serializer->deserialize(
-                data: $request->getContent(),
-                type: $className,
-                format: JsonEncoder::FORMAT
-            );
-        } catch (InvalidArgumentException $e) {
-            throw new ApiBadRequestException($e->getMessage(), $e);
-        } catch (Throwable $e) {
-            throw new ApiBadRequestException('Неверный формат запроса', $e);
+            $requestObject = (new MapperBuilder())
+                ->filterExceptions(static function (Throwable $exception): ErrorMessage {
+                    if ($exception instanceof InvalidArgumentException) {
+                        return MessageBuilder::from($exception);
+                    }
+
+                    throw $exception;
+                })
+                ->mapper()
+                ->map(
+                    signature: $className,
+                    source: new JsonSource($request->getContent()),
+                );
+        } catch (MappingError $e) {
+            $errorMessages = ($this->buildMappingErrorMessages)($e);
+
+            throw new ApiBadRequestException($errorMessages, $e);
+        } catch (InvalidSource $e) {
+            throw new ApiBadRequestException(['Невалидный json'], $e);
         }
 
         return [$requestObject];

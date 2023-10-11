@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\User\SignUp\Command;
 
+use App\Infrastructure\ValueObject\Email;
 use Webmozart\Assert\Assert;
 
 /**
@@ -11,14 +12,13 @@ use Webmozart\Assert\Assert;
  */
 final readonly class SignUpCommand
 {
+    /**
+     * @param non-empty-string $password
+     */
     public function __construct(
-        public string $email,
+        public Email $email,
         public string $password
     ) {
-        Assert::notEmpty($email);
-        Assert::email($email);
-
-        Assert::notEmpty($password);
         Assert::minLength($password, 6);
     }
 }

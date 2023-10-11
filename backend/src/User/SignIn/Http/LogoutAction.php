@@ -37,7 +37,7 @@ final readonly class LogoutAction
     ): SuccessResponse {
         $apiToken = $request->headers->get(ApiTokenAuthenticator::TOKEN_NAME);
         if ($apiToken === null) {
-            throw new ApiUnauthorizedException('Отсутствует токен в заголовках');
+            throw new ApiUnauthorizedException(['Отсутствует токен в заголовках']);
         }
 
         ($this->deleteToken)(Uuid::fromString($apiToken));

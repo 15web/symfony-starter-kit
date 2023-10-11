@@ -45,8 +45,8 @@ final readonly class CompleteTaskAction
                 'id' => $task->getTaskId(),
                 self::class => __FUNCTION__,
             ]);
-        } catch (TaskAlreadyIsDoneException $e) {
-            throw new ApiBadRequestException($e->getMessage());
+        } catch (TaskAlreadyIsDoneException) {
+            throw new ApiBadRequestException(['Задача уже выполнена']);
         }
 
         return new SuccessResponse();

@@ -55,7 +55,8 @@ paths:
                             example:
                                 error: true
                                 code: 400
-                                errorMessage: Неверный формат запроса
+                                message: Неверный формат запроса
+                                errors: ['invalid_request']
     /confirm-email/{confirmToken}:
         get:
             operationId: confirmEmail
@@ -82,7 +83,8 @@ paths:
                             example:
                                 error: true
                                 code: 400
-                                errorMessage: Неверный формат запроса
+                                message: Неверный формат запроса
+                                errors: ['invalid_request']
                 '404':
                     description: Email с таким токеном не найден
     /sign-in:
@@ -115,7 +117,8 @@ paths:
                             example:
                                 error: true
                                 code: 400
-                                errorMessage: Неверный формат запроса
+                                message: Неверный формат запроса
+                                errors: ['invalid_request']
                 '401':
                     description: Ошибка аутентификации
                     content:
@@ -125,7 +128,8 @@ paths:
                             example:
                                 error: true
                                 code: 401
-                                errorMessage: Не верный логин или пароль
+                                message: Не верный логин или пароль
+                                errors: ['invalid_request']
     /logout:
         get:
             operationId: logout
@@ -149,7 +153,8 @@ paths:
                             example:
                                 error: true
                                 code: 401
-                                errorMessage: Необходимо пройти аутентификацию
+                                message: Необходимо пройти аутентификацию
+                                errors: ['auth_required']
     /request-password-recovery:
         post:
             operationId: recoverPasswordRequest
@@ -182,7 +187,8 @@ paths:
                             example:
                                 error: true
                                 code: 400
-                                errorMessage: 'Неверный формат запроса'
+                                message: 'Неверный формат запроса'
+                                errors: ['invalid_request']
     /recover-password/{recoveryToken}:
         post:
             operationId: recoverPassword
@@ -231,7 +237,8 @@ paths:
                             example:
                                 error: true
                                 code: 401
-                                errorMessage: Необходимо пройти аутентификацию
+                                message: Необходимо пройти аутентификацию
+                                errors: ['auth_required']
     /profile-save:
         post:
             operationId: saveProfile
@@ -261,7 +268,8 @@ paths:
                             example:
                                 error: true
                                 code: 400
-                                errorMessage: Неверный формат запроса
+                                message: Неверный формат запроса
+                                errors: ['invalid_request']
                 '401':
                     description: Доступ запрещен
                     content:
@@ -271,7 +279,8 @@ paths:
                             example:
                                 error: true
                                 code: 401
-                                errorMessage: Необходимо пройти аутентификацию
+                                message: Необходимо пройти аутентификацию
+                                errors: ['auth_required']
     /tasks:
         get:
             operationId: tasksList
@@ -298,7 +307,8 @@ paths:
                             example:
                                 error: true
                                 code: 401
-                                errorMessage: Необходимо пройти аутентификацию
+                                message: Необходимо пройти аутентификацию
+                                errors: ['auth_required']
     /tasks/{id}:
         get:
             operationId: taskInfo
@@ -324,7 +334,8 @@ paths:
                             example:
                                 error: true
                                 code: 401
-                                errorMessage: Необходимо пройти аутентификацию
+                                message: Необходимо пройти аутентификацию
+                                errors: ['auth_required']
                 '404':
                     description: Задача не найдена
     /tasks/create:
@@ -356,7 +367,8 @@ paths:
                             example:
                                 error: true
                                 code: 400
-                                errorMessage: Неверный формат запроса
+                                message: Неверный формат запроса
+                                errors: ['invalid_request']
                 '401':
                     description: Доступ запрещен
                     content:
@@ -366,7 +378,8 @@ paths:
                             example:
                                 error: true
                                 code: 401
-                                errorMessage: Необходимо пройти аутентификацию
+                                message: Необходимо пройти аутентификацию
+                                errors: ['auth_required']
     /tasks/{id}/update-task-name:
         post:
             operationId: updateTaskName
@@ -398,7 +411,8 @@ paths:
                             example:
                                 error: true
                                 code: 400
-                                errorMessage: Неверный формат запроса
+                                message: Неверный формат запроса
+                                errors: ['invalid_request']
                 '401':
                     description: Доступ запрещен
                     content:
@@ -408,7 +422,8 @@ paths:
                             example:
                                 error: true
                                 code: 401
-                                errorMessage: Необходимо пройти аутентификацию
+                                message: Необходимо пройти аутентификацию
+                                errors: ['auth_required']
                 '404':
                     description: Задача не найдена
     /tasks/{id}/remove:
@@ -436,7 +451,8 @@ paths:
                             example:
                                 error: true
                                 code: 401
-                                errorMessage: Необходимо пройти аутентификацию
+                                message: Необходимо пройти аутентификацию
+                                errors: ['auth_required']
                 '404':
                     description: Задача не найдена
     /tasks/{id}/complete:
@@ -464,7 +480,8 @@ paths:
                             example:
                                 error: true
                                 code: 400
-                                errorMessage: Неверный формат запроса
+                                message: Неверный формат запроса
+                                errors: ['invalid_request']
                 '401':
                     description: Доступ запрещен
                     content:
@@ -474,7 +491,8 @@ paths:
                             example:
                                 error: true
                                 code: 401
-                                errorMessage: Необходимо пройти аутентификацию
+                                message: Необходимо пройти аутентификацию
+                                errors: ['auth_required']
                 '404':
                     description: Задача не найдена
     /tasks/{id}/add-comment:
@@ -508,7 +526,8 @@ paths:
                             example:
                                 error: true
                                 code: 400
-                                errorMessage: Неверный формат запроса
+                                message: Неверный формат запроса
+                                errors: ['invalid_request']
                 '401':
                     description: Доступ запрещен
                     content:
@@ -518,7 +537,8 @@ paths:
                             example:
                                 error: true
                                 code: 401
-                                errorMessage: Необходимо пройти аутентификацию
+                                message: Необходимо пройти аутентификацию
+                                errors: ['auth_required']
                 '404':
                     description: Задача не найдена
     /tasks/{id}/comments:
@@ -569,7 +589,8 @@ paths:
                             example:
                                 error: true
                                 code: 400
-                                errorMessage: 'Нет задач для экспорта'
+                                message: 'Нет задач для экспорта'
+                                errors: ['Нет задач для экспорта']
                 '401':
                     description: Доступ запрещен
                     content:
@@ -579,7 +600,8 @@ paths:
                             example:
                                 error: true
                                 code: 401
-                                errorMessage: Необходимо пройти аутентификацию
+                                message: Необходимо пройти аутентификацию
+                                errors: ['auth_required']
     /articles:
         get:
             operationId: articleList
@@ -648,7 +670,8 @@ paths:
                             example:
                                 error: true
                                 code: 400
-                                errorMessage: Неверный формат запроса
+                                message: Неверный формат запроса
+                                errors: ['invalid_request']
                 '401':
                     description: Доступ запрещен
                     content:
@@ -658,7 +681,8 @@ paths:
                             example:
                                 error: true
                                 code: 401
-                                errorMessage: Необходимо пройти аутентификацию
+                                message: Необходимо пройти аутентификацию
+                                errors: ['auth_required']
     /admin/articles/{id}/update:
         post:
             operationId: adminArticleUpdate
@@ -692,7 +716,8 @@ paths:
                             example:
                                 error: true
                                 code: 400
-                                errorMessage: Неверный формат запроса
+                                message: Неверный формат запроса
+                                errors: ['invalid_request']
                 '401':
                     description: Доступ запрещен
                     content:
@@ -702,7 +727,8 @@ paths:
                             example:
                                 error: true
                                 code: 401
-                                errorMessage: Необходимо пройти аутентификацию
+                                message: Необходимо пройти аутентификацию
+                                errors: ['auth_required']
                 '404':
                     description: Статья не найдена
     /admin/articles:
@@ -728,7 +754,8 @@ paths:
                             example:
                                 error: true
                                 code: 401
-                                errorMessage: Необходимо пройти аутентификацию
+                                message: Необходимо пройти аутентификацию
+                                errors: ['auth_required']
     /admin/articles/{id}:
         get:
             operationId: adminArticleInfo
@@ -754,7 +781,8 @@ paths:
                             example:
                                 error: true
                                 code: 401
-                                errorMessage: Необходимо пройти аутентификацию
+                                message: Необходимо пройти аутентификацию
+                                errors: ['auth_required']
                 '404':
                     description: Статья не найдена
     /admin/articles/{id}/remove:
@@ -782,7 +810,8 @@ paths:
                             example:
                                 error: true
                                 code: 401
-                                errorMessage: Необходимо пройти аутентификацию
+                                message: Необходимо пройти аутентификацию
+                                errors: ['auth_required']
                 '404':
                     description: Статья не найдена
     /settings:
@@ -823,7 +852,8 @@ paths:
                             example:
                                 error: true
                                 code: 401
-                                errorMessage: Необходимо пройти аутентификацию
+                                message: Необходимо пройти аутентификацию
+                                errors: ['auth_required']
     /admin/setting/save:
         post:
             operationId: saveSetting
@@ -853,7 +883,8 @@ paths:
                             example:
                                 error: true
                                 code: 400
-                                errorMessage: Неверный формат запроса
+                                message: Неверный формат запроса
+                                errors: ['invalid_request']
                 '401':
                     description: Доступ запрещен
                     content:
@@ -863,7 +894,8 @@ paths:
                             example:
                                 error: true
                                 code: 401
-                                errorMessage: Необходимо пройти аутентификацию
+                                message: Необходимо пройти аутентификацию
+                                errors: ['auth_required']
                 '404':
                     description: Запись не найдена
                     content:
@@ -873,7 +905,8 @@ paths:
                             example:
                                 error: true
                                 code: 404
-                                errorMessage: Настройка не найдена
+                                message: Настройка не найдена
+                                errors: ['not_found']
     /seo/{type}/{identity}:
         get:
             operationId: seoInfo
@@ -921,7 +954,8 @@ paths:
                             example:
                                 error: true
                                 code: 400
-                                errorMessage: Неверный формат запроса
+                                message: Неверный формат запроса
+                                errors: ['invalid_request']
                 '401':
                     description: Доступ запрещен
                     content:
@@ -931,7 +965,8 @@ paths:
                             example:
                                 error: true
                                 code: 401
-                                errorMessage: Необходимо пройти аутентификацию
+                                message: Необходимо пройти аутентификацию
+                                errors: ['auth_required']
 components:
     securitySchemes:
         ApiTokenAuth:
@@ -953,7 +988,8 @@ components:
             required:
                 - error
                 - code
-                - errorMessage
+                - message
+                - errors
             additionalProperties: false
             properties:
                 error:
@@ -961,12 +997,15 @@ components:
                     example: true
                 code:
                     type: integer
-                errorMessage:
+                message:
                     type: string
+                errors:
+                    type: array
             example:
                 error: true
                 code: 1
-                errorMessage: Ошибка валидации
+                message: Ошибка валидации
+                errors: ['entity.invalid_name']
         authResponse:
             type: object
             required:

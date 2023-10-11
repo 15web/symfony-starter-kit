@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\User\SignUp\Query;
 
+use App\Infrastructure\ValueObject\Email;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -11,5 +12,13 @@ use Symfony\Component\Uid\Uuid;
  */
 final readonly class UserData
 {
-    public function __construct(public Uuid $id, public string $email) {}
+    public Email $email;
+
+    /**
+     * @param non-empty-string $email
+     */
+    public function __construct(public Uuid $id, string $email)
+    {
+        $this->email = new Email($email);
+    }
 }

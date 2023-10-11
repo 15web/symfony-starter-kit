@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Setting\Http\Admin;
 
-use App\Infrastructure\ApiException\ApiBadRequestException;
 use App\Infrastructure\ApiException\ApiNotFoundException;
 use App\Infrastructure\ApiRequestValueResolver;
 use App\Infrastructure\Flush;
@@ -13,7 +12,6 @@ use App\Setting\Command\SaveSetting;
 use App\Setting\Command\SaveSettingCommand;
 use App\Setting\Domain\SettingNotFoundException;
 use App\User\SignUp\Domain\UserRole;
-use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -50,10 +48,8 @@ final readonly class SettingSaveAction
                 'value' => $setting->getValue(),
                 self::class => __FUNCTION__,
             ]);
-        } catch (SettingNotFoundException $e) {
-            throw new ApiNotFoundException($e->getMessage());
-        } catch (InvalidArgumentException $e) {
-            throw new ApiBadRequestException($e->getMessage());
+        } catch (SettingNotFoundException) {
+            throw new ApiNotFoundException(['Настройка не найдена']);
         }
 
         return new SuccessResponse();

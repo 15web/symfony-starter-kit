@@ -9,7 +9,6 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV7;
-use Webmozart\Assert\Assert;
 
 /**
  * Статья
@@ -36,11 +35,12 @@ class Article
     #[ORM\Column(nullable: true)]
     private ?DateTimeImmutable $updatedAt;
 
+    /**
+     * @param non-empty-string $title
+     * @param non-empty-string $alias
+     */
     public function __construct(string $title, string $alias, string $body = '')
     {
-        Assert::notEmpty($title, 'Укажите заголовок');
-        Assert::notEmpty($alias, 'Укажите алиас');
-
         $this->id = new UuidV7();
         $this->title = $title;
         $this->alias = $alias;
@@ -49,11 +49,12 @@ class Article
         $this->updatedAt = null;
     }
 
+    /**
+     * @param non-empty-string $title
+     * @param non-empty-string $alias
+     */
     public function change(string $title, string $alias, string $body = ''): void
     {
-        Assert::notEmpty($title, 'Укажите заголовок');
-        Assert::notEmpty($alias, 'Укажите алиас');
-
         $this->title = $title;
         $this->alias = $alias;
         $this->body = $body;

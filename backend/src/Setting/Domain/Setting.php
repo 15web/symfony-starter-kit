@@ -8,7 +8,6 @@ use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV7;
-use Webmozart\Assert\Assert;
 
 /**
  * Настройки
@@ -35,12 +34,11 @@ class Setting
     #[ORM\Column(nullable: true)]
     private ?DateTimeImmutable $updatedAt;
 
+    /**
+     * @param non-empty-string $value
+     */
     public function __construct(SettingType $type, string $value, bool $isPublic)
     {
-        Assert::notEmpty($type, 'Укажите тип');
-        Assert::notEmpty($value, 'Укажите значение');
-        Assert::inArray($type, array_column(SettingType::cases(), 'value'), 'Указан неверный тип');
-
         $this->id = new UuidV7();
         $this->type = $type;
         $this->value = $value;
@@ -49,10 +47,11 @@ class Setting
         $this->updatedAt = null;
     }
 
+    /**
+     * @param non-empty-string $value
+     */
     public function change(string $value): void
     {
-        Assert::notEmpty($value, 'Укажите значение');
-
         $this->value = $value;
         $this->updatedAt = new DateTimeImmutable();
     }

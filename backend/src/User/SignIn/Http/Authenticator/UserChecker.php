@@ -34,14 +34,14 @@ final readonly class UserChecker implements UserCheckerInterface
         }
 
         $this->messageBus->dispatch(
-            message: new ConfirmEmailMessage(
+            new ConfirmEmailMessage(
                 confirmToken: $user->confirmToken->value,
-                email: $user->userEmail->value,
+                email: $user->userEmail,
             ),
         );
 
         throw new ApiBadResponseException(
-            errorMessage: 'user.exception.not_confirmed_email',
+            errors: ['user.exception.not_confirmed_email'],
             apiCode: ApiErrorCode::EmailIsNotConfirmed,
         );
     }

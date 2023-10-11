@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace App\Infrastructure\Pagination;
 
 use App\Infrastructure\ApiException\ApiBadRequestException;
+use App\Infrastructure\ApiException\BuildMappingErrorMessages;
 use App\Infrastructure\AsService;
-use InvalidArgumentException;
+use CuyZ\Valinor\Mapper\MappingError;
+use CuyZ\Valinor\MapperBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
@@ -15,10 +17,12 @@ use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
  * Резолвер для запроса на пагинацию
  */
 #[AsService]
-final class PaginationRequestArgumentResolver implements ValueResolverInterface
+final readonly class PaginationRequestArgumentResolver implements ValueResolverInterface
 {
     private const QUERY_LIMIT_NAME = 'limit';
     private const QUERY_OFFSET_NAME = 'offset';
+
+    public function __construct(private BuildMappingErrorMessages $buildMappingErrorMessages) {}
 
     /**
      * @return iterable<PaginationRequest>
@@ -31,13 +35,18 @@ final class PaginationRequestArgumentResolver implements ValueResolverInterface
             return [];
         }
 
-        $offset = $request->query->getInt(self::QUERY_OFFSET_NAME);
-        $limit = $request->query->getInt(self::QUERY_LIMIT_NAME, 10);
-
         try {
-            $paginationRequest = new PaginationRequest($offset, $limit);
-        } catch (InvalidArgumentException $exception) {
-            throw new ApiBadRequestException($exception->getMessage());
+            $paginationRequest = (new MapperBuilder())->mapper()->map(
+                PaginationRequest::class,
+                [
+                    self::QUERY_OFFSET_NAME => $request->query->getInt(self::QUERY_OFFSET_NAME),
+                    self::QUERY_LIMIT_NAME => $request->query->getInt(self::QUERY_LIMIT_NAME, 10),
+                ]
+            );
+        } catch (MappingError $e) {
+            $errorMessages = ($this->buildMappingErrorMessages)($e);
+
+            throw new ApiBadRequestException($errorMessages, $e);
         }
 
         return [$paginationRequest];

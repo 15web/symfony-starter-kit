@@ -20,10 +20,10 @@ final readonly class SeoCollection
         $this->entityManager->persist($entity);
     }
 
-    public function findByTypeIdentity(string $type, string $identity): ?Seo
+    public function findByTypeIdentity(SeoResourceType $type, string $identity): ?Seo
     {
         return $this->entityManager->getRepository(Seo::class)->findOneBy([
-            'type' => $type,
+            'type' => $type->value,
             'identity' => $identity,
         ]);
     }

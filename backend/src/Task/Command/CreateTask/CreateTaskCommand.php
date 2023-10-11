@@ -4,15 +4,13 @@ declare(strict_types=1);
 
 namespace App\Task\Command\CreateTask;
 
-use Webmozart\Assert\Assert;
-
 /**
  * Команда создания задачи
  */
 final readonly class CreateTaskCommand
 {
-    public function __construct(public string $taskName)
-    {
-        Assert::notEmpty($taskName, 'Укажите наименование задачи');
-    }
+    /**
+     * @param non-empty-string $taskName
+     */
+    public function __construct(public string $taskName) {}
 }

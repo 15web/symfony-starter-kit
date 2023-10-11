@@ -24,6 +24,6 @@ final readonly class AuthenticationEntryPoint implements AuthenticationEntryPoin
 
     public function start(Request $request, ?AuthenticationException $authException = null): Response
     {
-        return ($this->createExceptionJsonResponse)(new ApiUnauthorizedException());
+        return ($this->createExceptionJsonResponse)(new ApiUnauthorizedException(['Необходимо пройти аутентификацию']));
     }
 }
