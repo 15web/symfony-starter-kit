@@ -23,7 +23,6 @@ services:
             - ../backend:/app/
             - composer_cache:/home/dev/.composer
         env_file: backend/.env
-        depends_on: [ ]
         entrypoint: [ "" ]
         command: [ "php", "-v" ]
 
