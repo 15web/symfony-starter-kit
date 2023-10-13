@@ -62,8 +62,8 @@ make help
 - Все миграции из директории `backend/migrations` и сгенерировать новые.
 - Переменные окружения из файла `docker/backend/.env.dist`
 - Задания `cron` из файла `docker/backend/cron/crontab`
-- Разделы документации из файла `backend/openapi.yaml`
-- Слои и правила `deptrac` из файла `backend/deptrac.yaml`
+- Разделы документации из файла `backend/src-dev/openapi.yaml`
+- Слои и правила `deptrac` из файла `backend/src-dev/deptrac.yaml`
 - Убрать секцию `paths` в конфиге `twig` из файла `backend/config/packages/twig.yaml`
 
 ### Copyright and license
