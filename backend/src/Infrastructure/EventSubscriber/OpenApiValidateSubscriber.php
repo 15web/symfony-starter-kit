@@ -14,6 +14,7 @@ use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\When;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 
@@ -62,7 +63,7 @@ final readonly class OpenApiValidateSubscriber implements EventSubscriberInterfa
         }
 
         $request = $event->getRequest();
-        if ($this->appEnv === 'test' && $request->request->get(self::VALIDATE_REQUEST_KEY) !== '1') {
+        if (!$this->needValidateTest($request, self::VALIDATE_REQUEST_KEY)) {
             return;
         }
 
@@ -78,7 +79,7 @@ final readonly class OpenApiValidateSubscriber implements EventSubscriberInterfa
         }
 
         $request = $event->getRequest();
-        if ($this->appEnv === 'test' && $request->request->get(self::VALIDATE_RESPONSE_KEY) !== '1') {
+        if (!$this->needValidateTest($request, self::VALIDATE_RESPONSE_KEY)) {
             return;
         }
 
@@ -108,5 +109,13 @@ final readonly class OpenApiValidateSubscriber implements EventSubscriberInterfa
         $psr17Factory = new Psr17Factory();
 
         return new PsrHttpFactory($psr17Factory, $psr17Factory, $psr17Factory, $psr17Factory);
+    }
+
+    private function needValidateTest(Request $request, string $requestParameterName): bool
+    {
+        $parameterValue = $request->query->get($requestParameterName) ??
+            $request->request->get($requestParameterName);
+
+        return $this->appEnv === 'test' && $parameterValue === '1';
     }
 }
