@@ -6,7 +6,6 @@ namespace App\Setting\Http\Admin;
 
 use App\Setting\Domain\Settings;
 use App\User\SignUp\Domain\UserRole;
-use Generator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -23,9 +22,9 @@ final readonly class ListAction
     public function __construct(private Settings $settings) {}
 
     /**
-     * @return Generator<SettingListData>
+     * @return iterable<SettingListData>
      */
-    public function __invoke(): Generator
+    public function __invoke(): iterable
     {
         $settings = $this->settings->getAll();
 
