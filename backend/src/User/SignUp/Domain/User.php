@@ -65,7 +65,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function confirm(): void
     {
         if ($this->isConfirmed) {
-            throw new EmailAlreadyIsConfirmedException('user.exception.email_already_is_confirmed');
+            throw new EmailAlreadyIsConfirmedException('Email уже подтвержден');
         }
 
         $this->isConfirmed = true;

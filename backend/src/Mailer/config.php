@@ -24,7 +24,4 @@ return static function (FrameworkConfig $config, ContainerConfigurator $containe
     if ($containerConfigurator->env() === 'prod') {
         $messengerRouting->senders(['async']);
     }
-
-    $config->translator()
-        ->paths(['%kernel.project_dir%/src/Mailer/translations']);
 };

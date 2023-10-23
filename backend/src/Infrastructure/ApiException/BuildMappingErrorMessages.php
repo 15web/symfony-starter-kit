@@ -7,7 +7,6 @@ namespace App\Infrastructure\ApiException;
 use App\Infrastructure\AsService;
 use CuyZ\Valinor\Mapper\MappingError;
 use CuyZ\Valinor\Mapper\Tree\Message\Messages;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Собирает массив ошибок валидации
@@ -15,8 +14,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[AsService]
 final readonly class BuildMappingErrorMessages
 {
-    public function __construct(private TranslatorInterface $translator) {}
-
     /**
      * @return non-empty-list<non-empty-string>
      */
@@ -28,9 +25,7 @@ final readonly class BuildMappingErrorMessages
 
         $allMessages = [];
         foreach ($messages->errors() as $message) {
-            $allMessages[] = $this->translator->trans(
-                $message->withParameter('source_value', $message->node()->path())->toString()
-            );
+            $allMessages[] = $message->withParameter('source_value', $message->node()->path())->toString();
         }
 
         /**

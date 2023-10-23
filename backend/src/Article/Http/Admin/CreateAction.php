@@ -34,7 +34,7 @@ final readonly class CreateAction
         $sameArticle = $this->articles->findByAlias($createRequest->alias);
         if ($sameArticle !== null) {
             throw new ApiBadResponseException(
-                errors: ['article.not_found_by_alias'],
+                errors: ['Запись с таким алиасом уже существует'],
                 apiCode: ApiErrorCode::ArticleAlreadyExist
             );
         }
