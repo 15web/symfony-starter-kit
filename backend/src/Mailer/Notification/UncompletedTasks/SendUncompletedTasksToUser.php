@@ -8,7 +8,6 @@ use App\Infrastructure\AsService;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Отправляет пользователю список невыполненных задач
@@ -17,13 +16,13 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[AsMessageHandler]
 final readonly class SendUncompletedTasksToUser
 {
-    public function __construct(private MailerInterface $mailer, private TranslatorInterface $translator) {}
+    public function __construct(private MailerInterface $mailer) {}
 
     public function __invoke(UncompletedTasksMessage $message): void
     {
         $email = (new TemplatedEmail())
             ->to($message->email->value)
-            ->subject($this->translator->trans('task.uncompleted_tasks_subject'))
+            ->subject('Невыполненные задачи')
             ->htmlTemplate('@mails/emails/uncompleted-tasks.html.twig')
             ->context([
                 'tasks' => $message->tasks,

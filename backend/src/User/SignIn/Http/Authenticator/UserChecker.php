@@ -41,7 +41,7 @@ final readonly class UserChecker implements UserCheckerInterface
         );
 
         throw new ApiBadResponseException(
-            errors: ['user.exception.not_confirmed_email'],
+            errors: ['E-mail пользователя не подтвержден'],
             apiCode: ApiErrorCode::EmailIsNotConfirmed,
         );
     }

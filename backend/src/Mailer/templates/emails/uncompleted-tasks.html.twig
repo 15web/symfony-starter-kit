@@ -1,13 +1,10 @@
 {% extends '@mails/layout.html.twig' %}
 {% block body %}
-<p>{{ 'task.uncompleted_tasks_text'|trans }}:</p>
+<p>У вас есть невыполненные задачи:</p>
 <ul>
     {% for task in tasks %}
         <li>
-            {{ 'task.uncompleted_tasks_row'|trans({
-                '%taskName%': task.taskName,
-                '%createdAt%': task.createdAt|date('Y-m-d H:i:s')
-            }) }}
+            Задача {{ task.taskName }} от {{ task.createdAt|date('Y-m-d H:i:s')  }}
         </li>
     {% endfor %}
 </ul>
