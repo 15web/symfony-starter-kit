@@ -44,6 +44,7 @@ paths:
                             additionalProperties: false
                             required:
                                 - email
+                                - password
             responses:
                 '200':
                     description: Пользователь успешно зарегистрирован
