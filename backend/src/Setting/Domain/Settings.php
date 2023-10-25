@@ -25,7 +25,8 @@ final readonly class Settings
      */
     public function getByType(SettingType $type): Setting
     {
-        $setting = $this->entityManager->getRepository(Setting::class)
+        $setting = $this->entityManager
+            ->getRepository(Setting::class)
             ->findOneBy(['type' => $type->value]);
 
         if ($setting === null) {
@@ -41,7 +42,9 @@ final readonly class Settings
     public function getAll(): array
     {
         /** @var Setting[] $settings */
-        $settings = $this->entityManager->getRepository(Setting::class)->createQueryBuilder('s')
+        $settings = $this->entityManager
+            ->getRepository(Setting::class)
+            ->createQueryBuilder('s')
             ->orderBy('s.createdAt', 'DESC')
             ->getQuery()
             ->getResult();
@@ -52,10 +55,12 @@ final readonly class Settings
     /**
      * @return Setting[]
      */
-    public function getAllForPublic(): array
+    public function getAllPublic(): array
     {
         /** @var Setting[] $settings */
-        $settings = $this->entityManager->getRepository(Setting::class)->createQueryBuilder('s')
+        $settings = $this->entityManager
+            ->getRepository(Setting::class)
+            ->createQueryBuilder('s')
             ->where('s.isPublic = 1')
             ->getQuery()->getResult();
 

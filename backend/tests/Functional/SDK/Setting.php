@@ -21,7 +21,7 @@ final class Setting extends ApiWebTestCase
      *     updatedAt: string|null,
      * }>
      */
-    public static function list(): array
+    public static function adminList(): array
     {
         $token = User::auth();
 

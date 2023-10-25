@@ -23,7 +23,7 @@ final readonly class SettingListAction
      */
     public function __invoke(): iterable
     {
-        $settings = $this->settings->getAllForPublic();
+        $settings = $this->settings->getAllPublic();
 
         foreach ($settings as $setting) {
             yield new SettingListData(

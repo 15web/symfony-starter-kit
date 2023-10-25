@@ -18,7 +18,7 @@ final class SettingListTest extends ApiWebTestCase
     public function testSuccess(): void
     {
         $filteredSettings = array_filter(
-            Setting::list(),
+            Setting::adminList(),
             static fn ($setting): bool => $setting['isPublic']
         );
 
