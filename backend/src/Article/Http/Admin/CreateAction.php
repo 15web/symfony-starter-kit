@@ -21,7 +21,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * Ручка создания статьи
  */
 #[IsGranted(UserRole::User->value)]
-#[Route('/admin/articles/create', methods: [Request::METHOD_POST])]
+#[Route('/admin/articles', methods: [Request::METHOD_POST])]
 #[AsController]
 final readonly class CreateAction
 {

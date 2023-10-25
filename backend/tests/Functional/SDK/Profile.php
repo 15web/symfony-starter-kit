@@ -19,7 +19,7 @@ final class Profile extends ApiWebTestCase
         $body['phone'] = $phone;
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        return self::request(Request::METHOD_POST, '/api/profile-save', $body, token: $token);
+        return self::request(Request::METHOD_POST, '/api/profile', $body, token: $token);
     }
 
     public static function info(string $token): Response

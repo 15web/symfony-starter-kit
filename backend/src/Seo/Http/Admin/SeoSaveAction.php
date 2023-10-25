@@ -21,7 +21,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * Ручка сохранения SEO
  */
 #[IsGranted(UserRole::User->value)]
-#[Route('/admin/seo/save', methods: [Request::METHOD_POST])]
+#[Route('/admin/seo', methods: [Request::METHOD_POST])]
 #[AsController]
 final readonly class SeoSaveAction
 {

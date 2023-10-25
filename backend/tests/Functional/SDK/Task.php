@@ -18,7 +18,7 @@ final class Task extends ApiWebTestCase
         $body['taskName'] = $taskName;
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        return self::request(Request::METHOD_POST, '/api/tasks/create', $body, token: $token);
+        return self::request(Request::METHOD_POST, '/api/tasks', $body, token: $token);
     }
 
     public static function createAndReturnId(string $taskName, string $token): string

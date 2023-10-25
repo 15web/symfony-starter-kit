@@ -21,7 +21,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * Ручка обновления статьи
  */
 #[IsGranted(UserRole::User->value)]
-#[Route('/admin/articles/{id}/update', methods: [Request::METHOD_POST])]
+#[Route('/admin/articles/{id}', methods: [Request::METHOD_POST])]
 #[AsController]
 final readonly class UpdateAction
 {

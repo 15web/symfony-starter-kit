@@ -23,7 +23,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * Ручка сохранения настройки
  */
 #[IsGranted(UserRole::User->value)]
-#[Route('/admin/setting/save', methods: [Request::METHOD_POST])]
+#[Route('/admin/settings', methods: [Request::METHOD_POST])]
 #[AsController]
 final readonly class SettingSaveAction
 {
