@@ -20,7 +20,7 @@ final class ListTest extends ApiWebTestCase
     #[TestDox('Получение списка')]
     public function testSuccess(): void
     {
-        $settings = Setting::list();
+        $settings = Setting::adminList();
         self::assertCount(\count(SettingType::cases()), $settings);
 
         foreach ($settings as $setting) {
