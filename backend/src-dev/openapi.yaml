@@ -36,7 +36,15 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/signUpRequest'
+                            properties:
+                                email:
+                                    $ref: '#/components/schemas/email'
+                                password:
+                                    $ref: '#/components/schemas/password'
+                            additionalProperties: false
+                            required:
+                                - email
+                                - password
             responses:
                 '200':
                     description: Пользователь успешно зарегистрирован
@@ -66,7 +74,14 @@ paths:
                 - auth
             security: []
             parameters:
-                - $ref: '#/components/parameters/confirmToken'
+                -   name: confirmToken
+                    in: path
+                    required: true
+                    description: Токен подтверждения
+                    example: 123e4567-e89b-12d3-a456-426614174000
+                    schema:
+                        type: string
+                        format: uuid
             responses:
                 '200':
                     description: Email подтвержден
@@ -100,14 +115,30 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/signInRequest'
+                            properties:
+                                email:
+                                    $ref: '#/components/schemas/email'
+                                password:
+                                    $ref: '#/components/schemas/password'
+                            additionalProperties: false
+                            required:
+                                - email
+                                - password
             responses:
                 '200':
                     description: Аутентификация прошла успешно
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/authResponse'
+                                type: object
+                                required:
+                                    - token
+                                additionalProperties: false
+                                properties:
+                                    token:
+                                        type: string
+                                        format: uuid
+                                        example: 123e4567-e89b-12d3-a456-426614174000
                 '400':
                     description: Ошибка запроса
                     content:
@@ -168,7 +199,15 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/recoverPasswordSendRequest'
+                            properties:
+                                email:
+                                    type: string
+                                    format: email
+                                    description: Email пользователя
+                                    example: test@test.ru
+                            additionalProperties: false
+                            required:
+                                - email
             responses:
                 '200':
                     description: Токен отправлен
@@ -198,13 +237,29 @@ paths:
                 - auth
             security: [ ]
             parameters:
-                - $ref: '#/components/parameters/recoveryToken'
+                -   name: recoveryToken
+                    in: path
+                    required: true
+                    description: Токен восстановления пароля
+                    example: 123e4567-e89b-12d3-a456-426614174000
+                    schema:
+                        type: string
+                        format: uuid
             requestBody:
                 description: Восстановление пароля
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/recoverPasswordRequest'
+                            properties:
+                                password:
+                                    type: string
+                                    nullable: false
+                                    description: Пароль пользователя
+                                    example: qwer1234
+                                    minLength: 6
+                            additionalProperties: false
+                            required:
+                                - password
             responses:
                 '200':
                     description: Пароль восстановлен
@@ -251,7 +306,21 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/profileCreateRequest'
+                            properties:
+                                phone:
+                                    type: string
+                                    description: Телефон в профиле
+                                    minLength: 1
+                                    example: '89272222222'
+                                name:
+                                    type: string
+                                    description: Имя в профиле
+                                    minLength: 1
+                                    example: cazak
+                            additionalProperties: false
+                            required:
+                                - phone
+                                - name
             responses:
                 '200':
                     description: Профиль сохранен
@@ -297,7 +366,40 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/taskListResponse'
+                                type: object
+                                required:
+                                    - data
+                                    - pagination
+                                additionalProperties: false
+                                properties:
+                                    pagination:
+                                        $ref: '#/components/schemas/paginationResponse'
+                                    data:
+                                        type: array
+                                        items:
+                                            properties:
+                                                id:
+                                                    type: string
+                                                    format: uuid
+                                                    description: ID задачи
+                                                taskName:
+                                                    type: string
+                                                    description: Наименование задачи
+                                                isCompleted:
+                                                    type: boolean
+                                                    description: Выполнена ли задача
+                                                createdAt:
+                                                    type: string
+                                                    description: Дата создания
+                                        example:
+                                            -   id: dc8dbada-b154-4ffb-b21c-da70162e2704
+                                                taskName: Моя первая задача
+                                                isCompleted: true
+                                                createdAt: '2021-10-28T16:19:44+00:00'
+                                            -   id: 80b12ebd-e493-4dce-a104-7d30464cef43
+                                                taskName: Моя вторая задача
+                                                isCompleted: true
+                                                createdAt: '2021-10-28T16:19:45+00:00'
                 '401':
                     description: Доступ запрещен
                     content:
@@ -324,7 +426,45 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/taskInfoResponse'
+                                type: object
+                                required:
+                                    - id
+                                    - taskName
+                                    - isCompleted
+                                    - createdAt
+                                    - completedAt
+                                    - updatedAt
+                                additionalProperties: false
+                                properties:
+                                    id:
+                                        type: string
+                                        format: uuid
+                                        description: ID задачи
+                                    taskName:
+                                        type: string
+                                        description: Наименование задачи
+                                    isCompleted:
+                                        type: boolean
+                                        description: Выполнена ли задача
+                                    createdAt:
+                                        type: string
+                                        description: Дата создания
+                                    completedAt:
+                                        type: string
+                                        description: Дата завершения
+                                        nullable: true
+                                    updatedAt:
+                                        type: string
+                                        description: Дата обновления
+                                        nullable: true
+                                example: {
+                                    id: dc8dbada-b154-4ffb-b21c-da70162e2704,
+                                    taskName: Моя первая задача,
+                                    isCompleted: true,
+                                    createdAt: '2021-10-28T16:19:44+00:00',
+                                    completedAt: '2021-10-28T16:19:44+00:00',
+                                    updatedAt: '2021-10-28T16:19:44+00:00'
+                                }
                 '401':
                     description: Доступ запрещен
                     content:
@@ -350,14 +490,33 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/taskCreateRequest'
+                            properties:
+                                taskName:
+                                    type: string
+                                    description: Наименование задачи
+                                    minLength: 1
+                                    example: Моя первая задача
+                            additionalProperties: false
+                            required:
+                                - taskName
             responses:
                 '200':
                     description: Задача создана
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/taskCreateResponse'
+                                type: object
+                                required:
+                                    - id
+                                additionalProperties: false
+                                properties:
+                                    id:
+                                        type: string
+                                        format: uuid
+                                        description: ID задачи
+                                example: {
+                                    id: dc8dbada-b154-4ffb-b21c-da70162e2704,
+                                }
                 '400':
                     description: Ошибка запроса
                     content:
@@ -394,7 +553,15 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/updateTaskNameRequest'
+                            properties:
+                                taskName:
+                                    type: string
+                                    description: Наименование задачи
+                                    minLength: 1
+                                    example: Моя вторая задача
+                            additionalProperties: false
+                            required:
+                                - taskName
             responses:
                 '200':
                     description: Наименование задачи обновлено
@@ -509,7 +676,14 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/addCommentToTaskRequest'
+                            properties:
+                                commentBody:
+                                    type: string
+                                    description: Текст комментария
+                                    minLength: 1
+                                    example: Мой первый комментарий
+                            required:
+                                - commentBody
             responses:
                 '200':
                     description: Комментарий успешно добавлен
@@ -556,7 +730,20 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/listTaskCommentsResponse'
+                                properties:
+                                    id:
+                                        type: string
+                                        format: uuid
+                                        description: ID комментария
+                                        example: dc8dbada-b154-4ffb-b21c-da70162e2704
+                                    body:
+                                        type: string
+                                        description: Текст комментария
+                                        example: Мой первый комментарий
+                                    createdAt:
+                                        $ref: '#/components/schemas/createdAt'
+                                    updatedAt:
+                                        $ref: '#/components/schemas/updatedAt'
     /export/tasks.{format}:
         get:
             operationId: exportTasks
@@ -565,7 +752,16 @@ paths:
             tags:
                 - tasks
             parameters:
-                -   $ref: '#/components/parameters/taskExportFormat'
+                -   in: path
+                    name: format
+                    required: true
+                    description: Формат (csv, xml)
+                    example: csv
+                    schema:
+                        type: string
+                        enum:
+                            - csv
+                            - xml
                 -   $ref: '#/components/parameters/limit'
                 -   $ref: '#/components/parameters/offset'
             responses:
@@ -619,7 +815,35 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/articleListResponse'
+                                type: object
+                                required:
+                                    - data
+                                    - pagination
+                                additionalProperties: false
+                                properties:
+                                    pagination:
+                                        $ref: '#/components/schemas/paginationResponse'
+                                    data:
+                                        type: array
+                                        items:
+                                            properties:
+                                                title:
+                                                    type: string
+                                                    description: Заголовок
+                                                alias:
+                                                    type: string
+                                                    description: Алиас
+                                                body:
+                                                    type: string
+                                                    description: Контент
+                                                    nullable: true
+                                        example:
+                                            -   title: Первая статья
+                                                alias: first-article
+                                                body: Контент первой статьи
+                                            -   title: Вторая статья
+                                                alias: second-article
+                                                body: Контент второй статьи
     /articles/{alias}:
         get:
             operationId: articleInfo
@@ -629,14 +853,33 @@ paths:
                 - articles
             security: []
             parameters:
-                - $ref: '#/components/parameters/articleAlias'
+                -   in: path
+                    name: alias
+                    required: true
+                    description: Алиас статьи
+                    example: first-article
+                    schema:
+                        type: string
             responses:
                 '200':
                     description: Возвращает статью
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/articleInfoResponse'
+                                type: object
+                                required:
+                                    - title
+                                    - body
+                                additionalProperties: false
+                                properties:
+                                    title:
+                                        $ref: '#/components/schemas/articleTitle'
+                                    body:
+                                        $ref: '#/components/schemas/articleBody'
+                                example: {
+                                    title: Первая статья,
+                                    body: Контент первой статьи
+                                }
                 '404':
                     description: Статья не найдена
     /admin/articles/create:
@@ -651,7 +894,17 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/articleCreateRequest'
+                            properties:
+                                title:
+                                    $ref: '#/components/schemas/articleTitle'
+                                alias:
+                                    $ref: '#/components/schemas/articleAlias'
+                                body:
+                                    $ref: '#/components/schemas/articleBody'
+                            additionalProperties: false
+                            required:
+                                - title
+                                - alias
             responses:
                 '200':
                     description: Статья создана
@@ -697,7 +950,17 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/articleUpdateRequest'
+                            properties:
+                                title:
+                                    $ref: '#/components/schemas/articleTitle'
+                                alias:
+                                    $ref: '#/components/schemas/articleAlias'
+                                body:
+                                    $ref: '#/components/schemas/articleBody'
+                            additionalProperties: false
+                            required:
+                                - title
+                                - alias
             responses:
                 '200':
                     description: Статья обновлена
@@ -744,7 +1007,9 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/articleResponseList'
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/articleResponse'
                 '401':
                     description: Доступ запрещен
                     content:
@@ -828,7 +1093,18 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/publicSettingResponseList'
+                                type: array
+                                items:
+                                    type: object
+                                    additionalProperties: false
+                                    required:
+                                        - type
+                                        - value
+                                    properties:
+                                        type:
+                                            $ref: '#/components/schemas/settingType'
+                                        value:
+                                            $ref: '#/components/schemas/settingValue'
     /admin/settings:
         get:
             operationId: adminSettingList
@@ -842,7 +1118,27 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/settingResponseList'
+                                type: array
+                                items:
+                                    type: object
+                                    additionalProperties: false
+                                    required:
+                                        - type
+                                        - value
+                                        - isPublic
+                                        - createdAt
+                                    properties:
+                                        type:
+                                            $ref: '#/components/schemas/settingType'
+                                        value:
+                                            $ref: '#/components/schemas/settingValue'
+                                        isPublic:
+                                            type: boolean
+                                            description: Публична ли настройка
+                                        createdAt:
+                                            $ref: '#/components/schemas/createdAt'
+                                        updatedAt:
+                                            $ref: '#/components/schemas/updatedAt'
                 '401':
                     description: Доступ запрещен
                     content:
@@ -866,7 +1162,15 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/settingSaveRequest'
+                            properties:
+                                type:
+                                    $ref: '#/components/schemas/settingType'
+                                value:
+                                    $ref: '#/components/schemas/settingValue'
+                            additionalProperties: false
+                            required:
+                                - type
+                                - value
             responses:
                 '200':
                     description: Данные настройки сохранены
@@ -915,8 +1219,24 @@ paths:
             tags:
                 - seo
             parameters:
-                -   $ref: '#/components/parameters/seoType'
-                -   $ref: '#/components/parameters/seoIdentity'
+                -   name: type
+                    in: path
+                    required: true
+                    description: Тип объекта
+                    example: article
+                    schema:
+                        type: string
+                        enum:
+                            - article
+                            - task
+                -   name: identity
+                    in: path
+                    required: true
+                    description: ID объекта
+                    example: 123e4567-e89b-12d3-a456-426614174000
+                    schema:
+                        type: string
+                        format: uuid
             security: [ ]
             responses:
                 '200':
@@ -924,7 +1244,24 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/seoInfoResponse'
+                                type: object
+                                description: SEO информация
+                                properties:
+                                    title:
+                                        type: string
+                                        nullable: true
+                                        description: Заголовок
+                                        example: Первая статья
+                                    description:
+                                        type: string
+                                        nullable: true
+                                        description: Описание
+                                        example: Описание первой статьи
+                                    keywords:
+                                        type: string
+                                        nullable: true
+                                        description: Ключевые слова
+                                        example: ключевые слова
     /admin/seo/save:
         post:
             operationId: saveSeo
@@ -937,7 +1274,37 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/seoSaveRequest'
+                            type: object
+                            properties:
+                                type:
+                                    type: string
+                                    description: Тип объекта
+                                    enum:
+                                        - article
+                                        - task
+                                identity:
+                                    type: string
+                                    description: Идентификатор объекта
+                                    example: dc8dbada-b154-4ffb-b21c-da70162e2704
+                                title:
+                                    type: string
+                                    nullable: true
+                                    description: Заголовок
+                                    example: Первая статья
+                                description:
+                                    type: string
+                                    nullable: true
+                                    description: Описание
+                                    example: Описание первой статьи
+                                keywords:
+                                    type: string
+                                    nullable: true
+                                    description: Ключевые слова
+                                    example: ключевые слова
+                            additionalProperties: false
+                            required:
+                                - type
+                                - identity
             responses:
                 '200':
                     description: Данные seo сохранены
@@ -1006,56 +1373,6 @@ components:
                 code: 1
                 message: Ошибка валидации
                 errors: ['entity.invalid_name']
-        authResponse:
-            type: object
-            required:
-                - token
-            additionalProperties: false
-            properties:
-                token:
-                    type: string
-                    format: uuid
-                    example: 123e4567-e89b-12d3-a456-426614174000
-        signInRequest:
-            properties:
-                email:
-                    $ref: '#/components/schemas/email'
-                password:
-                    $ref: '#/components/schemas/password'
-            additionalProperties: false
-            required:
-                - email
-                - password
-        signUpRequest:
-            properties:
-                email:
-                    $ref: '#/components/schemas/email'
-                password:
-                    $ref: '#/components/schemas/password'
-            additionalProperties: false
-            required:
-                - email
-        recoverPasswordSendRequest:
-            properties:
-                email:
-                    type: string
-                    format: email
-                    description: Email пользователя
-                    example: test@test.ru
-            additionalProperties: false
-            required:
-                - email
-        recoverPasswordRequest:
-            properties:
-                password:
-                    type: string
-                    nullable: false
-                    description: Пароль пользователя
-                    example: qwer1234
-                    minLength: 6
-            additionalProperties: false
-            required:
-                - password
         profileInfoResponse:
             type: object
             required:
@@ -1075,26 +1392,6 @@ components:
                 phone: '89272222222',
                 name: cazak,
             }
-        profileCreateRequest:
-            properties:
-                phone:
-                    type: string
-                    description: Телефон в профиле
-                    minLength: 1
-                    example: '89272222222'
-                name:
-                    type: string
-                    description: Имя в профиле
-                    minLength: 1
-                    example: cazak
-            additionalProperties: false
-            required:
-                - phone
-                - name
-        articleResponseList:
-            type: array
-            items:
-                $ref: '#/components/schemas/articleResponse'
         articleResponse:
             type: object
             additionalProperties: false
@@ -1122,255 +1419,6 @@ components:
                     $ref: '#/components/schemas/createdAt'
                 updatedAt:
                     $ref: '#/components/schemas/updatedAt'
-        articleListResponse:
-            type: object
-            required:
-                - data
-                - pagination
-            additionalProperties: false
-            properties:
-                pagination:
-                    $ref: '#/components/schemas/paginationResponse'
-                data:
-                    type: array
-                    items:
-                        properties:
-                            title:
-                                type: string
-                                description: Заголовок
-                            alias:
-                                type: string
-                                description: Алиас
-                            body:
-                                type: string
-                                description: Контент
-                                nullable: true
-                    example:
-                        -   title: Первая статья
-                            alias: first-article
-                            body: Контент первой статьи
-                        -   title: Вторая статья
-                            alias: second-article
-                            body: Контент второй статьи
-        articleInfoResponse:
-            type: object
-            required:
-                - title
-                - body
-            additionalProperties: false
-            properties:
-                title:
-                    $ref: '#/components/schemas/articleTitle'
-                body:
-                    $ref: '#/components/schemas/articleBody'
-            example: {
-                title: Первая статья,
-                body: Контент первой статьи
-            }
-        articleCreateRequest:
-            properties:
-                title:
-                    $ref: '#/components/schemas/articleTitle'
-                alias:
-                    $ref: '#/components/schemas/articleAlias'
-                body:
-                    $ref: '#/components/schemas/articleBody'
-            additionalProperties: false
-            required:
-                - title
-                - alias
-        articleUpdateRequest:
-            properties:
-                title:
-                    $ref: '#/components/schemas/articleTitle'
-                alias:
-                    $ref: '#/components/schemas/articleAlias'
-                body:
-                    $ref: '#/components/schemas/articleBody'
-            additionalProperties: false
-            required:
-                - title
-                - alias
-        taskInfoResponse:
-            type: object
-            required:
-                - id
-                - taskName
-                - isCompleted
-                - createdAt
-                - completedAt
-                - updatedAt
-            additionalProperties: false
-            properties:
-                id:
-                    type: string
-                    format: uuid
-                    description: ID задачи
-                taskName:
-                    type: string
-                    description: Наименование задачи
-                isCompleted:
-                    type: boolean
-                    description: Выполнена ли задача
-                createdAt:
-                    type: string
-                    description: Дата создания
-                completedAt:
-                    type: string
-                    description: Дата завершения
-                    nullable: true
-                updatedAt:
-                    type: string
-                    description: Дата обновления
-                    nullable: true
-            example: {
-                id: dc8dbada-b154-4ffb-b21c-da70162e2704,
-                taskName: Моя первая задача,
-                isCompleted: true,
-                createdAt: '2021-10-28T16:19:44+00:00',
-                completedAt: '2021-10-28T16:19:44+00:00',
-                updatedAt: '2021-10-28T16:19:44+00:00'
-            }
-        listTaskCommentsResponse:
-            properties:
-                id:
-                    type: string
-                    format: uuid
-                    description: ID комментария
-                    example: dc8dbada-b154-4ffb-b21c-da70162e2704
-                body:
-                    type: string
-                    description: Текст комментария
-                    example: Мой первый комментарий
-                createdAt:
-                    $ref: '#/components/schemas/createdAt'
-                updatedAt:
-                    $ref: '#/components/schemas/updatedAt'
-        taskCreateResponse:
-            type: object
-            required:
-                - id
-            additionalProperties: false
-            properties:
-                id:
-                    type: string
-                    format: uuid
-                    description: ID задачи
-            example: {
-                id: dc8dbada-b154-4ffb-b21c-da70162e2704,
-            }
-        taskListResponse:
-            type: object
-            required:
-                - data
-                - pagination
-            additionalProperties: false
-            properties:
-                pagination:
-                    $ref: '#/components/schemas/paginationResponse'
-                data:
-                    type: array
-                    items:
-                        properties:
-                            id:
-                                type: string
-                                format: uuid
-                                description: ID задачи
-                            taskName:
-                                type: string
-                                description: Наименование задачи
-                            isCompleted:
-                                type: boolean
-                                description: Выполнена ли задача
-                            createdAt:
-                                type: string
-                                description: Дата создания
-                    example:
-                        -   id: dc8dbada-b154-4ffb-b21c-da70162e2704
-                            taskName: Моя первая задача
-                            isCompleted: true
-                            createdAt: '2021-10-28T16:19:44+00:00'
-                        -   id: 80b12ebd-e493-4dce-a104-7d30464cef43
-                            taskName: Моя вторая задача
-                            isCompleted: true
-                            createdAt: '2021-10-28T16:19:45+00:00'
-        settingResponseList:
-            type: array
-            items:
-                $ref: '#/components/schemas/settingResponse'
-        settingResponse:
-            type: object
-            additionalProperties: false
-            required:
-                - type
-                - value
-                - isPublic
-                - createdAt
-            properties:
-                type:
-                    $ref: '#/components/schemas/settingType'
-                value:
-                    $ref: '#/components/schemas/settingValue'
-                isPublic:
-                    $ref: '#/components/schemas/settingIsPublic'
-                createdAt:
-                    $ref: '#/components/schemas/createdAt'
-                updatedAt:
-                    $ref: '#/components/schemas/updatedAt'
-        publicSettingResponseList:
-            type: array
-            items:
-                $ref: '#/components/schemas/publicSettingResponse'
-        publicSettingResponse:
-            type: object
-            additionalProperties: false
-            required:
-                - type
-                - value
-            properties:
-                type:
-                    $ref: '#/components/schemas/settingType'
-                value:
-                    $ref: '#/components/schemas/settingValue'
-        taskCreateRequest:
-            properties:
-                taskName:
-                    type: string
-                    description: Наименование задачи
-                    minLength: 1
-                    example: Моя первая задача
-            additionalProperties: false
-            required:
-                - taskName
-        updateTaskNameRequest:
-            properties:
-                taskName:
-                    type: string
-                    description: Наименование задачи
-                    minLength: 1
-                    example: Моя вторая задача
-            additionalProperties: false
-            required:
-                - taskName
-        addCommentToTaskRequest:
-            properties:
-                commentBody:
-                    type: string
-                    description: Текст комментария
-                    minLength: 1
-                    example: Мой первый комментарий
-            required:
-                - commentBody
-        settingSaveRequest:
-            properties:
-                type:
-                    $ref: '#/components/schemas/settingType'
-                value:
-                    $ref: '#/components/schemas/settingValue'
-            additionalProperties: false
-            required:
-                - type
-                - value
         paginationResponse:
             type: object
             properties:
@@ -1421,80 +1469,7 @@ components:
             type: string
             description: Значение настройки
             example: symfony-starter-kit
-        settingIsPublic:
-            type: boolean
-            description: Публична ли настройка
-        seoInfoResponse:
-            type: object
-            description: SEO информация
-            properties:
-                title:
-                    type: string
-                    nullable: true
-                    description: Заголовок
-                    example: Первая статья
-                description:
-                    type: string
-                    nullable: true
-                    description: Описание
-                    example: Описание первой статьи
-                keywords:
-                    type: string
-                    nullable: true
-                    description: Ключевые слова
-                    example: ключевые слова
-        seoSaveRequest:
-            type: object
-            properties:
-                type:
-                    type: string
-                    description: Тип объекта
-                    enum:
-                        - article
-                        - task
-                identity:
-                    type: string
-                    description: Идентификатор объекта
-                    example: dc8dbada-b154-4ffb-b21c-da70162e2704
-                title:
-                    type: string
-                    nullable: true
-                    description: Заголовок
-                    example: Первая статья
-                description:
-                    type: string
-                    nullable: true
-                    description: Описание
-                    example: Описание первой статьи
-                keywords:
-                    type: string
-                    nullable: true
-                    description: Ключевые слова
-                    example: ключевые слова
-            additionalProperties: false
-            required:
-                - type
-                - identity
     parameters:
-        articleAlias:
-            in: path
-            name: alias
-            required: true
-            description: Алиас статьи
-            example: first-article
-            schema:
-                type: string
-        taskExportFormat:
-            in: path
-            name: format
-            required: true
-            description: Формат (csv, xml)
-            example: csv
-            schema:
-                type: string
-                enum:
-                    - csv
-                    - xml
         limit:
             in: query
             name: limit
@@ -1525,44 +1500,6 @@ components:
             in: path
             required: true
             description: ID статьи
-            example: 123e4567-e89b-12d3-a456-426614174000
-            schema:
-                type: string
-                format: uuid
-        confirmToken:
-            name: confirmToken
-            in: path
-            required: true
-            description: Токен подтверждения
-            example: 123e4567-e89b-12d3-a456-426614174000
-            schema:
-                type: string
-                format: uuid
-        recoveryToken:
-            name: recoveryToken
-            in: path
-            required: true
-            description: Токен восстановления пароля
-            example: 123e4567-e89b-12d3-a456-426614174000
-            schema:
-                 type: string
-                 format: uuid
-        seoType:
-            name: type
-            in: path
-            required: true
-            description: Тип объекта
-            example: article
-            schema:
-                type: string
-                enum:
-                    - article
-                    - task
-        seoIdentity:
-            name: identity
-            in: path
-            required: true
-            description: ID объекта
             example: 123e4567-e89b-12d3-a456-426614174000
             schema:
                 type: string
