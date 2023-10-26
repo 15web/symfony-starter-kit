@@ -294,7 +294,6 @@ paths:
                                 code: 401
                                 message: Необходимо пройти аутентификацию
                                 errors: ['auth_required']
-    /profile-save:
         post:
             operationId: saveProfile
             summary: Сохранить профиль
@@ -338,7 +337,7 @@ paths:
                                 error: true
                                 code: 400
                                 message: Неверный формат запроса
-                                errors: ['invalid_request']
+                                errors: [ 'invalid_request' ]
                 '401':
                     description: Доступ запрещен
                     content:
@@ -349,7 +348,7 @@ paths:
                                 error: true
                                 code: 401
                                 message: Необходимо пройти аутентификацию
-                                errors: ['auth_required']
+                                errors: [ 'auth_required' ]
     /tasks:
         get:
             operationId: tasksList
@@ -411,6 +410,66 @@ paths:
                                 code: 401
                                 message: Необходимо пройти аутентификацию
                                 errors: ['auth_required']
+        post:
+            operationId: createTask
+            summary: Создать задачу
+            description: Создать задачу
+            tags:
+                - tasks
+            requestBody:
+                description: Запрос на создание задачи
+                content:
+                    application/json:
+                        schema:
+                            properties:
+                                taskName:
+                                    type: string
+                                    description: Наименование задачи
+                                    minLength: 1
+                                    example: Моя первая задача
+                            additionalProperties: false
+                            required:
+                                - taskName
+            responses:
+                '200':
+                    description: Задача создана
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                required:
+                                    - id
+                                additionalProperties: false
+                                properties:
+                                    id:
+                                        type: string
+                                        format: uuid
+                                        description: ID задачи
+                                example: {
+                                    id: dc8dbada-b154-4ffb-b21c-da70162e2704,
+                                }
+                '400':
+                    description: Ошибка запроса
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/errorResponse'
+                            example:
+                                error: true
+                                code: 400
+                                message: Неверный формат запроса
+                                errors: [ 'invalid_request' ]
+                '401':
+                    description: Доступ запрещен
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/errorResponse'
+                            example:
+                                error: true
+                                code: 401
+                                message: Необходимо пройти аутентификацию
+                                errors: [ 'auth_required' ]
     /tasks/{id}:
         get:
             operationId: taskInfo
@@ -478,56 +537,21 @@ paths:
                                 errors: ['auth_required']
                 '404':
                     description: Задача не найдена
-    /tasks/create:
-        post:
-            operationId: createTask
-            summary: Создать задачу
-            description: Создать задачу
+        delete:
+            operationId: removeTask
+            summary: Удаляет задачу
+            description: Удаляет задачу
             tags:
                 - tasks
-            requestBody:
-                description: Запрос на создание задачи
-                content:
-                    application/json:
-                        schema:
-                            properties:
-                                taskName:
-                                    type: string
-                                    description: Наименование задачи
-                                    minLength: 1
-                                    example: Моя первая задача
-                            additionalProperties: false
-                            required:
-                                - taskName
+            parameters:
+                -   $ref: '#/components/parameters/taskId'
             responses:
                 '200':
-                    description: Задача создана
+                    description: Задача удалена
                     content:
                         application/json:
                             schema:
-                                type: object
-                                required:
-                                    - id
-                                additionalProperties: false
-                                properties:
-                                    id:
-                                        type: string
-                                        format: uuid
-                                        description: ID задачи
-                                example: {
-                                    id: dc8dbada-b154-4ffb-b21c-da70162e2704,
-                                }
-                '400':
-                    description: Ошибка запроса
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/errorResponse'
-                            example:
-                                error: true
-                                code: 400
-                                message: Неверный формат запроса
-                                errors: ['invalid_request']
+                                $ref: '#/components/schemas/successResponse'
                 '401':
                     description: Доступ запрещен
                     content:
@@ -538,7 +562,9 @@ paths:
                                 error: true
                                 code: 401
                                 message: Необходимо пройти аутентификацию
-                                errors: ['auth_required']
+                                errors: [ 'auth_required' ]
+                '404':
+                    description: Задача не найдена
     /tasks/{id}/update-task-name:
         post:
             operationId: updateTaskName
@@ -580,35 +606,6 @@ paths:
                                 code: 400
                                 message: Неверный формат запроса
                                 errors: ['invalid_request']
-                '401':
-                    description: Доступ запрещен
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/errorResponse'
-                            example:
-                                error: true
-                                code: 401
-                                message: Необходимо пройти аутентификацию
-                                errors: ['auth_required']
-                '404':
-                    description: Задача не найдена
-    /tasks/{id}/remove:
-        post:
-            operationId: removeTask
-            summary: Удаляет задачу
-            description: Удаляет задачу
-            tags:
-                - tasks
-            parameters:
-                - $ref: '#/components/parameters/taskId'
-            responses:
-                '200':
-                    description: Задача удалена
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/successResponse'
                 '401':
                     description: Доступ запрещен
                     content:
@@ -882,7 +879,33 @@ paths:
                                 }
                 '404':
                     description: Статья не найдена
-    /admin/articles/create:
+    /admin/articles:
+        get:
+            operationId: adminArticleList
+            summary: Получить список статей
+            description: Получить список статей
+            tags:
+                - articles
+            responses:
+                '200':
+                    description: Список статей
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/articleResponse'
+                '401':
+                    description: Доступ запрещен
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/errorResponse'
+                            example:
+                                error: true
+                                code: 401
+                                message: Необходимо пройти аутентификацию
+                                errors: ['auth_required']
         post:
             operationId: adminArticleCreate
             summary: Создать статью
@@ -912,8 +935,8 @@ paths:
                         application/json:
                             schema:
                                 oneOf:
-                                    - $ref: '#/components/schemas/articleResponse'
-                                    - $ref: '#/components/schemas/errorResponse'
+                                    -   $ref: '#/components/schemas/articleResponse'
+                                    -   $ref: '#/components/schemas/errorResponse'
                 '400':
                     description: Ошибка запроса
                     content:
@@ -924,7 +947,7 @@ paths:
                                 error: true
                                 code: 400
                                 message: Неверный формат запроса
-                                errors: ['invalid_request']
+                                errors: [ 'invalid_request' ]
                 '401':
                     description: Доступ запрещен
                     content:
@@ -935,92 +958,7 @@ paths:
                                 error: true
                                 code: 401
                                 message: Необходимо пройти аутентификацию
-                                errors: ['auth_required']
-    /admin/articles/{id}/update:
-        post:
-            operationId: adminArticleUpdate
-            summary: Обновить статью
-            description: Обновить статью
-            tags:
-                - articles
-            parameters:
-                - $ref: '#/components/parameters/articleId'
-            requestBody:
-                description: Запрос на обновление статьи
-                content:
-                    application/json:
-                        schema:
-                            properties:
-                                title:
-                                    $ref: '#/components/schemas/articleTitle'
-                                alias:
-                                    $ref: '#/components/schemas/articleAlias'
-                                body:
-                                    $ref: '#/components/schemas/articleBody'
-                            additionalProperties: false
-                            required:
-                                - title
-                                - alias
-            responses:
-                '200':
-                    description: Статья обновлена
-                    content:
-                        application/json:
-                            schema:
-                                oneOf:
-                                    - $ref: '#/components/schemas/articleResponse'
-                                    - $ref: '#/components/schemas/errorResponse'
-                '400':
-                    description: Ошибка запроса
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/errorResponse'
-                            example:
-                                error: true
-                                code: 400
-                                message: Неверный формат запроса
-                                errors: ['invalid_request']
-                '401':
-                    description: Доступ запрещен
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/errorResponse'
-                            example:
-                                error: true
-                                code: 401
-                                message: Необходимо пройти аутентификацию
-                                errors: ['auth_required']
-                '404':
-                    description: Статья не найдена
-    /admin/articles:
-        get:
-            operationId: adminArticleList
-            summary: Получить список статей
-            description: Получить список статей
-            tags:
-                - articles
-            responses:
-                '200':
-                    description: Список статей
-                    content:
-                        application/json:
-                            schema:
-                                type: array
-                                items:
-                                    $ref: '#/components/schemas/articleResponse'
-                '401':
-                    description: Доступ запрещен
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/errorResponse'
-                            example:
-                                error: true
-                                code: 401
-                                message: Необходимо пройти аутентификацию
-                                errors: ['auth_required']
+                                errors: [ 'auth_required' ]
     /admin/articles/{id}:
         get:
             operationId: adminArticleInfo
@@ -1050,15 +988,14 @@ paths:
                                 errors: ['auth_required']
                 '404':
                     description: Статья не найдена
-    /admin/articles/{id}/remove:
-        post:
+        delete:
             operationId: adminArticleRemove
             summary: Удалить статью
             description: Удалить статью
             tags:
                 - articles
             parameters:
-                - $ref: '#/components/parameters/articleId'
+                -   $ref: '#/components/parameters/articleId'
             responses:
                 '200':
                     description: Статья удалена
@@ -1076,7 +1013,64 @@ paths:
                                 error: true
                                 code: 401
                                 message: Необходимо пройти аутентификацию
-                                errors: ['auth_required']
+                                errors: [ 'auth_required' ]
+                '404':
+                    description: Статья не найдена
+        post:
+            operationId: adminArticleUpdate
+            summary: Обновить статью
+            description: Обновить статью
+            tags:
+                - articles
+            parameters:
+                -   $ref: '#/components/parameters/articleId'
+            requestBody:
+                description: Запрос на обновление статьи
+                content:
+                    application/json:
+                        schema:
+                            properties:
+                                title:
+                                    $ref: '#/components/schemas/articleTitle'
+                                alias:
+                                    $ref: '#/components/schemas/articleAlias'
+                                body:
+                                    $ref: '#/components/schemas/articleBody'
+                            additionalProperties: false
+                            required:
+                                - title
+                                - alias
+            responses:
+                '200':
+                    description: Статья обновлена
+                    content:
+                        application/json:
+                            schema:
+                                oneOf:
+                                    -   $ref: '#/components/schemas/articleResponse'
+                                    -   $ref: '#/components/schemas/errorResponse'
+                '400':
+                    description: Ошибка запроса
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/errorResponse'
+                            example:
+                                error: true
+                                code: 400
+                                message: Неверный формат запроса
+                                errors: [ 'invalid_request' ]
+                '401':
+                    description: Доступ запрещен
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/errorResponse'
+                            example:
+                                error: true
+                                code: 401
+                                message: Необходимо пройти аутентификацию
+                                errors: [ 'auth_required' ]
                 '404':
                     description: Статья не найдена
     /settings:
@@ -1150,7 +1144,6 @@ paths:
                                 code: 401
                                 message: Необходимо пройти аутентификацию
                                 errors: ['auth_required']
-    /admin/setting/save:
         post:
             operationId: saveSetting
             summary: Сохранить изменения настройки
@@ -1188,7 +1181,7 @@ paths:
                                 error: true
                                 code: 400
                                 message: Неверный формат запроса
-                                errors: ['invalid_request']
+                                errors: [ 'invalid_request' ]
                 '401':
                     description: Доступ запрещен
                     content:
@@ -1199,7 +1192,7 @@ paths:
                                 error: true
                                 code: 401
                                 message: Необходимо пройти аутентификацию
-                                errors: ['auth_required']
+                                errors: [ 'auth_required' ]
                 '404':
                     description: Запись не найдена
                     content:
@@ -1210,7 +1203,7 @@ paths:
                                 error: true
                                 code: 404
                                 message: Настройка не найдена
-                                errors: ['not_found']
+                                errors: [ 'not_found' ]
     /seo/{type}/{identity}:
         get:
             operationId: seoInfo
@@ -1262,7 +1255,7 @@ paths:
                                         nullable: true
                                         description: Ключевые слова
                                         example: ключевые слова
-    /admin/seo/save:
+    /admin/seo:
         post:
             operationId: saveSeo
             summary: Сохранить SEO параметры объекта

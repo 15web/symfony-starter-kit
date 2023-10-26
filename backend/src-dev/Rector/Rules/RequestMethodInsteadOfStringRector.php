@@ -25,11 +25,11 @@ final class RequestMethodInsteadOfStringRector extends AbstractRector
         constant from the Symfony Request class',
             [new CodeSample(
                 <<<'CODE_SAMPLE'
-                        #[Route('/admin/articles/create', methods: ['POST'])]
+                        #[Route('/admin/articles', methods: ['POST'])]
                     CODE_SAMPLE
                 ,
                 <<<'CODE_SAMPLE'
-                        #[Route('/admin/articles/create', methods: [Request::METHOD_POST])]
+                        #[Route('/admin/articles', methods: [Request::METHOD_POST])]
                     CODE_SAMPLE
             )]
         );

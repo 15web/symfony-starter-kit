@@ -30,6 +30,6 @@ final class Seo extends ApiWebTestCase
 
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        return self::request(Request::METHOD_POST, '/api/admin/seo/save', $body, token: $token);
+        return self::request(Request::METHOD_POST, '/api/admin/seo', $body, token: $token);
     }
 }

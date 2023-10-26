@@ -26,7 +26,7 @@ final class RemoveTaskTest extends ApiWebTestCase
         $task1Id = Task::createAndReturnId('Тестовая задача 1', $token);
         $task2Id = Task::createAndReturnId('Тестовая задача 2', $token);
 
-        $response = self::request(Request::METHOD_POST, "/api/tasks/{$task1Id}/remove", token: $token);
+        $response = self::request(Request::METHOD_DELETE, "/api/tasks/{$task1Id}", token: $token);
         self::assertSuccessContentResponse($response);
 
         $response = Task::list($token);
@@ -44,7 +44,7 @@ final class RemoveTaskTest extends ApiWebTestCase
         Task::create('Тестовая задача 1', $token);
 
         $taskId = (string) Uuid::v4();
-        $response = self::request(Request::METHOD_POST, "/api/tasks/{$taskId}/remove", token: $token);
+        $response = self::request(Request::METHOD_DELETE, "/api/tasks/{$taskId}", token: $token);
         self::assertNotFound($response);
     }
 
@@ -55,7 +55,7 @@ final class RemoveTaskTest extends ApiWebTestCase
         $token = User::auth();
         $taskId = Task::createAndReturnId('Тестовая задача 1', $token);
 
-        $response = self::request(Request::METHOD_POST, "/api/tasks/{$taskId}/remove", token: $notValidToken);
+        $response = self::request(Request::METHOD_DELETE, "/api/tasks/{$taskId}", token: $notValidToken);
 
         self::assertAccessDenied($response);
     }
@@ -70,7 +70,7 @@ final class RemoveTaskTest extends ApiWebTestCase
         $tokenSecond = User::auth('second@example.com');
         $taskId = Task::createAndReturnId('Тестовая задача №2 ', $tokenSecond);
 
-        $response = self::request(Request::METHOD_POST, "/api/tasks/{$taskId}/remove", token: $token);
+        $response = self::request(Request::METHOD_DELETE, "/api/tasks/{$taskId}", token: $token);
 
         self::assertNotFound($response);
     }

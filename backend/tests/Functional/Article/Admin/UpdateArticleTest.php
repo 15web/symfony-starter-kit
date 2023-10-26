@@ -31,7 +31,7 @@ final class UpdateArticleTest extends ApiWebTestCase
         $body['body'] = $content = 'Контент 2';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request(Request::METHOD_POST, "/api/admin/articles/{$articleId}/update", $body, token: $token);
+        $response = self::request(Request::METHOD_POST, "/api/admin/articles/{$articleId}", $body, token: $token);
 
         self::assertSuccessResponse($response);
 
@@ -58,7 +58,7 @@ final class UpdateArticleTest extends ApiWebTestCase
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
         $articleId = (string) Uuid::v4();
-        $response = self::request(Request::METHOD_POST, "/api/admin/articles/{$articleId}/update", $body, token: $token);
+        $response = self::request(Request::METHOD_POST, "/api/admin/articles/{$articleId}", $body, token: $token);
         self::assertNotFound($response);
     }
 
@@ -76,7 +76,7 @@ final class UpdateArticleTest extends ApiWebTestCase
         $body['body'] = 'Контент 2';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request(Request::METHOD_POST, "/api/admin/articles/{$articleId}/update", $body, token: $token);
+        $response = self::request(Request::METHOD_POST, "/api/admin/articles/{$articleId}", $body, token: $token);
 
         self::assertApiError($response, 2);
     }
@@ -94,7 +94,7 @@ final class UpdateArticleTest extends ApiWebTestCase
         $body['body'] = 'Контент 2';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request(Request::METHOD_POST, "/api/admin/articles/{$articleId}/update", $body, token: $notValidToken);
+        $response = self::request(Request::METHOD_POST, "/api/admin/articles/{$articleId}", $body, token: $notValidToken);
 
         self::assertAccessDenied($response);
     }
@@ -112,7 +112,7 @@ final class UpdateArticleTest extends ApiWebTestCase
         $body = json_encode($body, JSON_THROW_ON_ERROR);
         $response = self::request(
             Request::METHOD_POST,
-            "/api/admin/articles/{$articleId}/update",
+            "/api/admin/articles/{$articleId}",
             $body,
             token: $token,
             validateRequestSchema: false

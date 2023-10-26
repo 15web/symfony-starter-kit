@@ -24,7 +24,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * Ручка сохранения профиля
  */
 #[IsGranted(UserRole::User->value)]
-#[Route('/profile-save', methods: [Request::METHOD_POST])]
+#[Route('/profile', methods: [Request::METHOD_POST])]
 #[AsController]
 final readonly class ProfileSaveAction
 {

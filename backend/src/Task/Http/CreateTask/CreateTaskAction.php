@@ -23,7 +23,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * Ручка создания задачи
  */
 #[IsGranted(UserRole::User->value)]
-#[Route('/tasks/create', methods: [Request::METHOD_POST])]
+#[Route('/tasks', methods: [Request::METHOD_POST])]
 #[AsController]
 final readonly class CreateTaskAction
 {

@@ -73,7 +73,7 @@ final class ProfileSaveTest extends ApiWebTestCase
         $this->assertBadRequests(['name' => '', 'phone' => ''], $token);
 
         $badJson = '{"name"=1,"phone"=89272222222}';
-        $response = self::request(Request::METHOD_POST, '/api/profile-save', $badJson, token: $token, validateRequestSchema: false);
+        $response = self::request(Request::METHOD_POST, '/api/profile', $badJson, token: $token, validateRequestSchema: false);
         self::assertBadRequest($response);
     }
 
@@ -84,7 +84,7 @@ final class ProfileSaveTest extends ApiWebTestCase
     {
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request(Request::METHOD_POST, '/api/profile-save', $body, token: $token, validateRequestSchema: false);
+        $response = self::request(Request::METHOD_POST, '/api/profile', $body, token: $token, validateRequestSchema: false);
         self::assertBadRequest($response);
     }
 }
