@@ -88,4 +88,9 @@ class Task
     {
         return new TaskId($this->id);
     }
+
+    public function getUserId(): UserId
+    {
+        return new UserId($this->userId);
+    }
 }

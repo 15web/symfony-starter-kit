@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Task\Domain;
 
 use App\Infrastructure\AsService;
-use App\User\SignUp\Domain\UserId;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
@@ -16,11 +15,10 @@ final readonly class Tasks
 {
     public function __construct(private EntityManagerInterface $entityManager) {}
 
-    public function findByIdAndUserId(TaskId $taskId, UserId $userId): ?Task
+    public function findById(TaskId $taskId): ?Task
     {
         return $this->entityManager->getRepository(Task::class)->findOneBy([
             'id' => $taskId->value,
-            'userId' => $userId->value,
         ]);
     }
 
