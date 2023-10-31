@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Task\Console;
 
+use App\Mailer\Notification\UncompletedTasks\TaskData;
 use App\Mailer\Notification\UncompletedTasks\UncompletedTasksMessage;
 use App\Task\Query\Task\FindUncompletedTasksByUserId\FindUncompletedTasksByUserId;
 use App\Task\Query\Task\FindUncompletedTasksByUserId\FindUncompletedTasksByUserIdQuery;
@@ -52,9 +53,11 @@ final class SendUncompletedTaskToUser extends Command
                 continue;
             }
 
+            $uncompletedTasksForMessage = array_map(static fn ($uncompletedTask): TaskData => new TaskData($uncompletedTask->taskName, $uncompletedTask->createdAt), $uncompletedTasks);
+
             $this->messageBus->dispatch(new UncompletedTasksMessage(
                 email: $user->email,
-                tasks: $uncompletedTasks,
+                tasks: $uncompletedTasksForMessage
             ));
 
             ++$emailSent;

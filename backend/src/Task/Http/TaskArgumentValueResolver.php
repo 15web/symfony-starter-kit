@@ -6,27 +6,23 @@ namespace App\Task\Http;
 
 use App\Infrastructure\ApiException\ApiBadRequestException;
 use App\Infrastructure\ApiException\ApiNotFoundException;
-use App\Infrastructure\ApiException\ApiUnauthorizedException;
 use App\Infrastructure\AsService;
 use App\Task\Domain\Task;
 use App\Task\Domain\TaskId;
 use App\Task\Domain\Tasks;
-use App\User\SignUp\Domain\User;
 use InvalidArgumentException;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Symfony\Component\Uid\Uuid;
 
 /**
- * Резолвер нахождения задачи по айди и пользователю
+ * Резолвер нахождения задачи по айди
  */
 #[AsService]
 final readonly class TaskArgumentValueResolver implements ValueResolverInterface
 {
     public function __construct(
-        private Security $security,
         private Tasks $tasks,
     ) {}
 
@@ -39,12 +35,6 @@ final readonly class TaskArgumentValueResolver implements ValueResolverInterface
             return [];
         }
 
-        $user = $this->security->getUser();
-
-        if (!$user instanceof User) {
-            throw new ApiUnauthorizedException(['Необходимо пройти аутентификацию']);
-        }
-
         /** @var string|null $taskId */
         $taskId = $request->attributes->get('id');
         if ($taskId === null) {
@@ -52,9 +42,8 @@ final readonly class TaskArgumentValueResolver implements ValueResolverInterface
         }
 
         try {
-            $task = $this->tasks->findByIdAndUserId(
+            $task = $this->tasks->findById(
                 taskId: new TaskId(Uuid::fromString($taskId)),
-                userId: $user->getUserId(),
             );
 
             if ($task === null) {

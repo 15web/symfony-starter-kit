@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Task\Http\Comment;
 
 use App\Infrastructure\ApiException\ApiBadRequestException;
+use App\Infrastructure\ApiException\ApiNotFoundException;
 use App\Infrastructure\ApiRequestValueResolver;
 use App\Infrastructure\Flush;
 use App\Infrastructure\SuccessResponse;
@@ -14,7 +15,9 @@ use App\Task\Domain\AddCommentToCompletedTaskException;
 use App\Task\Domain\Task;
 use App\Task\Domain\TaskCommentId;
 use App\Task\Http\TaskArgumentValueResolver;
+use App\User\SignUp\Domain\UserId;
 use App\User\SignUp\Domain\UserRole;
+use App\User\SignUp\Http\UserIdArgumentValueResolver;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -41,7 +44,13 @@ final readonly class AddCommentOnTaskAction
         Task $task,
         #[ValueResolver(ApiRequestValueResolver::class)]
         AddCommentOnTaskCommand $addCommentOnTaskCommand,
+        #[ValueResolver(UserIdArgumentValueResolver::class)]
+        UserId $userId
     ): SuccessResponse {
+        if (!$userId->equalTo($task->getUserId())) {
+            throw new ApiNotFoundException(['Запись не найдена']);
+        }
+
         try {
             $commentId = new TaskCommentId();
             ($this->addCommentOnTask)(

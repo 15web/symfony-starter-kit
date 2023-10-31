@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace App\Task\Http;
 
+use App\Infrastructure\ApiException\ApiNotFoundException;
 use App\Infrastructure\Flush;
 use App\Infrastructure\SuccessResponse;
 use App\Task\Command\RemoveTask;
 use App\Task\Domain\Task;
+use App\User\SignUp\Domain\UserId;
 use App\User\SignUp\Domain\UserRole;
+use App\User\SignUp\Http\UserIdArgumentValueResolver;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -32,8 +35,14 @@ final readonly class RemoveTaskAction
 
     public function __invoke(
         #[ValueResolver(TaskArgumentValueResolver::class)]
-        Task $task
+        Task $task,
+        #[ValueResolver(UserIdArgumentValueResolver::class)]
+        UserId $userId
     ): SuccessResponse {
+        if (!$userId->equalTo($task->getUserId())) {
+            throw new ApiNotFoundException(['Запись не найдена']);
+        }
+
         ($this->removeTask)($task);
 
         ($this->flush)();
