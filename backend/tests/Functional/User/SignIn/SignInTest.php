@@ -42,9 +42,12 @@ final class SignInTest extends ApiWebTestCase
         $response = self::request(Request::METHOD_POST, '/api/sign-in', $body);
         self::assertSuccessResponse($response);
 
-        $response = self::jsonDecode($response->getContent());
+        /** @var array{
+         *     data: array{token: string}
+         * } $signInResponse */
+        $signInResponse = self::jsonDecode($response->getContent());
 
-        self::assertNotEmpty($response['token']);
+        self::assertNotEmpty($signInResponse['data']['token']);
     }
 
     #[TestDox('Неверный пароль')]

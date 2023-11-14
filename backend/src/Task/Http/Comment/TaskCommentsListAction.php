@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Task\Http\Comment;
 
+use App\Infrastructure\Response\ApiListObjectResponse;
+use App\Infrastructure\Response\Pagination\PaginationResponse;
 use App\Task\Query\Comment\FindAll\CommentData;
 use App\Task\Query\Comment\FindAll\FindAllCommentQuery;
 use App\Task\Query\Comment\FindAll\FindAllCommentsByTaskIdAndUserId;
@@ -28,15 +30,25 @@ final readonly class TaskCommentsListAction
 {
     public function __construct(private FindAllCommentsByTaskIdAndUserId $findAllComments) {}
 
-    /**
-     * @return CommentData[]
-     */
     public function __invoke(
         #[ValueResolver(UidValueResolver::class)]
         Uuid $id,
         #[ValueResolver(UserIdArgumentValueResolver::class)]
         UserId $userId,
-    ): array {
+    ): ApiListObjectResponse {
+        $taskComments = $this->buildResponseData($id, $userId);
+
+        return new ApiListObjectResponse(
+            data: $taskComments,
+            pagination: new PaginationResponse(total: \count($taskComments))
+        );
+    }
+
+    /**
+     * @return CommentData[]
+     */
+    private function buildResponseData(Uuid $id, UserId $userId): array
+    {
         return ($this->findAllComments)(
             findAllQuery: new FindAllCommentQuery(
                 taskId: $id,

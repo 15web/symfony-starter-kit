@@ -183,7 +183,7 @@ final readonly class EntityGenerator
         return $question;
     }
 
-    private function askForNextField(ConsoleStyle $io, array $fields, string $entityClass, bool $isFirstField): EntityRelation|array|null
+    private function askForNextField(ConsoleStyle $io, array $fields, string $entityClass, bool $isFirstField): null|array|EntityRelation
     {
         $io->writeln('');
 

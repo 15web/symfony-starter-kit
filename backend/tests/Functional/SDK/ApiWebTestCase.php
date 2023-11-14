@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Functional\SDK;
 
 use App\Infrastructure\EventSubscriber\OpenApiValidateSubscriber;
+use App\Infrastructure\Response\ResponseStatus;
 use Iterator;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -60,7 +61,7 @@ abstract class ApiWebTestCase extends WebTestCase
     /**
      * @return array<mixed>
      */
-    final public static function jsonDecode(string|bool $content): array
+    final public static function jsonDecode(bool|string $content): array
     {
         if (\is_bool($content)) {
             return [];
@@ -78,8 +79,15 @@ abstract class ApiWebTestCase extends WebTestCase
     {
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
 
-        $response = self::jsonDecode($response->getContent());
-        self::assertTrue($response['success']);
+        /** @var array{
+         *     data: array{
+         *     status: string|null
+         *    }
+         * } $responseContent */
+        $responseContent = self::jsonDecode($response->getContent());
+        $successResponse = ResponseStatus::Success;
+
+        self::assertSame($responseContent['data']['status'], $successResponse->value);
     }
 
     final public static function assertBadRequest(Response $response): void
@@ -91,11 +99,21 @@ abstract class ApiWebTestCase extends WebTestCase
     {
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
 
-        $response = self::jsonDecode($response->getContent());
-        self::assertTrue($response['error']);
-        self::assertSame($response['code'], $apiErrorCode);
-        self::assertNotEmpty($response['message']);
-        self::assertNotEmpty($response['errors']);
+        /**
+         * @var array{
+         *     data: array{
+         *         error: bool,
+         *         code: int,
+         *         message: ?string,
+         *         errors: array <int, array{}>
+         *     }
+         * } $errorResponse
+         */
+        $errorResponse = self::jsonDecode($response->getContent());
+        self::assertTrue($errorResponse['data']['error']);
+        self::assertSame($errorResponse['data']['code'], $apiErrorCode);
+        self::assertNotEmpty($errorResponse['data']['message']);
+        self::assertNotEmpty($errorResponse['data']['errors']);
     }
 
     final public static function assertAccessDenied(Response $response): void

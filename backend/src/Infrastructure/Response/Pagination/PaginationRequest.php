@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Pagination;
+namespace App\Infrastructure\Response\Pagination;
 
 /**
  * Запрос на пагинацию

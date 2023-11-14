@@ -7,7 +7,8 @@ namespace App\Task\Http;
 use App\Infrastructure\ApiException\ApiNotFoundException;
 use App\Infrastructure\ApiRequestValueResolver;
 use App\Infrastructure\Flush;
-use App\Infrastructure\SuccessResponse;
+use App\Infrastructure\Response\ApiObjectResponse;
+use App\Infrastructure\Response\SuccessResponse;
 use App\Task\Command\UpdateTaskName\UpdateTaskName;
 use App\Task\Command\UpdateTaskName\UpdateTaskNameCommand;
 use App\Task\Domain\Task;
@@ -42,7 +43,7 @@ final readonly class UpdateTaskNameAction
         UpdateTaskNameCommand $command,
         #[ValueResolver(UserIdArgumentValueResolver::class)]
         UserId $userId
-    ): SuccessResponse {
+    ): ApiObjectResponse {
         if (!$userId->equalTo($task->getUserId())) {
             throw new ApiNotFoundException(['Запись не найдена']);
         }
@@ -59,6 +60,8 @@ final readonly class UpdateTaskNameAction
             self::class => __FUNCTION__,
         ]);
 
-        return new SuccessResponse();
+        return new ApiObjectResponse(
+            data: new SuccessResponse()
+        );
     }
 }

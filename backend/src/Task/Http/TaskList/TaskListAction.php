@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Task\Http\TaskList;
 
-use App\Infrastructure\Pagination\PaginationRequest;
-use App\Infrastructure\Pagination\PaginationRequestArgumentResolver;
-use App\Infrastructure\Pagination\PaginationResponse;
+use App\Infrastructure\Response\ApiListObjectResponse;
+use App\Infrastructure\Response\Pagination\PaginationRequest;
+use App\Infrastructure\Response\Pagination\PaginationRequestArgumentResolver;
+use App\Infrastructure\Response\Pagination\PaginationResponse;
 use App\Task\Query\Task\FindAllByUserId\CountAllTasksByUserId;
 use App\Task\Query\Task\FindAllByUserId\FindAllTasksByUserId;
 use App\Task\Query\Task\FindAllByUserId\FindAllTasksByUserIdQuery;
@@ -37,7 +38,7 @@ final readonly class TaskListAction
         UserId $userId,
         #[ValueResolver(PaginationRequestArgumentResolver::class)]
         PaginationRequest $paginationRequest,
-    ): TaskListResponse {
+    ): ApiListObjectResponse {
         $query = new FindAllTasksByUserIdQuery(
             userId: $userId->value,
             limit: $paginationRequest->limit,
@@ -49,7 +50,7 @@ final readonly class TaskListAction
 
         $pagination = new PaginationResponse($allTasksCount);
 
-        return new TaskListResponse(
+        return new ApiListObjectResponse(
             data: $tasks,
             pagination: $pagination,
         );

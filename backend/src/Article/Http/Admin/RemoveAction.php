@@ -7,7 +7,8 @@ namespace App\Article\Http\Admin;
 use App\Article\Domain\Article;
 use App\Article\Domain\Articles;
 use App\Infrastructure\Flush;
-use App\Infrastructure\SuccessResponse;
+use App\Infrastructure\Response\ApiObjectResponse;
+use App\Infrastructure\Response\SuccessResponse;
 use App\User\SignUp\Domain\UserRole;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -28,10 +29,12 @@ final readonly class RemoveAction
     public function __invoke(
         #[ValueResolver(ArticleArgumentValueResolver::class)]
         Article $article
-    ): SuccessResponse {
+    ): ApiObjectResponse {
         $this->articles->remove($article);
         ($this->flush)();
 
-        return new SuccessResponse();
+        return new ApiObjectResponse(
+            data: new SuccessResponse()
+        );
     }
 }

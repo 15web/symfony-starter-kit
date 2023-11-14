@@ -33,10 +33,13 @@ final class ProfileInfoTest extends ApiWebTestCase
         $response = self::request(Request::METHOD_GET, '/api/profile', token: $token);
         self::assertSuccessResponse($response);
 
+        /** @var array{
+         *     data: array{phone: string, name: string}
+         * } $profile */
         $profile = self::jsonDecode($response->getContent());
 
-        self::assertSame($profilePhone, $profile['phone']);
-        self::assertSame($profileName, $profile['name']);
+        self::assertSame($profilePhone, $profile['data']['phone']);
+        self::assertSame($profileName, $profile['data']['name']);
     }
 
     #[TestDox('Пустые данные профиля')]
@@ -47,10 +50,13 @@ final class ProfileInfoTest extends ApiWebTestCase
         $response = self::request(Request::METHOD_GET, '/api/profile', token: $token);
         self::assertSuccessResponse($response);
 
+        /** @var array{
+         *     data: array{phone: ?string, name: ?string}
+         * } $profile */
         $profile = self::jsonDecode($response->getContent());
 
-        self::assertNull($profile['phone']);
-        self::assertNull($profile['name']);
+        self::assertNull($profile['data']['phone']);
+        self::assertNull($profile['data']['name']);
     }
 
     #[DataProvider('notValidTokenDataProvider')]

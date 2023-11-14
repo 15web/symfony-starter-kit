@@ -6,7 +6,8 @@ namespace App\Task\Http;
 
 use App\Infrastructure\ApiException\ApiNotFoundException;
 use App\Infrastructure\Flush;
-use App\Infrastructure\SuccessResponse;
+use App\Infrastructure\Response\ApiObjectResponse;
+use App\Infrastructure\Response\SuccessResponse;
 use App\Task\Command\RemoveTask;
 use App\Task\Domain\Task;
 use App\User\SignUp\Domain\UserId;
@@ -38,7 +39,7 @@ final readonly class RemoveTaskAction
         Task $task,
         #[ValueResolver(UserIdArgumentValueResolver::class)]
         UserId $userId
-    ): SuccessResponse {
+    ): ApiObjectResponse {
         if (!$userId->equalTo($task->getUserId())) {
             throw new ApiNotFoundException(['Запись не найдена']);
         }
@@ -52,6 +53,8 @@ final readonly class RemoveTaskAction
             self::class => __FUNCTION__,
         ]);
 
-        return new SuccessResponse();
+        return new ApiObjectResponse(
+            data: new SuccessResponse()
+        );
     }
 }

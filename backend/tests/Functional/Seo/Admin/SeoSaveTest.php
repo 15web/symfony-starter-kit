@@ -40,11 +40,14 @@ final class SeoSaveTest extends ApiWebTestCase
         $response = self::request(Request::METHOD_GET, $url);
         self::assertSuccessResponse($response);
 
+        /** @var array{
+         *     data: array{title: string, description: string, keywords:string}
+         * } $seo */
         $seo = self::jsonDecode($response->getContent());
 
-        self::assertSame($body['title'], $seo['title']);
-        self::assertSame($body['description'], $seo['description']);
-        self::assertSame($body['keywords'], $seo['keywords']);
+        self::assertSame($body['title'], $seo['data']['title']);
+        self::assertSame($body['description'], $seo['data']['description']);
+        self::assertSame($body['keywords'], $seo['data']['keywords']);
     }
 
     #[DataProvider('notValidTokenDataProvider')]

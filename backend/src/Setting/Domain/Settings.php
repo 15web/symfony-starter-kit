@@ -37,11 +37,11 @@ final readonly class Settings
     }
 
     /**
-     * @return Setting[]
+     * @return list<Setting>
      */
     public function getAll(): array
     {
-        /** @var Setting[] $settings */
+        /** @var list<Setting> $settings */
         $settings = $this->entityManager
             ->getRepository(Setting::class)
             ->createQueryBuilder('s')
@@ -53,11 +53,11 @@ final readonly class Settings
     }
 
     /**
-     * @return Setting[]
+     * @return list<Setting>
      */
     public function getAllPublic(): array
     {
-        /** @var Setting[] $settings */
+        /** @var list<Setting> $settings */
         $settings = $this->entityManager
             ->getRepository(Setting::class)
             ->createQueryBuilder('s')

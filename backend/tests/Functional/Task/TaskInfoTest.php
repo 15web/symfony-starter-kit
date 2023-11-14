@@ -33,14 +33,24 @@ final class TaskInfoTest extends ApiWebTestCase
         $response = self::request(Request::METHOD_GET, "/api/tasks/{$taskId}", token: $token);
         self::assertSuccessResponse($response);
 
+        /** @var array{
+         *     data: array{
+         *     id: string|null,
+         *     taskName: string,
+         *     isCompleted: bool,
+         *     createdAt: string|null,
+         *     completedAt: string|null,
+         *     updatedAt: string|null
+         *    }
+         * } $task */
         $task = self::jsonDecode($response->getContent());
 
-        self::assertNotNull($task['id']);
-        self::assertSame($taskName, $task['taskName']);
-        self::assertFalse($task['isCompleted']);
-        self::assertNotNull($task['createdAt']);
-        self::assertNull($task['completedAt']);
-        self::assertNull($task['updatedAt']);
+        self::assertNotNull($task['data']['id']);
+        self::assertSame($taskName, $task['data']['taskName']);
+        self::assertFalse($task['data']['isCompleted']);
+        self::assertNotNull($task['data']['createdAt']);
+        self::assertNull($task['data']['completedAt']);
+        self::assertNull($task['data']['updatedAt']);
     }
 
     #[TestDox('Задача не найдена')]

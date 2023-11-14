@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Setting\Http\Admin;
 
+use App\Infrastructure\Response\ApiListObjectResponse;
+use App\Infrastructure\Response\Pagination\PaginationResponse;
+use App\Setting\Domain\Setting;
 use App\Setting\Domain\Settings;
 use App\User\SignUp\Domain\UserRole;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,13 +24,23 @@ final readonly class ListAction
 {
     public function __construct(private Settings $settings) {}
 
-    /**
-     * @return iterable<SettingListData>
-     */
-    public function __invoke(): iterable
+    public function __invoke(): ApiListObjectResponse
     {
         $settings = $this->settings->getAll();
 
+        return new ApiListObjectResponse(
+            data: $this->buildResponseData($settings),
+            pagination: new PaginationResponse(\count($settings))
+        );
+    }
+
+    /**
+     * @param list<Setting> $settings
+     *
+     * @return iterable<SettingListData>
+     */
+    private function buildResponseData(array $settings): iterable
+    {
         foreach ($settings as $setting) {
             yield new SettingListData(
                 type: $setting->getType()->value,

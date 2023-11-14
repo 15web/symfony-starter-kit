@@ -6,6 +6,7 @@ namespace App\Task\Http\CreateTask;
 
 use App\Infrastructure\ApiRequestValueResolver;
 use App\Infrastructure\Flush;
+use App\Infrastructure\Response\ApiObjectResponse;
 use App\Task\Command\CreateTask\CreateTask;
 use App\Task\Command\CreateTask\CreateTaskCommand;
 use App\Task\Domain\TaskId;
@@ -38,7 +39,7 @@ final readonly class CreateTaskAction
         CreateTaskCommand $createTaskCommand,
         #[ValueResolver(UserIdArgumentValueResolver::class)]
         UserId $userId,
-    ): TaskData {
+    ): ApiObjectResponse {
         $taskId = new TaskId();
         ($this->createTask)(
             createTaskCommand: $createTaskCommand,
@@ -53,6 +54,8 @@ final readonly class CreateTaskAction
             self::class => __FUNCTION__,
         ]);
 
-        return new TaskData($taskId->value);
+        return new ApiObjectResponse(
+            data: new TaskData($taskId->value)
+        );
     }
 }

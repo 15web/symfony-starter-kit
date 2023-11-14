@@ -32,10 +32,21 @@ final class ChangeTaskNameTest extends ApiWebTestCase
         self::assertSuccessContentResponse($response);
 
         $response = self::request(Request::METHOD_GET, "/api/tasks/{$taskId}", token: $token);
+
+        /** @var array{
+         *     data: array{
+         *     id: string|null,
+         *     taskName: string,
+         *     isCompleted: bool,
+         *     createdAt: string|null,
+         *     completedAt: string|null,
+         *     updatedAt: string|null
+         *    }
+         * } $task */
         $task = self::jsonDecode($response->getContent());
 
-        self::assertSame($secondName, $task['taskName']);
-        self::assertNotNull($task['updatedAt']);
+        self::assertSame($secondName, $task['data']['taskName']);
+        self::assertNotNull($task['data']['updatedAt']);
     }
 
     #[TestDox('Задача не найдена')]
