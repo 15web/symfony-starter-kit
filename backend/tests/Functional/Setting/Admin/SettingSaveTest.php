@@ -35,17 +35,21 @@ final class SettingSaveTest extends ApiWebTestCase
         $responseList = self::request(Request::METHOD_GET, '/api/admin/settings', token: $token);
         self::assertSuccessResponse($responseList);
 
-        /** @var array<int, array{
-         *     id: string,
-         *     type: string,
-         *     value: string,
-         *     isPublic: bool,
-         *     createdAt: string,
-         *     updatedAt: string|null,
-         * }> $settings */
+        /** @var array{
+         *     data: array<int, array{
+         *          id: string,
+         *          type: string,
+         *          value: string,
+         *          isPublic: bool,
+         *          createdAt: string,
+         *          updatedAt: string|null,
+         *     }>,
+         *     pagination: array{total: int},
+         * } $settings
+         */
         $settings = self::jsonDecode($responseList->getContent());
 
-        foreach ($settings as $setting) {
+        foreach ($settings['data'] as $setting) {
             if ($setting['type'] !== SettingType::EMAIL_SITE->value) {
                 continue;
             }

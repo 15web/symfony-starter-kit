@@ -7,7 +7,8 @@ namespace App\User\RecoveryPassword\Http;
 use App\Infrastructure\ApiException\ApiNotFoundException;
 use App\Infrastructure\ApiRequestValueResolver;
 use App\Infrastructure\Flush;
-use App\Infrastructure\SuccessResponse;
+use App\Infrastructure\Response\ApiObjectResponse;
+use App\Infrastructure\Response\SuccessResponse;
 use App\User\RecoveryPassword\Command\RecoverPassword;
 use App\User\RecoveryPassword\Command\RecoverPasswordCommand;
 use App\User\RecoveryPassword\Command\RecoveryTokenNotFoundException;
@@ -32,7 +33,7 @@ final readonly class RecoverPasswordAction
         Uuid $recoveryToken,
         #[ValueResolver(ApiRequestValueResolver::class)]
         RecoverPasswordCommand $recoverPasswordCommand,
-    ): SuccessResponse {
+    ): ApiObjectResponse {
         try {
             ($this->recoverPassword)(
                 recoveryToken: $recoveryToken,
@@ -44,6 +45,8 @@ final readonly class RecoverPasswordAction
             throw new ApiNotFoundException(['Токен восстановления пароля не найден']);
         }
 
-        return new SuccessResponse();
+        return new ApiObjectResponse(
+            data: new SuccessResponse(),
+        );
     }
 }

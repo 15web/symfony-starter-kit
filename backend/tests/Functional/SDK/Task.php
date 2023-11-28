@@ -26,11 +26,11 @@ final class Task extends ApiWebTestCase
         $response = self::create($taskName, $token);
 
         /** @var array{
-         *     id: string
+         *     data: array{id: string}
          * } $taskInfo */
         $taskInfo = self::jsonDecode($response->getContent());
 
-        return $taskInfo['id'];
+        return $taskInfo['data']['id'];
     }
 
     /**

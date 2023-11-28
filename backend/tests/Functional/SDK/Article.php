@@ -34,16 +34,18 @@ final class Article extends ApiWebTestCase
         $response = self::request(Request::METHOD_POST, '/api/admin/articles', $body, token: $token);
 
         /** @var array{
+         *     data: array{
          *     id: string,
          *     title: string,
          *     alias: string,
          *     body: string,
-         *     createdAt: string,
-         *     updatedAt: string|null,
+         *     createdAt: string|null,
+         *     updatedAt: string|null
+         *    }
          * } $article */
         $article = self::jsonDecode($response->getContent());
 
-        return $article['id'];
+        return $article['data']['id'];
     }
 
     /**
@@ -52,7 +54,7 @@ final class Article extends ApiWebTestCase
      *     title: string,
      *     alias: string,
      *     body: string,
-     *     createdAt: string,
+     *     createdAt: string|null,
      *     updatedAt: string|null,
      * }>
      */
@@ -62,16 +64,20 @@ final class Article extends ApiWebTestCase
 
         self::assertSuccessResponse($response);
 
-        /** @var array<int, array{
-         *     id: string,
-         *     title: string,
-         *     alias: string,
-         *     body: string,
-         *     createdAt: string,
-         *     updatedAt: string|null,
-         * }> $articles */
+        /** @var array{
+         *     data: array<int, array{
+         *          id: string,
+         *          title: string,
+         *          alias: string,
+         *          body: string,
+         *          createdAt: string|null,
+         *          updatedAt: string|null
+         *     }>,
+         *     pagination: array{total: int},
+         * } $articles
+         */
         $articles = self::jsonDecode($response->getContent());
 
-        return $articles;
+        return $articles['data'];
     }
 }

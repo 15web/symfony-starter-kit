@@ -29,17 +29,21 @@ final class Setting extends ApiWebTestCase
 
         self::assertSuccessResponse($response);
 
-        /** @var array<int, array{
-         *     id: string,
-         *     type: string,
-         *     value: string,
-         *     isPublic: bool,
-         *     createdAt: string,
-         *     updatedAt: string|null,
-         * }> $settings */
+        /** @var array{
+         *     data: array<int, array{
+         *          id: string,
+         *          type: string,
+         *          value: string,
+         *          isPublic: bool,
+         *          createdAt: string,
+         *          updatedAt: string|null,
+         *     }>,
+         *     pagination: array{total: int},
+         * } $settings
+         */
         $settings = self::jsonDecode($response->getContent());
 
-        return $settings;
+        return $settings['data'];
     }
 
     /**
@@ -54,12 +58,16 @@ final class Setting extends ApiWebTestCase
 
         self::assertSuccessResponse($response);
 
-        /** @var array<int, array{
-         *     type: string,
-         *     value: string,
-         * }> $settings */
+        /** @var array{
+         *     data: array<int, array{
+         *          type: string,
+         *          value: string
+         *     }>,
+         *     pagination: array{total: int},
+         * } $settings
+         */
         $settings = self::jsonDecode($response->getContent());
 
-        return $settings;
+        return $settings['data'];
     }
 }

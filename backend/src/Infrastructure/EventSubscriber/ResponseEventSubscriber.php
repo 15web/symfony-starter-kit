@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Infrastructure\EventSubscriber;
 
 use App\Infrastructure\AsService;
+use App\Infrastructure\Response\ResponseInterface;
 use RuntimeException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -38,12 +39,8 @@ final readonly class ResponseEventSubscriber implements EventSubscriberInterface
     {
         $controllerResult = $event->getControllerResult();
 
-        if (!\is_object($controllerResult) && !is_iterable($controllerResult)) {
+        if (!$controllerResult instanceof ResponseInterface) {
             throw new RuntimeException('Не поддерживаемый ответ');
-        }
-
-        if ($controllerResult instanceof Response) {
-            return;
         }
 
         $controllerResult = $this->serializer->serialize(

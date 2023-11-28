@@ -2,19 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure;
+namespace App\Infrastructure\Response;
 
 /**
  * Дефолтный успешный ответ
  */
 final readonly class SuccessResponse
 {
-    private const SUCCESS_VALUE = true;
-
-    public bool $success;
+    public ResponseStatus $status;
 
     public function __construct()
     {
-        $this->success = self::SUCCESS_VALUE;
+        $this->status = ResponseStatus::Success;
     }
 }

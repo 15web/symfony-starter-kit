@@ -7,7 +7,8 @@ namespace App\Setting\Http\Admin;
 use App\Infrastructure\ApiException\ApiNotFoundException;
 use App\Infrastructure\ApiRequestValueResolver;
 use App\Infrastructure\Flush;
-use App\Infrastructure\SuccessResponse;
+use App\Infrastructure\Response\ApiObjectResponse;
+use App\Infrastructure\Response\SuccessResponse;
 use App\Setting\Command\SaveSetting;
 use App\Setting\Command\SaveSettingCommand;
 use App\Setting\Domain\SettingNotFoundException;
@@ -36,7 +37,7 @@ final readonly class SettingSaveAction
     public function __invoke(
         #[ValueResolver(ApiRequestValueResolver::class)]
         SaveSettingCommand $saveSettingCommand,
-    ): SuccessResponse {
+    ): ApiObjectResponse {
         try {
             $setting = ($this->saveSetting)($saveSettingCommand);
 
@@ -52,6 +53,8 @@ final readonly class SettingSaveAction
             throw new ApiNotFoundException(['Настройка не найдена']);
         }
 
-        return new SuccessResponse();
+        return new ApiObjectResponse(
+            data: new SuccessResponse()
+        );
     }
 }

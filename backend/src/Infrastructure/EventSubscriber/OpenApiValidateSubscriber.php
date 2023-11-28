@@ -95,7 +95,7 @@ final readonly class OpenApiValidateSubscriber implements EventSubscriberInterfa
         );
     }
 
-    private function needValidate(ResponseEvent|RequestEvent $event): bool
+    private function needValidate(RequestEvent|ResponseEvent $event): bool
     {
         if (!$event->isMainRequest() || !$this->activateValidation) {
             return false;

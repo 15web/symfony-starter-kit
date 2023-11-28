@@ -7,7 +7,6 @@
     findUnusedBaselineEntry="true"
     findUnusedCode="false"
     cacheDirectory="./cache/psalm"
-    errorBaseline="psalm-baseline.xml"
 >
     <projectFiles>
         <directory name="../src" />

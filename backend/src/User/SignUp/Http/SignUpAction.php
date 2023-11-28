@@ -8,7 +8,8 @@ use App\Infrastructure\ApiException\ApiBadResponseException;
 use App\Infrastructure\ApiException\ApiErrorCode;
 use App\Infrastructure\ApiRequestValueResolver;
 use App\Infrastructure\Flush;
-use App\Infrastructure\SuccessResponse;
+use App\Infrastructure\Response\ApiObjectResponse;
+use App\Infrastructure\Response\SuccessResponse;
 use App\User\SignUp\Command\SignUp;
 use App\User\SignUp\Command\SignUpCommand;
 use App\User\SignUp\Command\UserAlreadyExistException;
@@ -32,7 +33,7 @@ final readonly class SignUpAction
     public function __invoke(
         #[ValueResolver(ApiRequestValueResolver::class)]
         SignUpCommand $signUpCommand,
-    ): SuccessResponse {
+    ): ApiObjectResponse {
         try {
             ($this->signUp)($signUpCommand);
             ($this->flush)();
@@ -43,6 +44,8 @@ final readonly class SignUpAction
             );
         }
 
-        return new SuccessResponse();
+        return new ApiObjectResponse(
+            data: new SuccessResponse()
+        );
     }
 }

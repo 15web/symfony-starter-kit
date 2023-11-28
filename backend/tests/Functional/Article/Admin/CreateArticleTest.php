@@ -26,14 +26,24 @@ final class CreateArticleTest extends ApiWebTestCase
 
         self::assertSuccessResponse($response);
 
+        /** @var array{
+         *     data: array{
+         *     id: string|null,
+         *     title: string,
+         *     alias: string,
+         *     body: string,
+         *     createdAt: string|null,
+         *     updatedAt: string|null
+         *    }
+         * } $articleResponse */
         $articleResponse = self::jsonDecode($response->getContent());
 
-        self::assertNotNull($articleResponse['id']);
-        self::assertSame($articleResponse['title'], $title);
-        self::assertSame($articleResponse['alias'], $alias);
-        self::assertSame($articleResponse['body'], $content);
-        self::assertNotNull($articleResponse['createdAt']);
-        self::assertNull($articleResponse['updatedAt']);
+        self::assertNotNull($articleResponse['data']['id']);
+        self::assertSame($articleResponse['data']['title'], $title);
+        self::assertSame($articleResponse['data']['alias'], $alias);
+        self::assertSame($articleResponse['data']['body'], $content);
+        self::assertNotNull($articleResponse['data']['createdAt']);
+        self::assertNull($articleResponse['data']['updatedAt']);
     }
 
     #[TestDox('Нельзя создать статьи с одинаковым алиасом')]

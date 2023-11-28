@@ -34,20 +34,21 @@ final class CreateCommentOnTaskTest extends ApiWebTestCase
 
         $response = self::request(Request::METHOD_GET, "/api/tasks/{$taskId}/comments", token: $token);
 
-        /** @var array<int, array{
+        /** @var array{
+         *     data: array<int, array{
          *     id: string,
          *     body: string,
          *     createdAt: string,
          *     updatedAt: string|null,
-         * }> $comments
-         */
+         *    }>
+         * } $comments */
         $comments = self::jsonDecode($response->getContent());
 
-        self::assertCount(1, $comments);
-        self::assertSame($commentText, $comments[0]['body']);
-        self::assertNotEmpty($comments[0]['id']);
-        self::assertNotEmpty($comments[0]['createdAt']);
-        self::assertNull($comments[0]['updatedAt']);
+        self::assertCount(1, $comments['data']);
+        self::assertSame($commentText, $comments['data'][0]['body']);
+        self::assertNotEmpty($comments['data'][0]['id']);
+        self::assertNotEmpty($comments['data'][0]['createdAt']);
+        self::assertNull($comments['data'][0]['updatedAt']);
     }
 
     #[TestDox('Задача не найдена')]

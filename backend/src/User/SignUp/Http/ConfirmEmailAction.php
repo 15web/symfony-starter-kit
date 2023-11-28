@@ -8,7 +8,8 @@ use App\Infrastructure\ApiException\ApiBadResponseException;
 use App\Infrastructure\ApiException\ApiErrorCode;
 use App\Infrastructure\ApiException\ApiNotFoundException;
 use App\Infrastructure\Flush;
-use App\Infrastructure\SuccessResponse;
+use App\Infrastructure\Response\ApiObjectResponse;
+use App\Infrastructure\Response\SuccessResponse;
 use App\User\SignUp\Command\ConfirmEmail;
 use App\User\SignUp\Domain\EmailAlreadyIsConfirmedException;
 use App\User\SignUp\Domain\UserNotFoundException;
@@ -34,7 +35,7 @@ final readonly class ConfirmEmailAction
     public function __invoke(
         #[ValueResolver(UidValueResolver::class)]
         Uuid $confirmToken,
-    ): SuccessResponse {
+    ): ApiObjectResponse {
         try {
             ($this->confirmEmail)($confirmToken);
             ($this->flush)();
@@ -47,6 +48,8 @@ final readonly class ConfirmEmailAction
             throw new ApiNotFoundException(['Пользователь не найден']);
         }
 
-        return new SuccessResponse();
+        return new ApiObjectResponse(
+            data: new SuccessResponse()
+        );
     }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\User\SignIn\Http;
 
 use App\Infrastructure\Flush;
+use App\Infrastructure\Response\ApiObjectResponse;
 use App\User\SignIn\Command\CreateToken;
 use App\User\SignIn\Http\Authenticator\JsonLoginAuthenticator;
 use App\User\SignUp\Domain\UserId;
@@ -29,7 +30,7 @@ final readonly class SignInAction
     public function __invoke(
         #[ValueResolver(UserIdArgumentValueResolver::class)]
         UserId $userId
-    ): UserResponse {
+    ): ApiObjectResponse {
         $token = new UuidV7();
         ($this->createToken)(
             userId: $userId,
@@ -38,6 +39,8 @@ final readonly class SignInAction
 
         ($this->flush)();
 
-        return new UserResponse($token);
+        return new ApiObjectResponse(
+            data: new UserResponse($token),
+        );
     }
 }

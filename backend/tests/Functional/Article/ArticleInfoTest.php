@@ -26,10 +26,20 @@ final class ArticleInfoTest extends ApiWebTestCase
         $response = self::request(Request::METHOD_GET, "/api/articles/{$alias}");
         self::assertSuccessResponse($response);
 
+        /** @var array{
+         *     data: array{
+         *     id: string|null,
+         *     title: string,
+         *     alias: string,
+         *     body: string,
+         *     createdAt: string|null,
+         *     updatedAt: string|null
+         *    }
+         * } $article */
         $article = self::jsonDecode($response->getContent());
 
-        self::assertSame($article['title'], $title);
-        self::assertSame($article['body'], $content);
+        self::assertSame($article['data']['title'], $title);
+        self::assertSame($article['data']['body'], $content);
     }
 
     #[TestDox('Статья не найдена')]

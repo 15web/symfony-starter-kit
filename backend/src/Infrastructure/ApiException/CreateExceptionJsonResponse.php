@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Infrastructure\ApiException;
 
 use App\Infrastructure\AsService;
+use App\Infrastructure\Response\ApiObjectResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -20,7 +21,13 @@ final readonly class CreateExceptionJsonResponse
     public function __invoke(ApiException $e): JsonResponse
     {
         $content = $this->serializer->serialize(
-            new ApiErrorResponse($e->getErrorMessage(), $e->getErrors(), $e->getApiCode()),
+            new ApiObjectResponse(
+                new ApiErrorResponse(
+                    message: $e->getErrorMessage(),
+                    errors: $e->getErrors(),
+                    code: $e->getApiCode(),
+                )
+            ),
             JsonEncoder::FORMAT
         );
 

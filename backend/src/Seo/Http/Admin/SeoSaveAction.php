@@ -6,7 +6,8 @@ namespace App\Seo\Http\Admin;
 
 use App\Infrastructure\ApiRequestValueResolver;
 use App\Infrastructure\Flush;
-use App\Infrastructure\SuccessResponse;
+use App\Infrastructure\Response\ApiObjectResponse;
+use App\Infrastructure\Response\SuccessResponse;
 use App\Seo\Command\SaveSeo;
 use App\Seo\Command\SaveSeoCommand;
 use App\User\SignUp\Domain\UserRole;
@@ -34,7 +35,7 @@ final readonly class SeoSaveAction
     public function __invoke(
         #[ValueResolver(ApiRequestValueResolver::class)]
         SaveSeoCommand $saveSeoCommand,
-    ): SuccessResponse {
+    ): ApiObjectResponse {
         $seo = ($this->saveSeo)($saveSeoCommand);
 
         ($this->flush)();
@@ -45,6 +46,8 @@ final readonly class SeoSaveAction
             self::class => __FUNCTION__,
         ]);
 
-        return new SuccessResponse();
+        return new ApiObjectResponse(
+            data: new SuccessResponse()
+        );
     }
 }

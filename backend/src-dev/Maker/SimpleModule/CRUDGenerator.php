@@ -9,7 +9,7 @@ use App\Infrastructure\ApiException\ApiNotFoundException;
 use App\Infrastructure\ApiRequestValueResolver;
 use App\Infrastructure\AsService;
 use App\Infrastructure\Flush;
-use App\Infrastructure\SuccessResponse;
+use App\Infrastructure\Response\SuccessResponse;
 use App\User\SignUp\Domain\UserRole;
 use Dev\Maker\EntityFieldsManipulator;
 use Dev\Maker\Vendor\CustomGenerator;

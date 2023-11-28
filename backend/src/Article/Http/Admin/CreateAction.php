@@ -10,6 +10,7 @@ use App\Infrastructure\ApiException\ApiBadResponseException;
 use App\Infrastructure\ApiException\ApiErrorCode;
 use App\Infrastructure\ApiRequestValueResolver;
 use App\Infrastructure\Flush;
+use App\Infrastructure\Response\ApiObjectResponse;
 use App\User\SignUp\Domain\UserRole;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -30,7 +31,7 @@ final readonly class CreateAction
     public function __invoke(
         #[ValueResolver(ApiRequestValueResolver::class)]
         CreateRequest $createRequest,
-    ): Article {
+    ): ApiObjectResponse {
         $sameArticle = $this->articles->findByAlias($createRequest->alias);
         if ($sameArticle !== null) {
             throw new ApiBadResponseException(
@@ -48,6 +49,8 @@ final readonly class CreateAction
         $this->articles->add($article);
         ($this->flush)();
 
-        return $article;
+        return new ApiObjectResponse(
+            data: $article
+        );
     }
 }

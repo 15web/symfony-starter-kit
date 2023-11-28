@@ -31,11 +31,14 @@ final class SeoTest extends ApiWebTestCase
         $response = self::request(Request::METHOD_GET, "/api/seo/{$type}/{$id}");
         self::assertSuccessResponse($response);
 
+        /** @var array{
+         *     data: array{title: string, description: string, keywords:string}
+         * } $seo */
         $seo = self::jsonDecode($response->getContent());
 
-        self::assertSame($seo['title'], $title);
-        self::assertSame($seo['description'], $description);
-        self::assertSame($seo['keywords'], $keywords);
+        self::assertSame($seo['data']['title'], $title);
+        self::assertSame($seo['data']['description'], $description);
+        self::assertSame($seo['data']['keywords'], $keywords);
     }
 
     #[TestDox('Получение seo данных с несуществующим идентификатором')]
@@ -44,10 +47,14 @@ final class SeoTest extends ApiWebTestCase
         $response = self::request(Request::METHOD_GET, '/api/seo/'.SeoResourceType::ARTICLE->value.'/'.Uuid::v7());
 
         self::assertSuccessResponse($response);
+
+        /** @var array{
+         *     data: array{title: string, description: string, keywords:string}
+         * } $seo */
         $seo = self::jsonDecode($response->getContent());
 
-        self::assertSame($seo['title'], null);
-        self::assertSame($seo['description'], null);
-        self::assertSame($seo['keywords'], null);
+        self::assertSame($seo['data']['title'], null);
+        self::assertSame($seo['data']['description'], null);
+        self::assertSame($seo['data']['keywords'], null);
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\User\Profile\Http;
 
+use App\Infrastructure\Response\ApiObjectResponse;
 use App\User\Profile\Query\FindByUserId\FindProfileByUserId;
 use App\User\Profile\Query\FindByUserId\FindProfileByUserIdQuery;
 use App\User\Profile\Query\FindByUserId\ProfileData;
@@ -29,7 +30,14 @@ final readonly class ProfileInfoAction
     public function __invoke(
         #[ValueResolver(UserIdArgumentValueResolver::class)]
         UserId $userId
-    ): ProfileData {
+    ): ApiObjectResponse {
+        return new ApiObjectResponse(
+            data: $this->buildResponseData($userId),
+        );
+    }
+
+    private function buildResponseData(UserId $userId): ProfileData
+    {
         return ($this->findProfileByUserId)(
             query: new FindProfileByUserIdQuery(
                 userId: $userId->value,

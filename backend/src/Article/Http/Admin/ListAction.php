@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace App\Article\Http\Admin;
 
-use App\Article\Domain\Article;
 use App\Article\Domain\Articles;
+use App\Infrastructure\Response\ApiListObjectResponse;
+use App\Infrastructure\Response\Pagination\PaginationResponse;
 use App\User\SignUp\Domain\UserRole;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -22,11 +23,16 @@ final readonly class ListAction
 {
     public function __construct(private Articles $articles) {}
 
-    /**
-     * @return Article[]
-     */
-    public function __invoke(): array
+    public function __invoke(): ApiListObjectResponse
     {
-        return $this->articles->getAll();
+        $articles = $this->articles->getAll();
+        $articlesCount = $this->articles->countAll();
+
+        $pagination = new PaginationResponse($articlesCount);
+
+        return new ApiListObjectResponse(
+            data: $articles,
+            pagination: $pagination,
+        );
     }
 }

@@ -6,6 +6,7 @@ namespace App\User\Profile\Http;
 
 use App\Infrastructure\ApiRequestValueResolver;
 use App\Infrastructure\Flush;
+use App\Infrastructure\Response\ApiObjectResponse;
 use App\User\Profile\Command\SaveProfile\SaveProfile;
 use App\User\Profile\Command\SaveProfile\SaveProfileCommand;
 use App\User\Profile\Query\FindByUserId\FindProfileByUserId;
@@ -39,7 +40,7 @@ final readonly class ProfileSaveAction
         SaveProfileCommand $command,
         #[ValueResolver(UserIdArgumentValueResolver::class)]
         UserId $userId,
-    ): ProfileData {
+    ): ApiObjectResponse {
         ($this->saveProfile)(
             command: $command,
             userId: $userId,
@@ -47,6 +48,13 @@ final readonly class ProfileSaveAction
 
         ($this->flush)();
 
+        return new ApiObjectResponse(
+            data: $this->buildResponseData($userId),
+        );
+    }
+
+    private function buildResponseData(UserId $userId): ProfileData
+    {
         return ($this->findProfileByUserId)(
             query: new FindProfileByUserIdQuery(
                 userId: $userId->value,

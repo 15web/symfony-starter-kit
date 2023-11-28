@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Article\Http\Admin;
 
 use App\Article\Domain\Article;
+use App\Infrastructure\Response\ApiObjectResponse;
 use App\User\SignUp\Domain\UserRole;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -23,7 +24,9 @@ final class InfoAction
     public function __invoke(
         #[ValueResolver(ArticleArgumentValueResolver::class)]
         Article $article
-    ): Article {
-        return $article;
+    ): ApiObjectResponse {
+        return new ApiObjectResponse(
+            data: $article
+        );
     }
 }

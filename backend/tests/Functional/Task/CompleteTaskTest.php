@@ -29,11 +29,22 @@ final class CompleteTaskTest extends ApiWebTestCase
         self::assertSuccessContentResponse($response);
 
         $response = self::request(Request::METHOD_GET, "/api/tasks/{$taskId}", token: $token);
+
+        /** @var array{
+         *     data: array{
+         *     id: string|null,
+         *     taskName: string,
+         *     isCompleted: bool,
+         *     createdAt: string|null,
+         *     completedAt: string|null,
+         *     updatedAt: string|null
+         *    }
+         * } $task */
         $task = self::jsonDecode($response->getContent());
 
-        self::assertTrue($task['isCompleted']);
-        self::assertNotNull($task['updatedAt']);
-        self::assertNotNull($task['completedAt']);
+        self::assertTrue($task['data']['isCompleted']);
+        self::assertNotNull($task['data']['updatedAt']);
+        self::assertNotNull($task['data']['completedAt']);
     }
 
     #[TestDox('Нельзя повторно выполнить задачу')]

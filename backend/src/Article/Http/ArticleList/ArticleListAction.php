@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace App\Article\Http\ArticleList;
 
 use App\Article\Domain\Articles;
-use App\Infrastructure\Pagination\PaginationRequest;
-use App\Infrastructure\Pagination\PaginationRequestArgumentResolver;
-use App\Infrastructure\Pagination\PaginationResponse;
+use App\Infrastructure\Response\ApiListObjectResponse;
+use App\Infrastructure\Response\Pagination\PaginationRequest;
+use App\Infrastructure\Response\Pagination\PaginationRequestArgumentResolver;
+use App\Infrastructure\Response\Pagination\PaginationResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
@@ -25,7 +26,7 @@ final readonly class ArticleListAction
     public function __invoke(
         #[ValueResolver(PaginationRequestArgumentResolver::class)]
         PaginationRequest $paginationRequest,
-    ): ArticleListResponse {
+    ): ApiListObjectResponse {
         $articles = $this->articles->getAll(
             limit: $paginationRequest->limit,
             offset: $paginationRequest->offset,
@@ -43,7 +44,7 @@ final readonly class ArticleListAction
 
         $pagination = new PaginationResponse($articlesCount);
 
-        return new ArticleListResponse(
+        return new ApiListObjectResponse(
             data: $data,
             pagination: $pagination,
         );

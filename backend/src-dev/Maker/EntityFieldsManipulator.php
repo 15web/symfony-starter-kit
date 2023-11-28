@@ -87,7 +87,7 @@ final class EntityFieldsManipulator
         return $fieldsWithData;
     }
 
-    private function getTestValueByType(string $fieldType): string|int|float
+    private function getTestValueByType(string $fieldType): float|int|string
     {
         $value = '';
 

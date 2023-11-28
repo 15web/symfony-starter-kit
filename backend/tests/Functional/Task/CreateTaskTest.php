@@ -24,8 +24,12 @@ final class CreateTaskTest extends ApiWebTestCase
         $response = Task::create($taskName = 'Тестовая задача', $token);
 
         self::assertSuccessResponse($response);
+
+        /** @var array{
+         *     data: array{id: string|null}
+         * } $taskInfo */
         $taskInfo = self::jsonDecode($response->getContent());
-        self::assertNotNull($taskInfo['id']);
+        self::assertNotNull($taskInfo['data']['id']);
 
         $response = Task::list($token);
         $tasks = $response['data'];
@@ -33,7 +37,7 @@ final class CreateTaskTest extends ApiWebTestCase
         self::assertCount(1, $tasks);
         self::assertSame($taskName, $tasks[0]['taskName']);
         self::assertNotEmpty($tasks[0]['id']);
-        self::assertSame($taskInfo['id'], $tasks[0]['id']);
+        self::assertSame($taskInfo['data']['id'], $tasks[0]['id']);
         self::assertFalse($tasks[0]['isCompleted']);
     }
 

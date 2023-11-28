@@ -6,7 +6,8 @@ namespace App\User\SignIn\Http;
 
 use App\Infrastructure\ApiException\ApiUnauthorizedException;
 use App\Infrastructure\Flush;
-use App\Infrastructure\SuccessResponse;
+use App\Infrastructure\Response\ApiObjectResponse;
+use App\Infrastructure\Response\SuccessResponse;
 use App\User\SignIn\Command\DeleteToken;
 use App\User\SignIn\Http\Authenticator\ApiTokenAuthenticator;
 use App\User\SignUp\Domain\UserRole;
@@ -34,7 +35,7 @@ final readonly class LogoutAction
     public function __invoke(
         #[ValueResolver(RequestValueResolver::class)]
         Request $request,
-    ): SuccessResponse {
+    ): ApiObjectResponse {
         $apiToken = $request->headers->get(ApiTokenAuthenticator::TOKEN_NAME);
         if ($apiToken === null) {
             throw new ApiUnauthorizedException(['Отсутствует токен в заголовках']);
@@ -43,6 +44,8 @@ final readonly class LogoutAction
         ($this->deleteToken)(Uuid::fromString($apiToken));
         ($this->flush)();
 
-        return new SuccessResponse();
+        return new ApiObjectResponse(
+            data: new SuccessResponse(),
+        );
     }
 }

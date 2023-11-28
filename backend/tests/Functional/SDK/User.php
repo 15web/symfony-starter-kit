@@ -42,9 +42,11 @@ final class User extends ApiWebTestCase
 
         $response = self::request(Request::METHOD_POST, '/api/sign-in', $body);
 
-        /** @var string $token */
-        $token = self::jsonDecode($response->getContent())['token'];
+        /** @var array{
+         *     data: array{token: string}
+         * } $signUpResponse */
+        $signUpResponse = self::jsonDecode($response->getContent());
 
-        return $token;
+        return $signUpResponse['data']['token'];
     }
 }

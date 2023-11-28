@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Seo\Http;
 
+use App\Infrastructure\Response\ApiObjectResponse;
+use App\Seo\Domain\Seo;
 use App\Seo\Domain\SeoCollection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -25,12 +27,19 @@ final readonly class SeoAction
         string $type,
         #[ValueResolver(RequestAttributeValueResolver::class)]
         string $identity,
-    ): SeoData {
+    ): ApiObjectResponse {
         $seo = $this->seoCollection->findOneByTypeAndIdentity(
             type: $type,
             identity: $identity,
         );
 
+        return new ApiObjectResponse(
+            data: $this->buildResponseData($seo),
+        );
+    }
+
+    private function buildResponseData(?Seo $seo): SeoData
+    {
         return new SeoData(
             title: $seo?->getTitle(),
             description: $seo?->getDescription(),

@@ -29,10 +29,13 @@ final class ProfileSaveTest extends ApiWebTestCase
         $response = Profile::info($token);
         self::assertSuccessResponse($response);
 
+        /** @var array{
+         *     data: array{phone: ?string, name: ?string}
+         * } $profileInfo */
         $profileInfo = self::jsonDecode($response->getContent());
 
-        self::assertSame(self::PHONE_NUMBER, $profileInfo['phone']);
-        self::assertSame($name, $profileInfo['name']);
+        self::assertSame(self::PHONE_NUMBER, $profileInfo['data']['phone']);
+        self::assertSame($name, $profileInfo['data']['name']);
     }
 
     #[TestDox('Профиль сохранен 2 раза, данные изменились')]
@@ -44,14 +47,18 @@ final class ProfileSaveTest extends ApiWebTestCase
         Profile::save($name2 = 'Имя 2', $phone = '89272222221', $token);
 
         $response = Profile::info($token);
+
+        /** @var array{
+         *     data: array{phone: ?string, name: ?string}
+         * } $profileInfo */
         $profileInfo = self::jsonDecode($response->getContent());
         self::assertSuccessResponse($response);
 
-        self::assertSame($phone, $profileInfo['phone']);
-        self::assertSame($name2, $profileInfo['name']);
+        self::assertSame($phone, $profileInfo['data']['phone']);
+        self::assertSame($name2, $profileInfo['data']['name']);
 
-        self::assertNotSame(self::PHONE_NUMBER, $profileInfo['phone']);
-        self::assertNotSame($name1, $profileInfo['name']);
+        self::assertNotSame(self::PHONE_NUMBER, $profileInfo['data']['phone']);
+        self::assertNotSame($name1, $profileInfo['data']['name']);
     }
 
     #[DataProvider('notValidTokenDataProvider')]

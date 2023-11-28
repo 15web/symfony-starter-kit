@@ -8,7 +8,8 @@ use App\Infrastructure\ApiException\ApiBadRequestException;
 use App\Infrastructure\ApiException\ApiNotFoundException;
 use App\Infrastructure\ApiRequestValueResolver;
 use App\Infrastructure\Flush;
-use App\Infrastructure\SuccessResponse;
+use App\Infrastructure\Response\ApiObjectResponse;
+use App\Infrastructure\Response\SuccessResponse;
 use App\Task\Command\Comment\Add\AddCommentOnTask;
 use App\Task\Command\Comment\Add\AddCommentOnTaskCommand;
 use App\Task\Domain\AddCommentToCompletedTaskException;
@@ -46,7 +47,7 @@ final readonly class AddCommentOnTaskAction
         AddCommentOnTaskCommand $addCommentOnTaskCommand,
         #[ValueResolver(UserIdArgumentValueResolver::class)]
         UserId $userId
-    ): SuccessResponse {
+    ): ApiObjectResponse {
         if (!$userId->equalTo($task->getUserId())) {
             throw new ApiNotFoundException(['Запись не найдена']);
         }
@@ -70,6 +71,8 @@ final readonly class AddCommentOnTaskAction
             throw new ApiBadRequestException(['Нельзя добавить комментарий в завершенную задачу']);
         }
 
-        return new SuccessResponse();
+        return new ApiObjectResponse(
+            data: new SuccessResponse()
+        );
     }
 }

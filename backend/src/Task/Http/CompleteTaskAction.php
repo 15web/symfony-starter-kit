@@ -7,7 +7,8 @@ namespace App\Task\Http;
 use App\Infrastructure\ApiException\ApiBadRequestException;
 use App\Infrastructure\ApiException\ApiNotFoundException;
 use App\Infrastructure\Flush;
-use App\Infrastructure\SuccessResponse;
+use App\Infrastructure\Response\ApiObjectResponse;
+use App\Infrastructure\Response\SuccessResponse;
 use App\Task\Command\CompleteTask;
 use App\Task\Domain\Task;
 use App\Task\Domain\TaskAlreadyIsDoneException;
@@ -40,7 +41,7 @@ final readonly class CompleteTaskAction
         Task $task,
         #[ValueResolver(UserIdArgumentValueResolver::class)]
         UserId $userId
-    ): SuccessResponse {
+    ): ApiObjectResponse {
         if (!$userId->equalTo($task->getUserId())) {
             throw new ApiNotFoundException(['Запись не найдена']);
         }
@@ -58,6 +59,8 @@ final readonly class CompleteTaskAction
             throw new ApiBadRequestException(['Задача уже выполнена']);
         }
 
-        return new SuccessResponse();
+        return new ApiObjectResponse(
+            data: new SuccessResponse()
+        );
     }
 }

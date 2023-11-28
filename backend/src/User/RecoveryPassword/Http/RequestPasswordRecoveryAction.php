@@ -7,7 +7,8 @@ namespace App\User\RecoveryPassword\Http;
 use App\Infrastructure\ApiException\ApiNotFoundException;
 use App\Infrastructure\ApiRequestValueResolver;
 use App\Infrastructure\Flush;
-use App\Infrastructure\SuccessResponse;
+use App\Infrastructure\Response\ApiObjectResponse;
+use App\Infrastructure\Response\SuccessResponse;
 use App\User\RecoveryPassword\Command\GenerateRecoveryToken;
 use App\User\RecoveryPassword\Command\GenerateRecoveryTokenCommand;
 use App\User\SignUp\Domain\UserNotFoundException;
@@ -31,7 +32,7 @@ final readonly class RequestPasswordRecoveryAction
     public function __invoke(
         #[ValueResolver(ApiRequestValueResolver::class)]
         GenerateRecoveryTokenCommand $command,
-    ): SuccessResponse {
+    ): ApiObjectResponse {
         try {
             ($this->generateRecoveryToken)($command);
 
@@ -40,6 +41,8 @@ final readonly class RequestPasswordRecoveryAction
             throw new ApiNotFoundException(['Пользователь не найден']);
         }
 
-        return new SuccessResponse();
+        return new ApiObjectResponse(
+            data: new SuccessResponse(),
+        );
     }
 }
