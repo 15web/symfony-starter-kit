@@ -9,5 +9,8 @@ namespace App\Infrastructure\Response;
  */
 final readonly class ApiObjectResponse implements ResponseInterface
 {
-    public function __construct(public object $data) {}
+    public function __construct(
+        public object $data,
+        public ResponseStatus $status = ResponseStatus::Success
+    ) {}
 }

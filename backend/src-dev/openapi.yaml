@@ -66,6 +66,7 @@ paths:
                                     code: 400
                                     message: Неверный формат запроса
                                     errors: [ 'invalid_request' ]
+                                status: error
     /confirm-email/{confirmToken}:
         get:
             operationId: confirmEmail
@@ -102,6 +103,7 @@ paths:
                                     code: 400
                                     message: Неверный формат запроса
                                     errors: [ 'invalid_request' ]
+                                status: error
                 '404':
                     description: Email с таким токеном не найден
     /sign-in:
@@ -143,6 +145,9 @@ paths:
                                                 type: string
                                                 format: uuid
                                                 example: 123e4567-e89b-12d3-a456-426614174000
+                                    status:
+                                        type: string
+                                        example: success
                 '400':
                     description: Ошибка запроса
                     content:
@@ -155,6 +160,7 @@ paths:
                                     code: 400
                                     message: Неверный формат запроса
                                     errors: [ 'invalid_request' ]
+                                status: error
                 '401':
                     description: Доступ запрещен
                     content:
@@ -167,6 +173,7 @@ paths:
                                     code: 401
                                     message: Необходимо пройти аутентификацию
                                     errors: [ 'auth_required' ]
+                                status: error
     /logout:
         get:
             operationId: logout
@@ -193,6 +200,7 @@ paths:
                                     code: 401
                                     message: Необходимо пройти аутентификацию
                                     errors: [ 'auth_required' ]
+                                status: error
     /request-password-recovery:
         post:
             operationId: recoverPasswordRequest
@@ -239,6 +247,7 @@ paths:
                                     code: 400
                                     message: Неверный формат запроса
                                     errors: [ 'invalid_request' ]
+                                status: error
     /recover-password/{recoveryToken}:
         post:
             operationId: recoverPassword
@@ -305,10 +314,12 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/errorResponse'
                             example:
-                                error: true
-                                code: 401
-                                message: Необходимо пройти аутентификацию
-                                errors: ['auth_required']
+                                data:
+                                    error: true
+                                    code: 401
+                                    message: Необходимо пройти аутентификацию
+                                    errors: [ 'auth_required' ]
+                                status: error
         post:
             operationId: saveProfile
             summary: Сохранить профиль
@@ -357,6 +368,7 @@ paths:
                                     code: 400
                                     message: Неверный формат запроса
                                     errors: [ 'invalid_request' ]
+                                status: error
                 '401':
                     description: Доступ запрещен
                     content:
@@ -364,10 +376,12 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/errorResponse'
                             example:
-                                error: true
-                                code: 401
-                                message: Необходимо пройти аутентификацию
-                                errors: [ 'auth_required' ]
+                                data:
+                                    error: true
+                                    code: 401
+                                    message: Необходимо пройти аутентификацию
+                                    errors: [ 'auth_required' ]
+                                status: error
     /tasks:
         get:
             operationId: tasksList
@@ -418,6 +432,9 @@ paths:
                                                 taskName: Моя вторая задача
                                                 isCompleted: true
                                                 createdAt: '2021-10-28T16:19:45+00:00'
+                                    status:
+                                        type: string
+                                        example: success
                 '401':
                     description: Доступ запрещен
                     content:
@@ -430,6 +447,7 @@ paths:
                                     code: 401
                                     message: Необходимо пройти аутентификацию
                                     errors: [ 'auth_required' ]
+                                status: error
         post:
             operationId: createTask
             summary: Создать задачу
@@ -470,9 +488,13 @@ paths:
                                                 type: string
                                                 format: uuid
                                                 description: ID задачи
+                                    status:
+                                        type: string
+                                        example: success
                                 example:
                                     data:
                                         id: dc8dbada-b154-4ffb-b21c-da70162e2704
+                                    status: success
                 '400':
                     description: Ошибка запроса
                     content:
@@ -485,6 +507,7 @@ paths:
                                     code: 400
                                     message: Неверный формат запроса
                                     errors: [ 'invalid_request' ]
+                                status: error
                 '401':
                     description: Доступ запрещен
                     content:
@@ -497,6 +520,7 @@ paths:
                                     code: 401
                                     message: Необходимо пройти аутентификацию
                                     errors: [ 'auth_required' ]
+                                status: error
     /tasks/{id}:
         get:
             operationId: taskInfo
@@ -548,6 +572,9 @@ paths:
                                                 type: string
                                                 description: Дата обновления
                                                 nullable: true
+                                    status:
+                                        type: string
+                                        example: success
                                 example:
                                     data:
                                         id: dc8dbada-b154-4ffb-b21c-da70162e2704
@@ -556,6 +583,7 @@ paths:
                                         createdAt: '2021-10-28T16:19:44+00:00'
                                         completedAt: '2021-10-28T16:19:44+00:00'
                                         updatedAt: '2021-10-28T16:19:44+00:00'
+                                    status: success
                 '401':
                     description: Доступ запрещен
                     content:
@@ -568,6 +596,7 @@ paths:
                                     code: 401
                                     message: Необходимо пройти аутентификацию
                                     errors: [ 'auth_required' ]
+                                status: error
                 '404':
                     description: Задача не найдена
         delete:
@@ -597,6 +626,7 @@ paths:
                                     code: 401
                                     message: Необходимо пройти аутентификацию
                                     errors: [ 'auth_required' ]
+                                status: error
                 '404':
                     description: Задача не найдена
     /tasks/{id}/update-task-name:
@@ -641,6 +671,7 @@ paths:
                                     code: 400
                                     message: Неверный формат запроса
                                     errors: [ 'invalid_request' ]
+                                status: error
                 '401':
                     description: Доступ запрещен
                     content:
@@ -653,6 +684,7 @@ paths:
                                     code: 401
                                     message: Необходимо пройти аутентификацию
                                     errors: [ 'auth_required' ]
+                                status: error
                 '404':
                     description: Задача не найдена
     /tasks/{id}/complete:
@@ -683,6 +715,7 @@ paths:
                                     code: 400
                                     message: Неверный формат запроса
                                     errors: [ 'invalid_request' ]
+                                status: error
                 '401':
                     description: Доступ запрещен
                     content:
@@ -695,6 +728,7 @@ paths:
                                     code: 401
                                     message: Необходимо пройти аутентификацию
                                     errors: [ 'auth_required' ]
+                                status: error
                 '404':
                     description: Задача не найдена
     /tasks/{id}/add-comment:
@@ -733,10 +767,12 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/errorResponse'
                             example:
-                                error: true
-                                code: 400
-                                message: Неверный формат запроса
-                                errors: ['invalid_request']
+                                data:
+                                    error: true
+                                    code: 400
+                                    message: Неверный формат запроса
+                                    errors: [ 'invalid_request' ]
+                                status: error
                 '401':
                     description: Доступ запрещен
                     content:
@@ -749,6 +785,7 @@ paths:
                                     code: 401
                                     message: Необходимо пройти аутентификацию
                                     errors: [ 'auth_required' ]
+                                status: error
                 '404':
                     description: Задача не найдена
     /tasks/{id}/comments:
@@ -786,6 +823,9 @@ paths:
                                                 $ref: '#/components/schemas/createdAt'
                                             updatedAt:
                                                 $ref: '#/components/schemas/updatedAt'
+                                    status:
+                                        type: string
+                                        example: success
     /export/tasks.{format}:
         get:
             operationId: exportTasks
@@ -825,10 +865,12 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/errorResponse'
                             example:
-                                error: true
-                                code: 400
-                                message: 'Нет задач для экспорта'
-                                errors: ['Нет задач для экспорта']
+                                data:
+                                    error: true
+                                    code: 400
+                                    message: 'Нет задач для экспорта'
+                                    errors: [ 'Нет задач для экспорта' ]
+                                status: error
                 '401':
                     description: Доступ запрещен
                     content:
@@ -841,6 +883,7 @@ paths:
                                     code: 401
                                     message: Необходимо пройти аутентификацию
                                     errors: [ 'auth_required' ]
+                                status: error
     /articles:
         get:
             operationId: articleList
@@ -982,6 +1025,7 @@ paths:
                                     code: 401
                                     message: Необходимо пройти аутентификацию
                                     errors: [ 'auth_required' ]
+                                status: error
         post:
             operationId: adminArticleCreate
             summary: Создать статью
@@ -1020,10 +1064,12 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/errorResponse'
                             example:
-                                error: true
-                                code: 400
-                                message: Неверный формат запроса
-                                errors: [ 'invalid_request' ]
+                                data:
+                                    error: true
+                                    code: 400
+                                    message: Неверный формат запроса
+                                    errors: [ 'invalid_request' ]
+                                status: error
                 '401':
                     description: Доступ запрещен
                     content:
@@ -1036,6 +1082,7 @@ paths:
                                     code: 401
                                     message: Необходимо пройти аутентификацию
                                     errors: [ 'auth_required' ]
+                                status: error
     /admin/articles/{id}:
         get:
             operationId: adminArticleInfo
@@ -1064,6 +1111,7 @@ paths:
                                     code: 401
                                     message: Необходимо пройти аутентификацию
                                     errors: [ 'auth_required' ]
+                                status: error
                 '404':
                     description: Статья не найдена
         delete:
@@ -1093,6 +1141,7 @@ paths:
                                     code: 401
                                     message: Необходимо пройти аутентификацию
                                     errors: [ 'auth_required' ]
+                                status: error
                 '404':
                     description: Статья не найдена
         post:
@@ -1135,10 +1184,12 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/errorResponse'
                             example:
-                                error: true
-                                code: 400
-                                message: Неверный формат запроса
-                                errors: [ 'invalid_request' ]
+                                data:
+                                    error: true
+                                    code: 400
+                                    message: Неверный формат запроса
+                                    errors: [ 'invalid_request' ]
+                                status: error
                 '401':
                     description: Доступ запрещен
                     content:
@@ -1151,6 +1202,7 @@ paths:
                                     code: 401
                                     message: Необходимо пройти аутентификацию
                                     errors: [ 'auth_required' ]
+                                status: error
                 '404':
                     description: Статья не найдена
     /settings:
@@ -1226,10 +1278,12 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/errorResponse'
                             example:
-                                error: true
-                                code: 401
-                                message: Необходимо пройти аутентификацию
-                                errors: ['auth_required']
+                                data:
+                                    error: true
+                                    code: 401
+                                    message: Необходимо пройти аутентификацию
+                                    errors: [ 'auth_required' ]
+                                status: error
         post:
             operationId: saveSetting
             summary: Сохранить изменения настройки
@@ -1264,10 +1318,12 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/errorResponse'
                             example:
-                                error: true
-                                code: 400
-                                message: Неверный формат запроса
-                                errors: [ 'invalid_request' ]
+                                data:
+                                    error: true
+                                    code: 400
+                                    message: Неверный формат запроса
+                                    errors: [ 'invalid_request' ]
+                                status: error
                 '401':
                     description: Доступ запрещен
                     content:
@@ -1275,10 +1331,12 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/errorResponse'
                             example:
-                                error: true
-                                code: 401
-                                message: Необходимо пройти аутентификацию
-                                errors: [ 'auth_required' ]
+                                data:
+                                    error: true
+                                    code: 401
+                                    message: Необходимо пройти аутентификацию
+                                    errors: [ 'auth_required' ]
+                                status: error
                 '404':
                     description: Запись не найдена
                     content:
@@ -1286,10 +1344,12 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/errorResponse'
                             example:
-                                error: true
-                                code: 404
-                                message: Настройка не найдена
-                                errors: [ 'not_found' ]
+                                data:
+                                    error: true
+                                    code: 404
+                                    message: Настройка не найдена
+                                    errors: [ 'not_found' ]
+                                status: error
     /seo/{type}/{identity}:
         get:
             operationId: seoInfo
@@ -1401,10 +1461,12 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/errorResponse'
                             example:
-                                error: true
-                                code: 400
-                                message: Неверный формат запроса
-                                errors: ['invalid_request']
+                                data:
+                                    error: true
+                                    code: 400
+                                    message: Неверный формат запроса
+                                    errors: [ 'invalid_request' ]
+                                status: error
                 '401':
                     description: Доступ запрещен
                     content:
@@ -1429,6 +1491,9 @@ components:
                 - data
             additionalProperties: false
             properties:
+                status:
+                    type: string
+                    example: success
                 data:
                     type: object
         errorResponse:
@@ -1452,6 +1517,8 @@ components:
                             type: string
                         errors:
                             type: array
+                status:
+                    type: string
         profileInfoResponse:
             type: object
             required:
@@ -1502,6 +1569,9 @@ components:
                             $ref: '#/components/schemas/createdAt'
                         updatedAt:
                             $ref: '#/components/schemas/updatedAt'
+                status:
+                    type: string
+                    example: success
         paginationResponse:
             type: object
             properties:
