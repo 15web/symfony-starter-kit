@@ -82,12 +82,13 @@ abstract class ApiWebTestCase extends WebTestCase
         /** @var array{
          *     data: array{
          *     status: string|null
-         *    }
+         *    },
+         *    status: string|null
          * } $responseContent */
         $responseContent = self::jsonDecode($response->getContent());
         $successResponse = ResponseStatus::Success;
 
-        self::assertSame($responseContent['data']['status'], $successResponse->value);
+        self::assertSame($responseContent['status'], $successResponse->value);
     }
 
     final public static function assertBadRequest(Response $response): void
