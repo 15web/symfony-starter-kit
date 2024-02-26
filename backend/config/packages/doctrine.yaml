@@ -27,8 +27,12 @@ when@test:
         test_token: 1
     doctrine:
         dbal:
-            # "TEST_TOKEN" is typically set by ParaTest
-            dbname_suffix: '_test%env(default:test_token:TEST_TOKEN)%'
+            connections:
+                default:
+                    # "TEST_TOKEN" is typically set by ParaTest
+                    dbname_suffix: '_test%env(default:test_token:TEST_TOKEN)%'
+                    use_savepoints: true
+
 
 when@prod:
     doctrine:
