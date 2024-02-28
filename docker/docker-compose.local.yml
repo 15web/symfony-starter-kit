@@ -70,7 +70,7 @@ services:
     mailhog:
         image: mailhog/mailhog:v1.0.1
     docs:
-        image: swaggerapi/swagger-ui:v4.17.0
+        image: swaggerapi/swagger-ui:v5.11.8
         environment:
             SWAGGER_JSON_URL: /docs/openapi.yaml
             BASE_URL: /docs
