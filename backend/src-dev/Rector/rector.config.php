@@ -27,7 +27,7 @@ return static function (RectorConfig $rectorConfig): void {
         __DIR__.'/../../src',
         __DIR__.'/../',
         __DIR__.'/../../migrations',
-        __DIR__.'/../../tests',
+        __DIR__.'/../../srv-dev/Tests',
     ]);
 
     $rectorConfig->parallel(seconds: 360);

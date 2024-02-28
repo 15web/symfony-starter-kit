@@ -190,7 +190,7 @@
         "files": [
             ".env.test",
             "phpunit.xml.dist",
-            "tests/bootstrap.php"
+            "src-dev/Tests/bootstrap.php"
         ]
     },
     "psr/cache": {

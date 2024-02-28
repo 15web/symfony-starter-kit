@@ -5,7 +5,7 @@ parameters:
     paths:
         - ../../src
         - ../
-        - ../../tests
+        - ../../src-dev/Tests
     tmpDir: ../cache/phpstan
     excludePaths:
         - ../Maker/Vendor/EntityGenerator.php
