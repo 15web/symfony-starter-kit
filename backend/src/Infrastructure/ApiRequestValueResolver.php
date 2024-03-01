@@ -12,6 +12,7 @@ use CuyZ\Valinor\Mapper\Source\JsonSource;
 use CuyZ\Valinor\Mapper\Tree\Message\ErrorMessage;
 use CuyZ\Valinor\Mapper\Tree\Message\MessageBuilder;
 use CuyZ\Valinor\MapperBuilder;
+use Override;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
@@ -33,6 +34,7 @@ final readonly class ApiRequestValueResolver implements ValueResolverInterface
      *
      * @throws ApiBadRequestException
      */
+    #[Override]
     public function resolve(Request $request, ArgumentMetadata $argument): iterable
     {
         /** @var class-string<TApiRequest>|null $className */

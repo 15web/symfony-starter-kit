@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Infrastructure\ApiException;
 
 use Exception;
+use Override;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
@@ -13,7 +14,7 @@ use Throwable;
  */
 final class ApiBadRequestException extends Exception implements ApiException
 {
-    private const MESSAGE = 'Укажите корректный запрос';
+    private const string MESSAGE = 'Укажите корректный запрос';
 
     /**
      * @param non-empty-list<non-empty-string> $errors
@@ -25,16 +26,19 @@ final class ApiBadRequestException extends Exception implements ApiException
         parent::__construct(previous: $previous);
     }
 
+    #[Override]
     public function getErrorMessage(): string
     {
         return self::MESSAGE;
     }
 
+    #[Override]
     public function getHttpCode(): int
     {
         return Response::HTTP_BAD_REQUEST;
     }
 
+    #[Override]
     public function getApiCode(): int
     {
         return Response::HTTP_BAD_REQUEST;
@@ -43,6 +47,7 @@ final class ApiBadRequestException extends Exception implements ApiException
     /**
      * @return non-empty-list<non-empty-string>
      */
+    #[Override]
     public function getErrors(): array
     {
         return $this->errors;

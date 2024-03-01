@@ -10,6 +10,7 @@ use App\Infrastructure\AsService;
 use App\User\SignIn\Domain\UserTokens;
 use App\User\SignUp\Domain\Users;
 use DomainException;
+use Override;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -27,7 +28,7 @@ use Symfony\Component\Uid\Uuid;
 #[AsService]
 final class ApiTokenAuthenticator extends AbstractAuthenticator
 {
-    public const TOKEN_NAME = 'X-AUTH-TOKEN';
+    public const string TOKEN_NAME = 'X-AUTH-TOKEN';
 
     public function __construct(
         private readonly UserTokens $userTokens,
@@ -35,11 +36,13 @@ final class ApiTokenAuthenticator extends AbstractAuthenticator
         private readonly CreateExceptionJsonResponse $createExceptionJsonResponse,
     ) {}
 
-    public function supports(Request $request): ?bool
+    #[Override]
+    public function supports(Request $request): bool
     {
         return $request->headers->has(self::TOKEN_NAME);
     }
 
+    #[Override]
     public function authenticate(Request $request): Passport
     {
         $apiToken = $request->headers->get(self::TOKEN_NAME);
@@ -66,12 +69,14 @@ final class ApiTokenAuthenticator extends AbstractAuthenticator
         return new SelfValidatingPassport(new UserBadge($user->getUserIdentifier()));
     }
 
+    #[Override]
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
         return null;
     }
 
-    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
+    #[Override]
+    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): Response
     {
         /**
          * Генерирует сообщение об ошибке по шаблону, например:

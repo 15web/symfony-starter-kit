@@ -21,7 +21,7 @@ final readonly class CountAllTasksByUserId
     public function __invoke(FindAllTasksByUserIdQuery $query): int
     {
         $queryBuilder = $this->connection->createQueryBuilder()
-            ->select(['COUNT(t.id)'])
+            ->select('COUNT(t.id)')
             ->from('task', 't');
 
         $this->filter->applyFilter($queryBuilder, $query);

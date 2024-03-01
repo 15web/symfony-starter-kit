@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure;
 
+use Override;
 use ReflectionAttribute;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -23,12 +24,13 @@ final class Kernel extends BaseKernel implements CompilerPassInterface
 {
     use MicroKernelTrait;
 
-    private const TAGGED_SERVICE = [
+    private const array TAGGED_SERVICE = [
         AsService::class,
         AsController::class,
         AsCommand::class,
     ];
 
+    #[Override]
     public function process(ContainerBuilder $container): void
     {
         foreach ($container->getDefinitions() as $definitionId => $definition) {

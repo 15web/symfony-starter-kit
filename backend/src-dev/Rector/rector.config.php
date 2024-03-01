@@ -14,7 +14,6 @@ use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
 use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
-use Rector\Symfony\Set\SymfonyLevelSetList;
 use Rector\Symfony\Set\SymfonySetList;
 use Rector\Symfony\Symfony43\Rector\MethodCall\WebTestCaseAssertIsSuccessfulRector;
 use Rector\Symfony\Symfony43\Rector\MethodCall\WebTestCaseAssertResponseCodeRector;
@@ -27,10 +26,10 @@ return static function (RectorConfig $rectorConfig): void {
         __DIR__.'/../../src',
         __DIR__.'/../',
         __DIR__.'/../../migrations',
-        __DIR__.'/../../srv-dev/Tests',
+        __DIR__.'/../../src-dev/Tests',
     ]);
 
-    $rectorConfig->parallel(seconds: 360);
+    $rectorConfig->parallel(processTimeout: 360);
 
     $rectorConfig->importNames();
     $rectorConfig->importShortClasses(false);
@@ -40,8 +39,7 @@ return static function (RectorConfig $rectorConfig): void {
         SetList::CODE_QUALITY,
         SetList::EARLY_RETURN,
         SetList::TYPE_DECLARATION,
-        LevelSetList::UP_TO_PHP_82,
-        SymfonyLevelSetList::UP_TO_SYMFONY_63,
+        LevelSetList::UP_TO_PHP_83,
         SymfonySetList::SYMFONY_CODE_QUALITY,
         DoctrineSetList::DOCTRINE_CODE_QUALITY,
         DoctrineSetList::ANNOTATIONS_TO_ATTRIBUTES,

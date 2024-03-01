@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Dev\Rector\Rules;
 
+use Override;
 use PhpParser\Node;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
-use Rector\Core\Rector\AbstractRector;
+use Rector\Rector\AbstractRector;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -21,6 +22,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ResolversInActionRector extends AbstractRector
 {
+    #[Override]
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Obliges to specify ValueResolver in the arguments of actions', [new CodeSample(
@@ -45,11 +47,13 @@ final class ResolversInActionRector extends AbstractRector
     /**
      * @return array<class-string<Node>>
      */
+    #[Override]
     public function getNodeTypes(): array
     {
         return [Class_::class];
     }
 
+    #[Override]
     public function refactor(Node $node): ?Node
     {
         /** @var Class_ $node */

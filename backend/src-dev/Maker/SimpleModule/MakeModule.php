@@ -6,6 +6,7 @@ namespace Dev\Maker\SimpleModule;
 
 use Dev\Maker\CustomStr;
 use Dev\Maker\Vendor\EntityGenerator;
+use Override;
 use Symfony\Bundle\MakerBundle\ConsoleStyle;
 use Symfony\Bundle\MakerBundle\DependencyBuilder;
 use Symfony\Bundle\MakerBundle\Doctrine\ORMDependencyBuilder;
@@ -38,6 +39,7 @@ final class MakeModule extends AbstractMaker implements InputAwareMakerInterface
         }
     }
 
+    #[Override]
     public static function getCommandName(): string
     {
         return 'make:module';
@@ -48,6 +50,7 @@ final class MakeModule extends AbstractMaker implements InputAwareMakerInterface
         return 'Creates simple CRUD module';
     }
 
+    #[Override]
     public function configureCommand(Command $command, InputConfiguration $inputConfig): void
     {
         /** @var non-empty-string $helpFile */
@@ -75,6 +78,7 @@ final class MakeModule extends AbstractMaker implements InputAwareMakerInterface
         $inputConfig->setArgumentAsNonInteractive('name');
     }
 
+    #[Override]
     public function interact(InputInterface $input, ConsoleStyle $io, Command $command): void
     {
         if ($input->getArgument('name') !== null) {
@@ -90,6 +94,7 @@ final class MakeModule extends AbstractMaker implements InputAwareMakerInterface
         $input->setArgument('name', $entityClassName);
     }
 
+    #[Override]
     public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator): void
     {
         /** @var non-empty-string $moduleName */
@@ -124,6 +129,7 @@ final class MakeModule extends AbstractMaker implements InputAwareMakerInterface
         ]);
     }
 
+    #[Override]
     public function configureDependencies(DependencyBuilder $dependencies, ?InputInterface $input = null): void
     {
         /**

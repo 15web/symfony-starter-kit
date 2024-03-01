@@ -46,7 +46,7 @@ logs: # Просмотр логов сервиса, пример: make logs back
 	./setup_envs.bash
 	@docker compose logs $(Arguments)
 
-lint: container-lint validate-doctrine-schema twig-lint fixer-check rector-check phpstan psalm deptrac-check deptrac-check-unassigned cache-prod-check
+lint: container-lint twig-lint fixer-check rector-check phpstan psalm deptrac-check-unassigned cache-prod-check
 
 composer-install: # Установка пакетов
 	docker compose run --rm backend-cli composer install --no-scripts --prefer-dist

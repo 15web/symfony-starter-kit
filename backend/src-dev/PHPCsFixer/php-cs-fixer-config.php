@@ -30,7 +30,7 @@ return (new Config())
         '@PER:risky' => true,
         '@DoctrineAnnotation' => true,
         '@PHP80Migration:risky' => true,
-        '@PHP82Migration' => true,
+        '@PHP83Migration' => true,
         '@PhpCsFixer' => true,
         '@PhpCsFixer:risky' => true,
         '@PHPUnit100Migration:risky' => true,

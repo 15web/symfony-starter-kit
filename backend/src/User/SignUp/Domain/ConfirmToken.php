@@ -6,6 +6,7 @@ namespace App\User\SignUp\Domain;
 
 use App\Infrastructure\ValueObject\ValueObject;
 use Doctrine\ORM\Mapping as ORM;
+use Override;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -25,6 +26,7 @@ final readonly class ConfirmToken implements ValueObject
     /**
      * @param object $other
      */
+    #[Override]
     public function equalTo(mixed $other): bool
     {
         return $other::class === self::class && $this->value->equals($other->value);

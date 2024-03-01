@@ -9,6 +9,7 @@ use App\Mailer\Notification\UncompletedTasks\UncompletedTasksMessage;
 use App\Task\Query\Task\FindUncompletedTasksByUserId\FindUncompletedTasksByUserId;
 use App\Task\Query\Task\FindUncompletedTasksByUserId\FindUncompletedTasksByUserIdQuery;
 use App\User\SignUp\Query\FindAllUsers;
+use Override;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -34,6 +35,7 @@ final class SendUncompletedTaskToUser extends Command
         parent::__construct();
     }
 
+    #[Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if (!$this->lock()) {

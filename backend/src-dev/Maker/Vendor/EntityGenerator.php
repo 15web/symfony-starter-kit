@@ -92,7 +92,7 @@ final readonly class EntityGenerator
             if (\is_array($newField)) {
                 $annotationOptions = $newField;
                 unset($annotationOptions['fieldName']);
-                $manipulator->addEntityField($newField['fieldName'], $annotationOptions);
+                $manipulator->addEntityField($newField['fieldName']);
 
                 $currentFields[] = $newField['fieldName'];
             } elseif ($newField instanceof EntityRelation) {

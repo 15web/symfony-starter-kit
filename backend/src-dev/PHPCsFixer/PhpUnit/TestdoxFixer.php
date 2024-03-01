@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Dev\PHPCsFixer\PhpUnit;
 
 use InvalidArgumentException;
+use Override;
 use PhpCsFixer\ConfigurationException\InvalidForEnvFixerConfigurationException;
 use PhpCsFixer\ConfigurationException\RequiredFixerConfigurationException;
 use PhpCsFixer\Console\Application;
@@ -32,7 +33,7 @@ use Symfony\Component\OptionsResolver\Options;
  */
 final class TestdoxFixer implements FixerInterface, WhitespacesAwareFixerInterface, ConfigurableFixerInterface
 {
-    private const EXCLUDE_KEY = 'exclude';
+    private const string EXCLUDE_KEY = 'exclude';
 
     private readonly TestdoxForMethods $testdoxForMethods;
     private readonly DocCommentHelper $commentHelper;
@@ -56,16 +57,19 @@ final class TestdoxFixer implements FixerInterface, WhitespacesAwareFixerInterfa
         $this->testdoxForMethods = new TestdoxForMethods($this->commentHelper);
     }
 
+    #[Override]
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAllTokenKindsFound([T_CLASS, T_STRING]);
     }
 
+    #[Override]
     public function isRisky(): bool
     {
         return false;
     }
 
+    #[Override]
     public function fix(SplFileInfo $file, Tokens $tokens): void
     {
         if ($tokens->count() <= 0) {
@@ -80,6 +84,7 @@ final class TestdoxFixer implements FixerInterface, WhitespacesAwareFixerInterfa
         $this->applyFix($file, $tokens);
     }
 
+    #[Override]
     public function getDefinition(): FixerDefinitionInterface
     {
         return new FixerDefinition(
@@ -99,21 +104,25 @@ final class ExampleTest
         );
     }
 
+    #[Override]
     public function getName(): string
     {
         return sprintf('Testdox/%s', 'test_requires_testdox');
     }
 
+    #[Override]
     public function getPriority(): int
     {
         return -31;
     }
 
+    #[Override]
     public function supports(SplFileInfo $file): bool
     {
         return true;
     }
 
+    #[Override]
     public function setWhitespacesConfig(WhitespacesFixerConfig $config): void
     {
         $this->whitespacesConfig = $config;
@@ -122,6 +131,7 @@ final class ExampleTest
     /**
      * @param array<mixed> $configuration
      */
+    #[Override]
     public function configure(array $configuration): void
     {
         foreach ($this->getConfigurationDefinition()->getOptions() as $option) {
@@ -176,6 +186,7 @@ final class ExampleTest
         }
     }
 
+    #[Override]
     public function getConfigurationDefinition(): FixerConfigurationResolverInterface
     {
         if ($this->configurationDefinition === null) {

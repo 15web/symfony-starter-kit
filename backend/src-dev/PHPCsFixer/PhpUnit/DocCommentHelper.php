@@ -16,7 +16,7 @@ use PhpCsFixer\WhitespacesFixerConfig;
 final readonly class DocCommentHelper
 {
     // Слово TestDox находится на 4 токена ниже закрывающей скобки атрибута - ]
-    private const TESTDOX_WORD_TOKEN_COUNT_BEFORE_ATTRIBUTE_CLOSE = 4;
+    private const int TESTDOX_WORD_TOKEN_COUNT_BEFORE_ATTRIBUTE_CLOSE = 4;
 
     public function __construct(private WhitespacesFixerConfig $whitespacesConfig) {}
 

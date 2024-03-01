@@ -33,9 +33,9 @@ final class PhoneTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
 
         /**
-         * @phpstan-ignore-next-line
-         *
          * @psalm-suppress ArgumentTypeCoercion
+         *
+         * @phpstan-ignore-next-line
          */
         new Phone($phone);
     }

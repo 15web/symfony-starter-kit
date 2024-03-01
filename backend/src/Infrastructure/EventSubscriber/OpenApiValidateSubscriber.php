@@ -10,6 +10,7 @@ use League\OpenAPIValidation\PSR7\RequestValidator;
 use League\OpenAPIValidation\PSR7\ResponseValidator;
 use League\OpenAPIValidation\PSR7\ValidatorBuilder;
 use Nyholm\Psr7\Factory\Psr17Factory;
+use Override;
 use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\When;
@@ -26,8 +27,8 @@ use Symfony\Component\HttpKernel\Event\ResponseEvent;
 #[When('test')]
 final readonly class OpenApiValidateSubscriber implements EventSubscriberInterface
 {
-    public const VALIDATE_REQUEST_KEY = 'validate_request';
-    public const VALIDATE_RESPONSE_KEY = 'validate_response';
+    public const string VALIDATE_REQUEST_KEY = 'validate_request';
+    public const string VALIDATE_RESPONSE_KEY = 'validate_response';
 
     private RequestValidator $requestValidator;
     private ResponseValidator $responseValidator;
@@ -45,6 +46,7 @@ final readonly class OpenApiValidateSubscriber implements EventSubscriberInterfa
         $this->responseValidator = $validatorBuilder->getResponseValidator();
     }
 
+    #[Override]
     public static function getSubscribedEvents(): array
     {
         return [

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Dev\PHPCsFixer\Comment;
 
+use Override;
 use PhpCsFixer\Fixer\FixerInterface;
 use PhpCsFixer\Fixer\WhitespacesAwareFixerInterface;
 use PhpCsFixer\FixerDefinition\CodeSample;
@@ -27,21 +28,25 @@ final class ClassDocCommentFixer implements FixerInterface, WhitespacesAwareFixe
         $this->whitespacesConfig = $this->getDefaultWhitespacesFixerConfig();
     }
 
+    #[Override]
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAnyTokenKindsFound(Token::getClassyTokenKinds());
     }
 
+    #[Override]
     public function isRisky(): bool
     {
         return false;
     }
 
+    #[Override]
     public function getName(): string
     {
         return sprintf('ClassDocComment/%s', 'class_doc_comment');
     }
 
+    #[Override]
     public function getDefinition(): FixerDefinitionInterface
     {
         return new FixerDefinition(
@@ -57,11 +62,13 @@ final class Sample
         );
     }
 
+    #[Override]
     public function getPriority(): int
     {
         return -30;
     }
 
+    #[Override]
     public function fix(SplFileInfo $file, Tokens $tokens): void
     {
         if ($tokens->count() <= 0) {
@@ -76,11 +83,13 @@ final class Sample
         $this->applyFix($tokens);
     }
 
+    #[Override]
     public function supports(SplFileInfo $file): bool
     {
         return true;
     }
 
+    #[Override]
     public function setWhitespacesConfig(WhitespacesFixerConfig $config): void
     {
         $this->whitespacesConfig = $config;

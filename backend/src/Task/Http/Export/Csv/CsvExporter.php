@@ -8,6 +8,7 @@ use App\Infrastructure\AsService;
 use App\Task\Http\Export\Exporter;
 use App\Task\Http\Export\Format;
 use App\Task\Query\Task\FindAllByUserId\TaskData;
+use Override;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -25,6 +26,7 @@ final readonly class CsvExporter implements Exporter
         private Filesystem $filesystem,
     ) {}
 
+    #[Override]
     public function getFormat(): Format
     {
         return Format::CSV;
@@ -33,6 +35,7 @@ final readonly class CsvExporter implements Exporter
     /**
      * @param TaskData[] $tasks
      */
+    #[Override]
     public function export(array $tasks): BinaryFileResponse
     {
         $csvTaskData = $this->serializer->serialize(

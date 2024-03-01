@@ -11,6 +11,7 @@ use App\Task\Domain\Task;
 use App\Task\Domain\TaskId;
 use App\Task\Domain\Tasks;
 use InvalidArgumentException;
+use Override;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
@@ -29,6 +30,7 @@ final readonly class TaskArgumentValueResolver implements ValueResolverInterface
     /**
      * @return iterable<Task>
      */
+    #[Override]
     public function resolve(Request $request, ArgumentMetadata $argument): iterable
     {
         if ($argument->getType() !== Task::class) {

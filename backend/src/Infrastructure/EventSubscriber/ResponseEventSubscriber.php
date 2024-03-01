@@ -6,6 +6,7 @@ namespace App\Infrastructure\EventSubscriber;
 
 use App\Infrastructure\AsService;
 use App\Infrastructure\Response\ResponseInterface;
+use Override;
 use RuntimeException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -26,6 +27,7 @@ final readonly class ResponseEventSubscriber implements EventSubscriberInterface
     /**
      * @return array<string, array{0: string, 1: int}|list<array{0: string, 1?: int}>|string>
      */
+    #[Override]
     public static function getSubscribedEvents(): array
     {
         return [

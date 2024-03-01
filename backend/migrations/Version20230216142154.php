@@ -6,17 +6,20 @@ namespace DoctrineMigrations;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
+use Override;
 
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
 final class Version20230216142154 extends AbstractMigration
 {
+    #[Override]
     public function getDescription(): string
     {
         return 'Переименовал поля email, confirmToken, isConfirmed для пользователя';
     }
 
+    #[Override]
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
@@ -25,6 +28,7 @@ final class Version20230216142154 extends AbstractMigration
         $this->addSql('CREATE UNIQUE INDEX UNIQ_8D93D649B6244599 ON user (confirm_token_value)');
     }
 
+    #[Override]
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs

@@ -7,6 +7,7 @@ namespace App\Infrastructure\EventSubscriber;
 use App\Infrastructure\ApiException\ApiException;
 use App\Infrastructure\ApiException\CreateExceptionJsonResponse;
 use App\Infrastructure\AsService;
+use Override;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -22,6 +23,7 @@ final readonly class ExceptionEventSubscriber implements EventSubscriberInterfac
     /**
      * @return array<string, array{0: string, 1: int}|list<array{0: string, 1?: int}>|string>
      */
+    #[Override]
     public static function getSubscribedEvents(): array
     {
         return [

@@ -10,6 +10,7 @@ use App\Infrastructure\ApiException\ApiBadRequestException;
 use App\Infrastructure\ApiException\ApiNotFoundException;
 use App\Infrastructure\AsService;
 use InvalidArgumentException;
+use Override;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
@@ -27,6 +28,7 @@ final readonly class ArticleArgumentValueResolver implements ValueResolverInterf
     /**
      * @return iterable<Article>
      */
+    #[Override]
     public function resolve(Request $request, ArgumentMetadata $argument): iterable
     {
         if ($argument->getType() !== Article::class) {
