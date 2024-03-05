@@ -10,8 +10,6 @@ use Symfony\Bundle\MakerBundle\Doctrine\DoctrineHelper;
 use Symfony\Bundle\MakerBundle\Str;
 use Symfony\Bundle\MakerBundle\Util\ClassNameDetails;
 use Symfony\Bundle\MakerBundle\Util\UseStatementGenerator;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV7;
 
@@ -79,14 +77,6 @@ final readonly class EntityClassGeneratorForModule
         $shortEntityClass = Str::getShortClassName($entityClass);
         $entityAlias = strtolower($shortEntityClass[0]);
 
-        $passwordUserInterfaceName = UserInterface::class;
-
-        if (interface_exists(PasswordAuthenticatedUserInterface::class)) {
-            $passwordUserInterfaceName = PasswordAuthenticatedUserInterface::class;
-        }
-
-        $interfaceClassNameDetails = new ClassNameDetails($passwordUserInterfaceName, 'Symfony\Component\Security\Core\User');
-
         $useStatements = new UseStatementGenerator([
             AsService::class,
             EntityManagerInterface::class,
@@ -100,8 +90,6 @@ final readonly class EntityClassGeneratorForModule
                 'use_statements' => $useStatements,
                 'entity_class_name' => $shortEntityClass,
                 'entity_alias' => $entityAlias,
-                'with_password_upgrade' => false,
-                'password_upgrade_user_interface' => $interfaceClassNameDetails,
                 'include_example_comments' => true,
             ]
         );

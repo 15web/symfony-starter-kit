@@ -12,18 +12,18 @@ use App\Infrastructure\Response\SuccessResponse;
 use App\Setting\Command\SaveSetting;
 use App\Setting\Command\SaveSettingCommand;
 use App\Setting\Domain\SettingNotFoundException;
+use App\User\SignIn\Http\Auth\IsGranted;
 use App\User\SignUp\Domain\UserRole;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Ручка сохранения настройки
  */
-#[IsGranted(UserRole::User->value)]
+#[IsGranted(UserRole::User)]
 #[Route('/admin/settings', methods: [Request::METHOD_POST])]
 #[AsController]
 final readonly class SettingSaveAction

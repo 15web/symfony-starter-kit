@@ -4,12 +4,18 @@ declare(strict_types=1);
 
 namespace App\User\SignIn\Http;
 
+use App\Infrastructure\ApiException\ApiBadResponseException;
+use App\Infrastructure\ApiException\ApiErrorCode;
+use App\Infrastructure\ApiException\ApiUnauthorizedException;
+use App\Infrastructure\ApiRequestValueResolver;
 use App\Infrastructure\Flush;
 use App\Infrastructure\Response\ApiObjectResponse;
-use App\User\SignIn\Command\CreateToken;
-use App\User\SignIn\Http\Authenticator\JsonLoginAuthenticator;
-use App\User\SignUp\Domain\UserId;
-use App\User\SignUp\Http\UserIdArgumentValueResolver;
+use App\Infrastructure\ValueObject\Email;
+use App\User\SignIn\Command\SignIn;
+use App\User\SignIn\Command\SignInCommand;
+use App\User\SignUp\Domain\EmailIsNotConfirmedException;
+use DomainException;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Attribute\Route;
@@ -18,26 +24,36 @@ use Symfony\Component\Uid\UuidV7;
 /**
  * Ручка аутентификации
  */
-#[Route('/sign-in', name: JsonLoginAuthenticator::SIGN_IN, methods: JsonLoginAuthenticator::SIGN_IN_METHODS)]
+#[Route('/sign-in', methods: [Request::METHOD_POST])]
 #[AsController]
 final readonly class SignInAction
 {
     public function __construct(
-        private CreateToken $createToken,
+        private SignIn $signIn,
         private Flush $flush,
     ) {}
 
     public function __invoke(
-        #[ValueResolver(UserIdArgumentValueResolver::class)]
-        UserId $userId
+        #[ValueResolver(ApiRequestValueResolver::class)]
+        SignInRequest $signInRequest,
     ): ApiObjectResponse {
         $token = new UuidV7();
-        ($this->createToken)(
-            userId: $userId,
-            userTokenId: $token,
-        );
 
-        ($this->flush)();
+        try {
+            ($this->signIn)(new SignInCommand(
+                email: new Email($signInRequest->email),
+                password: $signInRequest->password,
+                token: $token,
+            ));
+            ($this->flush)();
+        } catch (EmailIsNotConfirmedException) {
+            throw new ApiBadResponseException(
+                errors: ['Email не подтвержден'],
+                apiCode: ApiErrorCode::EmailIsNotConfirmed,
+            );
+        } catch (DomainException) {
+            throw new ApiUnauthorizedException(['Ошибка аутентификации']);
+        }
 
         return new ApiObjectResponse(
             data: new UserResponse($token),

@@ -10,6 +10,7 @@ use App\Task\Query\Task\FindById\FindTaskById;
 use App\Task\Query\Task\FindById\FindTaskByIdQuery;
 use App\Task\Query\Task\FindById\TaskData;
 use App\Task\Query\Task\FindById\TaskNotFoundException;
+use App\User\SignIn\Http\Auth\IsGranted;
 use App\User\SignUp\Domain\UserId;
 use App\User\SignUp\Domain\UserRole;
 use App\User\SignUp\Http\UserIdArgumentValueResolver;
@@ -18,13 +19,12 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\HttpKernel\Controller\ArgumentResolver\UidValueResolver;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Uid\Uuid;
 
 /**
  * Ручка информации задачи
  */
-#[IsGranted(UserRole::User->value)]
+#[IsGranted(UserRole::User)]
 #[Route('/tasks/{id}', methods: [Request::METHOD_GET])]
 #[AsController]
 final readonly class TaskInfoAction

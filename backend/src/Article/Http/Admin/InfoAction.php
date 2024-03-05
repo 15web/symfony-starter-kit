@@ -6,17 +6,17 @@ namespace App\Article\Http\Admin;
 
 use App\Article\Domain\Article;
 use App\Infrastructure\Response\ApiObjectResponse;
+use App\User\SignIn\Http\Auth\IsGranted;
 use App\User\SignUp\Domain\UserRole;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Ручка информации статьи
  */
-#[IsGranted(UserRole::User->value)]
+#[IsGranted(UserRole::User)]
 #[Route('/admin/articles/{id}', methods: [Request::METHOD_GET])]
 #[AsController]
 final class InfoAction
