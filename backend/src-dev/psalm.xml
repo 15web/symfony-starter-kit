@@ -11,7 +11,7 @@
     <projectFiles>
         <directory name="../src" />
         <directory name="./" />
-        <directory name="../tests" />
+        <directory name="../src-dev/Tests" />
         <ignoreFiles>
             <directory name="../vendor" />
             <directory name="./cache" />
@@ -20,7 +20,7 @@
             <file name="../src/Infrastructure/Kernel.php" />
             <file name="../src/Infrastructure/di.php" />
             <file name="./Maker/Vendor/EntityGenerator.php" />
-            <file name="../tests/bootstrap.php" />
+            <file name="../src-dev/Tests/bootstrap.php" />
         </ignoreFiles>
     </projectFiles>
 

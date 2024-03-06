@@ -29,7 +29,7 @@ return static function (ContainerConfigurator $di): void {
         ->bind(FileManager::class, service('maker.file_manager'));
 
     $services->set('custom_maker.generator_for_tests', CustomGenerator::class)
-        ->bind('$namespacePrefix', 'App\Tests')
+        ->bind('$namespacePrefix', 'Dev\Tests')
         ->bind(FileManager::class, service('maker.file_manager'));
 
     $services->set(EntityGenerator::class)

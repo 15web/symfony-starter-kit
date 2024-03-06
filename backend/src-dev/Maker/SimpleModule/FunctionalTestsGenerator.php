@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Dev\Maker\SimpleModule;
 
-use App\Tests\Functional\SDK\ApiWebTestCase;
-use App\Tests\Functional\SDK\User;
 use Dev\Maker\EntityFieldsManipulator;
 use Dev\Maker\Vendor\CustomGenerator;
+use Dev\Tests\Functional\SDK\ApiWebTestCase;
+use Dev\Tests\Functional\SDK\User;
 use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;

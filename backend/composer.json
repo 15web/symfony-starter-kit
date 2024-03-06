@@ -80,8 +80,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Dev\\": "src-dev/",
-            "App\\Tests\\": "tests/"
+            "Dev\\": "src-dev/"
         }
     },
     "replace": {

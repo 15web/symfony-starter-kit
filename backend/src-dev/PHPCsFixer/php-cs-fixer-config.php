@@ -11,7 +11,7 @@ $finder = (new Finder())
     ->in([
         __DIR__.'/../../src',
         __DIR__.'/../../src-dev',
-        __DIR__.'/../../tests',
+        __DIR__.'/../../src-dev/Tests',
     ])
     ->exclude('cache')
     ->append([
