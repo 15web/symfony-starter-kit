@@ -7,7 +7,7 @@ parameters:
         -   name: Vendor
             collectors:
                 -   type: className
-                    regex: (Symfony|Sensio|Doctrine|Webmozart|Psr|League|Nyholm|Valinor)\\.*
+                    regex: (Symfony|Sensio|Doctrine|Webmozart|Psr|League|Nyholm|Valinor|ValinorBundle)\\.*
         -   name: Infrastructure
             collectors:
                 -   type: className

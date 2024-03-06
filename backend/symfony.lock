@@ -8,6 +8,9 @@
     "composer/xdebug-handler": {
         "version": "3.0.3"
     },
+    "cuyz/valinor-bundle": {
+        "version": "0.2.3"
+    },
     "dama/doctrine-test-bundle": {
         "version": "7.2",
         "recipe": {

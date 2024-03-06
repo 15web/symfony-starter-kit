@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Dev\Infrastructure;
+namespace Dev\Maker;
 
 use Dev\Maker\SimpleModule\FunctionalTestsGenerator;
 use Dev\Maker\SimpleModule\MakeModule;
@@ -19,7 +19,14 @@ return static function (ContainerConfigurator $di): void {
     $services = $di->services()->defaults()->autowire()->autoconfigure();
 
     $services
-        ->load('Dev\\', '../*');
+        ->load('Dev\\', '../*')
+        ->exclude([
+            './{di.php}',
+            '../**/{di.php}',
+            '../**/{config.php}',
+            '../**/bootstrap.php',
+            '../cache/**',
+        ]);
 
     $services->set(MakeModule::class)
         ->tag('maker.command');
