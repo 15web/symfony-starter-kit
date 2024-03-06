@@ -4,15 +4,13 @@ declare(strict_types=1);
 
 namespace App\Task\Domain;
 
-use App\Infrastructure\ValueObject\ValueObject;
-use Override;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV7;
 
 /**
  * ID комментария задачи
  */
-final readonly class TaskCommentId implements ValueObject
+final readonly class TaskCommentId
 {
     private Uuid $value;
 
@@ -24,7 +22,6 @@ final readonly class TaskCommentId implements ValueObject
     /**
      * @param object $other
      */
-    #[Override]
     public function equalTo(mixed $other): bool
     {
         return $other::class === self::class && $this->value->equals($other->value);
