@@ -59,7 +59,7 @@ logs: # Просмотр логов сервиса, пример: make logs back
 	make setup-env
 	@docker compose logs $(Arguments)
 
-lint: container-lint twig-lint fixer-check rector-check phpstan psalm deptrac-check-unassigned cache-prod-check
+lint: container-lint validate-doctrine-schema twig-lint fixer-check rector-check phpstan psalm deptrac-check-unassigned cache-prod-check
 
 composer-install: # Установка пакетов
 	docker compose run --rm backend-cli composer install --no-scripts --prefer-dist
@@ -77,7 +77,7 @@ container-lint: # Проверка контейнера зависимостей
 	docker compose run --rm backend-cli bin/console lint:container
 
 validate-doctrine-schema: # Проверка валидности схемы БД
-	docker compose run --rm backend-cli bin/console doctrine:schema:validate -v
+	docker compose run --rm backend-cli bin/console app:schema:validate
 
 twig-lint: # Линтер твиг-шаблонов
 	docker compose run --rm backend-cli bin/console lint:twig src/Mailer/templates

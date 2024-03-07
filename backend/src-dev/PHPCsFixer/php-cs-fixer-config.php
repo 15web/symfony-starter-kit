@@ -12,6 +12,7 @@ $finder = (new Finder())
         __DIR__.'/../../src',
         __DIR__.'/../../src-dev',
         __DIR__.'/../../src-dev/Tests',
+        __DIR__.'/../../migrations',
     ])
     ->exclude('cache')
     ->append([
