@@ -9,6 +9,7 @@ use App\Infrastructure\ApiException\BuildMappingErrorMessages;
 use App\Infrastructure\AsService;
 use CuyZ\Valinor\Mapper\MappingError;
 use CuyZ\Valinor\MapperBuilder;
+use Override;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
@@ -19,8 +20,8 @@ use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 #[AsService]
 final readonly class PaginationRequestArgumentResolver implements ValueResolverInterface
 {
-    private const QUERY_LIMIT_NAME = 'limit';
-    private const QUERY_OFFSET_NAME = 'offset';
+    private const string QUERY_LIMIT_NAME = 'limit';
+    private const string QUERY_OFFSET_NAME = 'offset';
 
     public function __construct(private BuildMappingErrorMessages $buildMappingErrorMessages) {}
 
@@ -29,6 +30,7 @@ final readonly class PaginationRequestArgumentResolver implements ValueResolverI
      *
      * @throws ApiBadRequestException
      */
+    #[Override]
     public function resolve(Request $request, ArgumentMetadata $argument): iterable
     {
         if ($argument->getType() !== PaginationRequest::class) {

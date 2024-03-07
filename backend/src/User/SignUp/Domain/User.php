@@ -7,6 +7,7 @@ namespace App\User\SignUp\Domain;
 use App\Infrastructure\ValueObject\Email;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
+use Override;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Uid\Uuid;
@@ -76,18 +77,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->isConfirmed;
     }
 
+    #[Override]
     public function getPassword(): ?string
     {
         return $this->userPassword->value;
     }
 
+    #[Override]
     public function getRoles(): array
     {
         return [$this->userRole->value];
     }
 
+    #[Override]
     public function eraseCredentials(): void {}
 
+    #[Override]
     public function getUserIdentifier(): string
     {
         return $this->userEmail->value;

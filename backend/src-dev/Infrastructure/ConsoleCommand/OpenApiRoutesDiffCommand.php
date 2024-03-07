@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Dev\Infrastructure\ConsoleCommand;
 
 use InvalidArgumentException;
+use Override;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -20,13 +21,14 @@ use Symfony\Component\Yaml\Yaml;
 #[AsCommand(name: 'app:openapi-routes-diff', description: 'Находит расхождения endpoints и документации openapi')]
 final class OpenApiRoutesDiffCommand extends Command
 {
-    private const OPEN_API_FILE_ARGUMENT = 'openApiFile';
+    private const string OPEN_API_FILE_ARGUMENT = 'openApiFile';
 
     public function __construct(private readonly RouterInterface $router)
     {
         parent::__construct();
     }
 
+    #[Override]
     protected function configure(): void
     {
         $this->addArgument(
@@ -36,6 +38,7 @@ final class OpenApiRoutesDiffCommand extends Command
         );
     }
 
+    #[Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         /** @var string $file */

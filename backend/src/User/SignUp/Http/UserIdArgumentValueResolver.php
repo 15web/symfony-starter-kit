@@ -8,6 +8,7 @@ use App\Infrastructure\ApiException\ApiUnauthorizedException;
 use App\Infrastructure\AsService;
 use App\User\SignUp\Domain\User;
 use App\User\SignUp\Domain\UserId;
+use Override;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
@@ -26,6 +27,7 @@ final readonly class UserIdArgumentValueResolver implements ValueResolverInterfa
      *
      * @throws ApiUnauthorizedException
      */
+    #[Override]
     public function resolve(Request $request, ArgumentMetadata $argument): iterable
     {
         if ($argument->getType() !== UserId::class) {

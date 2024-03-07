@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Infrastructure\EventSubscriber;
 
 use App\Infrastructure\AsService;
+use Override;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Mailer\Event\MessageEvent;
@@ -27,6 +28,7 @@ final readonly class MailerSubscriber implements EventSubscriberInterface
     /**
      * @return array<class-string, string>
      */
+    #[Override]
     public static function getSubscribedEvents(): array
     {
         return [

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Infrastructure\ValueObject;
 
 use Doctrine\ORM\Mapping as ORM;
+use Override;
 use Webmozart\Assert\Assert;
 
 /**
@@ -13,7 +14,7 @@ use Webmozart\Assert\Assert;
 #[ORM\Embeddable]
 final class Phone implements ValueObject
 {
-    private const PHONE_NUMBER_REGEX = '/^\d{11}+$/';
+    private const string PHONE_NUMBER_REGEX = '/^\d{11}+$/';
 
     #[ORM\Column]
     private readonly string $value;
@@ -31,6 +32,7 @@ final class Phone implements ValueObject
     /**
      * @param object $other
      */
+    #[Override]
     public function equalTo(mixed $other): bool
     {
         return $other::class === self::class && $this->value === $other->value;

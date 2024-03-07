@@ -9,6 +9,7 @@ use App\Infrastructure\ApiException\ApiErrorCode;
 use App\Infrastructure\AsService;
 use App\Mailer\Notification\EmailConfirmation\ConfirmEmailMessage;
 use App\User\SignUp\Domain\User;
+use Override;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Security\Core\User\UserCheckerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -23,6 +24,7 @@ final readonly class UserChecker implements UserCheckerInterface
 {
     public function __construct(private MessageBusInterface $messageBus) {}
 
+    #[Override]
     public function checkPreAuth(UserInterface $user): void
     {
         if (!$user instanceof User) {
@@ -46,5 +48,6 @@ final readonly class UserChecker implements UserCheckerInterface
         );
     }
 
+    #[Override]
     public function checkPostAuth(UserInterface $user): void {}
 }

@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace Dev\Rector\Rules;
 
 use App\Infrastructure\Flush;
+use Override;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Expression;
-use Rector\Core\Rector\AbstractRector;
+use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -22,9 +23,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class OneFlushInClassRector extends AbstractRector
 {
-    private const FLUSHER_CLASS = Flush::class;
-    private const FLUSH_METHOD = 'flush';
+    private const string FLUSHER_CLASS = Flush::class;
+    private const string FLUSH_METHOD = 'flush';
 
+    #[Override]
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove one flush if it occurs 2 or more times', [new CodeSample(
@@ -63,11 +65,13 @@ final class OneFlushInClassRector extends AbstractRector
     /**
      * @return array<class-string<Node>>
      */
+    #[Override]
     public function getNodeTypes(): array
     {
         return [Class_::class];
     }
 
+    #[Override]
     public function refactor(Node $node): ?Node
     {
         $hasChanged = false;
@@ -103,10 +107,10 @@ final class OneFlushInClassRector extends AbstractRector
                         $hasChanged = true;
 
                         /**
-                         * @phpstan-ignore-next-line
-                         *
                          * @psalm-suppress MixedArrayOffset
                          * @psalm-suppress MixedArrayAccess
+                         *
+                         * @phpstan-ignore-next-line
                          */
                         unset($node->stmts[$key]);
                     }

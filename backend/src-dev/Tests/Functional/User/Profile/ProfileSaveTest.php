@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 #[TestDox('Сохранение профиля')]
 final class ProfileSaveTest extends ApiWebTestCase
 {
-    private const PHONE_NUMBER = '89272222222';
+    private const string PHONE_NUMBER = '89272222222';
 
     #[TestDox('Профиль сохранен')]
     public function testSuccess(): void

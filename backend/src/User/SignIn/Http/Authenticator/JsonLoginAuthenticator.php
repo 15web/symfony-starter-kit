@@ -8,6 +8,7 @@ use App\Infrastructure\ApiException\ApiBadRequestException;
 use App\Infrastructure\ApiException\ApiUnauthorizedException;
 use App\Infrastructure\ApiException\CreateExceptionJsonResponse;
 use App\Infrastructure\AsService;
+use Override;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -27,14 +28,15 @@ use Webmozart\Assert\InvalidArgumentException;
 #[AsService]
 final class JsonLoginAuthenticator extends AbstractAuthenticator
 {
-    public const SIGN_IN = 'sign-in';
-    public const SIGN_IN_METHODS = [Request::METHOD_POST];
-    private const EMAIL_KEY = 'email';
-    private const PASSWORD_KEY = 'password';
+    public const string SIGN_IN = 'sign-in';
+    public const array SIGN_IN_METHODS = [Request::METHOD_POST];
+    private const string EMAIL_KEY = 'email';
+    private const string PASSWORD_KEY = 'password';
 
     public function __construct(private readonly CreateExceptionJsonResponse $createExceptionJsonResponse) {}
 
-    public function supports(Request $request): ?bool
+    #[Override]
+    public function supports(Request $request): bool
     {
         if ($request->attributes->get('_route') !== self::SIGN_IN) {
             return false;
@@ -46,6 +48,7 @@ final class JsonLoginAuthenticator extends AbstractAuthenticator
     /**
      * @throws ApiBadRequestException
      */
+    #[Override]
     public function authenticate(Request $request): Passport
     {
         try {
@@ -68,12 +71,14 @@ final class JsonLoginAuthenticator extends AbstractAuthenticator
         );
     }
 
+    #[Override]
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
         return null;
     }
 
-    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
+    #[Override]
+    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): Response
     {
         $message = 'Ошибка аутентификации';
         if ($exception instanceof BadCredentialsException) {

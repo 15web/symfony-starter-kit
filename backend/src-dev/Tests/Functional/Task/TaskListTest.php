@@ -17,9 +17,9 @@ use Symfony\Component\HttpFoundation\Request;
 #[TestDox('Список задач')]
 final class TaskListTest extends ApiWebTestCase
 {
-    private const TASK_DATA_KEY = 'data';
-    private const PAGINATION_KEY = 'pagination';
-    private const TOTAL = 'total';
+    private const string TASK_DATA_KEY = 'data';
+    private const string PAGINATION_KEY = 'pagination';
+    private const string TOTAL = 'total';
 
     #[TestDox('Получение списка из 2 созданных задач')]
     public function testSuccess(): void

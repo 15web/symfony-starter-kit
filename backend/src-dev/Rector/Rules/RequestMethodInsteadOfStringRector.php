@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Dev\Rector\Rules;
 
+use Override;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
-use Rector\Core\Rector\AbstractRector;
+use Rector\Rector\AbstractRector;
 use Symfony\Component\HttpFoundation\Request;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -18,6 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RequestMethodInsteadOfStringRector extends AbstractRector
 {
+    #[Override]
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -35,11 +37,13 @@ final class RequestMethodInsteadOfStringRector extends AbstractRector
         );
     }
 
+    #[Override]
     public function getNodeTypes(): array
     {
         return [String_::class];
     }
 
+    #[Override]
     public function refactor(Node $node): ?Node
     {
         /** @var String_ $node */

@@ -6,6 +6,7 @@ namespace Dev\Infrastructure\EventSubscriber;
 
 use App\Infrastructure\AsService;
 use League\OpenAPIValidation\PSR7\Exception\ValidationFailed;
+use Override;
 use Symfony\Component\DependencyInjection\Attribute\When;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
@@ -21,6 +22,7 @@ final readonly class TestExceptionEventSubscriber implements EventSubscriberInte
     /**
      * @return array<string, array{0: string, 1: int}|list<array{0: string, 1?: int}>|string>
      */
+    #[Override]
     public static function getSubscribedEvents(): array
     {
         return [

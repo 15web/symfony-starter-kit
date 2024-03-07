@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 #[TestDox('Получение информации по профилю')]
 final class ProfileInfoTest extends ApiWebTestCase
 {
-    private const PHONE_NUMBER = '89272222222';
+    private const string PHONE_NUMBER = '89272222222';
 
     #[TestDox('Создан профиль, получена информация по нему')]
     public function testSuccess(): void

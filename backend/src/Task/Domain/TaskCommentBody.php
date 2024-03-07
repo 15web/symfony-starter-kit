@@ -6,6 +6,7 @@ namespace App\Task\Domain;
 
 use App\Infrastructure\ValueObject\ValueObject;
 use Doctrine\ORM\Mapping as ORM;
+use Override;
 
 /**
  * Текст комментария задачи
@@ -27,6 +28,7 @@ final readonly class TaskCommentBody implements ValueObject
     /**
      * @param object $other
      */
+    #[Override]
     public function equalTo(mixed $other): bool
     {
         return $other::class === self::class && $this->value === $other->value;
