@@ -1,6 +1,13 @@
 .PHONY: all
 
-init: ./setup_envs.bash build db-migrate setup-transports # Запуск проекта и установка зависимостей
+setup-env: # Установка переменных окружения
+	./setup_envs.bash
+
+init: # Запуск проекта и установка зависимостей
+	make setup-env
+	make build
+	make db-migrate
+	make setup-transports
 
 install-test: # Подготовка тестового окружения
 	make init
@@ -16,18 +23,18 @@ check: composer-validate composer-audit cache-clear lint test check-openapi-diff
 fix: fixer-fix rector-fix # Запуск правок кода
 
 up:	# Запуск контейнеров
-	./setup_envs.bash
+	make setup-env
 	docker compose up -d --force-recreate --remove-orphans
 
 down: # Остановка контейнеров
-	./setup_envs.bash
+	make setup-env
 	docker compose down --remove-orphans
 
 update:	# Обновление зависимостей
 	docker compose run --rm backend-cli composer update
 
 build: # Сборка образов и установка зависимостей
-	./setup_envs.bash
+	make setup-env
 	docker compose build
 	make composer-install
 	make up
@@ -35,15 +42,21 @@ build: # Сборка образов и установка зависимост�
 db-migrate: # Миграции БД
 	docker compose run --rm backend-cli bin/console doctrine:migrations:migrate --no-interaction
 
+db-create-migration: # Создание миграций БД
+	docker compose run --rm backend-cli bin/console doctrine:migrations:diff
+
+db-migration-prev: # Откатить последнюю миграцию
+	docker compose run --rm backend-cli bin/console doctrine:migrations:migrate prev
+
 setup-transports: # Настройка очередей
 	docker compose run --rm backend-cli bin/console messenger:setup-transports
 
 run-backend: # Выполнение команды на бэкенде, пример: make run-backend echo "hello"
-	./setup_envs.bash
+	make setup-env
 	@docker compose run --rm backend-cli $(Arguments)
 
 logs: # Просмотр логов сервиса, пример: make logs backend
-	./setup_envs.bash
+	make setup-env
 	@docker compose logs $(Arguments)
 
 lint: container-lint twig-lint fixer-check rector-check phpstan psalm deptrac-check-unassigned cache-prod-check
@@ -72,8 +85,14 @@ twig-lint: # Линтер твиг-шаблонов
 phpstan: # Запустить phpstan
 	docker compose run --rm backend-cli vendor/bin/phpstan analyse -c src-dev/PHPStan/phpstan-config.neon --memory-limit 2G --ansi
 
+phpstan-update-baseline: # Обновить baseline для phpstan
+	docker compose run --rm backend-cli vendor/bin/phpstan analyse -c src-dev/PHPStan/phpstan-config.neon --memory-limit 2G --generate-baseline
+
 psalm:	# Запустить psalm
 	docker compose run --rm backend-cli vendor/bin/psalm --config=src-dev/psalm.xml
+
+psalm-update-baseline:	# Обновить baseline для psalm
+	docker compose run --rm backend-cli vendor/bin/psalm --config=src-dev/psalm.xml --set-baseline=psalm-baseline.xml
 
 fixer-check: # Проверка стиля написания кода
 	docker compose run --rm backend-cli vendor/bin/php-cs-fixer --config=src-dev/PHPCsFixer/php-cs-fixer-config.php fix --dry-run --diff --ansi
@@ -104,12 +123,12 @@ test: # Запуск тестов
 	docker compose run --rm backend-cli bash -c 'APP_ENV=test vendor/bin/paratest --configuration=src-dev/phpunit.xml -p4'
 
 test-verbose: # Запуск тестов с детальным описанием
-	./setup_envs.bash
+	make setup-env
 	docker compose run --rm backend-cli bin/console --env=test cache:clear
 	docker compose run --rm backend-cli bash -c 'APP_ENV=test vendor/bin/paratest --configuration=src-dev/phpunit.xml -p4 --testdox'
 
 test-single: # Запуск одного теста, пример: make test-single class=TaskCommentBodyTest
-	./setup_envs.bash
+	make setup-env
 	docker compose run --rm backend-cli bin/console --env=test cache:clear
 	@docker compose run --rm backend-cli bash -c "APP_ENV=test vendor/bin/phpunit --configuration=src-dev/phpunit.xml --filter=$(class)"
 
