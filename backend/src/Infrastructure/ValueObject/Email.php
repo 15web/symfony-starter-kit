@@ -5,14 +5,13 @@ declare(strict_types=1);
 namespace App\Infrastructure\ValueObject;
 
 use Doctrine\ORM\Mapping as ORM;
-use Override;
 use Webmozart\Assert\Assert;
 
 /**
  * Email
  */
 #[ORM\Embeddable]
-final readonly class Email implements ValueObject
+final readonly class Email
 {
     /**
      * @param non-empty-string $value
@@ -27,7 +26,6 @@ final readonly class Email implements ValueObject
     /**
      * @param object $other
      */
-    #[Override]
     public function equalTo(mixed $other): bool
     {
         return $other::class === self::class && $this->value === $other->value;
