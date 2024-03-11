@@ -12,7 +12,7 @@ use App\User\SignUp\Domain\UserId;
 use App\User\SignUp\Http\UserIdArgumentValueResolver;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Uid\UuidV7;
 
 /**
