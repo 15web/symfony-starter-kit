@@ -15,7 +15,7 @@ use App\User\SignUp\Domain\UserNotFoundException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 /**
  * Ручка запроса на восстановление пароля
