@@ -41,6 +41,7 @@ final class Task extends ApiWebTestCase
      *          isCompleted: bool
      *     }>,
      *     pagination: array{total: int},
+     *     meta: array{incompletedTasksCount: int}
      * }
      */
     public static function list(string $token, int $limit = 10, int $offset = 0): array
@@ -63,6 +64,7 @@ final class Task extends ApiWebTestCase
          *          isCompleted: bool
          *     }>,
          *     pagination: array{total: int},
+         *     meta: array{incompletedTasksCount: int}
          * } $tasks
          */
         $tasks = self::jsonDecode($response->getContent());

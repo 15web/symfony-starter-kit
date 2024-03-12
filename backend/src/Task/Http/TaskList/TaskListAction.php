@@ -11,6 +11,7 @@ use App\Infrastructure\Response\Pagination\PaginationResponse;
 use App\Task\Query\Task\FindAllByUserId\CountAllTasksByUserId;
 use App\Task\Query\Task\FindAllByUserId\FindAllTasksByUserId;
 use App\Task\Query\Task\FindAllByUserId\FindAllTasksByUserIdQuery;
+use App\Task\Query\Task\FindAllByUserId\TaskData;
 use App\User\SignIn\Http\Auth\IsGranted;
 use App\User\SignUp\Domain\UserId;
 use App\User\SignUp\Domain\UserRole;
@@ -48,11 +49,14 @@ final readonly class TaskListAction
         $tasks = ($this->findAllTasksByUserId)($query);
         $allTasksCount = ($this->countAllTasksByUserId)($query);
 
+        $incompletedTasksCount = \count(array_filter($tasks, static fn (TaskData $task): bool => $task->isCompleted === false));
+
         $pagination = new PaginationResponse($allTasksCount);
 
         return new ApiListObjectResponse(
             data: $tasks,
             pagination: $pagination,
+            meta: new TaskListMetaData(incompletedTasksCount: $incompletedTasksCount)
         );
     }
 }
