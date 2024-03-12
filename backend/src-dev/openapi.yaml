@@ -8,6 +8,8 @@ info:
         url: https://www.15web.ru
         email: info@15web.ru
 tags:
+    - name: general
+      description: Общее
     - name: auth
       description: Аутентификация
     - name: tasks
@@ -23,6 +25,38 @@ tags:
 servers:
     - url: /api
 paths:
+    /ping:
+        get:
+            operationId: ping
+            summary: Пинг приложения
+            description: Пинг приложения
+            tags:
+                - general
+            security: [ ]
+            responses:
+                '200':
+                    description: Возвращает ответ Pong
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data:
+                                        type: object
+                                        required:
+                                            - result
+                                        additionalProperties: false
+                                        properties:
+                                            result:
+                                                type: string
+                                                description: Ответ
+                                                minLength: 1
+                                                example: Pong
+                                    status:
+                                        type: string
+                                        description: Статус запроса
+                                        example: success
+
     /sign-up:
         post:
             operationId: signUp

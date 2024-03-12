@@ -65,6 +65,10 @@ parameters:
             collectors:
                 -   type: className
                     regex: App\\Article\\.*
+        -   name: Ping
+            collectors:
+                -   type: className
+                    regex: App\\Ping\\.*
     ruleset:
         UserDisallowed:
             - Vendor
