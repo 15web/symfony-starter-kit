@@ -10,4 +10,5 @@ namespace App\User\SignUp\Domain;
 enum UserRole: string
 {
     case User = 'ROLE_USER';
+    case Admin = 'ROLE_ADMIN';
 }

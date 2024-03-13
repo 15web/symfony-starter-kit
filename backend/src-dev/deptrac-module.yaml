@@ -33,6 +33,8 @@ parameters:
                             value: App\\User\\SignUp\\Domain\\UserId
                         -   type: className
                             value: App\\User\\SignUp\\Http\\UserIdArgumentValueResolver
+                        -   type: className
+                            value: App\\User\\SignIn\\Http\\Auth\\*
         -   name: UserAllowed
             collectors:
                 -   type: classLike
@@ -45,6 +47,8 @@ parameters:
                     value: App\\User\\SignUp\\Domain\\UserRole
                 -   type: className
                     value: App\\User\\SignUp\\Http\\UserIdArgumentValueResolver
+                -   type: className
+                    value: App\\User\\SignIn\\Http\\Auth\\*
         -   name: Task
             collectors:
                 -   type: className

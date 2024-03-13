@@ -12,8 +12,8 @@ use App\User\SignUp\Domain\UserId;
 use App\User\SignUp\Domain\UserPassword;
 use App\User\SignUp\Domain\UserRole;
 use App\User\SignUp\Domain\Users;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Uid\UuidV7;
 
 /**
@@ -25,7 +25,7 @@ final readonly class SignUp
     public function __construct(
         private Users $users,
         private MessageBusInterface $messageBus,
-        private UserPasswordHasherInterface $passwordHasher,
+        private LoggerInterface $logger,
     ) {}
 
     public function __invoke(SignUpCommand $signUpCommand): void
@@ -43,13 +43,8 @@ final readonly class SignUp
             userRole: UserRole::User,
         );
 
-        /**
-         * @var non-empty-string $hashedPassword
-         */
-        $hashedPassword = $this->passwordHasher->hashPassword(
-            user: $user,
-            plainPassword: $signUpCommand->password,
-        );
+        /** @var non-empty-string $hashedPassword */
+        $hashedPassword = password_hash($signUpCommand->password, PASSWORD_DEFAULT);
 
         $user->applyHashedPassword(new UserPassword($hashedPassword));
 
@@ -61,5 +56,10 @@ final readonly class SignUp
                 email: $signUpCommand->email,
             ),
         );
+
+        $this->logger->info('Пользователь зарегистрирован', [
+            'userId' => $user->getUserId(),
+            self::class => __FUNCTION__,
+        ]);
     }
 }

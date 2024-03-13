@@ -6,10 +6,10 @@ namespace App\User\SignUp\Http;
 
 use App\Infrastructure\ApiException\ApiUnauthorizedException;
 use App\Infrastructure\AsService;
-use App\User\SignUp\Domain\User;
+use App\User\SignIn\Http\Auth\TokenException;
+use App\User\SignIn\Http\Auth\TokenManager;
 use App\User\SignUp\Domain\UserId;
 use Override;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
@@ -20,7 +20,9 @@ use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 #[AsService]
 final readonly class UserIdArgumentValueResolver implements ValueResolverInterface
 {
-    public function __construct(private Security $security) {}
+    public function __construct(
+        private TokenManager $tokenManager,
+    ) {}
 
     /**
      * @return iterable<UserId>
@@ -34,12 +36,12 @@ final readonly class UserIdArgumentValueResolver implements ValueResolverInterfa
             return [];
         }
 
-        $user = $this->security->getUser();
-
-        if (!$user instanceof User) {
+        try {
+            $userToken = $this->tokenManager->getToken($request);
+        } catch (TokenException) {
             throw new ApiUnauthorizedException(['Необходимо пройти аутентификацию']);
         }
 
-        return [$user->getUserId()];
+        return [$userToken->getUserId()];
     }
 }

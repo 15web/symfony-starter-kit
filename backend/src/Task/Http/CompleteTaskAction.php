@@ -12,6 +12,7 @@ use App\Infrastructure\Response\SuccessResponse;
 use App\Task\Command\CompleteTask;
 use App\Task\Domain\Task;
 use App\Task\Domain\TaskAlreadyIsDoneException;
+use App\User\SignIn\Http\Auth\IsGranted;
 use App\User\SignUp\Domain\UserId;
 use App\User\SignUp\Domain\UserRole;
 use App\User\SignUp\Http\UserIdArgumentValueResolver;
@@ -20,12 +21,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Ручка завершения задачи
  */
-#[IsGranted(UserRole::User->value)]
+#[IsGranted(UserRole::User)]
 #[Route('/tasks/{id}/complete', methods: [Request::METHOD_POST])]
 #[AsController]
 final readonly class CompleteTaskAction

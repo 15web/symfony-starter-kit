@@ -8,6 +8,7 @@ use App\Infrastructure\ApiException\ApiBadResponseException;
 use App\Infrastructure\ApiException\ApiErrorCode;
 use App\Infrastructure\Response\Pagination\PaginationRequest;
 use App\Infrastructure\Response\Pagination\PaginationRequestArgumentResolver;
+use App\User\SignIn\Http\Auth\IsGranted;
 use App\User\SignUp\Domain\UserId;
 use App\User\SignUp\Domain\UserRole;
 use App\User\SignUp\Http\UserIdArgumentValueResolver;
@@ -17,12 +18,11 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\HttpKernel\Controller\ArgumentResolver\BackedEnumValueResolver;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Ручка экспорта задач
  */
-#[IsGranted(UserRole::User->value)]
+#[IsGranted(UserRole::User)]
 #[Route('/export/tasks.{format}', methods: [Request::METHOD_GET])]
 #[AsController]
 final readonly class ExportTaskAction

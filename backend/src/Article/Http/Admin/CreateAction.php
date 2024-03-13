@@ -11,17 +11,17 @@ use App\Infrastructure\ApiException\ApiErrorCode;
 use App\Infrastructure\ApiRequestValueResolver;
 use App\Infrastructure\Flush;
 use App\Infrastructure\Response\ApiObjectResponse;
+use App\User\SignIn\Http\Auth\IsGranted;
 use App\User\SignUp\Domain\UserRole;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Ручка создания статьи
  */
-#[IsGranted(UserRole::User->value)]
+#[IsGranted(UserRole::User)]
 #[Route('/admin/articles', methods: [Request::METHOD_POST])]
 #[AsController]
 final readonly class CreateAction

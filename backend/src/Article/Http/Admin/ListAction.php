@@ -7,16 +7,16 @@ namespace App\Article\Http\Admin;
 use App\Article\Domain\Articles;
 use App\Infrastructure\Response\ApiListObjectResponse;
 use App\Infrastructure\Response\Pagination\PaginationResponse;
+use App\User\SignIn\Http\Auth\IsGranted;
 use App\User\SignUp\Domain\UserRole;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Ручка списка статей
  */
-#[IsGranted(UserRole::User->value)]
+#[IsGranted(UserRole::User)]
 #[Route('/admin/articles', methods: [Request::METHOD_GET])]
 #[AsController]
 final readonly class ListAction

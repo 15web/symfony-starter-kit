@@ -8,6 +8,7 @@ use App\Infrastructure\Response\ApiObjectResponse;
 use App\User\Profile\Query\FindByUserId\FindProfileByUserId;
 use App\User\Profile\Query\FindByUserId\FindProfileByUserIdQuery;
 use App\User\Profile\Query\FindByUserId\ProfileData;
+use App\User\SignIn\Http\Auth\IsGranted;
 use App\User\SignUp\Domain\UserId;
 use App\User\SignUp\Domain\UserRole;
 use App\User\SignUp\Http\UserIdArgumentValueResolver;
@@ -15,12 +16,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Ручка получения информации о профиле
  */
-#[IsGranted(UserRole::User->value)]
+#[IsGranted(UserRole::User)]
 #[Route('/profile', methods: [Request::METHOD_GET])]
 #[AsController]
 final readonly class ProfileInfoAction

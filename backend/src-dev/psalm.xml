@@ -17,7 +17,6 @@
             <directory name="../vendor" />
             <directory name="./cache" />
             <file name="../src/*/config.php" />
-            <file name="../src/*/*/config.php" />
             <file name="../src/Infrastructure/Kernel.php" />
             <file name="../src/Infrastructure/di.php" />
             <file name="./Maker/Vendor/EntityGenerator.php" />

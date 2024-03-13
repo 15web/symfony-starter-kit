@@ -7,9 +7,6 @@ namespace App\User\SignUp\Domain;
 use App\Infrastructure\ValueObject\Email;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
-use Override;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Uid\Uuid;
 use Webmozart\Assert\Assert;
 
@@ -18,7 +15,7 @@ use Webmozart\Assert\Assert;
  */
 #[ORM\Entity]
 /** @final */
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+class User
 {
     #[ORM\Embedded]
     public readonly Email $userEmail;
@@ -77,25 +74,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->isConfirmed;
     }
 
-    #[Override]
-    public function getPassword(): ?string
+    public function getPassword(): string
     {
         return $this->userPassword->value;
     }
 
-    #[Override]
+    /**
+     * @return non-empty-list<UserRole>
+     */
     public function getRoles(): array
     {
-        return [$this->userRole->value];
-    }
-
-    #[Override]
-    public function eraseCredentials(): void {}
-
-    #[Override]
-    public function getUserIdentifier(): string
-    {
-        return $this->userEmail->value;
+        return [$this->userRole];
     }
 
     public function getUserId(): UserId

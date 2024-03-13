@@ -8,7 +8,6 @@ use App\Infrastructure\AsService;
 use App\User\RecoveryPassword\Domain\RecoveryTokens;
 use App\User\SignUp\Domain\UserPassword;
 use App\User\SignUp\Domain\Users;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -20,7 +19,6 @@ final readonly class RecoverPassword
     public function __construct(
         private RecoveryTokens $recoveryTokens,
         private Users $users,
-        private UserPasswordHasherInterface $passwordHasher,
     ) {}
 
     public function __invoke(
@@ -35,13 +33,8 @@ final readonly class RecoverPassword
 
         $user = $this->users->getById($token->getUserId());
 
-        /**
-         * @var non-empty-string $hashedPassword
-         */
-        $hashedPassword = $this->passwordHasher->hashPassword(
-            user: $user,
-            plainPassword: $recoverPasswordCommand->password
-        );
+        /** @var non-empty-string $hashedPassword */
+        $hashedPassword = password_hash($recoverPasswordCommand->password, PASSWORD_DEFAULT);
 
         $user->applyHashedPassword(new UserPassword($hashedPassword));
     }

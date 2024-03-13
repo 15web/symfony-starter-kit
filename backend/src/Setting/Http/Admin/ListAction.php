@@ -8,16 +8,16 @@ use App\Infrastructure\Response\ApiListObjectResponse;
 use App\Infrastructure\Response\Pagination\PaginationResponse;
 use App\Setting\Domain\Setting;
 use App\Setting\Domain\Settings;
+use App\User\SignIn\Http\Auth\IsGranted;
 use App\User\SignUp\Domain\UserRole;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Ручка списка настроек
  */
-#[IsGranted(UserRole::User->value)]
+#[IsGranted(UserRole::User)]
 #[Route('/admin/settings', methods: [Request::METHOD_GET])]
 #[AsController]
 final readonly class ListAction

@@ -10,6 +10,7 @@ use App\Infrastructure\ApiRequestValueResolver;
 use App\Infrastructure\AsService;
 use App\Infrastructure\Flush;
 use App\Infrastructure\Response\SuccessResponse;
+use App\User\SignIn\Http\Auth\IsGranted;
 use App\User\SignUp\Domain\UserRole;
 use Dev\Maker\EntityFieldsManipulator;
 use Dev\Maker\Vendor\CustomGenerator;
@@ -23,7 +24,6 @@ use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Uid\Uuid;
 use Webmozart\Assert\Assert;
 
