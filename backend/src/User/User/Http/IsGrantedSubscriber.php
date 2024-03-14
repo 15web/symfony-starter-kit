@@ -2,13 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\User\SignIn\Http\Auth;
+namespace App\User\User\Http;
 
 use App\Infrastructure\ApiException\ApiUnauthorizedException;
 use App\Infrastructure\AsService;
-use App\User\SignUp\Domain\UserRole;
-use App\User\SignUp\Domain\Users;
-use DomainException;
+use App\User\User\Query\FindUser;
+use App\User\User\Query\FindUserQuery;
 use Override;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -23,8 +22,8 @@ final readonly class IsGrantedSubscriber implements EventSubscriberInterface
 {
     public function __construct(
         private TokenManager $tokenManager,
-        private Users $users,
         private LoggerInterface $logger,
+        private FindUser $findUser,
     ) {}
 
     /**
@@ -55,9 +54,11 @@ final readonly class IsGrantedSubscriber implements EventSubscriberInterface
             throw new ApiUnauthorizedException(['Невалидный токен']);
         }
 
-        try {
-            $user = $this->users->getById($userToken->getUserId());
-        } catch (DomainException) {
+        $userData = ($this->findUser)(
+            new FindUserQuery(userId: $userToken->getUserId())
+        );
+
+        if ($userData === null) {
             $this->logger->info('Пользователь токена не найден', [
                 'userId' => $userToken->getUserId()->value,
                 self::class => __FUNCTION__,
@@ -66,11 +67,9 @@ final readonly class IsGrantedSubscriber implements EventSubscriberInterface
             throw new ApiUnauthorizedException(['Пользователь не найден']);
         }
 
-        $roleValues = array_map(static fn (UserRole $role) => $role->value, $user->getRoles());
-
-        if (!\in_array($attribute->userRole->value, $roleValues, true)) {
+        if ($attribute->userRole !== $userData->role) {
             $this->logger->info('Доступ запрещен', [
-                'userId' => $user->getUserId()->value,
+                'userId' => $userData->userId,
                 'role' => $attribute->userRole->value,
                 self::class => __FUNCTION__,
             ]);

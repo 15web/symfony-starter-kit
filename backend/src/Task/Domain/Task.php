@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Task\Domain;
 
-use App\User\SignUp\Domain\UserId;
+use App\User\User\Domain\UserId;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;

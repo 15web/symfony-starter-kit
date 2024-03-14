@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\User\SignUp\Command;
+namespace App\User\User\Domain\Exception;
 
 use Exception;
 

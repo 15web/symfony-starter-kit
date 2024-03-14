@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\User\SignUp\Query;
+namespace App\User\User\Query;
 
 use App\Infrastructure\ValueObject\Email;
 use Symfony\Component\Uid\Uuid;
@@ -10,7 +10,7 @@ use Symfony\Component\Uid\Uuid;
 /**
  * DTO пользователя
  */
-final readonly class UserData
+final readonly class UserListData
 {
     public Email $email;
 

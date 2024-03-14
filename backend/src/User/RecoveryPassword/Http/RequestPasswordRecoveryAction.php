@@ -11,7 +11,7 @@ use App\Infrastructure\Response\ApiObjectResponse;
 use App\Infrastructure\Response\SuccessResponse;
 use App\User\RecoveryPassword\Command\GenerateRecoveryToken;
 use App\User\RecoveryPassword\Command\GenerateRecoveryTokenCommand;
-use App\User\SignUp\Domain\UserNotFoundException;
+use App\User\User\Domain\Exception\UserNotFoundException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;

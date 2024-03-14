@@ -12,7 +12,7 @@ use App\Infrastructure\Response\ApiObjectResponse;
 use App\Infrastructure\Response\SuccessResponse;
 use App\User\SignUp\Command\SignUp;
 use App\User\SignUp\Command\SignUpCommand;
-use App\User\SignUp\Command\UserAlreadyExistException;
+use App\User\User\Domain\Exception\UserAlreadyExistException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;

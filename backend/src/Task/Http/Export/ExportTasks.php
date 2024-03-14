@@ -7,7 +7,7 @@ namespace App\Task\Http\Export;
 use App\Infrastructure\AsService;
 use App\Task\Query\Task\FindAllByUserId\FindAllTasksByUserId;
 use App\Task\Query\Task\FindAllByUserId\FindAllTasksByUserIdQuery;
-use App\User\SignUp\Domain\UserId;
+use App\User\User\Domain\UserId;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;

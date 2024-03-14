@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\User\SignUp\Domain;
+namespace App\User\User\Domain;
 
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV7;

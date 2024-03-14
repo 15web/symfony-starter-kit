@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace App\User\SignIn\Command;
 
 use App\Infrastructure\AsService;
+use App\Infrastructure\ValueObject\Email;
 use App\Mailer\Notification\EmailConfirmation\ConfirmEmailMessage;
-use App\User\SignUp\Domain\EmailIsNotConfirmedException;
-use App\User\SignUp\Domain\Users;
+use App\User\User\Domain\Exception\EmailIsNotConfirmedException;
+use App\User\User\Domain\UserId;
+use App\User\User\Query\FindUser;
+use App\User\User\Query\FindUserQuery;
 use DomainException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -19,29 +22,31 @@ use Symfony\Component\Messenger\MessageBusInterface;
 final readonly class SignIn
 {
     public function __construct(
-        private Users $users,
         private CreateToken $createToken,
         private MessageBusInterface $messageBus,
         private LoggerInterface $logger,
+        private FindUser $findUser,
     ) {}
 
     public function __invoke(SignInCommand $signInCommand): void
     {
-        $user = $this->users->findByEmail($signInCommand->email);
+        $userData = ($this->findUser)(
+            new FindUserQuery(userEmail: $signInCommand->email)
+        );
 
-        if ($user === null) {
+        if ($userData === null) {
             throw new DomainException('Некорректный email');
         }
 
-        if (!password_verify($signInCommand->password, $user->getPassword())) {
+        if (!password_verify($signInCommand->password, $userData->password)) {
             throw new DomainException('Неправильные логин/пароль');
         }
 
-        if (!$user->isConfirmed()) {
+        if (!$userData->isConfirmed) {
             $this->messageBus->dispatch(
                 new ConfirmEmailMessage(
-                    confirmToken: $user->confirmToken->value,
-                    email: $user->userEmail,
+                    confirmToken: $userData->confirmToken,
+                    email: new Email($userData->email),
                 ),
             );
 
@@ -49,12 +54,12 @@ final readonly class SignIn
         }
 
         ($this->createToken)(
-            userId: $user->getUserId(),
+            userId: new UserId($userData->userId),
             userTokenId: $signInCommand->token,
         );
 
         $this->logger->info('Пользователь залогинен', [
-            'userId' => $user->getUserId(),
+            'userId' => $userData->userId,
             self::class => __FUNCTION__,
         ]);
     }
