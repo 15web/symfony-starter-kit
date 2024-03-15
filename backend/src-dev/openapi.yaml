@@ -177,8 +177,7 @@ paths:
                                         properties:
                                             token:
                                                 type: string
-                                                format: uuid
-                                                example: 123e4567-e89b-12d3-a456-426614174000
+                                                example: 123e4567-e89b-12d3-a456-426614174000-1q1e5r3123
                                     status:
                                         type: string
                                         example: success
