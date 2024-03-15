@@ -10,6 +10,7 @@ use App\User\RecoveryPassword\Domain\RecoveryTokenRepository;
 use App\User\SignIn\Domain\UserTokenRepository;
 use App\User\User\Domain\UserPassword;
 use App\User\User\Domain\UserRepository;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -22,7 +23,8 @@ final readonly class RecoverPassword
         private RecoveryTokenRepository $recoveryTokenRepository,
         private UserTokenRepository $userTokenRepository,
         private UserRepository $userRepository,
-        private Hasher $passwordHasher
+        #[Autowire(service: PasswordHasher::class)]
+        private Hasher $hasher
     ) {}
 
     public function __invoke(
@@ -38,7 +40,7 @@ final readonly class RecoverPassword
         $user = $this->userRepository->getById($token->getUserId());
 
         /** @var non-empty-string $hashedPassword */
-        $hashedPassword = $this->passwordHasher->hash($recoverPasswordCommand->password);
+        $hashedPassword = $this->hasher->hash($recoverPasswordCommand->password);
 
         $user->applyHashedPassword(new UserPassword($hashedPassword));
 

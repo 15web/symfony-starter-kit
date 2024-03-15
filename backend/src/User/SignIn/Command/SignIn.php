@@ -8,12 +8,14 @@ use App\Infrastructure\AsService;
 use App\Infrastructure\Hasher;
 use App\Infrastructure\ValueObject\Email;
 use App\Mailer\Notification\EmailConfirmation\ConfirmEmailMessage;
+use App\User\Service\PasswordHasher;
 use App\User\User\Domain\Exception\EmailIsNotConfirmedException;
 use App\User\User\Domain\UserId;
 use App\User\User\Query\FindUser;
 use App\User\User\Query\FindUserQuery;
 use DomainException;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 /**
@@ -27,6 +29,7 @@ final readonly class SignIn
         private MessageBusInterface $messageBus,
         private LoggerInterface $logger,
         private FindUser $findUser,
+        #[Autowire(service: PasswordHasher::class)]
         private Hasher $hasher
     ) {}
 
@@ -61,7 +64,8 @@ final readonly class SignIn
 
         ($this->createToken)(
             userId: new UserId($userData->userId),
-            userTokenId: $signInCommand->token,
+            userTokenId: $signInCommand->authToken->tokenId,
+            token: $signInCommand->authToken->token
         );
 
         $this->logger->info('Пользователь залогинен', [

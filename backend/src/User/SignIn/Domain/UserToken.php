@@ -24,12 +24,19 @@ class UserToken
     private readonly Uuid $userId;
 
     #[ORM\Column]
+    private readonly string $hash;
+
+    #[ORM\Column]
     private readonly DateTimeImmutable $createdAt;
 
-    public function __construct(Uuid $id, UserId $userId)
+    /**
+     * @param non-empty-string $hash
+     */
+    public function __construct(Uuid $id, UserId $userId, string $hash)
     {
         $this->id = $id;
         $this->userId = $userId->value;
+        $this->hash = $hash;
 
         $this->createdAt = new DateTimeImmutable();
     }
@@ -42,5 +49,18 @@ class UserToken
     public function getUserId(): UserId
     {
         return new UserId($this->userId);
+    }
+
+    /**
+     * @return non-empty-string
+     */
+    public function getHash(): string
+    {
+        /**
+         * @var non-empty-string $hash
+         */
+        $hash = $this->hash;
+
+        return $hash;
     }
 }
