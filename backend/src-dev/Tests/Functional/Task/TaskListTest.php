@@ -19,6 +19,7 @@ final class TaskListTest extends ApiWebTestCase
 {
     private const string TASK_DATA_KEY = 'data';
     private const string PAGINATION_KEY = 'pagination';
+    private const string META_KEY = 'meta';
     private const string TOTAL = 'total';
 
     #[TestDox('Получение списка из 2 созданных задач')]
@@ -32,9 +33,11 @@ final class TaskListTest extends ApiWebTestCase
         $response = Task::list($token);
         $tasks = $response[self::TASK_DATA_KEY];
         $pagination = $response[self::PAGINATION_KEY];
+        $meta = $response[self::META_KEY];
 
         self::assertCount(2, $tasks);
         self::assertSame(2, $pagination[self::TOTAL]);
+        self::assertSame(2, $meta['incompletedTasksCount']);
 
         foreach ($tasks as $task) {
             self::assertNotEmpty($task['id']);

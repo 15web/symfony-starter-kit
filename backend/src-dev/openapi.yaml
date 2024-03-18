@@ -436,10 +436,21 @@ paths:
                                 required:
                                     - data
                                     - pagination
+                                    - meta
                                 additionalProperties: false
                                 properties:
                                     pagination:
                                         $ref: '#/components/schemas/paginationResponse'
+                                    meta:
+                                        type: object
+                                        required:
+                                            - incompletedTasksCount
+                                        additionalProperties: false
+                                        properties:
+                                            incompletedTasksCount:
+                                                type: number
+                                                minimum: 0
+                                                description: Количество незакрытых задач
                                     data:
                                         type: array
                                         items:
@@ -841,6 +852,9 @@ paths:
                                 properties:
                                     pagination:
                                         $ref: '#/components/schemas/paginationResponse'
+                                    meta:
+                                        nullable: true
+                                        type: object
                                     data:
                                         type: array
                                         properties:
@@ -939,9 +953,13 @@ paths:
                                 required:
                                     - data
                                     - pagination
+                                    - meta
                                 properties:
                                     pagination:
                                         $ref: '#/components/schemas/paginationResponse'
+                                    meta:
+                                        type: object
+                                        nullable: true
                                     data:
                                         type: array
                                         items:
@@ -1023,9 +1041,13 @@ paths:
                                 required:
                                     - data
                                     - pagination
+                                    - meta
                                 properties:
                                     pagination:
                                         $ref: '#/components/schemas/paginationResponse'
+                                    meta:
+                                        type: object
+                                        nullable: true
                                     data:
                                         type: array
                                         items:
