@@ -26,8 +26,8 @@ return (new Config())
         new TestdoxFixer(),
     ])
     ->setRules([
-        '@PER' => true,
-        '@PER:risky' => true,
+        '@PER-CS' => true,
+        '@PER-CS:risky' => true,
         '@DoctrineAnnotation' => true,
         '@PHP80Migration:risky' => true,
         '@PHP83Migration' => true,
@@ -35,7 +35,7 @@ return (new Config())
         '@PhpCsFixer:risky' => true,
         '@PHPUnit100Migration:risky' => true,
 
-        'escape_implicit_backslashes' => ['heredoc_syntax' => false],
+        'string_implicit_backslashes' => false,
 
         'final_class' => true,
         'final_public_method_for_abstract_class' => true,

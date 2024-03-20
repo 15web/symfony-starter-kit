@@ -95,10 +95,10 @@ psalm-update-baseline:	# Обновить baseline для psalm
 	docker compose run --rm backend-cli vendor/bin/psalm --config=src-dev/psalm.xml --set-baseline=psalm-baseline.xml
 
 fixer-check: # Проверка стиля написания кода
-	docker compose run --rm backend-cli vendor/bin/php-cs-fixer --config=src-dev/PHPCsFixer/php-cs-fixer-config.php fix --dry-run --diff --ansi
+	docker compose run --rm backend-cli vendor/bin/php-cs-fixer --config=src-dev/PHPCsFixer/php-cs-fixer-config.php fix --dry-run --diff --ansi -v
 
 fixer-fix: # Фикс стиля написания кода
-	docker compose run --rm backend-cli vendor/bin/php-cs-fixer --config=src-dev/PHPCsFixer/php-cs-fixer-config.php fix
+	docker compose run --rm backend-cli vendor/bin/php-cs-fixer --config=src-dev/PHPCsFixer/php-cs-fixer-config.php fix -v
 
 rector-check: # Какой код необходимо отрефакторить
 	docker compose run --rm backend-cli vendor/bin/rector process --config=src-dev/Rector/rector.config.php --dry-run --ansi
