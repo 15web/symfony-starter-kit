@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\User\SignIn\Command;
 
 use App\Infrastructure\AsService;
+use App\Infrastructure\Hasher;
 use App\Infrastructure\ValueObject\Email;
 use App\Mailer\Notification\EmailConfirmation\ConfirmEmailMessage;
 use App\User\User\Domain\Exception\EmailIsNotConfirmedException;
@@ -26,6 +27,7 @@ final readonly class SignIn
         private MessageBusInterface $messageBus,
         private LoggerInterface $logger,
         private FindUser $findUser,
+        private Hasher $hasher
     ) {}
 
     public function __invoke(SignInCommand $signInCommand): void
@@ -38,7 +40,7 @@ final readonly class SignIn
             throw new DomainException('Некорректный email');
         }
 
-        if (!password_verify($signInCommand->password, $userData->password)) {
+        if (!$this->hasher->verify($signInCommand->password, $userData->password)) {
             throw new DomainException('Неправильные логин/пароль');
         }
 

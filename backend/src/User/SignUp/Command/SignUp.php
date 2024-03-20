@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\User\SignUp\Command;
 
 use App\Infrastructure\AsService;
+use App\Infrastructure\Hasher;
 use App\Mailer\Notification\EmailConfirmation\ConfirmEmailMessage;
 use App\User\User\Domain\ConfirmToken;
 use App\User\User\Domain\Exception\UserAlreadyExistException;
@@ -30,6 +31,7 @@ final readonly class SignUp
         private MessageBusInterface $messageBus,
         private LoggerInterface $logger,
         private FindUser $findUser,
+        private Hasher $passwordHasher
     ) {}
 
     public function __invoke(SignUpCommand $signUpCommand): void
@@ -53,7 +55,7 @@ final readonly class SignUp
         );
 
         /** @var non-empty-string $hashedPassword */
-        $hashedPassword = password_hash($signUpCommand->password, PASSWORD_DEFAULT);
+        $hashedPassword = $this->passwordHasher->hash($signUpCommand->password);
 
         $user->applyHashedPassword(new UserPassword($hashedPassword));
 
