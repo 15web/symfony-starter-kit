@@ -6,12 +6,15 @@ namespace App\User\SignUp\Command;
 
 use App\Infrastructure\AsService;
 use App\Mailer\Notification\EmailConfirmation\ConfirmEmailMessage;
-use App\User\SignUp\Domain\ConfirmToken;
-use App\User\SignUp\Domain\User;
-use App\User\SignUp\Domain\UserId;
-use App\User\SignUp\Domain\UserPassword;
-use App\User\SignUp\Domain\UserRole;
-use App\User\SignUp\Domain\Users;
+use App\User\User\Domain\ConfirmToken;
+use App\User\User\Domain\Exception\UserAlreadyExistException;
+use App\User\User\Domain\User;
+use App\User\User\Domain\UserId;
+use App\User\User\Domain\UserPassword;
+use App\User\User\Domain\UserRepository;
+use App\User\User\Domain\UserRole;
+use App\User\User\Query\FindUser;
+use App\User\User\Query\FindUserQuery;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Uid\UuidV7;
@@ -23,21 +26,27 @@ use Symfony\Component\Uid\UuidV7;
 final readonly class SignUp
 {
     public function __construct(
-        private Users $users,
+        private UserRepository $userRepository,
         private MessageBusInterface $messageBus,
         private LoggerInterface $logger,
+        private FindUser $findUser,
     ) {}
 
     public function __invoke(SignUpCommand $signUpCommand): void
     {
-        $user = $this->users->findByEmail($signUpCommand->email);
-        if ($user !== null) {
+        $userData = ($this->findUser)(
+            new FindUserQuery(userEmail: $signUpCommand->email)
+        );
+
+        if ($userData !== null) {
             throw new UserAlreadyExistException('Пользователь с таким email уже существует');
         }
 
+        $userId = new UserId();
         $confirmToken = new UuidV7();
+
         $user = new User(
-            userId: new UserId(),
+            userId: $userId,
             userEmail: $signUpCommand->email,
             confirmToken: new ConfirmToken($confirmToken),
             userRole: UserRole::User,
@@ -48,7 +57,7 @@ final readonly class SignUp
 
         $user->applyHashedPassword(new UserPassword($hashedPassword));
 
-        $this->users->add($user);
+        $this->userRepository->add($user);
 
         $this->messageBus->dispatch(
             new ConfirmEmailMessage(
@@ -58,7 +67,7 @@ final readonly class SignUp
         );
 
         $this->logger->info('Пользователь зарегистрирован', [
-            'userId' => $user->getUserId(),
+            'userId' => $userId->value,
             self::class => __FUNCTION__,
         ]);
     }

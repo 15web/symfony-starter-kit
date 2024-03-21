@@ -7,7 +7,7 @@ namespace App\User\SignIn\Command;
 use App\Infrastructure\AsService;
 use App\User\SignIn\Domain\UserToken;
 use App\User\SignIn\Domain\UserTokens;
-use App\User\SignUp\Domain\UserId;
+use App\User\User\Domain\UserId;
 use Symfony\Component\Uid\Uuid;
 
 /**

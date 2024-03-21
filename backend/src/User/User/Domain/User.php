@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\User\SignUp\Domain;
+namespace App\User\User\Domain;
 
 use App\Infrastructure\ValueObject\Email;
+use App\User\User\Domain\Exception\EmailAlreadyIsConfirmedException;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
@@ -67,28 +68,5 @@ class User
         }
 
         $this->isConfirmed = true;
-    }
-
-    public function isConfirmed(): bool
-    {
-        return $this->isConfirmed;
-    }
-
-    public function getPassword(): string
-    {
-        return $this->userPassword->value;
-    }
-
-    /**
-     * @return non-empty-list<UserRole>
-     */
-    public function getRoles(): array
-    {
-        return [$this->userRole];
-    }
-
-    public function getUserId(): UserId
-    {
-        return new UserId($this->id);
     }
 }

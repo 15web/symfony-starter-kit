@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Dev\Tests\Unit\User\SignUp\Domain;
 
-use App\User\SignUp\Domain\ConfirmToken;
+use App\User\User\Domain\ConfirmToken;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Uid\UuidV4;

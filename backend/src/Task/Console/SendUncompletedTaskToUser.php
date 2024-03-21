@@ -8,7 +8,7 @@ use App\Mailer\Notification\UncompletedTasks\TaskData;
 use App\Mailer\Notification\UncompletedTasks\UncompletedTasksMessage;
 use App\Task\Query\Task\FindUncompletedTasksByUserId\FindUncompletedTasksByUserId;
 use App\Task\Query\Task\FindUncompletedTasksByUserId\FindUncompletedTasksByUserIdQuery;
-use App\User\SignUp\Query\FindAllUsers;
+use App\User\User\Query\FindAllUsers;
 use Override;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;

@@ -13,7 +13,7 @@ use App\Infrastructure\Response\ApiObjectResponse;
 use App\Infrastructure\ValueObject\Email;
 use App\User\SignIn\Command\SignIn;
 use App\User\SignIn\Command\SignInCommand;
-use App\User\SignUp\Domain\EmailIsNotConfirmedException;
+use App\User\User\Domain\Exception\EmailIsNotConfirmedException;
 use DomainException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;

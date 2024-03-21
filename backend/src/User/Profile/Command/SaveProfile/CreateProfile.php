@@ -9,7 +9,7 @@ use App\Infrastructure\ValueObject\Phone;
 use App\User\Profile\Domain\Profile;
 use App\User\Profile\Domain\ProfileId;
 use App\User\Profile\Domain\Profiles;
-use App\User\SignUp\Domain\UserId;
+use App\User\User\Domain\UserId;
 
 /**
  * Создает профиль

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\User\Profile\Domain;
 
 use App\Infrastructure\ValueObject\Phone;
-use App\User\SignUp\Domain\UserId;
+use App\User\User\Domain\UserId;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 

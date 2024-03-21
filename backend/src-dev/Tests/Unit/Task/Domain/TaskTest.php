@@ -12,7 +12,7 @@ use App\Task\Domain\TaskCommentBody;
 use App\Task\Domain\TaskCommentId;
 use App\Task\Domain\TaskId;
 use App\Task\Domain\TaskName;
-use App\User\SignUp\Domain\UserId;
+use App\User\User\Domain\UserId;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 

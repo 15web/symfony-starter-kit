@@ -2,13 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\User\SignUp\Http;
+namespace App\User\User\Http;
 
 use App\Infrastructure\ApiException\ApiUnauthorizedException;
 use App\Infrastructure\AsService;
-use App\User\SignIn\Http\Auth\TokenException;
-use App\User\SignIn\Http\Auth\TokenManager;
-use App\User\SignUp\Domain\UserId;
+use App\User\User\Domain\UserId;
 use Override;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;

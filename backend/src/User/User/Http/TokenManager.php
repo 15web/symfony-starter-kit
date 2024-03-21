@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\User\SignIn\Http\Auth;
+namespace App\User\User\Http;
 
 use App\Infrastructure\AsService;
 use App\User\SignIn\Domain\UserToken;

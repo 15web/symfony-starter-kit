@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\User\SignIn\Http\Auth;
+namespace App\User\User\Http;
 
-use App\User\SignUp\Domain\UserRole;
+use App\User\User\Domain\UserRole;
 use Attribute;
 
 /**

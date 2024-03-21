@@ -6,8 +6,8 @@ namespace App\User\RecoveryPassword\Command;
 
 use App\Infrastructure\AsService;
 use App\User\RecoveryPassword\Domain\RecoveryTokens;
-use App\User\SignUp\Domain\UserPassword;
-use App\User\SignUp\Domain\Users;
+use App\User\User\Domain\UserPassword;
+use App\User\User\Domain\UserRepository;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -18,7 +18,7 @@ final readonly class RecoverPassword
 {
     public function __construct(
         private RecoveryTokens $recoveryTokens,
-        private Users $users,
+        private UserRepository $userRepository,
     ) {}
 
     public function __invoke(
@@ -31,7 +31,7 @@ final readonly class RecoverPassword
             throw new RecoveryTokenNotFoundException();
         }
 
-        $user = $this->users->getById($token->getUserId());
+        $user = $this->userRepository->getById($token->getUserId());
 
         /** @var non-empty-string $hashedPassword */
         $hashedPassword = password_hash($recoverPasswordCommand->password, PASSWORD_DEFAULT);

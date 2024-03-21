@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace App\User\SignUp\Command;
 
 use App\Infrastructure\AsService;
-use App\User\SignUp\Domain\EmailAlreadyIsConfirmedException;
-use App\User\SignUp\Domain\UserNotFoundException;
-use App\User\SignUp\Domain\Users;
+use App\User\User\Domain\Exception\EmailAlreadyIsConfirmedException;
+use App\User\User\Domain\Exception\UserNotFoundException;
+use App\User\User\Domain\UserId;
+use App\User\User\Domain\UserRepository;
+use App\User\User\Query\FindUser;
+use App\User\User\Query\FindUserQuery;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -16,14 +19,26 @@ use Symfony\Component\Uid\Uuid;
 #[AsService]
 final readonly class ConfirmEmail
 {
-    public function __construct(private Users $users) {}
+    public function __construct(
+        private FindUser $findUser,
+        private UserRepository $userRepository
+    ) {}
 
     /**
      * @throws EmailAlreadyIsConfirmedException|UserNotFoundException
      */
     public function __invoke(Uuid $confirmToken): void
     {
-        $user = $this->users->findByConfirmToken($confirmToken);
+        $userData = ($this->findUser)(
+            new FindUserQuery(confirmToken: $confirmToken)
+        );
+
+        if ($userData === null) {
+            throw new UserNotFoundException();
+        }
+
+        $user = $this->userRepository->getById(new UserId($userData->userId));
+
         $user->confirm();
     }
 }

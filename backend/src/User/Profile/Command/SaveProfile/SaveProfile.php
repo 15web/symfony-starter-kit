@@ -6,7 +6,7 @@ namespace App\User\Profile\Command\SaveProfile;
 
 use App\Infrastructure\AsService;
 use App\User\Profile\Domain\Profiles;
-use App\User\SignUp\Domain\UserId;
+use App\User\User\Domain\UserId;
 
 /**
  * Хендлер сохранения профиля
