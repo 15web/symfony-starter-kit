@@ -11,7 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
  * Репозиторий Setting
  */
 #[AsService]
-final readonly class Settings
+final readonly class SettingsRepository
 {
     public function __construct(private EntityManagerInterface $entityManager) {}
 

@@ -31,7 +31,7 @@ final readonly class EntityClassGeneratorForModule
         $repoClassDetails = $this->generator->createClassNameDetails(
             name: $entityClassDetails->getRelativeName(),
             namespacePrefix: $moduleName.'\\Domain\\',
-            suffix: 's'
+            suffix: 'Repository'
         );
 
         /** @psalm-suppress InternalMethod */

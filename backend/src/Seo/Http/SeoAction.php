@@ -6,7 +6,7 @@ namespace App\Seo\Http;
 
 use App\Infrastructure\Response\ApiObjectResponse;
 use App\Seo\Domain\Seo;
-use App\Seo\Domain\SeoCollection;
+use App\Seo\Domain\SeoRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
@@ -20,7 +20,7 @@ use Symfony\Component\Routing\Attribute\Route;
 #[AsController]
 final readonly class SeoAction
 {
-    public function __construct(private SeoCollection $seoCollection) {}
+    public function __construct(private SeoRepository $seoRepository) {}
 
     public function __invoke(
         #[ValueResolver(RequestAttributeValueResolver::class)]
@@ -28,7 +28,7 @@ final readonly class SeoAction
         #[ValueResolver(RequestAttributeValueResolver::class)]
         string $identity,
     ): ApiObjectResponse {
-        $seo = $this->seoCollection->findOneByTypeAndIdentity(
+        $seo = $this->seoRepository->findOneByTypeAndIdentity(
             type: $type,
             identity: $identity,
         );

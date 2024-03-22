@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Article\Http\Admin;
 
-use App\Article\Domain\Articles;
+use App\Article\Domain\ArticleRepository;
 use App\Infrastructure\Response\ApiListObjectResponse;
 use App\Infrastructure\Response\Pagination\PaginationResponse;
 use App\User\User\Domain\UserRole;
@@ -21,12 +21,12 @@ use Symfony\Component\Routing\Attribute\Route;
 #[AsController]
 final readonly class ListAction
 {
-    public function __construct(private Articles $articles) {}
+    public function __construct(private ArticleRepository $articleRepository) {}
 
     public function __invoke(): ApiListObjectResponse
     {
-        $articles = $this->articles->getAll();
-        $articlesCount = $this->articles->countAll();
+        $articles = $this->articleRepository->getAll();
+        $articlesCount = $this->articleRepository->countAll();
 
         $pagination = new PaginationResponse($articlesCount);
 

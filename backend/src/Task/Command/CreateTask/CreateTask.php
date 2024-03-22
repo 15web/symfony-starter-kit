@@ -8,7 +8,7 @@ use App\Infrastructure\AsService;
 use App\Task\Domain\Task;
 use App\Task\Domain\TaskId;
 use App\Task\Domain\TaskName;
-use App\Task\Domain\Tasks;
+use App\Task\Domain\TaskRepository;
 use App\User\User\Domain\UserId;
 
 /**
@@ -17,7 +17,7 @@ use App\User\User\Domain\UserId;
 #[AsService]
 final readonly class CreateTask
 {
-    public function __construct(private Tasks $tasks) {}
+    public function __construct(private TaskRepository $taskRepository) {}
 
     public function __invoke(
         CreateTaskCommand $createTaskCommand,
@@ -26,6 +26,6 @@ final readonly class CreateTask
     ): void {
         $task = new Task($taskId, new TaskName($createTaskCommand->taskName), $userId);
 
-        $this->tasks->add($task);
+        $this->taskRepository->add($task);
     }
 }

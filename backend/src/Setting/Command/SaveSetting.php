@@ -7,7 +7,7 @@ namespace App\Setting\Command;
 use App\Infrastructure\AsService;
 use App\Setting\Domain\Setting;
 use App\Setting\Domain\SettingNotFoundException;
-use App\Setting\Domain\Settings;
+use App\Setting\Domain\SettingsRepository;
 
 /**
  * Хендлер сохранения настройки
@@ -15,14 +15,14 @@ use App\Setting\Domain\Settings;
 #[AsService]
 final readonly class SaveSetting
 {
-    public function __construct(private Settings $settings) {}
+    public function __construct(private SettingsRepository $settingsRepository) {}
 
     /**
      * @throws SettingNotFoundException
      */
     public function __invoke(SaveSettingCommand $command): Setting
     {
-        $setting = $this->settings->getByType($command->type);
+        $setting = $this->settingsRepository->getByType($command->type);
 
         $setting->change($command->value);
 

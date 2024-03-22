@@ -7,7 +7,7 @@ namespace App\Setting\Http\Admin;
 use App\Infrastructure\Response\ApiListObjectResponse;
 use App\Infrastructure\Response\Pagination\PaginationResponse;
 use App\Setting\Domain\Setting;
-use App\Setting\Domain\Settings;
+use App\Setting\Domain\SettingsRepository;
 use App\User\User\Domain\UserRole;
 use App\User\User\Http\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,11 +22,11 @@ use Symfony\Component\Routing\Attribute\Route;
 #[AsController]
 final readonly class ListAction
 {
-    public function __construct(private Settings $settings) {}
+    public function __construct(private SettingsRepository $settingsRepository) {}
 
     public function __invoke(): ApiListObjectResponse
     {
-        $settings = $this->settings->getAll();
+        $settings = $this->settingsRepository->getAll();
 
         return new ApiListObjectResponse(
             data: $this->buildResponseData($settings),

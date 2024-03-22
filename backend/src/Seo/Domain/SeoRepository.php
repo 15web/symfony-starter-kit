@@ -11,7 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
  * Репозиторий Seo
  */
 #[AsService]
-final readonly class SeoCollection
+final readonly class SeoRepository
 {
     public function __construct(private EntityManagerInterface $entityManager) {}
 

@@ -6,7 +6,7 @@ namespace App\User\SignIn\Command;
 
 use App\Infrastructure\AsService;
 use App\User\SignIn\Domain\UserToken;
-use App\User\SignIn\Domain\UserTokens;
+use App\User\SignIn\Domain\UserTokenRepository;
 use App\User\User\Domain\UserId;
 use Symfony\Component\Uid\Uuid;
 
@@ -16,11 +16,11 @@ use Symfony\Component\Uid\Uuid;
 #[AsService]
 final readonly class CreateToken
 {
-    public function __construct(private UserTokens $userTokens) {}
+    public function __construct(private UserTokenRepository $userTokenRepository) {}
 
     public function __invoke(UserId $userId, Uuid $userTokenId): void
     {
         $userToken = new UserToken($userTokenId, $userId);
-        $this->userTokens->add($userToken);
+        $this->userTokenRepository->add($userToken);
     }
 }

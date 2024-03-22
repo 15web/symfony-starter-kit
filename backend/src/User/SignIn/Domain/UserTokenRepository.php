@@ -13,7 +13,7 @@ use Symfony\Component\Uid\Uuid;
  * Репозиторий токенов пользователя
  */
 #[AsService]
-final readonly class UserTokens
+final readonly class UserTokenRepository
 {
     public function __construct(private EntityManagerInterface $entityManager) {}
 

@@ -8,7 +8,7 @@ use App\Infrastructure\AsService;
 use App\Infrastructure\ValueObject\Phone;
 use App\User\Profile\Domain\Profile;
 use App\User\Profile\Domain\ProfileId;
-use App\User\Profile\Domain\Profiles;
+use App\User\Profile\Domain\ProfileRepository;
 use App\User\User\Domain\UserId;
 
 /**
@@ -17,7 +17,7 @@ use App\User\User\Domain\UserId;
 #[AsService]
 final readonly class CreateProfile
 {
-    public function __construct(private Profiles $profiles) {}
+    public function __construct(private ProfileRepository $profileRepository) {}
 
     public function __invoke(
         SaveProfileCommand $command,
@@ -30,6 +30,6 @@ final readonly class CreateProfile
             name: $command->name
         );
 
-        $this->profiles->add($profile);
+        $this->profileRepository->add($profile);
     }
 }

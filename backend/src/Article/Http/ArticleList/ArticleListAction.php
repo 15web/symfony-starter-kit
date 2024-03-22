@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Article\Http\ArticleList;
 
-use App\Article\Domain\Articles;
+use App\Article\Domain\ArticleRepository;
 use App\Infrastructure\Response\ApiListObjectResponse;
 use App\Infrastructure\Response\Pagination\PaginationRequest;
 use App\Infrastructure\Response\Pagination\PaginationRequestArgumentResolver;
@@ -21,17 +21,17 @@ use Symfony\Component\Routing\Attribute\Route;
 #[AsController]
 final readonly class ArticleListAction
 {
-    public function __construct(private Articles $articles) {}
+    public function __construct(private ArticleRepository $articleRepository) {}
 
     public function __invoke(
         #[ValueResolver(PaginationRequestArgumentResolver::class)]
         PaginationRequest $paginationRequest,
     ): ApiListObjectResponse {
-        $articles = $this->articles->getAll(
+        $articles = $this->articleRepository->getAll(
             limit: $paginationRequest->limit,
             offset: $paginationRequest->offset,
         );
-        $articlesCount = $this->articles->countAll();
+        $articlesCount = $this->articleRepository->countAll();
 
         $data = [];
         foreach ($articles as $article) {

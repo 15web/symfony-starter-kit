@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Article\Http\Admin;
 
 use App\Article\Domain\Article;
-use App\Article\Domain\Articles;
+use App\Article\Domain\ArticleRepository;
 use App\Infrastructure\ApiException\ApiBadResponseException;
 use App\Infrastructure\ApiException\ApiErrorCode;
 use App\Infrastructure\ApiRequestValueResolver;
@@ -26,7 +26,7 @@ use Symfony\Component\Routing\Attribute\Route;
 #[AsController]
 final readonly class UpdateAction
 {
-    public function __construct(private Articles $articles, private Flush $flush) {}
+    public function __construct(private ArticleRepository $articleRepository, private Flush $flush) {}
 
     public function __invoke(
         #[ValueResolver(ArticleArgumentValueResolver::class)]
@@ -34,7 +34,7 @@ final readonly class UpdateAction
         #[ValueResolver(ApiRequestValueResolver::class)]
         UpdateRequest $updateRequest,
     ): ApiObjectResponse {
-        $sameArticle = $this->articles->findByAlias($updateRequest->alias);
+        $sameArticle = $this->articleRepository->findByAlias($updateRequest->alias);
         if ($sameArticle !== null && $sameArticle->getId() !== $article->getId()) {
             throw new ApiBadResponseException(
                 errors: ['Запись с таким алиасом уже существует'],

@@ -11,7 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
  * Репозиторий задач
  */
 #[AsService]
-final readonly class Tasks
+final readonly class TaskRepository
 {
     public function __construct(private EntityManagerInterface $entityManager) {}
 

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Article\Http\Admin;
 
 use App\Article\Domain\Article;
-use App\Article\Domain\Articles;
+use App\Article\Domain\ArticleRepository;
 use App\Infrastructure\Flush;
 use App\Infrastructure\Response\ApiObjectResponse;
 use App\Infrastructure\Response\SuccessResponse;
@@ -24,13 +24,13 @@ use Symfony\Component\Routing\Attribute\Route;
 #[AsController]
 final readonly class RemoveAction
 {
-    public function __construct(private Articles $articles, private Flush $flush) {}
+    public function __construct(private ArticleRepository $articleRepository, private Flush $flush) {}
 
     public function __invoke(
         #[ValueResolver(ArticleArgumentValueResolver::class)]
         Article $article
     ): ApiObjectResponse {
-        $this->articles->remove($article);
+        $this->articleRepository->remove($article);
         ($this->flush)();
 
         return new ApiObjectResponse(
