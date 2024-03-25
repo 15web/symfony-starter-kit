@@ -12,7 +12,7 @@ use Symfony\Component\Uid\Uuid;
  * Репозиторий статей
  */
 #[AsService]
-final readonly class Articles
+final readonly class ArticleRepository
 {
     public function __construct(private EntityManagerInterface $entityManager) {}
 

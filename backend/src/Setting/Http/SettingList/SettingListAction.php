@@ -7,7 +7,7 @@ namespace App\Setting\Http\SettingList;
 use App\Infrastructure\Response\ApiListObjectResponse;
 use App\Infrastructure\Response\Pagination\PaginationResponse;
 use App\Setting\Domain\Setting;
-use App\Setting\Domain\Settings;
+use App\Setting\Domain\SettingsRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Attribute\Route;
@@ -19,11 +19,11 @@ use Symfony\Component\Routing\Attribute\Route;
 #[AsController]
 final readonly class SettingListAction
 {
-    public function __construct(private Settings $settings) {}
+    public function __construct(private SettingsRepository $settingsRepository) {}
 
     public function __invoke(): ApiListObjectResponse
     {
-        $settings = $this->settings->getAllPublic();
+        $settings = $this->settingsRepository->getAllPublic();
 
         return new ApiListObjectResponse(
             data: $this->buildResponseData($settings),

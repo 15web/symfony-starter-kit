@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\User\RecoveryPassword\Command;
 
 use App\Infrastructure\AsService;
-use App\User\RecoveryPassword\Domain\RecoveryTokens;
+use App\User\RecoveryPassword\Domain\RecoveryTokenRepository;
 use App\User\User\Domain\UserPassword;
 use App\User\User\Domain\UserRepository;
 use Symfony\Component\Uid\Uuid;
@@ -17,7 +17,7 @@ use Symfony\Component\Uid\Uuid;
 final readonly class RecoverPassword
 {
     public function __construct(
-        private RecoveryTokens $recoveryTokens,
+        private RecoveryTokenRepository $recoveryTokenRepository,
         private UserRepository $userRepository,
     ) {}
 
@@ -25,7 +25,7 @@ final readonly class RecoverPassword
         Uuid $recoveryToken,
         RecoverPasswordCommand $recoverPasswordCommand,
     ): void {
-        $token = $this->recoveryTokens->findByToken($recoveryToken);
+        $token = $this->recoveryTokenRepository->findByToken($recoveryToken);
 
         if ($token === null) {
             throw new RecoveryTokenNotFoundException();

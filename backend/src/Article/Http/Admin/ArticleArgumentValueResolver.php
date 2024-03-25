@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Article\Http\Admin;
 
 use App\Article\Domain\Article;
-use App\Article\Domain\Articles;
+use App\Article\Domain\ArticleRepository;
 use App\Infrastructure\ApiException\ApiBadRequestException;
 use App\Infrastructure\ApiException\ApiNotFoundException;
 use App\Infrastructure\AsService;
@@ -23,7 +23,7 @@ use Webmozart\Assert\Assert;
 #[AsService]
 final readonly class ArticleArgumentValueResolver implements ValueResolverInterface
 {
-    public function __construct(private Articles $articles) {}
+    public function __construct(private ArticleRepository $articleRepository) {}
 
     /**
      * @return iterable<Article>
@@ -44,7 +44,7 @@ final readonly class ArticleArgumentValueResolver implements ValueResolverInterf
         try {
             Assert::uuid($id);
 
-            $article = $this->articles->findById(Uuid::fromString($id));
+            $article = $this->articleRepository->findById(Uuid::fromString($id));
 
             if ($article === null) {
                 throw new ApiNotFoundException(['Статья не найдена']);

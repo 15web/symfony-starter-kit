@@ -7,7 +7,7 @@ namespace App\User\RecoveryPassword\Command;
 use App\Infrastructure\AsService;
 use App\Mailer\Notification\PasswordRecovery\RecoveryPasswordMessage;
 use App\User\RecoveryPassword\Domain\RecoveryToken;
-use App\User\RecoveryPassword\Domain\RecoveryTokens;
+use App\User\RecoveryPassword\Domain\RecoveryTokenRepository;
 use App\User\User\Domain\Exception\UserNotFoundException;
 use App\User\User\Domain\UserId;
 use App\User\User\Query\FindUser;
@@ -22,7 +22,7 @@ use Symfony\Component\Uid\UuidV7;
 final readonly class GenerateRecoveryToken
 {
     public function __construct(
-        private RecoveryTokens $tokens,
+        private RecoveryTokenRepository $recoveryTokenRepository,
         private MessageBusInterface $messageBus,
         private FindUser $findUser,
     ) {}
@@ -43,7 +43,7 @@ final readonly class GenerateRecoveryToken
             token: new UuidV7(),
         );
 
-        $this->tokens->add($recoveryToken);
+        $this->recoveryTokenRepository->add($recoveryToken);
 
         $this->messageBus->dispatch(
             message: new RecoveryPasswordMessage(

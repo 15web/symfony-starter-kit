@@ -6,7 +6,7 @@ namespace App\User\User\Http;
 
 use App\Infrastructure\AsService;
 use App\User\SignIn\Domain\UserToken;
-use App\User\SignIn\Domain\UserTokens;
+use App\User\SignIn\Domain\UserTokenRepository;
 use DomainException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Uid\Uuid;
@@ -20,7 +20,7 @@ final readonly class TokenManager
     public const string TOKEN_NAME = 'X-AUTH-TOKEN';
 
     public function __construct(
-        private UserTokens $userTokens,
+        private UserTokenRepository $userTokenRepository,
     ) {}
 
     public function getToken(Request $request): UserToken
@@ -36,7 +36,7 @@ final readonly class TokenManager
         }
 
         try {
-            $userToken = $this->userTokens->getById(Uuid::fromString($apiToken));
+            $userToken = $this->userTokenRepository->getById(Uuid::fromString($apiToken));
         } catch (DomainException) {
             throw new TokenException('Токен не найден');
         }

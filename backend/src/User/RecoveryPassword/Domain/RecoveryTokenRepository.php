@@ -12,7 +12,7 @@ use Symfony\Component\Uid\Uuid;
  * Репозиторий паролей восстановления
  */
 #[AsService]
-final readonly class RecoveryTokens
+final readonly class RecoveryTokenRepository
 {
     public function __construct(private EntityManagerInterface $entityManager) {}
 

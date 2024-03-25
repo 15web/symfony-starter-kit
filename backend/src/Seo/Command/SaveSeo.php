@@ -7,7 +7,7 @@ namespace App\Seo\Command;
 use App\Infrastructure\AsService;
 use App\Infrastructure\Flush;
 use App\Seo\Domain\Seo;
-use App\Seo\Domain\SeoCollection;
+use App\Seo\Domain\SeoRepository;
 
 /**
  * Хендлер сохранения SEO
@@ -15,11 +15,11 @@ use App\Seo\Domain\SeoCollection;
 #[AsService]
 final readonly class SaveSeo
 {
-    public function __construct(private SeoCollection $seoCollection, private Flush $flush) {}
+    public function __construct(private SeoRepository $seoRepository, private Flush $flush) {}
 
     public function __invoke(SaveSeoCommand $command): Seo
     {
-        $seo = $this->seoCollection->findByTypeIdentity(
+        $seo = $this->seoRepository->findByTypeIdentity(
             type: $command->type,
             identity: $command->identity,
         );
@@ -31,7 +31,7 @@ final readonly class SaveSeo
                 title: $command->title,
             );
 
-            $this->seoCollection->add($seo);
+            $this->seoRepository->add($seo);
         }
 
         $seo->change(

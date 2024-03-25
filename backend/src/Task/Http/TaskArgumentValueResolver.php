@@ -9,7 +9,7 @@ use App\Infrastructure\ApiException\ApiNotFoundException;
 use App\Infrastructure\AsService;
 use App\Task\Domain\Task;
 use App\Task\Domain\TaskId;
-use App\Task\Domain\Tasks;
+use App\Task\Domain\TaskRepository;
 use InvalidArgumentException;
 use Override;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,7 +24,7 @@ use Symfony\Component\Uid\Uuid;
 final readonly class TaskArgumentValueResolver implements ValueResolverInterface
 {
     public function __construct(
-        private Tasks $tasks,
+        private TaskRepository $taskRepository,
     ) {}
 
     /**
@@ -44,7 +44,7 @@ final readonly class TaskArgumentValueResolver implements ValueResolverInterface
         }
 
         try {
-            $task = $this->tasks->findById(
+            $task = $this->taskRepository->findById(
                 taskId: new TaskId(Uuid::fromString($taskId)),
             );
 
