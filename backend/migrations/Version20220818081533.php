@@ -8,6 +8,9 @@ use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 use Override;
 
+/**
+ * Auto-generated Migration: Please modify to your needs!
+ */
 final class Version20220818081533 extends AbstractMigration
 {
     #[Override]
