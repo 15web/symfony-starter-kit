@@ -13,13 +13,13 @@ use App\Infrastructure\Response\ApiObjectResponse;
 use App\Infrastructure\ValueObject\Email;
 use App\User\SignIn\Command\SignIn;
 use App\User\SignIn\Command\SignInCommand;
+use App\User\SignIn\Service\AuthTokenService;
 use App\User\User\Domain\Exception\EmailIsNotConfirmedException;
 use DomainException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Uid\UuidV7;
 
 /**
  * Ручка аутентификации
@@ -31,19 +31,20 @@ final readonly class SignInAction
     public function __construct(
         private SignIn $signIn,
         private Flush $flush,
+        private AuthTokenService $authTokenService
     ) {}
 
     public function __invoke(
         #[ValueResolver(ApiRequestValueResolver::class)]
         SignInRequest $signInRequest,
     ): ApiObjectResponse {
-        $token = new UuidV7();
+        $token = $this->authTokenService->generateAuthToken();
 
         try {
             ($this->signIn)(new SignInCommand(
                 email: new Email($signInRequest->email),
                 password: $signInRequest->password,
-                token: $token,
+                authToken: $token
             ));
             ($this->flush)();
         } catch (EmailIsNotConfirmedException) {
@@ -56,7 +57,9 @@ final readonly class SignInAction
         }
 
         return new ApiObjectResponse(
-            data: new UserResponse($token),
+            data: new UserResponse(
+                $this->authTokenService->buildConcatenatedToken($token)
+            ),
         );
     }
 }
