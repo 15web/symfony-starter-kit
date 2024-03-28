@@ -52,6 +52,10 @@ parameters:
                 -
                     type: className
                     regex: App\\.*\\Notification\\.*
+        -   name: Service
+            collectors:
+                -   type: className
+                    regex: App\\.*\\Service\\.*
     ruleset:
         Http:
             - Domain

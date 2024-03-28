@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\User\RecoveryPassword\Command;
 
 use App\Infrastructure\AsService;
+use App\Infrastructure\Hasher;
 use App\User\RecoveryPassword\Domain\RecoveryTokenRepository;
 use App\User\User\Domain\UserPassword;
 use App\User\User\Domain\UserRepository;
@@ -19,6 +20,7 @@ final readonly class RecoverPassword
     public function __construct(
         private RecoveryTokenRepository $recoveryTokenRepository,
         private UserRepository $userRepository,
+        private Hasher $passwordHasher
     ) {}
 
     public function __invoke(
@@ -34,7 +36,7 @@ final readonly class RecoverPassword
         $user = $this->userRepository->getById($token->getUserId());
 
         /** @var non-empty-string $hashedPassword */
-        $hashedPassword = password_hash($recoverPasswordCommand->password, PASSWORD_DEFAULT);
+        $hashedPassword = $this->passwordHasher->hash($recoverPasswordCommand->password);
 
         $user->applyHashedPassword(new UserPassword($hashedPassword));
     }
