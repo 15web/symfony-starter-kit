@@ -2,13 +2,12 @@
 framework:
     secret: '%env(APP_SECRET)%'
     #csrf_protection: true
-    http_method_override: false
-    handle_all_throwables: true
+
+    # Note that the session will be started ONLY if you read or write from it.
+    session: false
 
     #esi: true
     #fragments: true
-    php_errors:
-        log: true
 
 when@test:
     framework:

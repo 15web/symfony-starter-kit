@@ -103,7 +103,7 @@ abstract class ApiWebTestCase extends WebTestCase
         /**
          * @var array{
          *     data: array{
-         *         error: bool,
+         *         isError: bool,
          *         code: int,
          *         message: ?string,
          *         errors: array <int, array{}>
@@ -111,7 +111,7 @@ abstract class ApiWebTestCase extends WebTestCase
          * } $errorResponse
          */
         $errorResponse = self::jsonDecode($response->getContent());
-        self::assertTrue($errorResponse['data']['error']);
+        self::assertTrue($errorResponse['data']['isError']);
         self::assertSame($errorResponse['data']['code'], $apiErrorCode);
         self::assertNotEmpty($errorResponse['data']['message']);
         self::assertNotEmpty($errorResponse['data']['errors']);
