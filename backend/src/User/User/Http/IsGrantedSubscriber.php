@@ -64,6 +64,8 @@ final readonly class IsGrantedSubscriber implements EventSubscriberInterface
                 self::class => __FUNCTION__,
             ]);
 
+            // TODO: здесь наверное надо убить токен?
+
             throw new ApiUnauthorizedException(['Пользователь не найден']);
         }
 

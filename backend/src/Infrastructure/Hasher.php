@@ -7,6 +7,13 @@ namespace App\Infrastructure;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 /**
+ * TODO: зачем этот интерфейс?
+ *          зачем в AuthTokenHasher sha256 (не секурно)?
+ *              почему не password_hash?
+ *       реализации разбросаны по User, хотя иметь здесь один и без интерфейса
+*/
+
+/**
  * Интерфейс сервиса хеширования
  */
 #[AutoconfigureTag]

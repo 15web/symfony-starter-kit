@@ -2,6 +2,12 @@
 
 declare(strict_types=1);
 
+/**
+ * TODO: где-то мы свернули не туда
+ *      - App\User\User странный неймспейс
+ *      - в App\User появился не очень доменный Service
+ *      - по сути App\User\User\{Domain, Http, Query} тоже можно вынести в App\User
+ */
 namespace App\User\User\Domain;
 
 use App\Infrastructure\ValueObject\Email;
@@ -63,9 +69,15 @@ class User
 
     public function confirm(): void
     {
+        // TODO: здесь бы грохнуть ConfirmToken
+
         if ($this->isConfirmed) {
             throw new EmailAlreadyIsConfirmedException('Email уже подтвержден');
+
+            // или здесь
         }
+
+        // или здесь
 
         $this->isConfirmed = true;
     }
