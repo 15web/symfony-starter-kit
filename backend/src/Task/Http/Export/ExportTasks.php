@@ -9,7 +9,7 @@ use App\Task\Query\Task\FindAllByUserId\FindAllTasksByUserId;
 use App\Task\Query\Task\FindAllByUserId\FindAllTasksByUserIdQuery;
 use App\User\User\Domain\UserId;
 use RuntimeException;
-use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 /**
@@ -28,7 +28,7 @@ final class ExportTasks
      */
     public function __construct(
         private readonly FindAllTasksByUserId $findAllTasksByUserId,
-        #[TaggedIterator(Exporter::class)]
+        #[AutowireIterator(Exporter::class)]
         iterable $exporters,
     ) {
         $this->exporters = [];

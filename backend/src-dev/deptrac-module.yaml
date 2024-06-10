@@ -1,4 +1,5 @@
-parameters:
+deptrac:
+    cache_file: var/cache/.deptrac.cache
     paths:
         - ../src
     exclude_files:
@@ -6,34 +7,34 @@ parameters:
     layers:
         -   name: Vendor
             collectors:
-                -   type: className
-                    regex: (Symfony|Sensio|Doctrine|Webmozart|Psr|League|Nyholm|Valinor|ValinorBundle)\\.*
+                -   type: classLike
+                    value: (Symfony|Sensio|Doctrine|Webmozart|Psr|League|Nyholm|Valinor|ValinorBundle)\\.*
         -   name: Infrastructure
             collectors:
-                -   type: className
-                    regex: App\\Infrastructure\\.*
+                -   type: classLike
+                    value: App\\Infrastructure\\.*
         -   name: Mailer
             collectors:
-                -   type: className
-                    regex: App\\Mailer\\.*
+                -   type: classLike
+                    value: App\\Mailer\\.*
         -   name: UserDisallowed
             collectors:
                 -   type: bool
                     must:
-                        -   type: className
-                            regex: App\\User\\.*
+                        -   type: classLike
+                            value: App\\User\\.*
                     must_not:
                         -   type: classLike
                             value: App\\User\\.*\\Query\\.*
                         -   type: classLike
                             value: App\\User\\.*\\Command\\.*
-                        -   type: className
+                        -   type: classLike
                             value: App\\User\\SignUp\\Domain\\UserRole
-                        -   type: className
+                        -   type: classLike
                             value: App\\User\\SignUp\\Domain\\UserId
-                        -   type: className
+                        -   type: classLike
                             value: App\\User\\SignUp\\Http\\UserIdArgumentValueResolver
-                        -   type: className
+                        -   type: classLike
                             value: App\\User\\SignIn\\Http\\Auth\\*
         -   name: UserAllowed
             collectors:
@@ -41,34 +42,34 @@ parameters:
                     value: App\\User\\.*\\Query\\.*
                 -   type: classLike
                     value: App\\User\\.*\\Command\\.*
-                -   type: className
+                -   type: classLike
                     value: App\\User\\SignUp\\Domain\\UserId
-                -   type: className
+                -   type: classLike
                     value: App\\User\\SignUp\\Domain\\UserRole
-                -   type: className
+                -   type: classLike
                     value: App\\User\\SignUp\\Http\\UserIdArgumentValueResolver
-                -   type: className
+                -   type: classLike
                     value: App\\User\\SignIn\\Http\\Auth\\*
         -   name: Task
             collectors:
-                -   type: className
-                    regex: App\\Task\\.*
+                -   type: classLike
+                    value: App\\Task\\.*
         -   name: Setting
             collectors:
-                -   type: className
-                    regex: App\\Setting\\.*
+                -   type: classLike
+                    value: App\\Setting\\.*
         -   name: Seo
             collectors:
-                -   type: className
-                    regex: App\\Seo\\.*
+                -   type: classLike
+                    value: App\\Seo\\.*
         -   name: Article
             collectors:
-                -   type: className
-                    regex: App\\Article\\.*
+                -   type: classLike
+                    value: App\\Article\\.*
         -   name: Ping
             collectors:
-                -   type: className
-                    regex: App\\Ping\\.*
+                -   type: classLike
+                    value: App\\Ping\\.*
     ruleset:
         UserDisallowed:
             - Vendor

@@ -1,61 +1,46 @@
-parameters:
+deptrac:
+    cache_file: var/cache/.deptrac.cache
     paths:
         - ../src
     exclude_files:
         - '#.*test.*#i'
     layers:
-        -
-            name: Vendor
+        -   name: Vendor
             collectors:
-                -
-                    type: className
-                    regex: (Symfony|Sensio|Doctrine|Webmozart|Psr|League|Nyholm|Valinor|ValinorBundle)\\.*
-        -
-            name: Infrastructure
+                -   type: classLike
+                    value: (Symfony|Sensio|Doctrine|Webmozart|Psr|League|Nyholm|Valinor|ValinorBundle)\\.*
+        -   name: Infrastructure
             collectors:
-                -
-                    type: className
-                    regex: App\\Infrastructure\\.*
-        -
-            name: Http
+                -   type: classLike
+                    value: App\\Infrastructure\\.*
+        -   name: Http
             collectors:
-                -
-                    type: className
-                    regex: App\\.*\\Http\\.*
-        -
-            name: Console
+                -   type: classLike
+                    value: App\\.*\\Http\\.*
+        -   name: Console
             collectors:
-                -
-                    type: className
-                    regex: App\\.*\\Console\\.*
-        -
-            name: Domain
+                -   type: classLike
+                    value: App\\.*\\Console\\.*
+        -   name: Domain
             collectors:
-                -
-                    type: className
-                    regex: App\\.*\\Domain\\.*
-        -
-            name: Command
+                -   type: classLike
+                    value: App\\.*\\Domain\\.*
+        -   name: Command
             collectors:
-                -
-                    type: className
-                    regex: App\\.*\\Command\\.*
-        -
-            name: Query
+                -   type: classLike
+                    value: App\\.*\\Command\\.*
+        -   name: Query
             collectors:
-                -
-                    type: className
-                    regex: App\\.*\\Query\\.*
-        -
-            name: Notification
+                -   type: classLike
+                    value: App\\.*\\Query\\.*
+        -   name: Notification
             collectors:
-                -
-                    type: className
-                    regex: App\\.*\\Notification\\.*
+                -   type: classLike
+                    value: App\\.*\\Notification\\.*
         -   name: Service
             collectors:
-                -   type: className
-                    regex: App\\.*\\Service\\.*
+                -   type: classLike
+                    value: App\\.*\\Service\\.*
     ruleset:
         Http:
             - Domain

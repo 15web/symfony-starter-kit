@@ -27,9 +27,14 @@ final readonly class ValinorConfigurator implements MapperBuilderConfigurator
     #[Override]
     public function configure(MapperBuilder $builder): MapperBuilder
     {
-        // CuyZ\Valinor\MapperBuilder::registerConstructor expects class-string|pure-callable,
-        // but impure-Closure(string):Symfony\Component\Uid\Uuid provided (see https://psalm.dev/004)
+        /* todo разобраться с ошибкой psalm и phpstan, возможно ишью в валиноре создать
+         CuyZ\Valinor\MapperBuilder::registerConstructor expects class-string|pure-callable,
+         but impure-Closure(string):Symfony\Component\Uid\Uuid provided (see https://psalm.dev/004)
+         Parameter #1 ...$constructors of method CuyZ\Valinor\MapperBuilder::registerConstructor() expects (pure-callable(): mixed)|class-string, Closure(string):
+         Symfony\Component\Uid\Uuid given.
+        */
         return $builder
+            // @phpstan-ignore-next-line
             ->registerConstructor(Uuid::fromString(...))
             ->filterExceptions(static function (Throwable $exception): ErrorMessage {
                 if ($exception instanceof InvalidArgumentException) {
