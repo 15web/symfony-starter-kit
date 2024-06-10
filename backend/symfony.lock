@@ -196,13 +196,13 @@
     "psr/log": {
         "version": "3.0.0"
     },
-    "qossmic/deptrac-shim": {
-        "version": "0.23",
+    "qossmic/deptrac": {
+        "version": "2.0",
         "recipe": {
             "repo": "github.com/symfony/recipes-contrib",
             "branch": "main",
-            "version": "0.19",
-            "ref": "3c3daab46226c37fc14e10faf81df737a3039d96"
+            "version": "2.0",
+            "ref": "05ab8813714080c7bc915cb10c780e6cfdbdb991"
         },
         "files": [
             "deptrac.yaml"
@@ -370,15 +370,6 @@
         "files": [
             "config/packages/mailer.yaml"
         ]
-    },
-    "symfony/maker-bundle": {
-        "version": "1.48",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "main",
-            "version": "1.0",
-            "ref": "fadbfe33303a76e25cb63401050439aa9b1a9c7f"
-        }
     },
     "symfony/messenger": {
         "version": "6.3",

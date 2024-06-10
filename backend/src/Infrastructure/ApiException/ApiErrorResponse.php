@@ -19,7 +19,7 @@ final readonly class ApiErrorResponse
         $this->isError = true;
     }
 
-    public function isError(): bool
+    public function getIsError(): bool
     {
         return $this->isError;
     }

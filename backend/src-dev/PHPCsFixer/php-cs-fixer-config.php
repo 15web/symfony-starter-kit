@@ -11,15 +11,14 @@ $finder = (new Finder())
     ->in([
         __DIR__.'/../../src',
         __DIR__.'/../../src-dev',
-        __DIR__.'/../../src-dev/Tests',
     ])
-    ->exclude('cache')
     ->append([
         __FILE__,
-    ]);
+    ])
+    ->exclude(__DIR__.'/../../src-dev/cache');
 
 return (new Config())
-    ->setCacheFile(__DIR__.'/../cache/.php-cs-fixer-cache')
+    ->setCacheFile(__DIR__.'/../../var/cache/.php-cs-fixer')
     ->setRiskyAllowed(true)
     ->registerCustomFixers([
         new ClassDocCommentFixer(),
