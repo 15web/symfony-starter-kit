@@ -4,14 +4,13 @@ parameters:
         - php
     paths:
         - ../../src
+        - ../Tests
         - ../
-        - ../../src-dev/Tests
-    tmpDir: ../cache/phpstan
+    tmpDir: ../../var/cache/phpstan
     excludePaths:
-        - ../Maker/Vendor/EntityGenerator.php
-        - ../cache
-    scanDirectories:
-        - ../../var/cache/dev/Symfony
+        - ../../var/cache/phpstan
+        - ../../src/*/config.php
+        - ../Rector/rector.config.php
     parallel:
         maximumNumberOfProcesses: 8
     checkUninitializedProperties: true
@@ -27,3 +26,9 @@ includes:
 
 rules:
     - PHPStan\Rules\Doctrine\ORM\EntityNotFinalRule
+
+services:
+	-
+		class: Dev\PHPStan\EmbeddablePropertiesExtension
+		tags:
+			- phpstan.properties.readWriteExtension

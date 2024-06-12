@@ -20,7 +20,7 @@ use Rector\Symfony\Symfony43\Rector\MethodCall\WebTestCaseAssertResponseCodeRect
 use Rector\TypeDeclaration\Rector\FunctionLike\AddParamTypeSplFixedArrayRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->cacheDirectory(__DIR__.'/../cache/rector');
+    $rectorConfig->cacheDirectory(__DIR__.'/../../var/cache/rector');
 
     $rectorConfig->paths([
         __DIR__.'/../../src',
@@ -57,8 +57,7 @@ return static function (RectorConfig $rectorConfig): void {
         AddParamTypeSplFixedArrayRector::class => [
             __DIR__.'/../PHPCsFixer',
         ],
-        __DIR__.'/../Maker/Resources/skeleton',
-        __DIR__.'/../cache',
+        __DIR__.'/../Tests/bootstrap.php',
     ]);
 
     $rectorConfig->rule(RequestMethodInsteadOfStringRector::class);
