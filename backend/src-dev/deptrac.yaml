@@ -66,12 +66,17 @@ deptrac:
             - Infrastructure
             - Notification
             - Vendor
+            - Query
         Query:
             - Infrastructure
             - Vendor
+            - Domain
         Domain:
             - Infrastructure
             - Vendor
         Infrastructure:
+            - Vendor
+        Service:
+            - Infrastructure
             - Vendor
         Vendor: ~

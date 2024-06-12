@@ -110,12 +110,10 @@ cache-prod-check: # Очистка кода для прода
 	docker compose run --rm backend-cli bin/console cache:clear --env=prod
 
 deptrac-check: # Контроль зависимостей
-	docker compose run --rm backend-cli vendor/bin/deptrac analyse --config-file=src-dev/deptrac-layer.yaml --fail-on-uncovered --report-uncovered
-	docker compose run --rm backend-cli vendor/bin/deptrac analyse --config-file=src-dev/deptrac-module.yaml --fail-on-uncovered --report-uncovered
+	docker compose run --rm backend-cli vendor/bin/deptrac analyse --config-file=src-dev/deptrac.yaml --fail-on-uncovered --report-uncovered
 
 deptrac-check-unassigned: # Покрытие кода с deptrac
-	docker compose run --rm backend-cli vendor/bin/deptrac debug:unassigned --config-file=src-dev/deptrac-layer.yaml | tee /dev/stderr | grep 'There are no unassigned tokens'
-	docker compose run --rm backend-cli vendor/bin/deptrac debug:unassigned --config-file=src-dev/deptrac-module.yaml | tee /dev/stderr | grep 'There are no unassigned tokens'
+	docker compose run --rm backend-cli vendor/bin/deptrac debug:unassigned --config-file=src-dev/deptrac.yaml | tee /dev/stderr | grep 'There are no unassigned tokens'
 
 test: # Запуск тестов
 	docker compose run --rm backend-cli bin/console --env=test cache:clear
