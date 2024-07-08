@@ -8,15 +8,12 @@ use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 use Override;
 
-/**
- * Auto-generated Migration: Please modify to your needs!
- */
-final class Version20240315151448 extends AbstractMigration
+final class Version20240730133406 extends AbstractMigration
 {
     #[Override]
     public function getDescription(): string
     {
-        return 'Добавляет поле hash в user_token и удаляет ранее созданные токены';
+        return 'Удаляет ранее созданные токены и добавляет поле hash в user_token';
     }
 
     #[Override]

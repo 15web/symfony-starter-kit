@@ -5,12 +5,11 @@ declare(strict_types=1);
 namespace App\User\SignIn\Command;
 
 use App\Infrastructure\AsService;
-use App\Infrastructure\Hasher;
 use App\Infrastructure\ValueObject\Email;
 use App\Mailer\Notification\EmailConfirmation\ConfirmEmailMessage;
-use App\User\Service\PasswordHasher;
 use App\User\User\Domain\Exception\EmailIsNotConfirmedException;
 use App\User\User\Domain\UserId;
+use App\User\User\Domain\UserPassword;
 use App\User\User\Query\FindUser;
 use App\User\User\Query\FindUserQuery;
 use DomainException;
@@ -24,13 +23,16 @@ use Symfony\Component\Messenger\MessageBusInterface;
 #[AsService]
 final readonly class SignIn
 {
+    /**
+     * @param int<min, 4> $hashCost
+     */
     public function __construct(
+        #[Autowire('%app.hash_cost%')]
+        private int $hashCost,
         private CreateToken $createToken,
         private MessageBusInterface $messageBus,
         private LoggerInterface $logger,
         private FindUser $findUser,
-        #[Autowire(service: PasswordHasher::class)]
-        private Hasher $hasher
     ) {}
 
     public function __invoke(SignInCommand $signInCommand): void
@@ -43,7 +45,12 @@ final readonly class SignIn
             throw new DomainException('Некорректный email');
         }
 
-        if (!$this->hasher->verify($signInCommand->password, $userData->password)) {
+        $userPassword = new UserPassword(
+            cleanPassword: $signInCommand->password,
+            hashCost: $this->hashCost,
+        );
+
+        if (!$userPassword->verify($userData->password)) {
             throw new DomainException('Неправильные логин/пароль');
         }
 
@@ -65,10 +72,10 @@ final readonly class SignIn
         ($this->createToken)(
             userId: new UserId($userData->userId),
             userTokenId: $signInCommand->authToken->tokenId,
-            token: $signInCommand->authToken->token
+            token: $signInCommand->authToken,
         );
 
-        $this->logger->info('Пользователь залогинен', [
+        $this->logger->info('Пользователь авторизован', [
             'userId' => $userData->userId,
             self::class => __FUNCTION__,
         ]);

@@ -2,10 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\User\User\Http;
+namespace App\User\Security\Http;
 
 use App\Infrastructure\ApiException\ApiUnauthorizedException;
 use App\Infrastructure\AsService;
+use App\User\Security\Service\TokenException;
+use App\User\Security\Service\TokenManager;
 use App\User\User\Domain\UserId;
 use Override;
 use Symfony\Component\HttpFoundation\Request;

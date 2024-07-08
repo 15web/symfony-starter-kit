@@ -6,8 +6,8 @@ namespace App\Article\Http\Admin;
 
 use App\Article\Domain\Article;
 use App\Infrastructure\Response\ApiObjectResponse;
+use App\User\Security\Http\IsGranted;
 use App\User\User\Domain\UserRole;
-use App\User\User\Http\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;

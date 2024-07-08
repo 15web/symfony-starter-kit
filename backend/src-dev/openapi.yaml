@@ -1416,8 +1416,7 @@ components:
       example: symfony-starter-kit
     authToken:
       type: string
-      format: uuid
-      example: 123e4567-e89b-12d3-a456-426614174000
+      example: 123e4567-e89b-12d3-a456-426614174000-019103df-3d51-78db-9026-bd39044ba025
     succeedStatus:
       type: string
       description: Статус запроса

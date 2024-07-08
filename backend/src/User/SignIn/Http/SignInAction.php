@@ -13,9 +13,10 @@ use App\Infrastructure\Response\ApiObjectResponse;
 use App\Infrastructure\ValueObject\Email;
 use App\User\SignIn\Command\SignIn;
 use App\User\SignIn\Command\SignInCommand;
-use App\User\SignIn\Service\AuthTokenService;
+use App\User\User\Domain\AuthToken;
 use App\User\User\Domain\Exception\EmailIsNotConfirmedException;
 use DomainException;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
@@ -28,23 +29,29 @@ use Symfony\Component\Routing\Attribute\Route;
 #[AsController]
 final readonly class SignInAction
 {
+    /**
+     * @param int<min, 4> $hashCost
+     */
     public function __construct(
+        #[Autowire('%app.hash_cost%')]
+        private int $hashCost,
         private SignIn $signIn,
         private Flush $flush,
-        private AuthTokenService $authTokenService
     ) {}
 
     public function __invoke(
         #[ValueResolver(ApiRequestValueResolver::class)]
         SignInRequest $signInRequest,
     ): ApiObjectResponse {
-        $token = $this->authTokenService->generateAuthToken();
+        $token = AuthToken::generate(
+            hashCost: $this->hashCost,
+        );
 
         try {
             ($this->signIn)(new SignInCommand(
                 email: new Email($signInRequest->email),
                 password: $signInRequest->password,
-                authToken: $token
+                authToken: $token,
             ));
             ($this->flush)();
         } catch (EmailIsNotConfirmedException) {
@@ -57,8 +64,8 @@ final readonly class SignInAction
         }
 
         return new ApiObjectResponse(
-            data: new UserResponse(
-                $this->authTokenService->buildConcatenatedToken($token)
+            data: new UserTokenData(
+                (string) $token,
             ),
         );
     }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\User\User\Http;
+namespace App\User\Security\Http;
 
 use App\User\User\Domain\UserRole;
 use Attribute;

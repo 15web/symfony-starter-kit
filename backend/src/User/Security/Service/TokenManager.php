@@ -2,15 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\User\User\Http;
+namespace App\User\Security\Service;
 
 use App\Infrastructure\AsService;
-use App\Infrastructure\Hasher;
-use App\User\SignIn\Domain\UserToken;
-use App\User\SignIn\Domain\UserTokenRepository;
-use App\User\SignIn\Service\AuthTokenHasher;
-use App\User\SignIn\Service\AuthTokenService;
+use App\User\User\Domain\AuthToken;
+use App\User\User\Domain\UserToken;
+use App\User\User\Domain\UserTokenRepository;
 use DomainException;
+use InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -22,11 +21,13 @@ final readonly class TokenManager
 {
     public const string TOKEN_NAME = 'X-AUTH-TOKEN';
 
+    /**
+     * @param int<min, 4> $hashCost
+     */
     public function __construct(
+        #[Autowire('%app.hash_cost%')]
+        private int $hashCost,
         private UserTokenRepository $userTokenRepository,
-        private AuthTokenService $authTokenService,
-        #[Autowire(service: AuthTokenHasher::class)]
-        private Hasher $hasher
     ) {}
 
     public function getToken(Request $request): UserToken
@@ -37,10 +38,15 @@ final readonly class TokenManager
             throw new TokenException('Не передан токен');
         }
 
-        /**
-         * @var non-empty-string $apiToken
-         */
-        $authToken = $this->authTokenService->parseToken($apiToken);
+        try {
+            /** @var non-empty-string $apiToken */
+            $authToken = AuthToken::createFromString(
+                token: $apiToken,
+                hashCost: $this->hashCost,
+            );
+        } catch (InvalidArgumentException) {
+            throw new TokenException('Токен не найден');
+        }
 
         try {
             $userToken = $this->userTokenRepository->getById($authToken->tokenId);
@@ -48,12 +54,7 @@ final readonly class TokenManager
             throw new TokenException('Токен не найден');
         }
 
-        if (
-            !$this->hasher->verify(
-                data: $authToken->token,
-                hash: $userToken->getHash()
-            )
-        ) {
+        if (!$authToken->verify($userToken)) {
             throw new TokenException('Токен не найден');
         }
 

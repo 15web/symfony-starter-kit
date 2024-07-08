@@ -9,7 +9,6 @@ use App\User\User\Domain\Exception\EmailAlreadyIsConfirmedException;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
-use Webmozart\Assert\Assert;
 
 /**
  * @final
@@ -49,16 +48,18 @@ class User
         $this->userEmail = $userEmail;
         $this->confirmToken = $confirmToken;
         $this->userRole = $userRole;
-        $this->userPassword = new UserPassword('empty');
+
+        $this->userPassword = new UserPassword(
+            cleanPassword: bin2hex(random_bytes(6)),
+            hashCost: 4,
+        );
 
         $this->isConfirmed = false;
         $this->createdAt = new DateTimeImmutable();
     }
 
-    public function applyHashedPassword(UserPassword $userPassword): void
+    public function applyPassword(UserPassword $userPassword): void
     {
-        Assert::false($this->userPassword->equalTo($userPassword));
-
         $this->userPassword = $userPassword;
     }
 

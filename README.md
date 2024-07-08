@@ -36,7 +36,7 @@ make init
 
 Предварительно нужно выполнить настройку тестового окружения:
 ```shell
-make install-test
+make test-install
 ```
 Запуск проверок:
 ```shell

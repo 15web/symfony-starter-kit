@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\User\SignIn\Command;
 
 use App\Infrastructure\ValueObject\Email;
-use App\User\SignIn\Service\AuthToken;
+use App\User\User\Domain\AuthToken;
 
 /**
  * Команда для логина
@@ -18,6 +18,6 @@ final readonly class SignInCommand
     public function __construct(
         public Email $email,
         public string $password,
-        public AuthToken $authToken
+        public AuthToken $authToken,
     ) {}
 }
