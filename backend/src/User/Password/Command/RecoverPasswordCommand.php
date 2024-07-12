@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\User\RecoveryPassword\Command;
+namespace App\User\Password\Command;
 
 /**
  * Команда восстановления пароля

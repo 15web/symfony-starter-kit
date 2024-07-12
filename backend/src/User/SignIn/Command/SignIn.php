@@ -71,7 +71,6 @@ final readonly class SignIn
 
         ($this->createToken)(
             userId: new UserId($userData->userId),
-            userTokenId: $signInCommand->authToken->tokenId,
             token: $signInCommand->authToken,
         );
 

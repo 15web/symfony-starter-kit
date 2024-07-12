@@ -18,6 +18,8 @@ final readonly class UserRepository
 
     /**
      * @throws DomainException
+     *
+     * @todo Переделать на метод find без выбрасывания исключения, сделать после #98076
      */
     public function getById(UserId $userId): User
     {

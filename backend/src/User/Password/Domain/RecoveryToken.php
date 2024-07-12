@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\User\RecoveryPassword\Domain;
+namespace App\User\Password\Domain;
 
 use App\User\User\Domain\UserId;
 use Doctrine\ORM\Mapping as ORM;

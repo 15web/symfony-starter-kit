@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\User\RecoveryPassword\Command;
+namespace App\User\Password\Command;
 
 use App\Infrastructure\AsService;
-use App\User\RecoveryPassword\Domain\RecoveryTokenRepository;
+use App\User\Password\Domain\RecoveryTokenRepository;
 use App\User\User\Domain\UserPassword;
 use App\User\User\Domain\UserRepository;
 use App\User\User\Domain\UserTokenRepository;
