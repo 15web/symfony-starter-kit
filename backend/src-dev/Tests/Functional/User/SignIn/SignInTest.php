@@ -24,7 +24,7 @@ final class SignInTest extends ApiWebTestCase
         $password = $body['password'] = 'password';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        self::request(Request::METHOD_POST, '/api/sign-up', $body, newClient: true);
+        self::request(Request::METHOD_POST, '/api/sign-up', $body);
 
         /** @var TemplatedEmail $email */
         $email = self::getMailerMessage();
@@ -58,7 +58,7 @@ final class SignInTest extends ApiWebTestCase
         $body['password'] = '123456';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        self::request(Request::METHOD_POST, '/api/sign-up', $body, true);
+        self::request(Request::METHOD_POST, '/api/sign-up', $body);
 
         /** @var TemplatedEmail $email */
         $email = self::getMailerMessage();
@@ -85,7 +85,7 @@ final class SignInTest extends ApiWebTestCase
         $password = $body['password'] = 'password';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        self::request(Request::METHOD_POST, '/api/sign-up', $body, newClient: true);
+        self::request(Request::METHOD_POST, '/api/sign-up', $body);
 
         /** @var TemplatedEmail $email */
         $email = self::getMailerMessage();
@@ -108,7 +108,7 @@ final class SignInTest extends ApiWebTestCase
     public function testBadRequest(): void
     {
         $body = json_encode(['email' => 'test', 'password' => ''], JSON_THROW_ON_ERROR);
-        $response = self::request(Request::METHOD_POST, '/api/sign-in', $body, newClient: true, validateRequestSchema: false);
+        $response = self::request(Request::METHOD_POST, '/api/sign-in', $body, validateRequestSchema: false);
 
         self::assertBadRequest($response);
     }
@@ -121,7 +121,7 @@ final class SignInTest extends ApiWebTestCase
         $password = $body['password'] = 'password';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        self::request(Request::METHOD_POST, '/api/sign-up', $body, newClient: true);
+        self::request(Request::METHOD_POST, '/api/sign-up', $body);
 
         $body = [];
         $body['email'] = $userEmail;

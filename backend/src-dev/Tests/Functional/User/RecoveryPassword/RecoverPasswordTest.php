@@ -21,19 +21,23 @@ final class RecoverPasswordTest extends ApiWebTestCase
     #[TestDox('Отправлен запрос на восстановление пароля, получено письмо с токеном, пароль восстановлен')]
     public function testSuccess(): void
     {
-        $body = [];
-        $body['email'] = $userEmail = 'first@example.com';
-        $body['password'] = '123QWE';
-        $body = json_encode($body, JSON_THROW_ON_ERROR);
+        $body = [
+            'email' => $userEmail = 'first@example.com',
+            'password' => '123QWE',
+        ];
 
-        $response = self::request(Request::METHOD_POST, '/api/sign-up', $body, newClient: true);
+        $response = self::request(
+            method: Request::METHOD_POST,
+            uri: '/api/sign-up',
+            body: json_encode($body, JSON_THROW_ON_ERROR),
+        );
         self::assertSuccessResponse($response);
 
-        $body = [];
-        $body['email'] = $userEmail;
-        $body = json_encode($body, JSON_THROW_ON_ERROR);
-
-        $response = self::request(Request::METHOD_POST, '/api/request-password-recovery', $body);
+        $response = self::request(
+            method: Request::METHOD_POST,
+            uri: '/api/request-password-recovery',
+            body: json_encode(['email' => $userEmail], JSON_THROW_ON_ERROR),
+        );
         self::assertSuccessResponse($response);
 
         self::assertEmailCount(1);
@@ -46,32 +50,56 @@ final class RecoverPasswordTest extends ApiWebTestCase
 
         self::assertNotEmpty($recoverToken);
 
-        $body = json_encode([
-            'password' => $password = '123456',
-        ], JSON_THROW_ON_ERROR);
+        $password = '123456';
 
-        $response = self::request(Request::METHOD_POST, "/api/recover-password/{$recoverToken}", $body);
+        $response = self::request(
+            method: Request::METHOD_POST,
+            uri: "/api/recover-password/{$recoverToken}",
+            body: json_encode(['password' => $password], JSON_THROW_ON_ERROR),
+        );
         self::assertSuccessResponse($response);
 
-        $body = [];
-        $body['email'] = $userEmail;
-        $body['password'] = $password;
-        $body = json_encode($body, JSON_THROW_ON_ERROR);
+        $body = [
+            'email' => $userEmail,
+            'password' => $password,
+        ];
 
-        $response = self::request(Request::METHOD_POST, '/api/sign-in', $body);
+        $response = self::request(
+            method: Request::METHOD_POST,
+            uri: '/api/sign-in',
+            body: json_encode($body, JSON_THROW_ON_ERROR),
+        );
         self::assertSuccessResponse($response);
+
+        $response = self::request(
+            method: Request::METHOD_POST,
+            uri: "/api/recover-password/{$recoverToken}",
+            body: json_encode(['password' => $password], JSON_THROW_ON_ERROR),
+        );
+
+        self::assertNotFound($response);
+
+        $userTokens = self::getConnection()
+            ->createQueryBuilder()
+            ->select(...['*'])
+            ->from('user_token')
+            ->fetchAllAssociative();
+
+        // После восстановления пароля все токены текущего пользователя удалены
+        self::assertSame([], $userTokens);
     }
 
     #[TestDox('Пользователь не найден')]
     public function testUserNotFound(): void
     {
-        $body = [
-            'password' => '123456',
-        ];
         $token = Uuid::v7();
 
-        $body = json_encode($body, JSON_THROW_ON_ERROR);
-        $response = self::request(Request::METHOD_POST, "/api/recover-password/{$token}", $body, validateRequestSchema: false);
+        $response = self::request(
+            method: Request::METHOD_POST,
+            uri: "/api/recover-password/{$token}",
+            body: json_encode(['password' => '123456'], JSON_THROW_ON_ERROR),
+            validateRequestSchema: false,
+        );
 
         self::assertNotFound($response);
     }
@@ -80,9 +108,12 @@ final class RecoverPasswordTest extends ApiWebTestCase
     #[TestDox('Неверный запрос')]
     public function testBadRequest(?string $email): void
     {
-        $body = ['email' => $email];
-        $body = json_encode($body, JSON_THROW_ON_ERROR);
-        $response = self::request(Request::METHOD_POST, '/api/request-password-recovery', $body, validateRequestSchema: false);
+        $response = self::request(
+            method: Request::METHOD_POST,
+            uri: '/api/request-password-recovery',
+            body: json_encode(['email' => $email], JSON_THROW_ON_ERROR),
+            validateRequestSchema: false,
+        );
 
         self::assertBadRequest($response);
     }

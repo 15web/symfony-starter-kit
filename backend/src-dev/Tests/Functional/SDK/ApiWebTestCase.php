@@ -6,7 +6,9 @@ namespace Dev\Tests\Functional\SDK;
 
 use App\Infrastructure\EventSubscriber\OpenApiValidateSubscriber;
 use App\Infrastructure\Response\ResponseStatus;
+use Doctrine\DBAL\Connection;
 use Iterator;
+use Override;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,7 +20,16 @@ use Webmozart\Assert\Assert;
  */
 abstract class ApiWebTestCase extends WebTestCase
 {
-    private static ?KernelBrowser $client = null;
+    private static KernelBrowser $client;
+
+    #[Override]
+    protected function setUp(): void
+    {
+        self::$client = self::createClient();
+
+        // https://symfony.com/doc/current/testing.html#multiple-requests-in-one-test
+        self::$client->disableReboot();
+    }
 
     /**
      * Отправить запрос
@@ -27,17 +38,12 @@ abstract class ApiWebTestCase extends WebTestCase
         string $method,
         string $uri,
         ?string $body = null,
-        bool $newClient = false,
         ?string $token = null,
         bool $validateRequestSchema = true,
         bool $validateResponseSchema = true,
     ): Response {
         Assert::notEmpty($method);
         Assert::notEmpty($uri);
-
-        if (self::$client === null || $newClient) {
-            self::$client = self::createClient();
-        }
 
         $headers = [
             'HTTP_ACCEPT' => 'application/json',
@@ -48,7 +54,7 @@ abstract class ApiWebTestCase extends WebTestCase
             $headers['HTTP_X_AUTH_TOKEN'] = $token;
         }
 
-        self::$client->xmlHttpRequest($method, $uri, [
+        self::$client->request($method, $uri, [
             // передаем признак в OpenApiValidateSubscriber что не нужно проверять запрос
             OpenApiValidateSubscriber::VALIDATE_REQUEST_KEY => $validateRequestSchema,
             // передаем признак в OpenApiValidateSubscriber что не нужно проверять ответ
@@ -56,6 +62,14 @@ abstract class ApiWebTestCase extends WebTestCase
         ], [], $headers, $body);
 
         return self::$client->getResponse();
+    }
+
+    final public static function getConnection(): Connection
+    {
+        /** @var Connection $connection */
+        $connection = self::getContainer()->get(Connection::class);
+
+        return $connection;
     }
 
     /**

@@ -94,7 +94,6 @@ final class CompleteTaskTest extends ApiWebTestCase
         $token = User::auth();
         Task::create('Тестовая задача №1', $token);
 
-        $this->tearDown();
         $tokenSecond = User::auth('second@example.com');
         $taskId = Task::createAndReturnId('Тестовая задача №2 ', $tokenSecond);
 

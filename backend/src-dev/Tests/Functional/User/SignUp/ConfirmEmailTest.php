@@ -25,7 +25,7 @@ final class ConfirmEmailTest extends ApiWebTestCase
         $body['password'] = '123456';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request(Request::METHOD_POST, '/api/sign-up', $body, newClient: true);
+        $response = self::request(Request::METHOD_POST, '/api/sign-up', $body);
         self::assertSuccessResponse($response);
 
         self::assertEmailCount(1);
@@ -50,7 +50,7 @@ final class ConfirmEmailTest extends ApiWebTestCase
         $body['password'] = '123456';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        self::request(Request::METHOD_POST, '/api/sign-up', $body, newClient: true);
+        self::request(Request::METHOD_POST, '/api/sign-up', $body);
 
         /** @var TemplatedEmail $email */
         $email = self::getMailerMessage();
@@ -74,7 +74,7 @@ final class ConfirmEmailTest extends ApiWebTestCase
         $body['password'] = '123456';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request(Request::METHOD_POST, '/api/sign-up', $body, newClient: true);
+        $response = self::request(Request::METHOD_POST, '/api/sign-up', $body);
         self::assertSuccessResponse($response);
         self::assertEmailCount(1);
 

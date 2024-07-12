@@ -100,7 +100,6 @@ final class ChangeTaskNameTest extends ApiWebTestCase
         $userToken = User::auth();
         Task::create('Тестовая задача №1', $userToken);
 
-        $this->tearDown();
         $anotherUserToken = User::auth('second@example.com');
         $anotherTaskId = Task::createAndReturnId('Тестовая задача №2 ', $anotherUserToken);
 

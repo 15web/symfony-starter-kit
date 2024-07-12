@@ -24,7 +24,7 @@ final class SignUpTest extends ApiWebTestCase
         $body['password'] = '123456';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request(Request::METHOD_POST, '/api/sign-up', $body, newClient: true);
+        $response = self::request(Request::METHOD_POST, '/api/sign-up', $body);
         self::assertSuccessResponse($response);
 
         self::assertEmailCount(1);
@@ -54,7 +54,7 @@ final class SignUpTest extends ApiWebTestCase
     public function testBadRequest(): void
     {
         $body = json_encode(['email' => 'test', 'password' => '123456'], JSON_THROW_ON_ERROR);
-        $response = self::request(Request::METHOD_POST, '/api/sign-up', $body, newClient: true, validateRequestSchema: false);
+        $response = self::request(Request::METHOD_POST, '/api/sign-up', $body, validateRequestSchema: false);
         self::assertBadRequest($response);
     }
 }

@@ -26,4 +26,9 @@ final readonly class RecoveryTokenRepository
     {
         $this->entityManager->persist($recoveryToken);
     }
+
+    public function remove(RecoveryToken $recoveryToken): void
+    {
+        $this->entityManager->remove($recoveryToken);
+    }
 }

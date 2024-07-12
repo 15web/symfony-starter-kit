@@ -181,7 +181,6 @@ final class ExportTasksTest extends ApiWebTestCase
         Task::create('Тестовая задача 1', $token);
         Task::create('Тестовая задача 2', $token);
 
-        $this->tearDown();
         $tokenSecond = User::auth('second@example.com');
         $taskId3 = Task::createAndReturnId($taskName3 = 'Тестовая задача 3', $tokenSecond);
         $taskId4 = Task::createAndReturnId($taskName4 = 'Тестовая задача 4', $tokenSecond);
