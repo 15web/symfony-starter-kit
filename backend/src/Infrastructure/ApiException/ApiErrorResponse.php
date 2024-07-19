@@ -9,20 +9,14 @@ namespace App\Infrastructure\ApiException;
  */
 final readonly class ApiErrorResponse
 {
-    private bool $isError;
-
     /**
      * @param non-empty-list<non-empty-string> $errors
      */
-    public function __construct(private string $message, private array $errors, private int $code)
-    {
-        $this->isError = true;
-    }
-
-    public function getIsError(): bool
-    {
-        return $this->isError;
-    }
+    public function __construct(
+        private string $message,
+        private array $errors,
+        private int $code,
+    ) {}
 
     public function getCode(): int
     {
