@@ -1,14 +1,14 @@
-FROM php:8.3.8-fpm AS base
+FROM php:8.3.9-fpm AS base
 
 RUN apt-get update; \
     apt-get install -y --no-install-recommends unzip git;
 
 COPY php.ini /usr/local/etc/php/php.ini
 
-COPY --from=composer:2.7.6 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2.7.7 /usr/bin/composer /usr/bin/composer
 
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
-RUN install-php-extensions pdo_mysql pdo_pgsql intl sysvsem
+RUN install-php-extensions pdo_pgsql intl sysvsem
 RUN docker-php-ext-install bcmath
 
 RUN ln -sf /usr/share/zoneinfo/Europe/Moscow /etc/localtime

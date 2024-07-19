@@ -13,7 +13,7 @@ use Symfony\Component\Uid\Uuid;
  * Профиль пользователя
  */
 #[ORM\Entity]
-#[ORM\Index(fields: ['userId'], name: 'user_id_idx')]
+#[ORM\Index(name: 'ix_profile_user_id', fields: ['userId'])]
 /** @final */
 class Profile
 {

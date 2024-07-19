@@ -21,6 +21,6 @@ replace_env "${COMPOSE_ENV_PATH}" 'COMPOSE_FILE' './docker/docker-compose.local.
 replace_env "${COMPOSE_ENV_PATH}" 'USER_ID' "$(id -u)"
 
 [ ! -f 'docker/backend/.env' ] && cp 'docker/backend/.env.dist' 'docker/backend/.env'
-[ ! -f 'docker/mysql/.env' ] && cp 'docker/mysql/.env.dist' 'docker/mysql/.env'
+[ ! -f 'docker/pgsql/.env' ] && cp 'docker/pgsql/.env.dist' 'docker/pgsql/.env'
 
 echo 'Envs set up!';

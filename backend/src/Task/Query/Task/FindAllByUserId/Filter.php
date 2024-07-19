@@ -17,6 +17,6 @@ final readonly class Filter
     {
         $queryBuilder
             ->andWhere('t.user_id = :user_id')
-            ->setParameter('user_id', $query->userId->toBinary());
+            ->setParameter('user_id', $query->userId);
     }
 }

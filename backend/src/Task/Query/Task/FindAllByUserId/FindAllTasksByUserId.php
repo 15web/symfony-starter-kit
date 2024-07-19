@@ -27,7 +27,7 @@ final readonly class FindAllTasksByUserId
     public function __invoke(FindAllTasksByUserIdQuery $query): array
     {
         $queryBuilder = $this->connection->createQueryBuilder()
-            ->select('t.id', 't.task_name_value AS taskName', 't.is_completed AS isCompleted', 't.created_at AS createdAt')
+            ->select('t.id', 't.task_name_value AS "taskName"', 't.is_completed AS "isCompleted"', 't.created_at AS "createdAt"')
             ->from('task', 't')
             ->orderBy('t.is_completed', 'DESC')
             ->addOrderBy('t.created_at', 'DESC');

@@ -61,7 +61,7 @@ final readonly class SettingsRepository
         $settings = $this->entityManager
             ->getRepository(Setting::class)
             ->createQueryBuilder('s')
-            ->where('s.isPublic = 1')
+            ->where('s.isPublic = true')
             ->getQuery()->getResult();
 
         return $settings;

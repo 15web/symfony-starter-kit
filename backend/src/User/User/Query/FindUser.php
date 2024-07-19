@@ -24,20 +24,20 @@ final readonly class FindUser
     {
         $queryBuilder = $this->connection->createQueryBuilder()
             ->select(
-                'BIN_TO_UUID(id) as userId',
+                'id as "userId"',
                 'user_email_value as email',
                 'user_role as role',
                 'user_password_value as password',
-                'is_confirmed as isConfirmed',
-                'BIN_TO_UUID(confirm_token_value) as confirmToken',
+                'is_confirmed as "isConfirmed"',
+                'confirm_token_value as "confirmToken"',
             )
-            ->from('user')
+            ->from('"user"')
             ->setMaxResults(1);
 
         if ($query->userId !== null) {
             $queryBuilder
                 ->andWhere('id = :id')
-                ->setParameter('id', $query->userId->value->toBinary());
+                ->setParameter('id', $query->userId->value);
         }
 
         if ($query->userEmail !== null) {
@@ -49,7 +49,7 @@ final readonly class FindUser
         if ($query->confirmToken !== null) {
             $queryBuilder
                 ->andWhere('confirm_token_value = :confirmToken')
-                ->setParameter('confirmToken', $query->confirmToken->toBinary());
+                ->setParameter('confirmToken', $query->confirmToken);
         }
 
         $item = $queryBuilder->executeQuery()->fetchAssociative();

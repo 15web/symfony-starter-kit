@@ -25,8 +25,8 @@ final readonly class FindTaskById
             DQL;
 
         $dqlQuery = $this->entityManager->createQuery($dql);
-        $dqlQuery->setParameter('id', $query->taskId->toBinary());
-        $dqlQuery->setParameter('userId', $query->userId->toBinary());
+        $dqlQuery->setParameter('id', $query->taskId);
+        $dqlQuery->setParameter('userId', $query->userId);
 
         /** @var ?TaskData $result */
         $result = $dqlQuery->getOneOrNullResult();

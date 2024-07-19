@@ -13,7 +13,7 @@ use Symfony\Component\Uid\Uuid;
  * Токен пользователя
  */
 #[ORM\Entity]
-#[ORM\Index(fields: ['userId'], name: 'user_id_idx')]
+#[ORM\Index(name: 'ix_user_token_user_id', fields: ['userId'])]
 /** @final */
 class UserToken
 {
