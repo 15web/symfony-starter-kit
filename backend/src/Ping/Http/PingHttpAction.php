@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Attribute\Route;
 /**
  * Эндпоинт для пинга проекта.
  */
-#[Route('/ping', methods: [Request::METHOD_GET])]
+#[Route(path: '/ping', name: 'ping', methods: [Request::METHOD_GET])]
 #[AsController]
 final readonly class PingHttpAction
 {
