@@ -44,9 +44,9 @@ final class User extends ApiWebTestCase
 
         /** @var array{
          *     data: array{token: string}
-         * } $signUpResponse */
-        $signUpResponse = self::jsonDecode($response->getContent());
+         * } $signInResponse */
+        $signInResponse = self::jsonDecode($response->getContent());
 
-        return $signUpResponse['data']['token'];
+        return $signInResponse['data']['token'];
     }
 }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Dev\Tests\Functional\User\SignUp;
 
-use App\Infrastructure\ApiException\ApiErrorCode;
 use Dev\Tests\Functional\SDK\ApiWebTestCase;
 use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -42,8 +41,8 @@ final class ConfirmEmailTest extends ApiWebTestCase
         self::assertSuccessResponse($response);
     }
 
-    #[TestDox('Email уже подтвержден')]
-    public function testEmailAlreadyIsConfirmed(): void
+    #[TestDox('Токен удален после подтверждения')]
+    public function testRemovedConfirmToken(): void
     {
         $body = [];
         $body['email'] = 'first@example.com';
@@ -63,7 +62,7 @@ final class ConfirmEmailTest extends ApiWebTestCase
 
         $response = self::request(Request::METHOD_GET, "/api/confirm-email/{$confirmToken}");
 
-        self::assertApiError($response, ApiErrorCode::EmailAlreadyIsConfirmed->value);
+        self::assertNotFound($response);
     }
 
     #[TestDox('Регистрация не подтверждена, неверный токен')]

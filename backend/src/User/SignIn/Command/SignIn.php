@@ -45,6 +45,10 @@ final readonly class SignIn
         }
 
         if (!$userData->isConfirmed) {
+            if ($userData->confirmToken === null) {
+                throw new DomainException('Некорректный токен подтверждения');
+            }
+
             $this->messageBus->dispatch(
                 new ConfirmEmailMessage(
                     confirmToken: $userData->confirmToken,
