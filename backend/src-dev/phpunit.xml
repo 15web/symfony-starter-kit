@@ -6,7 +6,7 @@
          backupGlobals="false"
          colors="true"
          bootstrap="Tests/bootstrap.php"
-         cacheDirectory="./cache"
+         cacheDirectory="../var/cache"
 >
     <php>
         <ini name="display_errors" value="1" />

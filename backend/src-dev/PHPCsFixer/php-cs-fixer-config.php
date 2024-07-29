@@ -6,6 +6,7 @@ use Dev\PHPCsFixer\Comment\ClassDocCommentFixer;
 use Dev\PHPCsFixer\PhpUnit\TestdoxFixer;
 use PhpCsFixer\Config;
 use PhpCsFixer\Finder;
+use PhpCsFixer\Runner\Parallel\ParallelConfigFactory;
 
 $finder = (new Finder())
     ->in([
@@ -14,10 +15,10 @@ $finder = (new Finder())
     ])
     ->append([
         __FILE__,
-    ])
-    ->exclude(__DIR__.'/../../src-dev/cache');
+    ]);
 
 return (new Config())
+    ->setParallelConfig(ParallelConfigFactory::detect())
     ->setCacheFile(__DIR__.'/../../var/cache/.php-cs-fixer')
     ->setRiskyAllowed(true)
     ->registerCustomFixers([
