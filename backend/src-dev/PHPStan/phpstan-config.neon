@@ -8,7 +8,6 @@ parameters:
         - ../
     tmpDir: ../../var/cache/phpstan
     excludePaths:
-        - ../../var/cache/phpstan
         - ../../src/*/config.php
         - ../Rector/rector.config.php
     parallel:

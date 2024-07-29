@@ -1,4 +1,4 @@
-FROM php:8.3.8-fpm as base
+FROM php:8.3.8-fpm AS base
 
 RUN apt-get update; \
     apt-get install -y --no-install-recommends unzip git;
@@ -25,7 +25,7 @@ USER dev
 
 WORKDIR /app/
 
-FROM base as messenger
+FROM base AS messenger
 
 USER root
 
@@ -40,7 +40,7 @@ COPY messenger/supervisord.conf /etc/supervisor/supervisord.conf
 
 CMD ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]
 
-FROM base as cron
+FROM base AS cron
 
 USER root
 
