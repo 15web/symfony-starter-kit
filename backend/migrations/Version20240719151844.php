@@ -8,10 +8,7 @@ use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 use Override;
 
-/**
- * Auto-generated Migration: Please modify to your needs!
- */
-final class Version20230209163744 extends AbstractMigration
+final class Version20240719151844 extends AbstractMigration
 {
     #[Override]
     public function getDescription(): string
@@ -23,7 +20,8 @@ final class Version20230209163744 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('CREATE TABLE profile (id BINARY(16) NOT NULL COMMENT \'(DC2Type:uuid)\', user_id BINARY(16) NOT NULL COMMENT \'(DC2Type:uuid)\', name VARCHAR(255) NOT NULL, phone_value VARCHAR(255) NOT NULL, INDEX user_id_idx (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE profile (id UUID NOT NULL, user_id UUID NOT NULL, name VARCHAR(255) NOT NULL, phone_value VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE INDEX ix_profile_user_id ON profile (user_id)');
     }
 
     #[Override]

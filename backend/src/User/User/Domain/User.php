@@ -12,10 +12,11 @@ use Symfony\Component\Uid\Uuid;
 use Webmozart\Assert\Assert;
 
 /**
+ * @final
+ *
  * Пользователь
  */
-#[ORM\Entity]
-/** @final */
+#[ORM\Entity, ORM\Table(name: '"user"')]
 class User
 {
     #[ORM\Embedded]

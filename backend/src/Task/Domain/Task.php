@@ -15,7 +15,7 @@ use Symfony\Component\Uid\Uuid;
  * Задача
  */
 #[ORM\Entity]
-#[ORM\Index(fields: ['userId'], name: 'user_id_idx')]
+#[ORM\Index(name: 'ix_task_user_id', fields: ['userId'])]
 /** @final */
 class Task
 {

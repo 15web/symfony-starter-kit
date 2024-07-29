@@ -12,10 +12,9 @@ init: # Запуск проекта и установка зависимосте
 install-test: # Подготовка тестового окружения
 	make init
 	@for i in 1 2 3 4 ; do \
-  		docker compose exec mysql mysql -proot -e "drop database if exists db_name_test$$i;"; \
-  		docker compose exec mysql mysql -proot -e "create database if not exists db_name_test$$i;"; \
-  		docker compose exec mysql mysql -proot -e "GRANT ALL PRIVILEGES ON db_name_test$$i.* TO 'db_user'@'%';"; \
-  		docker compose run --rm backend-cli bash -c "TEST_TOKEN=$$i bin/console --env=test doctrine:migrations:migrate --no-interaction"; \
+		docker compose exec pgsql dropdb -f --if-exists db_name_test$$i; \
+		docker compose exec pgsql createdb -O postgres db_name_test$$i; \
+		docker compose run --rm backend bash -c "TEST_TOKEN=$$i bin/console --env=test doctrine:migrations:migrate --no-interaction"; \
 	done
 
 check: composer-validate composer-audit cache-clear lint test check-openapi-diff check-openapi-schema # Проверка кода

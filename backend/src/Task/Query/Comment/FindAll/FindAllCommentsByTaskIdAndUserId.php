@@ -30,8 +30,8 @@ final readonly class FindAllCommentsByTaskIdAndUserId
             DQL;
 
         $dqlQuery = $this->entityManager->createQuery($dql);
-        $dqlQuery->setParameter('taskId', $findAllQuery->taskId->toBinary());
-        $dqlQuery->setParameter('userId', $findAllQuery->userId->toBinary());
+        $dqlQuery->setParameter('taskId', $findAllQuery->taskId);
+        $dqlQuery->setParameter('userId', $findAllQuery->userId);
 
         /** @var CommentData[] $commentData */
         $commentData = $dqlQuery->getResult();
