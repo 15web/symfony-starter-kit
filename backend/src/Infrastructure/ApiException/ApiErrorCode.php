@@ -18,4 +18,6 @@ enum ApiErrorCode: int
     case EmailIsNotConfirmed = 4;
 
     case NotFoundTasksForExport = 5;
+
+    case Unauthenticated = 6;
 }
