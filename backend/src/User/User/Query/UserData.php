@@ -22,6 +22,6 @@ final readonly class UserData
         public UserRole $role,
         public string $password,
         public bool $isConfirmed,
-        public Uuid $confirmToken,
+        public ?Uuid $confirmToken,
     ) {}
 }

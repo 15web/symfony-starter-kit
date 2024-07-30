@@ -23,7 +23,7 @@ class User
     public readonly Email $userEmail;
 
     #[ORM\Embedded]
-    public readonly ConfirmToken $confirmToken;
+    public ?ConfirmToken $confirmToken;
 
     #[ORM\Id, ORM\Column(type: 'uuid', unique: true)]
     private readonly Uuid $id;
@@ -69,5 +69,6 @@ class User
         }
 
         $this->isConfirmed = true;
+        $this->confirmToken = null;
     }
 }
