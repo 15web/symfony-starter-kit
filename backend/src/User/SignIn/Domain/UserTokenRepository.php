@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\User\SignIn\Domain;
 
 use App\Infrastructure\AsService;
+use App\User\User\Domain\UserId;
 use Doctrine\ORM\EntityManagerInterface;
 use DomainException;
 use Symfony\Component\Uid\Uuid;
@@ -35,5 +36,15 @@ final readonly class UserTokenRepository
     public function add(UserToken $userToken): void
     {
         $this->entityManager->persist($userToken);
+    }
+
+    public function removeAllByUserId(UserId $userId): void
+    {
+        $this->entityManager->createQueryBuilder()
+            ->delete(UserToken::class, 't')
+            ->where('t.userId = :userId')
+            ->setParameter('userId', $userId->value)
+            ->getQuery()
+            ->execute();
     }
 }

@@ -7,6 +7,7 @@ namespace App\User\RecoveryPassword\Command;
 use App\Infrastructure\AsService;
 use App\Infrastructure\Hasher;
 use App\User\RecoveryPassword\Domain\RecoveryTokenRepository;
+use App\User\SignIn\Domain\UserTokenRepository;
 use App\User\User\Domain\UserPassword;
 use App\User\User\Domain\UserRepository;
 use Symfony\Component\Uid\Uuid;
@@ -19,6 +20,7 @@ final readonly class RecoverPassword
 {
     public function __construct(
         private RecoveryTokenRepository $recoveryTokenRepository,
+        private UserTokenRepository $userTokenRepository,
         private UserRepository $userRepository,
         private Hasher $passwordHasher
     ) {}
@@ -39,5 +41,9 @@ final readonly class RecoverPassword
         $hashedPassword = $this->passwordHasher->hash($recoverPasswordCommand->password);
 
         $user->applyHashedPassword(new UserPassword($hashedPassword));
+
+        $this->recoveryTokenRepository->remove($token);
+
+        $this->userTokenRepository->removeAllByUserId($token->getUserId());
     }
 }

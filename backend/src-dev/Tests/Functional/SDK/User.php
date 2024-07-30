@@ -25,7 +25,7 @@ final class User extends ApiWebTestCase
         $body['password'] = $password;
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        self::request(Request::METHOD_POST, '/api/sign-up', $body, newClient: true);
+        self::request(Request::METHOD_POST, '/api/sign-up', $body);
 
         /** @var TemplatedEmail $email */
         $email = self::getMailerMessage();

@@ -9,7 +9,6 @@ use Dev\Tests\Functional\SDK\Task;
 use Dev\Tests\Functional\SDK\User;
 use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -17,7 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
  * @internal
  */
 #[TestDox('Консольная команда для отправки письма о незавершенных задачах')]
-final class SendUncompletedTaskCommandTest extends KernelTestCase
+final class SendUncompletedTaskCommandTest extends ApiWebTestCase
 {
     #[TestDox('Отправлено письмо с 1 незавершенной задачей')]
     public function testExecute(): void
@@ -26,7 +25,11 @@ final class SendUncompletedTaskCommandTest extends KernelTestCase
         Task::create($taskName1 = 'Тестовая задача для отправки писем №1', $token);
 
         $taskId2 = Task::createAndReturnId('Тестовая задача для отправки писем №2', $token);
-        ApiWebTestCase::request(Request::METHOD_POST, "/api/tasks/{$taskId2}/complete", token: $token);
+        self::request(
+            method: Request::METHOD_POST,
+            uri: "/api/tasks/{$taskId2}/complete",
+            token: $token,
+        );
 
         $kernel = self::bootKernel();
         $application = new Application($kernel);
