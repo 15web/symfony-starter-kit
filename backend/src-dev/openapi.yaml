@@ -1,1717 +1,1425 @@
 openapi: 3.0.3
 info:
-    title: symfony-starter-kit
-    version: 1.0.0
-    description: Заготовка для проектов на symfony, примеры модулей
-    contact:
-        name: Студия 15
-        url: https://www.15web.ru
-        email: info@15web.ru
+  title: symfony-starter-kit
+  version: 1.0.0
+  description: Заготовка для проектов на Symfony, примеры модулей
+  contact:
+    name: Студия 15
+    url: https://www.15web.ru
+    email: info@15web.ru
 tags:
-    - name: general
-      description: Общее
-    - name: auth
-      description: Аутентификация
-    - name: tasks
-      description: Задачи
-    - name: articles
-      description: Статьи
-    - name: setting
-      description: Настройки
-    - name: profile
-      description: Профиль
-    - name: seo
-      description: SEO
+  - name: general
+    description: Общее
+  - name: auth
+    description: Аутентификация
+  - name: tasks
+    description: Задачи
+  - name: articles
+    description: Статьи
+  - name: setting
+    description: Настройки
+  - name: profile
+    description: Профиль
+  - name: seo
+    description: SEO
 servers:
-    - url: /api
-paths:
-    /ping:
-        get:
-            operationId: ping
-            summary: Пинг приложения
-            description: Пинг приложения
-            tags:
-                - general
-            security: [ ]
-            responses:
-                '200':
-                    description: Возвращает ответ Pong
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    data:
-                                        type: object
-                                        required:
-                                            - result
-                                        additionalProperties: false
-                                        properties:
-                                            result:
-                                                type: string
-                                                description: Ответ
-                                                minLength: 1
-                                                example: Pong
-                                    status:
-                                        type: string
-                                        description: Статус запроса
-                                        example: success
-
-    /sign-up:
-        post:
-            operationId: signUp
-            summary: Регистрация пользователя
-            description: Регистрация нового пользователя
-            tags:
-                - auth
-            security: []
-            requestBody:
-                description: Запрос на регистрацию
-                content:
-                    application/json:
-                        schema:
-                            properties:
-                                email:
-                                    $ref: '#/components/schemas/email'
-                                password:
-                                    $ref: '#/components/schemas/password'
-                            additionalProperties: false
-                            required:
-                                - email
-                                - password
-            responses:
-                '200':
-                    description: Пользователь успешно зарегистрирован
-                    content:
-                        application/json:
-                            schema:
-                                oneOf:
-                                    - $ref: '#/components/schemas/successResponse'
-                                    - $ref: '#/components/schemas/errorResponse'
-                '400':
-                    description: Ошибка запроса
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/errorResponse'
-                            example:
-                                data:
-                                    error: true
-                                    code: 400
-                                    message: Неверный формат запроса
-                                    errors: [ 'invalid_request' ]
-                                status: error
-    /confirm-email/{confirmToken}:
-        get:
-            operationId: confirmEmail
-            summary: Подтверждение email
-            description: Подтверждает email пользователя
-            tags:
-                - auth
-            security: []
-            parameters:
-                -   name: confirmToken
-                    in: path
-                    required: true
-                    description: Токен подтверждения
-                    example: 123e4567-e89b-12d3-a456-426614174000
-                    schema:
-                        type: string
-                        format: uuid
-            responses:
-                '200':
-                    description: Email подтвержден
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/successResponse'
-                '400':
-                    description: Ошибка запроса
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/errorResponse'
-                            example:
-                                data:
-                                    error: true
-                                    code: 400
-                                    message: Неверный формат запроса
-                                    errors: [ 'invalid_request' ]
-                                status: error
-                '404':
-                    description: Email с таким токеном не найден
-    /sign-in:
-        post:
-            operationId: signIn
-            summary: Аутентификация пользователя
-            description: Аутентификация пользователя
-            tags:
-                - auth
-            security: []
-            requestBody:
-                description: Запрос на аутентификацию
-                content:
-                    application/json:
-                        schema:
-                            properties:
-                                email:
-                                    $ref: '#/components/schemas/email'
-                                password:
-                                    $ref: '#/components/schemas/password'
-                            additionalProperties: false
-                            required:
-                                - email
-                                - password
-            responses:
-                '200':
-                    description: Аутентификация прошла успешно
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    data:
-                                        type: object
-                                        required:
-                                            - token
-                                        properties:
-                                            token:
-                                                type: string
-                                                format: uuid
-                                                example: 123e4567-e89b-12d3-a456-426614174000
-                                    status:
-                                        type: string
-                                        example: success
-                '400':
-                    description: Ошибка запроса
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/errorResponse'
-                            example:
-                                data:
-                                    error: true
-                                    code: 400
-                                    message: Неверный формат запроса
-                                    errors: [ 'invalid_request' ]
-                                status: error
-                '401':
-                    description: Доступ запрещен
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/errorResponse'
-                            example:
-                                data:
-                                    error: true
-                                    code: 401
-                                    message: Необходимо пройти аутентификацию
-                                    errors: [ 'auth_required' ]
-                                status: error
-    /logout:
-        get:
-            operationId: logout
-            summary: Выйти из приложения
-            description: Выполняет выход пользователя из приложения
-            tags:
-                - auth
-            responses:
-                '200':
-                    description: Выход прошел успешно
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/successResponse'
-                '401':
-                    description: Доступ запрещен
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/errorResponse'
-                            example:
-                                data:
-                                    error: true
-                                    code: 401
-                                    message: Необходимо пройти аутентификацию
-                                    errors: [ 'auth_required' ]
-                                status: error
-    /request-password-recovery:
-        post:
-            operationId: recoverPasswordRequest
-            summary: Запрос на восстановление пароля
-            description: Запрос на восстановление пароля
-            tags:
-                - auth
-            security: [ ]
-            requestBody:
-                description: Запрос на восстановление пароля
-                content:
-                    application/json:
-                        schema:
-                            properties:
-                                email:
-                                    type: string
-                                    format: email
-                                    description: Email пользователя
-                                    example: test@test.ru
-                            additionalProperties: false
-                            required:
-                                - email
-            responses:
-                '200':
-                    description: Токен отправлен
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    data:
-                                        oneOf:
-                                            -   $ref: '#/components/schemas/successResponse'
-                                            -   $ref: '#/components/schemas/errorResponse'
-                '400':
-                    description: Ошибка запроса
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/errorResponse'
-                            example:
-                                data:
-                                    error: true
-                                    code: 400
-                                    message: Неверный формат запроса
-                                    errors: [ 'invalid_request' ]
-                                status: error
-    /recover-password/{recoveryToken}:
-        post:
-            operationId: recoverPassword
-            summary: Восстановление пароля
-            description: Восстанавливает пароль пользователя
-            tags:
-                - auth
-            security: [ ]
-            parameters:
-                -   name: recoveryToken
-                    in: path
-                    required: true
-                    description: Токен восстановления пароля
-                    example: 123e4567-e89b-12d3-a456-426614174000
-                    schema:
-                        type: string
-                        format: uuid
-            requestBody:
-                description: Восстановление пароля
-                content:
-                    application/json:
-                        schema:
-                            properties:
-                                password:
-                                    type: string
-                                    nullable: false
-                                    description: Пароль пользователя
-                                    example: qwer1234
-                                    minLength: 6
-                            additionalProperties: false
-                            required:
-                                - password
-            responses:
-                '200':
-                    description: Пароль восстановлен
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/successResponse'
-                '404':
-                    description: Пользователь с таким токеном не найден
-    /profile:
-        get:
-            operationId: profileInfo
-            summary: Подробная информация по профилю
-            description: Подробная информация по профилю
-            tags:
-                - profile
-            responses:
-                '200':
-                    description: Возвращает подробную информацию по профилю
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    data:
-                                        $ref: '#/components/schemas/profileInfoResponse'
-
-                '401':
-                    description: Доступ запрещен
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/errorResponse'
-                            example:
-                                data:
-                                    error: true
-                                    code: 401
-                                    message: Необходимо пройти аутентификацию
-                                    errors: [ 'auth_required' ]
-                                status: error
-        post:
-            operationId: saveProfile
-            summary: Сохранить профиль
-            description: Сохранить профиль
-            tags:
-                - profile
-            requestBody:
-                description: Запрос на сохранение профиля
-                content:
-                    application/json:
-                        schema:
-                            properties:
-                                phone:
-                                    type: string
-                                    description: Телефон в профиле
-                                    minLength: 1
-                                    example: '89272222222'
-                                name:
-                                    type: string
-                                    description: Имя в профиле
-                                    minLength: 1
-                                    example: cazak
-                            additionalProperties: false
-                            required:
-                                - phone
-                                - name
-            responses:
-                '200':
-                    description: Профиль сохранен
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    data:
-                                        $ref: '#/components/schemas/profileInfoResponse'
-                '400':
-                    description: Ошибка запроса
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/errorResponse'
-                            example:
-                                data:
-                                    error: true
-                                    code: 400
-                                    message: Неверный формат запроса
-                                    errors: [ 'invalid_request' ]
-                                status: error
-                '401':
-                    description: Доступ запрещен
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/errorResponse'
-                            example:
-                                data:
-                                    error: true
-                                    code: 401
-                                    message: Необходимо пройти аутентификацию
-                                    errors: [ 'auth_required' ]
-                                status: error
-    /tasks:
-        get:
-            operationId: tasksList
-            summary: Список задач
-            description: Список задач
-            tags:
-                - tasks
-            parameters:
-                -   $ref: '#/components/parameters/limit'
-                -   $ref: '#/components/parameters/offset'
-            responses:
-                '200':
-                    description: Возвращает список задач
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                required:
-                                    - data
-                                    - pagination
-                                    - meta
-                                additionalProperties: false
-                                properties:
-                                    pagination:
-                                        $ref: '#/components/schemas/paginationResponse'
-                                    meta:
-                                        type: object
-                                        required:
-                                            - incompletedTasksCount
-                                        additionalProperties: false
-                                        properties:
-                                            incompletedTasksCount:
-                                                type: number
-                                                minimum: 0
-                                                description: Количество незакрытых задач
-                                    data:
-                                        type: array
-                                        items:
-                                            properties:
-                                                id:
-                                                    type: string
-                                                    format: uuid
-                                                    description: ID задачи
-                                                taskName:
-                                                    type: string
-                                                    description: Наименование задачи
-                                                isCompleted:
-                                                    type: boolean
-                                                    description: Выполнена ли задача
-                                                createdAt:
-                                                    type: string
-                                                    description: Дата создания
-                                        example:
-                                            -   id: dc8dbada-b154-4ffb-b21c-da70162e2704
-                                                taskName: Моя первая задача
-                                                isCompleted: true
-                                                createdAt: '2021-10-28T16:19:44+00:00'
-                                            -   id: 80b12ebd-e493-4dce-a104-7d30464cef43
-                                                taskName: Моя вторая задача
-                                                isCompleted: true
-                                                createdAt: '2021-10-28T16:19:45+00:00'
-                                    status:
-                                        type: string
-                                        example: success
-                '401':
-                    description: Доступ запрещен
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/errorResponse'
-                            example:
-                                data:
-                                    error: true
-                                    code: 401
-                                    message: Необходимо пройти аутентификацию
-                                    errors: [ 'auth_required' ]
-                                status: error
-        post:
-            operationId: createTask
-            summary: Создать задачу
-            description: Создать задачу
-            tags:
-                - tasks
-            requestBody:
-                description: Запрос на создание задачи
-                content:
-                    application/json:
-                        schema:
-                            properties:
-                                taskName:
-                                    type: string
-                                    description: Наименование задачи
-                                    minLength: 1
-                                    example: Моя первая задача
-                            additionalProperties: false
-                            required:
-                                - taskName
-            responses:
-                '200':
-                    description: Задача создана
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                required:
-                                    - data
-                                properties:
-                                    data:
-                                        type: object
-                                        required:
-                                            - id
-                                        additionalProperties: false
-                                        properties:
-                                            id:
-                                                type: string
-                                                format: uuid
-                                                description: ID задачи
-                                    status:
-                                        type: string
-                                        example: success
-                                example:
-                                    data:
-                                        id: dc8dbada-b154-4ffb-b21c-da70162e2704
-                                    status: success
-                '400':
-                    description: Ошибка запроса
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/errorResponse'
-                            example:
-                                data:
-                                    error: true
-                                    code: 400
-                                    message: Неверный формат запроса
-                                    errors: [ 'invalid_request' ]
-                                status: error
-                '401':
-                    description: Доступ запрещен
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/errorResponse'
-                            example:
-                                data:
-                                    error: true
-                                    code: 401
-                                    message: Необходимо пройти аутентификацию
-                                    errors: [ 'auth_required' ]
-                                status: error
-    /tasks/{id}:
-        get:
-            operationId: taskInfo
-            summary: Подробная информация по задаче
-            description: Подробная информация по задаче
-            tags:
-                - tasks
-            parameters:
-                - $ref: '#/components/parameters/taskId'
-            responses:
-                '200':
-                    description: Возвращает подробную информацию по задаче
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                required:
-                                    - data
-                                properties:
-                                    data:
-                                        type: object
-                                        required:
-                                            - id
-                                            - taskName
-                                            - isCompleted
-                                            - createdAt
-                                            - completedAt
-                                            - updatedAt
-                                        additionalProperties: false
-                                        properties:
-                                            id:
-                                                type: string
-                                                format: uuid
-                                                description: ID задачи
-                                            taskName:
-                                                type: string
-                                                description: Наименование задачи
-                                            isCompleted:
-                                                type: boolean
-                                                description: Выполнена ли задача
-                                            createdAt:
-                                                type: string
-                                                description: Дата создания
-                                            completedAt:
-                                                type: string
-                                                description: Дата завершения
-                                                nullable: true
-                                            updatedAt:
-                                                type: string
-                                                description: Дата обновления
-                                                nullable: true
-                                    status:
-                                        type: string
-                                        example: success
-                                example:
-                                    data:
-                                        id: dc8dbada-b154-4ffb-b21c-da70162e2704
-                                        taskName: "Моя первая задача"
-                                        isCompleted: true
-                                        createdAt: '2021-10-28T16:19:44+00:00'
-                                        completedAt: '2021-10-28T16:19:44+00:00'
-                                        updatedAt: '2021-10-28T16:19:44+00:00'
-                                    status: success
-                '401':
-                    description: Доступ запрещен
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/errorResponse'
-                            example:
-                                data:
-                                    error: true
-                                    code: 401
-                                    message: Необходимо пройти аутентификацию
-                                    errors: [ 'auth_required' ]
-                                status: error
-                '404':
-                    description: Задача не найдена
-        delete:
-            operationId: removeTask
-            summary: Удаляет задачу
-            description: Удаляет задачу
-            tags:
-                - tasks
-            parameters:
-                -   $ref: '#/components/parameters/taskId'
-            responses:
-                '200':
-                    description: Задача удалена
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/successResponse'
-                '401':
-                    description: Доступ запрещен
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/errorResponse'
-                            example:
-                                data:
-                                    error: true
-                                    code: 401
-                                    message: Необходимо пройти аутентификацию
-                                    errors: [ 'auth_required' ]
-                                status: error
-                '404':
-                    description: Задача не найдена
-    /tasks/{id}/update-task-name:
-        post:
-            operationId: updateTaskName
-            summary: Обновить наименование задачи
-            description: Обновить наименование задачи
-            tags:
-                - tasks
-            parameters:
-                - $ref: '#/components/parameters/taskId'
-            requestBody:
-                description: Запрос на обновление наименования задачи
-                content:
-                    application/json:
-                        schema:
-                            properties:
-                                taskName:
-                                    type: string
-                                    description: Наименование задачи
-                                    minLength: 1
-                                    example: Моя вторая задача
-                            additionalProperties: false
-                            required:
-                                - taskName
-            responses:
-                '200':
-                    description: Наименование задачи обновлено
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/successResponse'
-                '400':
-                    description: Ошибка запроса
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/errorResponse'
-                            example:
-                                data:
-                                    error: true
-                                    code: 400
-                                    message: Неверный формат запроса
-                                    errors: [ 'invalid_request' ]
-                                status: error
-                '401':
-                    description: Доступ запрещен
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/errorResponse'
-                            example:
-                                data:
-                                    error: true
-                                    code: 401
-                                    message: Необходимо пройти аутентификацию
-                                    errors: [ 'auth_required' ]
-                                status: error
-                '404':
-                    description: Задача не найдена
-    /tasks/{id}/complete:
-        post:
-            operationId: completeTask
-            summary: Завершает задачу
-            description: Завершает задачу
-            tags:
-                - tasks
-            parameters:
-                - $ref: '#/components/parameters/taskId'
-            responses:
-                '200':
-                    description: Задача завершена
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/successResponse'
-                '400':
-                    description: Ошибка запроса
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/errorResponse'
-                            example:
-                                data:
-                                    error: true
-                                    code: 400
-                                    message: Неверный формат запроса
-                                    errors: [ 'invalid_request' ]
-                                status: error
-                '401':
-                    description: Доступ запрещен
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/errorResponse'
-                            example:
-                                data:
-                                    error: true
-                                    code: 401
-                                    message: Необходимо пройти аутентификацию
-                                    errors: [ 'auth_required' ]
-                                status: error
-                '404':
-                    description: Задача не найдена
-    /tasks/{id}/add-comment:
-        post:
-            operationId: addCommentToTask
-            summary: Добавление комментария к задаче
-            description: Добавление комментария к задаче
-            tags:
-                - tasks
-            parameters:
-                - $ref: '#/components/parameters/taskId'
-            requestBody:
-                description: Запрос на добавление комментария
-                content:
-                    application/json:
-                        schema:
-                            properties:
-                                commentBody:
-                                    type: string
-                                    description: Текст комментария
-                                    minLength: 1
-                                    example: Мой первый комментарий
-                            required:
-                                - commentBody
-            responses:
-                '200':
-                    description: Комментарий успешно добавлен
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/successResponse'
-                '400':
-                    description: Нельзя добавлять комментарий в выполненную задачу
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/errorResponse'
-                            example:
-                                data:
-                                    error: true
-                                    code: 400
-                                    message: Неверный формат запроса
-                                    errors: [ 'invalid_request' ]
-                                status: error
-                '401':
-                    description: Доступ запрещен
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/errorResponse'
-                            example:
-                                data:
-                                    error: true
-                                    code: 401
-                                    message: Необходимо пройти аутентификацию
-                                    errors: [ 'auth_required' ]
-                                status: error
-                '404':
-                    description: Задача не найдена
-    /tasks/{id}/comments:
-        get:
-            operationId: listTaskComments
-            summary: Получить список комментариев к задаче
-            description: Получить список комментариев к задаче
-            tags:
-                - tasks
-            parameters:
-                - $ref: '#/components/parameters/taskId'
-            responses:
-                '200':
-                    description: Список
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    pagination:
-                                        $ref: '#/components/schemas/paginationResponse'
-                                    meta:
-                                        nullable: true
-                                        type: object
-                                    data:
-                                        type: array
-                                        properties:
-                                            id:
-                                                type: string
-                                                format: uuid
-                                                description: ID комментария
-                                                example: dc8dbada-b154-4ffb-b21c-da70162e2704
-                                            body:
-                                                type: string
-                                                description: Текст комментария
-                                                example: Мой первый комментарий
-                                            createdAt:
-                                                $ref: '#/components/schemas/createdAt'
-                                            updatedAt:
-                                                $ref: '#/components/schemas/updatedAt'
-                                    status:
-                                        type: string
-                                        example: success
-    /export/tasks.{format}:
-        get:
-            operationId: exportTasks
-            summary: Экспорт задач в нужном формате
-            description: Экспорт задач в нужном формате
-            tags:
-                - tasks
-            parameters:
-                -   in: path
-                    name: format
-                    required: true
-                    description: Формат (csv, xml)
-                    example: csv
-                    schema:
-                        type: string
-                        enum:
-                            - csv
-                            - xml
-                -   $ref: '#/components/parameters/limit'
-                -   $ref: '#/components/parameters/offset'
-            responses:
-                '200':
-                    description: Список задач успешно экспортирован
-                    content:
-                        text/csv:
-                            schema:
-                                type: string
-                            example: '2021-11-16T16:52:08+00:00,Задача 1,выполнена'
-                        text/xml:
-                            schema:
-                                type: string
-                            example: '<?xml version="1.0"?><response><item key="0"><id>da5b20a7-3c8b-4516-bc7c-7297c0e2f686</id><createdAt>2022-07-12T12:13:23+00:00</createdAt><taskName>Тестовая задача</taskName><isCompleted>0</isCompleted></item></response>'
-                '400':
-                    description: Нет задач для экспорта
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/errorResponse'
-                            example:
-                                data:
-                                    error: true
-                                    code: 400
-                                    message: 'Нет задач для экспорта'
-                                    errors: [ 'Нет задач для экспорта' ]
-                                status: error
-                '401':
-                    description: Доступ запрещен
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/errorResponse'
-                            example:
-                                data:
-                                    error: true
-                                    code: 401
-                                    message: Необходимо пройти аутентификацию
-                                    errors: [ 'auth_required' ]
-                                status: error
-    /articles:
-        get:
-            operationId: articleList
-            summary: Получить список статей
-            description: Получить список статей
-            tags:
-                - articles
-            parameters:
-                -   $ref: '#/components/parameters/limit'
-                -   $ref: '#/components/parameters/offset'
-            security: []
-            responses:
-                '200':
-                    description: Возвращает список статей
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                required:
-                                    - data
-                                    - pagination
-                                    - meta
-                                properties:
-                                    pagination:
-                                        $ref: '#/components/schemas/paginationResponse'
-                                    meta:
-                                        type: object
-                                        nullable: true
-                                    data:
-                                        type: array
-                                        items:
-                                            properties:
-                                                title:
-                                                    type: string
-                                                    description: Заголовок
-                                                alias:
-                                                    type: string
-                                                    description: Алиас
-                                                body:
-                                                    type: string
-                                                    description: Контент
-                                                    nullable: true
-                                        example:
-                                            -   title: Первая статья
-                                                alias: first-article
-                                                body: Контент первой статьи
-                                            -   title: Вторая статья
-                                                alias: second-article
-                                                body: Контент второй статьи
-    /articles/{alias}:
-        get:
-            operationId: articleInfo
-            summary: Получить данные по статье
-            description: Получить данные по статье
-            tags:
-                - articles
-            security: []
-            parameters:
-                -   in: path
-                    name: alias
-                    required: true
-                    description: Алиас статьи
-                    example: first-article
-                    schema:
-                        type: string
-            responses:
-                '200':
-                    description: Возвращает статью
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                required:
-                                    - data
-                                properties:
-                                    data:
-                                        type: object
-                                        required:
-                                            - title
-                                            - body
-                                        additionalProperties: false
-                                        properties:
-                                            title:
-                                                $ref: '#/components/schemas/articleTitle'
-                                            body:
-                                                $ref: '#/components/schemas/articleBody'
-                                example:
-                                    data:
-                                        title: Первая статья
-                                        body: Контент первой статьи
-                '404':
-                    description: Статья не найдена
-    /admin/articles:
-        get:
-            operationId: adminArticleList
-            summary: Получить список статей
-            description: Получить список статей
-            tags:
-                - articles
-            responses:
-                '200':
-                    description: Список статей
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                required:
-                                    - data
-                                    - pagination
-                                    - meta
-                                properties:
-                                    pagination:
-                                        $ref: '#/components/schemas/paginationResponse'
-                                    meta:
-                                        type: object
-                                        nullable: true
-                                    data:
-                                        type: array
-                                        items:
-                                            properties:
-                                                title:
-                                                    type: string
-                                                    description: Заголовок
-                                                alias:
-                                                    type: string
-                                                    description: Алиас
-                                                body:
-                                                    type: string
-                                                    description: Контент
-                                                    nullable: true
-                                        example:
-                                            -   title: Первая статья
-                                                alias: first-article
-                                                body: Контент первой статьи
-                                            -   title: Вторая статья
-                                                alias: second-article
-                                                body: Контент второй статьи
-                '401':
-                    description: Доступ запрещен
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/errorResponse'
-                            example:
-                                data:
-                                    error: true
-                                    code: 401
-                                    message: Необходимо пройти аутентификацию
-                                    errors: [ 'auth_required' ]
-                                status: error
-        post:
-            operationId: adminArticleCreate
-            summary: Создать статью
-            description: Создать статью
-            tags:
-                - articles
-            requestBody:
-                description: Запрос на создание статьи
-                content:
-                    application/json:
-                        schema:
-                            properties:
-                                title:
-                                    $ref: '#/components/schemas/articleTitle'
-                                alias:
-                                    $ref: '#/components/schemas/articleAlias'
-                                body:
-                                    $ref: '#/components/schemas/articleBody'
-                            additionalProperties: false
-                            required:
-                                - title
-                                - alias
-            responses:
-                '200':
-                    description: Статья создана
-                    content:
-                        application/json:
-                            schema:
-                                oneOf:
-                                    -   $ref: '#/components/schemas/articleResponse'
-                                    -   $ref: '#/components/schemas/errorResponse'
-                '400':
-                    description: Ошибка запроса
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/errorResponse'
-                            example:
-                                data:
-                                    error: true
-                                    code: 400
-                                    message: Неверный формат запроса
-                                    errors: [ 'invalid_request' ]
-                                status: error
-                '401':
-                    description: Доступ запрещен
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/errorResponse'
-                            example:
-                                data:
-                                    error: true
-                                    code: 401
-                                    message: Необходимо пройти аутентификацию
-                                    errors: [ 'auth_required' ]
-                                status: error
-    /admin/articles/{id}:
-        get:
-            operationId: adminArticleInfo
-            summary: Получить информацию по статье
-            description: Получить информацию по статье
-            tags:
-                - articles
-            parameters:
-                - $ref: '#/components/parameters/articleId'
-            responses:
-                '200':
-                    description: Информация по статье
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/articleResponse'
-                '401':
-                    description: Доступ запрещен
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/errorResponse'
-                            example:
-                                data:
-                                    error: true
-                                    code: 401
-                                    message: Необходимо пройти аутентификацию
-                                    errors: [ 'auth_required' ]
-                                status: error
-                '404':
-                    description: Статья не найдена
-        delete:
-            operationId: adminArticleRemove
-            summary: Удалить статью
-            description: Удалить статью
-            tags:
-                - articles
-            parameters:
-                -   $ref: '#/components/parameters/articleId'
-            responses:
-                '200':
-                    description: Статья удалена
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/successResponse'
-                '401':
-                    description: Доступ запрещен
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/errorResponse'
-                            example:
-                                data:
-                                    error: true
-                                    code: 401
-                                    message: Необходимо пройти аутентификацию
-                                    errors: [ 'auth_required' ]
-                                status: error
-                '404':
-                    description: Статья не найдена
-        post:
-            operationId: adminArticleUpdate
-            summary: Обновить статью
-            description: Обновить статью
-            tags:
-                - articles
-            parameters:
-                -   $ref: '#/components/parameters/articleId'
-            requestBody:
-                description: Запрос на обновление статьи
-                content:
-                    application/json:
-                        schema:
-                            properties:
-                                title:
-                                    $ref: '#/components/schemas/articleTitle'
-                                alias:
-                                    $ref: '#/components/schemas/articleAlias'
-                                body:
-                                    $ref: '#/components/schemas/articleBody'
-                            additionalProperties: false
-                            required:
-                                - title
-                                - alias
-            responses:
-                '200':
-                    description: Статья обновлена
-                    content:
-                        application/json:
-                            schema:
-                                oneOf:
-                                    -   $ref: '#/components/schemas/articleResponse'
-                                    -   $ref: '#/components/schemas/errorResponse'
-                '400':
-                    description: Ошибка запроса
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/errorResponse'
-                            example:
-                                data:
-                                    error: true
-                                    code: 400
-                                    message: Неверный формат запроса
-                                    errors: [ 'invalid_request' ]
-                                status: error
-                '401':
-                    description: Доступ запрещен
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/errorResponse'
-                            example:
-                                data:
-                                    error: true
-                                    code: 401
-                                    message: Необходимо пройти аутентификацию
-                                    errors: [ 'auth_required' ]
-                                status: error
-                '404':
-                    description: Статья не найдена
-    /settings:
-        get:
-            operationId: settingList
-            summary: Получить список настроек
-            description: Получить список настроек
-            tags:
-                - setting
-            security: [ ]
-            responses:
-                '200':
-                    description: Список настроек
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    data:
-                                        type: array
-                                        items:
-                                            type: object
-                                            additionalProperties: false
-                                            required:
-                                                - type
-                                                - value
-                                            properties:
-                                                type:
-                                                    $ref: '#/components/schemas/settingType'
-                                                value:
-                                                    $ref: '#/components/schemas/settingValue'
-    /admin/settings:
-        get:
-            operationId: adminSettingList
-            summary: Получить список настроек
-            description: Получить список настроек
-            tags:
-                - setting
-            responses:
-                '200':
-                    description: Список настроек
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    data:
-                                        type: array
-                                        items:
-                                            type: object
-                                            additionalProperties: false
-                                            required:
-                                                - type
-                                                - value
-                                                - isPublic
-                                                - createdAt
-                                            properties:
-                                                type:
-                                                    $ref: '#/components/schemas/settingType'
-                                                value:
-                                                    $ref: '#/components/schemas/settingValue'
-                                                isPublic:
-                                                    type: boolean
-                                                    description: Публична ли настройка
-                                                createdAt:
-                                                    $ref: '#/components/schemas/createdAt'
-                                                updatedAt:
-                                                    $ref: '#/components/schemas/updatedAt'
-                '401':
-                    description: Доступ запрещен
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/errorResponse'
-                            example:
-                                data:
-                                    error: true
-                                    code: 401
-                                    message: Необходимо пройти аутентификацию
-                                    errors: [ 'auth_required' ]
-                                status: error
-        post:
-            operationId: saveSetting
-            summary: Сохранить изменения настройки
-            description: Сохранить изменения настройки
-            tags:
-                - setting
-            requestBody:
-                description: Запрос на сохранение настройки
-                content:
-                    application/json:
-                        schema:
-                            properties:
-                                type:
-                                    $ref: '#/components/schemas/settingType'
-                                value:
-                                    $ref: '#/components/schemas/settingValue'
-                            additionalProperties: false
-                            required:
-                                - type
-                                - value
-            responses:
-                '200':
-                    description: Данные настройки сохранены
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/successResponse'
-                '400':
-                    description: Ошибка запроса
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/errorResponse'
-                            example:
-                                data:
-                                    error: true
-                                    code: 400
-                                    message: Неверный формат запроса
-                                    errors: [ 'invalid_request' ]
-                                status: error
-                '401':
-                    description: Доступ запрещен
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/errorResponse'
-                            example:
-                                data:
-                                    error: true
-                                    code: 401
-                                    message: Необходимо пройти аутентификацию
-                                    errors: [ 'auth_required' ]
-                                status: error
-                '404':
-                    description: Запись не найдена
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/errorResponse'
-                            example:
-                                data:
-                                    error: true
-                                    code: 404
-                                    message: Настройка не найдена
-                                    errors: [ 'not_found' ]
-                                status: error
-    /seo/{type}/{identity}:
-        get:
-            operationId: seoInfo
-            summary: Получить SEO параметры объекта
-            description: Получить SEO параметры объекта
-            tags:
-                - seo
-            parameters:
-                -   name: type
-                    in: path
-                    required: true
-                    description: Тип объекта
-                    example: article
-                    schema:
-                        type: string
-                        enum:
-                            - article
-                            - task
-                -   name: identity
-                    in: path
-                    required: true
-                    description: ID объекта
-                    example: 123e4567-e89b-12d3-a456-426614174000
-                    schema:
-                        type: string
-                        format: uuid
-            security: [ ]
-            responses:
-                '200':
-                    description: SEO параметры
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    data:
-                                        type: object
-                                        description: SEO информация
-                                        properties:
-                                            title:
-                                                type: string
-                                                nullable: true
-                                                description: Заголовок
-                                                example: Первая статья
-                                            description:
-                                                type: string
-                                                nullable: true
-                                                description: Описание
-                                                example: Описание первой статьи
-                                            keywords:
-                                                type: string
-                                                nullable: true
-                                                description: Ключевые слова
-                                                example: ключевые слова
-    /admin/seo:
-        post:
-            operationId: saveSeo
-            summary: Сохранить SEO параметры объекта
-            description: Сохранить SEO параметры объекта
-            tags:
-                - seo
-            requestBody:
-                description: Запрос на сохранение
-                content:
-                    application/json:
-                        schema:
-                            type: object
-                            properties:
-                                type:
-                                    type: string
-                                    description: Тип объекта
-                                    enum:
-                                        - article
-                                        - task
-                                identity:
-                                    type: string
-                                    description: Идентификатор объекта
-                                    example: dc8dbada-b154-4ffb-b21c-da70162e2704
-                                title:
-                                    type: string
-                                    nullable: true
-                                    description: Заголовок
-                                    example: Первая статья
-                                description:
-                                    type: string
-                                    nullable: true
-                                    description: Описание
-                                    example: Описание первой статьи
-                                keywords:
-                                    type: string
-                                    nullable: true
-                                    description: Ключевые слова
-                                    example: ключевые слова
-                            additionalProperties: false
-                            required:
-                                - type
-                                - identity
-            responses:
-                '200':
-                    description: Данные seo сохранены
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/successResponse'
-                '400':
-                    description: Ошибка запроса
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/errorResponse'
-                            example:
-                                data:
-                                    error: true
-                                    code: 400
-                                    message: Неверный формат запроса
-                                    errors: [ 'invalid_request' ]
-                                status: error
-                '401':
-                    description: Доступ запрещен
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/errorResponse'
-                            example:
-                                error: true
-                                code: 401
-                                message: Необходимо пройти аутентификацию
-                                errors: ['auth_required']
-components:
-    securitySchemes:
-        ApiTokenAuth:
-            type: apiKey
-            in: header
-            name: X-AUTH-TOKEN
-    schemas:
-        successResponse:
-            type: object
-            required:
-                - data
-            additionalProperties: false
-            properties:
-                status:
-                    type: string
-                    example: success
-                data:
-                    type: object
-        errorResponse:
-            type: object
-            properties:
-                data:
-                    type: object
-                    required:
-                        - error
-                        - code
-                        - message
-                        - errors
-                    additionalProperties: false
-                    properties:
-                        error:
-                            type: boolean
-                            example: true
-                        code:
-                            type: integer
-                        message:
-                            type: string
-                        errors:
-                            type: array
-                status:
-                    type: string
-        profileInfoResponse:
-            type: object
-            required:
-                - phone
-                - name
-            additionalProperties: false
-            properties:
-                phone:
-                    type: string
-                    description: Телефон в профиле
-                    nullable: true
-                name:
-                    type: string
-                    description: Имя в профиле
-                    nullable: true
-            example: {
-                phone: '89272222222',
-                name: cazak,
-            }
-        articleResponse:
-            type: object
-            required:
-                - data
-            properties:
-                data:
-                    type: object
-                    required:
-                        - id
-                        - title
-                        - alias
-                        - createdAt
-                    properties:
-                        id:
-                            type: string
-                            format: uuid
-                            description: ID
-                            example: dc8dbada-b154-4ffb-b21c-da70162e2704
-                        title:
-                            $ref: '#/components/schemas/articleTitle'
-                        alias:
-                            $ref: '#/components/schemas/articleAlias'
-                        body:
-                            type: string
-                            description: Контент
-                            example: Контент статьи
-                            nullable: true
-                        createdAt:
-                            $ref: '#/components/schemas/createdAt'
-                        updatedAt:
-                            $ref: '#/components/schemas/updatedAt'
-                status:
-                    type: string
-                    example: success
-        paginationResponse:
-            type: object
-            properties:
-                total:
-                    type: integer
-                    description: Количество всех данных
-                    example: 2
-        email:
-            type: string
-            format: email
-            description: Email пользователя
-            minLength: 1
-            example: test@test.ru
-        password:
-            type: string
-            description: Пароль пользователя
-            minLength: 6
-            example: '123456'
-        articleTitle:
-            type: string
-            description: Заголовок
-            minLength: 1
-            example: Первая статья
-        articleAlias:
-            type: string
-            description: Алиас
-            minLength: 1
-            example: first-article
-        articleBody:
-            type: string
-            description: Контент
-            example: Контент первой статьи
-            nullable: true
-        updatedAt:
-            type: string
-            description: Дата обновления
-            example: '2021-10-28T16:19:44+00:00'
-            nullable: true
-        createdAt:
-            type: string
-            description: Дата создания
-            example: '2021-10-28T16:19:44+00:00'
-        settingType:
-            type: string
-            description: Тип настройки
-            example: site_name
-        settingValue:
-            type: string
-            description: Значение настройки
-            example: symfony-starter-kit
-    parameters:
-        limit:
-            in: query
-            name: limit
-            required: false
-            description: Лимит
-            example: 10
-            schema:
-                type: integer
-        offset:
-            in: query
-            name: offset
-            required: false
-            description: Смещение
-            example: 1
-            schema:
-                type: integer
-        taskId:
-            name: id
-            in: path
-            required: true
-            description: ID задачи
-            example: 123e4567-e89b-12d3-a456-426614174000
-            schema:
-                type: string
-                format: uuid
-        articleId:
-            name: id
-            in: path
-            required: true
-            description: ID статьи
-            example: 123e4567-e89b-12d3-a456-426614174000
-            schema:
-                type: string
-                format: uuid
+  - url: /api
 security:
-    - ApiTokenAuth: []
+  - ApiTokenAuth: [ ]
+paths:
+  /ping:
+    get:
+      operationId: ping
+      summary: Пинг приложения
+      description: Пинг приложения
+      tags:
+        - general
+      security: [ ]
+      responses:
+        '200':
+          $ref: '#/components/responses/ping'
+  /sign-up:
+    post:
+      operationId: signUp
+      summary: Регистрация пользователя
+      description: Регистрация нового пользователя
+      tags:
+        - auth
+      security: [ ]
+      requestBody:
+        $ref: '#/components/requestBodies/signUp'
+      responses:
+        '200':
+          $ref: '#/components/responses/signUp'
+        '400':
+          $ref: '#/components/responses/invalidRequest'
+  /confirm-email/{confirmToken}:
+    get:
+      operationId: confirmEmail
+      summary: Подтверждение email
+      description: Подтверждает email пользователя
+      tags:
+        - auth
+      security: [ ]
+      parameters:
+        - $ref: '#/components/parameters/confirmToken'
+      responses:
+        '200':
+          $ref: '#/components/responses/success'
+        '400':
+          $ref: '#/components/responses/invalidRequest'
+        '404':
+          $ref: '#/components/responses/notFound'
+  /sign-in:
+    post:
+      operationId: signIn
+      summary: Аутентификация пользователя
+      description: Аутентификация пользователя
+      tags:
+        - auth
+      security: [ ]
+      requestBody:
+        $ref: '#/components/requestBodies/signIn'
+      responses:
+        '200':
+          $ref: '#/components/responses/signIn'
+        '400':
+          $ref: '#/components/responses/invalidRequest'
+        '401':
+          $ref: '#/components/responses/authRequired'
+  /logout:
+    get:
+      operationId: logout
+      summary: Выйти из приложения
+      description: Выполняет выход пользователя из приложения
+      tags:
+        - auth
+      responses:
+        '200':
+          $ref: '#/components/responses/success'
+        '401':
+          $ref: '#/components/responses/authRequired'
+  /request-password-recovery:
+    post:
+      operationId: recoverPasswordRequest
+      summary: Запрос на восстановление пароля
+      description: Запрос на восстановление пароля
+      tags:
+        - auth
+      security: [ ]
+      requestBody:
+        $ref: '#/components/requestBodies/recoverPasswordRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/recoverPasswordRequest'
+        '400':
+          $ref: '#/components/responses/invalidRequest'
+  /recover-password/{recoveryToken}:
+    post:
+      operationId: recoverPassword
+      summary: Восстановление пароля
+      description: Восстанавливает пароль пользователя
+      tags:
+        - auth
+      security: [ ]
+      parameters:
+        - $ref: '#/components/parameters/recoveryToken'
+      requestBody:
+        $ref: '#/components/requestBodies/recoverPassword'
+      responses:
+        '200':
+          $ref: '#/components/responses/success'
+        '404':
+          $ref: '#/components/responses/notFound'
+  /profile:
+    get:
+      operationId: profileInfo
+      summary: Подробная информация по профилю
+      description: Подробная информация по профилю
+      tags:
+        - profile
+      responses:
+        '200':
+          $ref: '#/components/responses/profileInfo'
+        '401':
+          $ref: '#/components/responses/authRequired'
+    post:
+      operationId: saveProfile
+      summary: Сохранить профиль
+      description: Сохранить профиль
+      tags:
+        - profile
+      requestBody:
+        $ref: '#/components/requestBodies/saveProfile'
+      responses:
+        '200':
+          description: Профиль сохранен
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/profileInfo'
+        '400':
+          $ref: '#/components/responses/invalidRequest'
+        '401':
+          $ref: '#/components/responses/authRequired'
+  /tasks:
+    get:
+      operationId: tasksList
+      summary: Список задач
+      description: Список задач
+      tags:
+        - tasks
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+      responses:
+        '200':
+          $ref: '#/components/responses/tasksList'
+        '401':
+          $ref: '#/components/responses/authRequired'
+    post:
+      operationId: createTask
+      summary: Создать задачу
+      description: Создать задачу
+      tags:
+        - tasks
+      requestBody:
+        $ref: '#/components/requestBodies/createTask'
+      responses:
+        '200':
+          $ref: '#/components/responses/createTask'
+        '400':
+          $ref: '#/components/responses/invalidRequest'
+        '401':
+          $ref: '#/components/responses/authRequired'
+  /tasks/{id}:
+    get:
+      operationId: taskInfo
+      summary: Подробная информация по задаче
+      description: Подробная информация по задаче
+      tags:
+        - tasks
+      parameters:
+        - $ref: '#/components/parameters/taskId'
+      responses:
+        '200':
+          $ref: '#/components/responses/taskInfo'
+        '401':
+          $ref: '#/components/responses/authRequired'
+        '404':
+          $ref: '#/components/responses/notFound'
+    delete:
+      operationId: removeTask
+      summary: Удаляет задачу
+      description: Удаляет задачу
+      tags:
+        - tasks
+      parameters:
+        - $ref: '#/components/parameters/taskId'
+      responses:
+        '200':
+          $ref: '#/components/responses/success'
+        '401':
+          $ref: '#/components/responses/authRequired'
+        '404':
+          $ref: '#/components/responses/notFound'
+  /tasks/{id}/update-task-name:
+    post:
+      operationId: updateTaskName
+      summary: Обновить наименование задачи
+      description: Обновить наименование задачи
+      tags:
+        - tasks
+      parameters:
+        - $ref: '#/components/parameters/taskId'
+      requestBody:
+        $ref: '#/components/requestBodies/updateTaskName'
+      responses:
+        '200':
+          $ref: '#/components/responses/success'
+        '400':
+          $ref: '#/components/responses/invalidRequest'
+        '401':
+          $ref: '#/components/responses/authRequired'
+        '404':
+          $ref: '#/components/responses/notFound'
+  /tasks/{id}/complete:
+    post:
+      operationId: completeTask
+      summary: Завершает задачу
+      description: Завершает задачу
+      tags:
+        - tasks
+      parameters:
+        - $ref: '#/components/parameters/taskId'
+      responses:
+        '200':
+          $ref: '#/components/responses/success'
+        '400':
+          $ref: '#/components/responses/invalidRequest'
+        '401':
+          $ref: '#/components/responses/authRequired'
+        '404':
+          $ref: '#/components/responses/notFound'
+  /tasks/{id}/add-comment:
+    post:
+      operationId: addCommentToTask
+      summary: Добавление комментария к задаче
+      description: Добавление комментария к задаче
+      tags:
+        - tasks
+      parameters:
+        - $ref: '#/components/parameters/taskId'
+      requestBody:
+        $ref: '#/components/requestBodies/addCommentToTask'
+      responses:
+        '200':
+          $ref: '#/components/responses/success'
+        '400':
+          $ref: '#/components/responses/invalidRequest'
+        '401':
+          $ref: '#/components/responses/authRequired'
+        '404':
+          $ref: '#/components/responses/notFound'
+  /tasks/{id}/comments:
+    get:
+      operationId: listTaskComments
+      summary: Получить список комментариев к задаче
+      description: Получить список комментариев к задаче
+      tags:
+        - tasks
+      parameters:
+        - $ref: '#/components/parameters/taskId'
+      responses:
+        '200':
+          $ref: '#/components/responses/listTaskComments'
+        '400':
+          $ref: '#/components/responses/invalidRequest'
+        '401':
+          $ref: '#/components/responses/authRequired'
+  /export/tasks.{format}:
+    get:
+      operationId: exportTasks
+      summary: Экспорт задач в нужном формате
+      description: Экспорт задач в нужном формате
+      tags:
+        - tasks
+      parameters:
+        - $ref: '#/components/parameters/exportFormat'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+      responses:
+        '200':
+          $ref: '#/components/responses/exportTasks'
+        '400':
+          $ref: '#/components/responses/exportNoTasks'
+        '401':
+          $ref: '#/components/responses/authRequired'
+  /articles:
+    get:
+      operationId: articleList
+      summary: Получить список статей
+      description: Получить список статей
+      tags:
+        - articles
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+      security: [ ]
+      responses:
+        '200':
+          $ref: '#/components/responses/articleList'
+  /articles/{alias}:
+    get:
+      operationId: articleInfo
+      summary: Получить данные по статье
+      description: Получить данные по статье
+      tags:
+        - articles
+      security: [ ]
+      parameters:
+        - in: path
+          name: alias
+          required: true
+          description: Алиас статьи
+          example: first-article
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/articleInfo'
+        '404':
+          $ref: '#/components/responses/notFound'
+  /admin/articles:
+    get:
+      operationId: adminArticleList
+      summary: Получить список статей
+      description: Получить список статей
+      tags:
+        - articles
+      responses:
+        '200':
+          $ref: '#/components/responses/adminArticleList'
+        '401':
+          $ref: '#/components/responses/authRequired'
+    post:
+      operationId: adminArticleCreate
+      summary: Создать статью
+      description: Создать статью
+      tags:
+        - articles
+      requestBody:
+        $ref: '#/components/requestBodies/adminArticleCreate'
+      responses:
+        '200':
+          $ref: '#/components/responses/adminArticleCreate'
+        '400':
+          $ref: '#/components/responses/invalidRequest'
+        '401':
+          $ref: '#/components/responses/authRequired'
+  /admin/articles/{id}:
+    get:
+      operationId: adminArticleInfo
+      summary: Получить информацию по статье
+      description: Получить информацию по статье
+      tags:
+        - articles
+      parameters:
+        - $ref: '#/components/parameters/articleId'
+      responses:
+        '200':
+          $ref: '#/components/responses/adminArticleInfo'
+        '401':
+          $ref: '#/components/responses/authRequired'
+        '404':
+          $ref: '#/components/responses/notFound'
+    delete:
+      operationId: adminArticleRemove
+      summary: Удалить статью
+      description: Удалить статью
+      tags:
+        - articles
+      parameters:
+        - $ref: '#/components/parameters/articleId'
+      responses:
+        '200':
+          $ref: '#/components/responses/success'
+        '401':
+          $ref: '#/components/responses/authRequired'
+        '404':
+          $ref: '#/components/responses/notFound'
+    post:
+      operationId: adminArticleUpdate
+      summary: Обновить статью
+      description: Обновить статью
+      tags:
+        - articles
+      parameters:
+        - $ref: '#/components/parameters/articleId'
+      requestBody:
+        $ref: '#/components/requestBodies/adminArticleUpdate'
+      responses:
+        '200':
+          $ref: '#/components/responses/adminArticleUpdate'
+        '400':
+          $ref: '#/components/responses/invalidRequest'
+        '401':
+          $ref: '#/components/responses/authRequired'
+        '404':
+          $ref: '#/components/responses/notFound'
+  /settings:
+    get:
+      operationId: settingList
+      summary: Получить список настроек
+      description: Получить список настроек
+      tags:
+        - setting
+      security: [ ]
+      responses:
+        '200':
+          $ref: '#/components/responses/settingList'
+  /admin/settings:
+    get:
+      operationId: adminSettingList
+      summary: Получить список настроек
+      description: Получить список настроек
+      tags:
+        - setting
+      responses:
+        '200':
+          $ref: '#/components/responses/adminSettingList'
+        '401':
+          $ref: '#/components/responses/authRequired'
+    post:
+      operationId: saveSetting
+      summary: Сохранить изменения настройки
+      description: Сохранить изменения настройки
+      tags:
+        - setting
+      requestBody:
+        $ref: '#/components/requestBodies/saveSetting'
+      responses:
+        '200':
+          $ref: '#/components/responses/success'
+        '400':
+          $ref: '#/components/responses/invalidRequest'
+        '401':
+          $ref: '#/components/responses/authRequired'
+        '404':
+          $ref: '#/components/responses/notFound'
+  /seo/{type}/{identity}:
+    get:
+      operationId: seoInfo
+      summary: Получить SEO параметры объекта
+      description: Получить SEO параметры объекта
+      tags:
+        - seo
+      parameters:
+        - $ref: '#/components/parameters/entityType'
+        - $ref: '#/components/parameters/entityId'
+      security: [ ]
+      responses:
+        '200':
+          $ref: '#/components/responses/seoInfo'
+  /admin/seo:
+    post:
+      operationId: saveSeo
+      summary: Сохранить SEO параметры объекта
+      description: Сохранить SEO параметры объекта
+      tags:
+        - seo
+      requestBody:
+        $ref: '#/components/requestBodies/saveSeo'
+      responses:
+        '200':
+          $ref: '#/components/responses/success'
+        '400':
+          $ref: '#/components/responses/invalidRequest'
+        '401':
+          $ref: '#/components/responses/authRequired'
+components:
+  securitySchemes:
+    ApiTokenAuth:
+      type: apiKey
+      in: header
+      name: X-AUTH-TOKEN
+  parameters:
+    confirmToken:
+      in: path
+      name: confirmToken
+      required: true
+      description: Токен подтверждения
+      example: 123e4567-e89b-12d3-a456-426614174000
+      schema:
+        type: string
+        format: uuid
+    recoveryToken:
+      in: path
+      name: recoveryToken
+      required: true
+      description: Токен восстановления
+      example: 123e4567-e89b-12d3-a456-426614174000
+      schema:
+        type: string
+        format: uuid
+    taskId:
+      name: id
+      in: path
+      required: true
+      description: ID задачи
+      example: 123e4567-e89b-12d3-a456-426614174000
+      schema:
+        type: string
+        format: uuid
+    articleId:
+      name: id
+      in: path
+      required: true
+      description: ID статьи
+      example: 123e4567-e89b-12d3-a456-426614174000
+      schema:
+        type: string
+        format: uuid
+    entityId:
+      name: identity
+      in: path
+      required: true
+      description: ID объекта
+      example: 123e4567-e89b-12d3-a456-426614174000
+      schema:
+        type: string
+        format: uuid
+    entityType:
+      name: type
+      in: path
+      required: true
+      description: Тип объекта
+      example: article
+      schema:
+        type: string
+        enum:
+          - article
+          - task
+    exportFormat:
+      in: path
+      name: format
+      required: true
+      description: Формат (csv, xml)
+      example: csv
+      schema:
+        type: string
+        enum:
+          - csv
+          - xml
+    limit:
+      in: query
+      name: limit
+      required: false
+      description: Лимит
+      example: 10
+      schema:
+        type: integer
+    offset:
+      in: query
+      name: offset
+      required: false
+      description: Смещение
+      example: 1
+      schema:
+        type: integer
+  requestBodies:
+    signUp:
+      description: Запрос на регистрацию
+      content:
+        application/json:
+          schema:
+            properties:
+              email:
+                $ref: '#/components/schemas/email'
+              password:
+                $ref: '#/components/schemas/password'
+            additionalProperties: false
+            required:
+              - email
+              - password
+    signIn:
+      description: Запрос на аутентификацию
+      content:
+        application/json:
+          schema:
+            properties:
+              email:
+                $ref: '#/components/schemas/email'
+              password:
+                $ref: '#/components/schemas/password'
+            additionalProperties: false
+            required:
+              - email
+              - password
+    recoverPasswordRequest:
+      description: Запрос на восстановление пароля
+      content:
+        application/json:
+          schema:
+            properties:
+              email:
+                type: string
+                format: email
+                description: Email пользователя
+                example: test@test.ru
+            additionalProperties: false
+            required:
+              - email
+    recoverPassword:
+      description: Восстановление пароля
+      content:
+        application/json:
+          schema:
+            properties:
+              password:
+                type: string
+                nullable: false
+                description: Пароль пользователя
+                example: qwer1234
+                minLength: 6
+            additionalProperties: false
+            required:
+              - password
+    saveProfile:
+      description: Запрос на сохранение профиля
+      content:
+        application/json:
+          schema:
+            properties:
+              phone:
+                type: string
+                description: Телефон в профиле
+                minLength: 1
+                example: '89272222222'
+              name:
+                type: string
+                description: Имя в профиле
+                minLength: 1
+                example: cazak
+            additionalProperties: false
+            required:
+              - phone
+              - name
+    createTask:
+      description: Запрос на создание задачи
+      content:
+        application/json:
+          schema:
+            properties:
+              taskName:
+                type: string
+                description: Наименование задачи
+                minLength: 1
+                example: Моя первая задача
+            additionalProperties: false
+            required:
+              - taskName
+    updateTaskName:
+      description: Запрос на обновление наименования задачи
+      content:
+        application/json:
+          schema:
+            properties:
+              taskName:
+                type: string
+                description: Наименование задачи
+                minLength: 1
+                example: Моя вторая задача
+            additionalProperties: false
+            required:
+              - taskName
+    addCommentToTask:
+      description: Запрос на добавление комментария
+      content:
+        application/json:
+          schema:
+            properties:
+              commentBody:
+                type: string
+                description: Текст комментария
+                minLength: 1
+                example: Мой первый комментарий
+            required:
+              - commentBody
+    adminArticleCreate:
+      description: Запрос на создание статьи
+      content:
+        application/json:
+          schema:
+            properties:
+              title:
+                $ref: '#/components/schemas/articleTitle'
+              alias:
+                $ref: '#/components/schemas/articleAlias'
+              body:
+                $ref: '#/components/schemas/articleBody'
+            additionalProperties: false
+            required:
+              - title
+              - alias
+    adminArticleUpdate:
+      description: Запрос на обновление статьи
+      content:
+        application/json:
+          schema:
+            properties:
+              title:
+                $ref: '#/components/schemas/articleTitle'
+              alias:
+                $ref: '#/components/schemas/articleAlias'
+              body:
+                $ref: '#/components/schemas/articleBody'
+            additionalProperties: false
+            required:
+              - title
+              - alias
+    saveSetting:
+      description: Запрос на сохранение настройки
+      content:
+        application/json:
+          schema:
+            properties:
+              type:
+                $ref: '#/components/schemas/settingType'
+              value:
+                $ref: '#/components/schemas/settingValue'
+            additionalProperties: false
+            required:
+              - type
+              - value
+    saveSeo:
+      description: Запрос на сохранение
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              type:
+                type: string
+                description: Тип объекта
+                enum:
+                  - article
+                  - task
+              identity:
+                type: string
+                description: Идентификатор объекта
+                example: dc8dbada-b154-4ffb-b21c-da70162e2704
+              title:
+                type: string
+                nullable: true
+                description: Заголовок
+                example: Первая статья
+              description:
+                type: string
+                nullable: true
+                description: Описание
+                example: Описание первой статьи
+              keywords:
+                type: string
+                nullable: true
+                description: Ключевые слова
+                example: ключевые слова
+            additionalProperties: false
+            required:
+              - type
+              - identity
+  responses:
+    ping:
+      description: Возвращает ответ Pong
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                required:
+                  - result
+                additionalProperties: false
+                properties:
+                  result:
+                    type: string
+                    description: Ответ
+                    minLength: 1
+                    example: Pong
+              status:
+                $ref: '#/components/schemas/succeedStatus'
+    signIn:
+      description: Аутентификация прошла успешно
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                required:
+                  - token
+                properties:
+                  token:
+                    $ref: '#/components/schemas/authToken'
+              status:
+                $ref: '#/components/schemas/succeedStatus'
+    signUp:
+      description: Пользователь успешно зарегистрирован
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - $ref: '#/components/schemas/success'
+              - $ref: '#/components/schemas/error'
+    recoverPasswordRequest:
+      description: Токен отправлен
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                oneOf:
+                  - $ref: '#/components/schemas/success'
+                  - $ref: '#/components/schemas/error'
+    profileInfo:
+      description: Возвращает подробную информацию по профилю
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: '#/components/schemas/profileInfo'
+    tasksList:
+      description: Возвращает список задач
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - data
+              - pagination
+              - meta
+            additionalProperties: false
+            properties:
+              pagination:
+                $ref: '#/components/schemas/pagination'
+              meta:
+                type: object
+                required:
+                  - incompletedTasksCount
+                additionalProperties: false
+                properties:
+                  incompletedTasksCount:
+                    type: number
+                    minimum: 0
+                    description: Количество незакрытых задач
+              data:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: string
+                      format: uuid
+                      description: ID задачи
+                    taskName:
+                      type: string
+                      description: Наименование задачи
+                    isCompleted:
+                      type: boolean
+                      description: Выполнена ли задача
+                    createdAt:
+                      type: string
+                      description: Дата создания
+                example:
+                  - id: dc8dbada-b154-4ffb-b21c-da70162e2704
+                    taskName: Моя первая задача
+                    isCompleted: true
+                    createdAt: '2021-10-28T16:19:44+00:00'
+                  - id: 80b12ebd-e493-4dce-a104-7d30464cef43
+                    taskName: Моя вторая задача
+                    isCompleted: true
+                    createdAt: '2021-10-28T16:19:45+00:00'
+              status:
+                $ref: '#/components/schemas/succeedStatus'
+
+    createTask:
+      description: Задача создана
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - data
+            properties:
+              data:
+                type: object
+                required:
+                  - id
+                additionalProperties: false
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    description: ID задачи
+              status:
+                type: string
+                example: success
+            example:
+              data:
+                id: dc8dbada-b154-4ffb-b21c-da70162e2704
+              status: success
+    taskInfo:
+      description: Возвращает подробную информацию по задаче
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - data
+            properties:
+              data:
+                type: object
+                required:
+                  - id
+                  - taskName
+                  - isCompleted
+                  - createdAt
+                  - completedAt
+                  - updatedAt
+                additionalProperties: false
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    description: ID задачи
+                  taskName:
+                    type: string
+                    description: Наименование задачи
+                  isCompleted:
+                    type: boolean
+                    description: Выполнена ли задача
+                  createdAt:
+                    type: string
+                    description: Дата создания
+                  completedAt:
+                    type: string
+                    description: Дата завершения
+                    nullable: true
+                  updatedAt:
+                    type: string
+                    description: Дата обновления
+                    nullable: true
+              status:
+                $ref: '#/components/schemas/succeedStatus'
+            example:
+              data:
+                id: dc8dbada-b154-4ffb-b21c-da70162e2704
+                taskName: "Моя первая задача"
+                isCompleted: true
+                createdAt: '2021-10-28T16:19:44+00:00'
+                completedAt: '2021-10-28T16:19:44+00:00'
+                updatedAt: '2021-10-28T16:19:44+00:00'
+              status: success
+    listTaskComments:
+      description: Список
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              pagination:
+                $ref: '#/components/schemas/pagination'
+              meta:
+                nullable: true
+                type: object
+              data:
+                type: array
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    description: ID комментария
+                    example: dc8dbada-b154-4ffb-b21c-da70162e2704
+                  body:
+                    type: string
+                    description: Текст комментария
+                    example: Мой первый комментарий
+                  createdAt:
+                    $ref: '#/components/schemas/createdAt'
+                  updatedAt:
+                    $ref: '#/components/schemas/updatedAt'
+              status:
+                $ref: '#/components/schemas/succeedStatus'
+    exportTasks:
+      description: Список задач успешно экспортирован
+      content:
+        text/csv:
+          schema:
+            type: string
+          example: '2021-11-16T16:52:08+00:00,Задача 1,выполнена'
+        text/xml:
+          schema:
+            type: string
+          example: '<?xml version="1.0"?><response><item key="0"><id>da5b20a7-3c8b-4516-bc7c-7297c0e2f686</id><createdAt>2022-07-12T12:13:23+00:00</createdAt><taskName>Тестовая задача</taskName><isCompleted>0</isCompleted></item></response>'
+    exportNoTasks:
+      description: Нет задач для экспорта
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            data:
+              code: 400
+              message: 'Нет задач для экспорта'
+              errors: [ 'Нет задач для экспорта' ]
+            status: error
+    articleList:
+      description: Возвращает список статей
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - data
+              - pagination
+              - meta
+            properties:
+              pagination:
+                $ref: '#/components/schemas/pagination'
+              meta:
+                type: object
+                nullable: true
+              data:
+                type: array
+                items:
+                  properties:
+                    title:
+                      type: string
+                      description: Заголовок
+                    alias:
+                      type: string
+                      description: Алиас
+                    body:
+                      type: string
+                      description: Контент
+                      nullable: true
+                example:
+                  - title: Первая статья
+                    alias: first-article
+                    body: Контент первой статьи
+                  - title: Вторая статья
+                    alias: second-article
+                    body: Контент второй статьи
+    articleInfo:
+      description: Возвращает статью
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - data
+            properties:
+              data:
+                type: object
+                required:
+                  - title
+                  - body
+                additionalProperties: false
+                properties:
+                  title:
+                    $ref: '#/components/schemas/articleTitle'
+                  body:
+                    $ref: '#/components/schemas/articleBody'
+            example:
+              data:
+                title: Первая статья
+                body: Контент первой статьи
+    adminArticleList:
+      description: Список статей
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - data
+              - pagination
+              - meta
+            properties:
+              pagination:
+                $ref: '#/components/schemas/pagination'
+              meta:
+                type: object
+                nullable: true
+              data:
+                type: array
+                items:
+                  properties:
+                    title:
+                      type: string
+                      description: Заголовок
+                    alias:
+                      type: string
+                      description: Алиас
+                    body:
+                      type: string
+                      description: Контент
+                      nullable: true
+                example:
+                  - title: Первая статья
+                    alias: first-article
+                    body: Контент первой статьи
+                  - title: Вторая статья
+                    alias: second-article
+                    body: Контент второй статьи
+    adminArticleCreate:
+      description: Статья создана
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - $ref: '#/components/schemas/article'
+              - $ref: '#/components/schemas/error'
+    adminArticleInfo:
+      description: Информация по статье
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/article'
+    adminArticleUpdate:
+      description: Статья обновлена
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - $ref: '#/components/schemas/article'
+              - $ref: '#/components/schemas/error'
+    settingList:
+      description: Список настроек
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  type: object
+                  additionalProperties: false
+                  required:
+                    - type
+                    - value
+                  properties:
+                    type:
+                      $ref: '#/components/schemas/settingType'
+                    value:
+                      $ref: '#/components/schemas/settingValue'
+    adminSettingList:
+      description: Список настроек
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  type: object
+                  additionalProperties: false
+                  required:
+                    - type
+                    - value
+                    - isPublic
+                    - createdAt
+                  properties:
+                    type:
+                      $ref: '#/components/schemas/settingType'
+                    value:
+                      $ref: '#/components/schemas/settingValue'
+                    isPublic:
+                      type: boolean
+                      description: Публична ли настройка
+                    createdAt:
+                      $ref: '#/components/schemas/createdAt'
+                    updatedAt:
+                      $ref: '#/components/schemas/updatedAt'
+    seoInfo:
+      description: SEO параметры
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                description: SEO информация
+                properties:
+                  title:
+                    type: string
+                    nullable: true
+                    description: Заголовок
+                    example: Первая статья
+                  description:
+                    type: string
+                    nullable: true
+                    description: Описание
+                    example: Описание первой статьи
+                  keywords:
+                    type: string
+                    nullable: true
+                    description: Ключевые слова
+                    example: ключевые слова
+    success:
+      description: Успешный ответ
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/success'
+          example:
+            data:
+              status: success
+            status: success
+    invalidRequest:
+      description: Ошибка запроса
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            data:
+              code: 400
+              message: Неверный формат запроса
+              errors: [ 'invalid_request' ]
+            status: error
+    authRequired:
+      description: Доступ запрещен
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            code: 401
+            message: Необходимо пройти аутентификацию
+            errors: [ 'auth_required' ]
+    notFound:
+      description: Запись не найдена
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            data:
+              code: 404
+              message: Запись не найдена
+              errors: [ 'Запись не найдена' ]
+            status: error
+  schemas:
+    success:
+      type: object
+      required:
+        - data
+      additionalProperties: false
+      properties:
+        status:
+          $ref: '#/components/schemas/succeedStatus'
+        data:
+          type: object
+          required:
+            - status
+          additionalProperties: false
+          properties:
+            status:
+              $ref: '#/components/schemas/succeedStatus'
+    error:
+      type: object
+      properties:
+        data:
+          type: object
+          required:
+            - code
+            - message
+            - errors
+          additionalProperties: false
+          properties:
+            code:
+              type: integer
+            message:
+              type: string
+            errors:
+              type: array
+        status:
+          $ref: '#/components/schemas/succeedStatus'
+    profileInfo:
+      type: object
+      required:
+        - phone
+        - name
+      additionalProperties: false
+      properties:
+        phone:
+          type: string
+          description: Телефон в профиле
+          nullable: true
+        name:
+          type: string
+          description: Имя в профиле
+          nullable: true
+      example: {phone: '89272222222', name: cazak,}
+    article:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+            - title
+            - alias
+            - createdAt
+          properties:
+            id:
+              type: string
+              format: uuid
+              description: ID
+              example: dc8dbada-b154-4ffb-b21c-da70162e2704
+            title:
+              $ref: '#/components/schemas/articleTitle'
+            alias:
+              $ref: '#/components/schemas/articleAlias'
+            body:
+              type: string
+              description: Контент
+              example: Контент статьи
+              nullable: true
+            createdAt:
+              $ref: '#/components/schemas/createdAt'
+            updatedAt:
+              $ref: '#/components/schemas/updatedAt'
+        status:
+          $ref: '#/components/schemas/succeedStatus'
+    pagination:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: Количество всех данных
+          example: 2
+    email:
+      type: string
+      format: email
+      description: Email пользователя
+      minLength: 1
+      example: test@test.ru
+    password:
+      type: string
+      description: Пароль пользователя
+      minLength: 6
+      example: '123456'
+    articleTitle:
+      type: string
+      description: Заголовок
+      minLength: 1
+      example: Первая статья
+    articleAlias:
+      type: string
+      description: Алиас
+      minLength: 1
+      example: first-article
+    articleBody:
+      type: string
+      description: Контент
+      example: Контент первой статьи
+      nullable: true
+    updatedAt:
+      type: string
+      description: Дата обновления
+      example: '2021-10-28T16:19:44+00:00'
+      nullable: true
+    createdAt:
+      type: string
+      description: Дата создания
+      example: '2021-10-28T16:19:44+00:00'
+    settingType:
+      type: string
+      description: Тип настройки
+      example: site_name
+    settingValue:
+      type: string
+      description: Значение настройки
+      example: symfony-starter-kit
+    authToken:
+      type: string
+      format: uuid
+      example: 123e4567-e89b-12d3-a456-426614174000
+    succeedStatus:
+      type: string
+      description: Статус запроса
+      example: success
+
