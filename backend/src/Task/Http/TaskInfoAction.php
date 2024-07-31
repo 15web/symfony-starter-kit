@@ -10,10 +10,10 @@ use App\Task\Query\Task\FindById\FindTaskById;
 use App\Task\Query\Task\FindById\FindTaskByIdQuery;
 use App\Task\Query\Task\FindById\TaskData;
 use App\Task\Query\Task\FindById\TaskNotFoundException;
+use App\User\Security\Http\IsGranted;
+use App\User\Security\Http\UserIdArgumentValueResolver;
 use App\User\User\Domain\UserId;
 use App\User\User\Domain\UserRole;
-use App\User\User\Http\IsGranted;
-use App\User\User\Http\UserIdArgumentValueResolver;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
@@ -38,7 +38,7 @@ final readonly class TaskInfoAction
         UserId $userId,
     ): ApiObjectResponse {
         return new ApiObjectResponse(
-            data: $this->buildResponseData($id, $userId)
+            data: $this->buildResponseData($id, $userId),
         );
     }
 

@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\User\RecoveryPassword\Command;
 
 use App\Infrastructure\AsService;
-use App\Infrastructure\Hasher;
 use App\User\RecoveryPassword\Domain\RecoveryTokenRepository;
-use App\User\SignIn\Domain\UserTokenRepository;
 use App\User\User\Domain\UserPassword;
 use App\User\User\Domain\UserRepository;
+use App\User\User\Domain\UserTokenRepository;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -18,11 +18,15 @@ use Symfony\Component\Uid\Uuid;
 #[AsService]
 final readonly class RecoverPassword
 {
+    /**
+     * @param int<min, 4> $hashCost
+     */
     public function __construct(
+        #[Autowire('%app.hash_cost%')]
+        private int $hashCost,
         private RecoveryTokenRepository $recoveryTokenRepository,
         private UserTokenRepository $userTokenRepository,
         private UserRepository $userRepository,
-        private Hasher $passwordHasher
     ) {}
 
     public function __invoke(
@@ -37,10 +41,12 @@ final readonly class RecoverPassword
 
         $user = $this->userRepository->getById($token->getUserId());
 
-        /** @var non-empty-string $hashedPassword */
-        $hashedPassword = $this->passwordHasher->hash($recoverPasswordCommand->password);
-
-        $user->applyHashedPassword(new UserPassword($hashedPassword));
+        $user->applyPassword(
+            new UserPassword(
+                cleanPassword: $recoverPasswordCommand->password,
+                hashCost: $this->hashCost,
+            ),
+        );
 
         $this->recoveryTokenRepository->remove($token);
 

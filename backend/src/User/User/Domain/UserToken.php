@@ -2,9 +2,8 @@
 
 declare(strict_types=1);
 
-namespace App\User\SignIn\Domain;
+namespace App\User\User\Domain;
 
-use App\User\User\Domain\UserId;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
@@ -24,23 +23,43 @@ class UserToken
     private readonly Uuid $userId;
 
     #[ORM\Column]
+    private readonly string $hash;
+
+    #[ORM\Column]
     private readonly DateTimeImmutable $createdAt;
 
-    public function __construct(Uuid $id, UserId $userId)
+    /**
+     * @param non-empty-string $hash
+     */
+    public function __construct(UserTokenId $id, UserId $userId, string $hash)
     {
-        $this->id = $id;
+        $this->id = $id->value;
         $this->userId = $userId->value;
+        $this->hash = $hash;
 
         $this->createdAt = new DateTimeImmutable();
     }
 
-    public function getId(): Uuid
+    public function getId(): UserTokenId
     {
-        return $this->id;
+        return new UserTokenId($this->id);
     }
 
     public function getUserId(): UserId
     {
         return new UserId($this->userId);
+    }
+
+    /**
+     * @return non-empty-string
+     */
+    public function getHash(): string
+    {
+        /**
+         * @var non-empty-string $hash
+         */
+        $hash = $this->hash;
+
+        return $hash;
     }
 }

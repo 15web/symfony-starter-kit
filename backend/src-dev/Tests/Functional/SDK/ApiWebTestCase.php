@@ -151,6 +151,6 @@ abstract class ApiWebTestCase extends WebTestCase
 
         yield 'текст' => ['любая строка'];
 
-        yield 'случайный идентификатор' => [(string) Uuid::v4()];
+        yield 'случайный идентификатор' => [(string) Uuid::v7()];
     }
 }

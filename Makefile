@@ -9,7 +9,7 @@ init: # Запуск проекта и установка зависимосте
 	make db-migrate
 	make setup-transports
 
-install-test: # Подготовка тестового окружения
+test-install: # Подготовка тестового окружения
 	make init
 	@for i in 1 2 3 4 ; do \
 		docker compose exec pgsql dropdb -f --if-exists db_name_test$$i; \

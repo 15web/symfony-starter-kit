@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\User\User\Http;
+namespace App\User\Security\Service;
 
 use Exception;
 

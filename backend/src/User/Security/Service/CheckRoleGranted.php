@@ -2,23 +2,21 @@
 
 declare(strict_types=1);
 
-namespace App\User\User\Http;
+namespace App\User\Security\Service;
 
 use App\Infrastructure\ApiException\ApiUnauthorizedException;
 use App\Infrastructure\AsService;
+use App\User\User\Domain\UserRole;
 use App\User\User\Query\FindUser;
 use App\User\User\Query\FindUserQuery;
-use Override;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent;
-use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Аутентификация и авторизация пользователя по токену для контроллеров с атрибутом IsGranted.
+ * Сервис для проверки наличия роли у пользователя
  */
 #[AsService]
-final readonly class IsGrantedSubscriber implements EventSubscriberInterface
+final readonly class CheckRoleGranted
 {
     public function __construct(
         private TokenManager $tokenManager,
@@ -26,28 +24,8 @@ final readonly class IsGrantedSubscriber implements EventSubscriberInterface
         private FindUser $findUser,
     ) {}
 
-    /**
-     * @return array<string, array{0: string, 1: int}|list<array{0: string, 1?: int}>|string>
-     */
-    #[Override]
-    public static function getSubscribedEvents(): array
+    public function __invoke(Request $request, UserRole $role): void
     {
-        return [
-            KernelEvents::CONTROLLER_ARGUMENTS => ['onKernelControllerArguments', 1000],
-        ];
-    }
-
-    public function onKernelControllerArguments(ControllerArgumentsEvent $event): void
-    {
-        /** @var IsGranted|null $attribute */
-        $attribute = $event->getAttributes()[IsGranted::class][0] ?? null;
-
-        if ($attribute === null) {
-            return;
-        }
-
-        $request = $event->getRequest();
-
         try {
             $userToken = $this->tokenManager->getToken($request);
         } catch (TokenException) {
@@ -67,10 +45,10 @@ final readonly class IsGrantedSubscriber implements EventSubscriberInterface
             throw new ApiUnauthorizedException(['Пользователь не найден']);
         }
 
-        if ($attribute->userRole !== $userData->role) {
+        if ($role !== $userData->role) {
             $this->logger->info('Доступ запрещен', [
                 'userId' => $userData->userId,
-                'role' => $attribute->userRole->value,
+                'role' => $role->value,
                 self::class => __FUNCTION__,
             ]);
 

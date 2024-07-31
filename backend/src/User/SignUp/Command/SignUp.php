@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\User\SignUp\Command;
 
 use App\Infrastructure\AsService;
-use App\Infrastructure\Hasher;
 use App\Mailer\Notification\EmailConfirmation\ConfirmEmailMessage;
 use App\User\User\Domain\ConfirmToken;
 use App\User\User\Domain\Exception\UserAlreadyExistException;
@@ -17,6 +16,7 @@ use App\User\User\Domain\UserRole;
 use App\User\User\Query\FindUser;
 use App\User\User\Query\FindUserQuery;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Uid\UuidV7;
 
@@ -26,12 +26,16 @@ use Symfony\Component\Uid\UuidV7;
 #[AsService]
 final readonly class SignUp
 {
+    /**
+     * @param int<min, 4> $hashCost
+     */
     public function __construct(
+        #[Autowire('%app.hash_cost%')]
+        private int $hashCost,
         private UserRepository $userRepository,
         private MessageBusInterface $messageBus,
         private LoggerInterface $logger,
         private FindUser $findUser,
-        private Hasher $passwordHasher
     ) {}
 
     public function __invoke(SignUpCommand $signUpCommand): void
@@ -54,10 +58,12 @@ final readonly class SignUp
             userRole: UserRole::User,
         );
 
-        /** @var non-empty-string $hashedPassword */
-        $hashedPassword = $this->passwordHasher->hash($signUpCommand->password);
-
-        $user->applyHashedPassword(new UserPassword($hashedPassword));
+        $user->applyPassword(
+            new UserPassword(
+                cleanPassword: $signUpCommand->password,
+                hashCost: $this->hashCost,
+            )
+        );
 
         $this->userRepository->add($user);
 

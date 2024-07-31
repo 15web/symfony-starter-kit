@@ -27,7 +27,7 @@ jobs:
             ${{ runner.os }}-php-
 
       - name: Install services
-        run: make install-test
+        run: make test-install
 
       - name: Check packages for known security vulnerabilities
         run: make composer-audit

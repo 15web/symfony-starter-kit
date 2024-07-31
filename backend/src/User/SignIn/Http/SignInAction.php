@@ -13,13 +13,14 @@ use App\Infrastructure\Response\ApiObjectResponse;
 use App\Infrastructure\ValueObject\Email;
 use App\User\SignIn\Command\SignIn;
 use App\User\SignIn\Command\SignInCommand;
+use App\User\User\Domain\AuthToken;
 use App\User\User\Domain\Exception\EmailIsNotConfirmedException;
 use DomainException;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Uid\UuidV7;
 
 /**
  * Ручка аутентификации
@@ -28,7 +29,12 @@ use Symfony\Component\Uid\UuidV7;
 #[AsController]
 final readonly class SignInAction
 {
+    /**
+     * @param int<min, 4> $hashCost
+     */
     public function __construct(
+        #[Autowire('%app.hash_cost%')]
+        private int $hashCost,
         private SignIn $signIn,
         private Flush $flush,
     ) {}
@@ -37,13 +43,15 @@ final readonly class SignInAction
         #[ValueResolver(ApiRequestValueResolver::class)]
         SignInRequest $signInRequest,
     ): ApiObjectResponse {
-        $token = new UuidV7();
+        $token = AuthToken::generate(
+            hashCost: $this->hashCost,
+        );
 
         try {
             ($this->signIn)(new SignInCommand(
                 email: new Email($signInRequest->email),
                 password: $signInRequest->password,
-                token: $token,
+                authToken: $token,
             ));
             ($this->flush)();
         } catch (EmailIsNotConfirmedException) {
@@ -56,7 +64,9 @@ final readonly class SignInAction
         }
 
         return new ApiObjectResponse(
-            data: new UserResponse($token),
+            data: new UserTokenData(
+                (string) $token,
+            ),
         );
     }
 }
