@@ -6,7 +6,6 @@ namespace App\User\SignIn\Http;
 
 use App\Infrastructure\ApiException\ApiBadResponseException;
 use App\Infrastructure\ApiException\ApiErrorCode;
-use App\Infrastructure\ApiException\ApiUnauthorizedException;
 use App\Infrastructure\ApiRequestValueResolver;
 use App\Infrastructure\Flush;
 use App\Infrastructure\Response\ApiObjectResponse;
@@ -60,7 +59,10 @@ final readonly class SignInAction
                 apiCode: ApiErrorCode::EmailIsNotConfirmed,
             );
         } catch (DomainException) {
-            throw new ApiUnauthorizedException(['Ошибка аутентификации']);
+            throw new ApiBadResponseException(
+                errors: ['Неверно указан логин или пароль'],
+                apiCode: ApiErrorCode::Unauthenticated,
+            );
         }
 
         return new ApiObjectResponse(

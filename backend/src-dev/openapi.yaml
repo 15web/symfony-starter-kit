@@ -85,8 +85,6 @@ paths:
           $ref: '#/components/responses/signIn'
         '400':
           $ref: '#/components/responses/invalidRequest'
-        '401':
-          $ref: '#/components/responses/authRequired'
   /logout:
     get:
       operationId: logout
@@ -817,17 +815,22 @@ components:
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              data:
-                type: object
-                required:
-                  - token
-                properties:
-                  token:
-                    $ref: '#/components/schemas/authToken'
-              status:
-                $ref: '#/components/schemas/succeedStatus'
+            oneOf:
+              - $ref: '#/components/schemas/authorized'
+              - $ref: '#/components/schemas/error'
+          examples:
+            Успешный ответ:
+              value:
+                data:
+                  token: 0191051e-7dab-7e31-b203-2974b8f75500-0191051e-b811-7c3c-a5bb-c22fc62986cd
+                status: success
+            Неверно указан логин или пароль:
+              value:
+                data:
+                  code: 6
+                  message: Ошибка
+                  errors: [ 'Неверно указан логин или пароль' ]
+                status: error
     signUp:
       description: Пользователь успешно зарегистрирован
       content:
@@ -908,7 +911,6 @@ components:
                     createdAt: '2021-10-28T16:19:45+00:00'
               status:
                 $ref: '#/components/schemas/succeedStatus'
-
     createTask:
       description: Задача создана
       content:
@@ -1284,10 +1286,9 @@ components:
       type: object
       required:
         - data
+        - status
       additionalProperties: false
       properties:
-        status:
-          $ref: '#/components/schemas/succeedStatus'
         data:
           type: object
           required:
@@ -1296,6 +1297,8 @@ components:
           properties:
             status:
               $ref: '#/components/schemas/succeedStatus'
+        status:
+          $ref: '#/components/schemas/succeedStatus'
     error:
       type: object
       properties:
@@ -1313,6 +1316,23 @@ components:
               type: string
             errors:
               type: array
+        status:
+          $ref: '#/components/schemas/succeedStatus'
+    authorized:
+      type: object
+      required:
+        - data
+        - status
+      additionalProperties: false
+      properties:
+        data:
+          type: object
+          required:
+            - token
+          additionalProperties: false
+          properties:
+            token:
+              $ref: '#/components/schemas/authToken'
         status:
           $ref: '#/components/schemas/succeedStatus'
     profileInfo:

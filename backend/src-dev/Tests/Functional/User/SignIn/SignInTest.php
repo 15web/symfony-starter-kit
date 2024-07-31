@@ -74,7 +74,7 @@ final class SignInTest extends ApiWebTestCase
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
         $response = self::request(Request::METHOD_POST, '/api/sign-in', $body);
-        self::assertAccessDenied($response);
+        self::assertApiError($response, ApiErrorCode::Unauthenticated->value);
     }
 
     #[TestDox('Пользователя с таким email не существует')]
@@ -101,7 +101,7 @@ final class SignInTest extends ApiWebTestCase
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
         $response = self::request(Request::METHOD_POST, '/api/sign-in', $body);
-        self::assertAccessDenied($response);
+        self::assertApiError($response, ApiErrorCode::Unauthenticated->value);
     }
 
     #[TestDox('Неправильный запрос')]
