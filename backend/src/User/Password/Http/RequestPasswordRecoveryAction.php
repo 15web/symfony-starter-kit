@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\User\RecoveryPassword\Http;
+namespace App\User\Password\Http;
 
 use App\Infrastructure\ApiException\ApiNotFoundException;
 use App\Infrastructure\ApiRequestValueResolver;
 use App\Infrastructure\Flush;
 use App\Infrastructure\Response\ApiObjectResponse;
 use App\Infrastructure\Response\SuccessResponse;
-use App\User\RecoveryPassword\Command\GenerateRecoveryToken;
-use App\User\RecoveryPassword\Command\GenerateRecoveryTokenCommand;
+use App\User\Password\Command\GenerateRecoveryToken;
+use App\User\Password\Command\GenerateRecoveryTokenCommand;
 use App\User\User\Domain\Exception\UserNotFoundException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;

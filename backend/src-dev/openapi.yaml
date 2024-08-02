@@ -97,6 +97,23 @@ paths:
           $ref: '#/components/responses/success'
         '401':
           $ref: '#/components/responses/authRequired'
+  /change-password:
+    post:
+      operationId: changePassword
+      summary: Смена текущего пароля
+      description: Смена текущего пароля
+      tags:
+        - auth
+      security: [ ]
+      requestBody:
+        $ref: '#/components/requestBodies/changePassword'
+      responses:
+        '200':
+          $ref: '#/components/responses/changePassword'
+        '400':
+          $ref: '#/components/responses/invalidRequest'
+        '401':
+          $ref: '#/components/responses/authRequired'
   /request-password-recovery:
     post:
       operationId: recoverPasswordRequest
@@ -617,6 +634,31 @@ components:
             required:
               - email
               - password
+    changePassword:
+      description: Смена текущего пароля
+      content:
+        application/json:
+          schema:
+            properties:
+              currentPassword:
+                type: string
+                description: Текущий пароль
+                example: password
+              newPassword:
+                type: string
+                minLength: 6
+                description: Новый пароль
+                example: qwerty
+              newPasswordConfirmation:
+                type: string
+                minLength: 6
+                description: Подтверждение нового пароля
+                example: qwerty
+            additionalProperties: false
+            required:
+              - currentPassword
+              - newPassword
+              - newPasswordConfirmation
     recoverPasswordRequest:
       description: Запрос на восстановление пароля
       content:
@@ -839,6 +881,22 @@ components:
             oneOf:
               - $ref: '#/components/schemas/success'
               - $ref: '#/components/schemas/error'
+    changePassword:
+      description: Пароль успешно сменен
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                required:
+                  - token
+                properties:
+                  token:
+                    $ref: '#/components/schemas/authToken'
+              status:
+                $ref: '#/components/schemas/succeedStatus'
     recoverPasswordRequest:
       description: Токен отправлен
       content:

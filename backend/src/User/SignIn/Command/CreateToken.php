@@ -8,7 +8,6 @@ use App\Infrastructure\AsService;
 use App\User\User\Domain\AuthToken;
 use App\User\User\Domain\UserId;
 use App\User\User\Domain\UserToken;
-use App\User\User\Domain\UserTokenId;
 use App\User\User\Domain\UserTokenRepository;
 
 /**
@@ -21,10 +20,10 @@ final readonly class CreateToken
         private UserTokenRepository $userTokenRepository,
     ) {}
 
-    public function __invoke(UserId $userId, UserTokenId $userTokenId, AuthToken $token): void
+    public function __invoke(UserId $userId, AuthToken $token): void
     {
         $userToken = new UserToken(
-            id: $userTokenId,
+            id: $token->tokenId,
             userId: $userId,
             hash: $token->hash(),
         );

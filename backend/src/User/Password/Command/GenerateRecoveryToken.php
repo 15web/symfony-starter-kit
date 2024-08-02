@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\User\RecoveryPassword\Command;
+namespace App\User\Password\Command;
 
 use App\Infrastructure\AsService;
 use App\Mailer\Notification\PasswordRecovery\RecoveryPasswordMessage;
-use App\User\RecoveryPassword\Domain\RecoveryToken;
-use App\User\RecoveryPassword\Domain\RecoveryTokenRepository;
+use App\User\Password\Domain\RecoveryToken;
+use App\User\Password\Domain\RecoveryTokenRepository;
 use App\User\User\Domain\Exception\UserNotFoundException;
 use App\User\User\Domain\UserId;
 use App\User\User\Query\FindUser;
