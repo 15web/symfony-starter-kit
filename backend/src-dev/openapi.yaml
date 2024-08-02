@@ -85,6 +85,8 @@ paths:
           $ref: '#/components/responses/signIn'
         '400':
           $ref: '#/components/responses/invalidRequest'
+        '429':
+          $ref: '#/components/responses/tooManyRequests'
   /logout:
     get:
       operationId: logout
@@ -114,6 +116,8 @@ paths:
           $ref: '#/components/responses/invalidRequest'
         '401':
           $ref: '#/components/responses/authRequired'
+        '429':
+          $ref: '#/components/responses/tooManyRequests'
   /request-password-recovery:
     post:
       operationId: recoverPasswordRequest
@@ -521,6 +525,30 @@ components:
       type: apiKey
       in: header
       name: X-AUTH-TOKEN
+  headers:
+    requestTraceId:
+      schema:
+        type: string
+      description: Уникальный идентификатор запроса
+      example: 01904f4d-d18f-778e-a981-432d6af77425
+    rateLimitRemaining:
+      schema:
+        type: integer
+        minimum: 0
+      description: Количество оставшихся попыток в период времени
+      example: 3
+    rateLimitRetryAfter:
+      schema:
+        type: integer
+        minimum: 1
+      description: Количество секунд до повторного запроса
+      example: 120
+    rateLimitLimit:
+      schema:
+        type: integer
+        minimum: 1
+      description: Количество допустимых попыток в период времени
+      example: 60
   parameters:
     confirmToken:
       in: path
@@ -873,6 +901,9 @@ components:
                   message: Ошибка
                   errors: [ 'Неверно указан логин или пароль' ]
                 status: error
+      headers:
+        X-Request-TraceId:
+          $ref: '#/components/headers/requestTraceId'
     signUp:
       description: Пользователь успешно зарегистрирован
       content:
@@ -881,6 +912,9 @@ components:
             oneOf:
               - $ref: '#/components/schemas/success'
               - $ref: '#/components/schemas/error'
+      headers:
+        X-Request-TraceId:
+          $ref: '#/components/headers/requestTraceId'
     changePassword:
       description: Пароль успешно сменен
       content:
@@ -897,6 +931,9 @@ components:
                     $ref: '#/components/schemas/authToken'
               status:
                 $ref: '#/components/schemas/succeedStatus'
+      headers:
+        X-Request-TraceId:
+          $ref: '#/components/headers/requestTraceId'
     recoverPasswordRequest:
       description: Токен отправлен
       content:
@@ -908,6 +945,9 @@ components:
                 oneOf:
                   - $ref: '#/components/schemas/success'
                   - $ref: '#/components/schemas/error'
+      headers:
+        X-Request-TraceId:
+          $ref: '#/components/headers/requestTraceId'
     profileInfo:
       description: Возвращает подробную информацию по профилю
       content:
@@ -917,6 +957,9 @@ components:
             properties:
               data:
                 $ref: '#/components/schemas/profileInfo'
+      headers:
+        X-Request-TraceId:
+          $ref: '#/components/headers/requestTraceId'
     tasksList:
       description: Возвращает список задач
       content:
@@ -969,6 +1012,9 @@ components:
                     createdAt: '2021-10-28T16:19:45+00:00'
               status:
                 $ref: '#/components/schemas/succeedStatus'
+      headers:
+        X-Request-TraceId:
+          $ref: '#/components/headers/requestTraceId'
     createTask:
       description: Задача создана
       content:
@@ -995,6 +1041,9 @@ components:
               data:
                 id: dc8dbada-b154-4ffb-b21c-da70162e2704
               status: success
+      headers:
+        X-Request-TraceId:
+          $ref: '#/components/headers/requestTraceId'
     taskInfo:
       description: Возвращает подробную информацию по задаче
       content:
@@ -1047,6 +1096,9 @@ components:
                 completedAt: '2021-10-28T16:19:44+00:00'
                 updatedAt: '2021-10-28T16:19:44+00:00'
               status: success
+      headers:
+        X-Request-TraceId:
+          $ref: '#/components/headers/requestTraceId'
     listTaskComments:
       description: Список
       content:
@@ -1077,6 +1129,9 @@ components:
                     $ref: '#/components/schemas/updatedAt'
               status:
                 $ref: '#/components/schemas/succeedStatus'
+      headers:
+        X-Request-TraceId:
+          $ref: '#/components/headers/requestTraceId'
     exportTasks:
       description: Список задач успешно экспортирован
       content:
@@ -1088,6 +1143,9 @@ components:
           schema:
             type: string
           example: '<?xml version="1.0"?><response><item key="0"><id>da5b20a7-3c8b-4516-bc7c-7297c0e2f686</id><createdAt>2022-07-12T12:13:23+00:00</createdAt><taskName>Тестовая задача</taskName><isCompleted>0</isCompleted></item></response>'
+      headers:
+        X-Request-TraceId:
+          $ref: '#/components/headers/requestTraceId'
     exportNoTasks:
       description: Нет задач для экспорта
       content:
@@ -1100,6 +1158,9 @@ components:
               message: 'Нет задач для экспорта'
               errors: [ 'Нет задач для экспорта' ]
             status: error
+      headers:
+        X-Request-TraceId:
+          $ref: '#/components/headers/requestTraceId'
     articleList:
       description: Возвращает список статей
       content:
@@ -1137,6 +1198,9 @@ components:
                   - title: Вторая статья
                     alias: second-article
                     body: Контент второй статьи
+      headers:
+        X-Request-TraceId:
+          $ref: '#/components/headers/requestTraceId'
     articleInfo:
       description: Возвращает статью
       content:
@@ -1161,6 +1225,9 @@ components:
               data:
                 title: Первая статья
                 body: Контент первой статьи
+      headers:
+        X-Request-TraceId:
+          $ref: '#/components/headers/requestTraceId'
     adminArticleList:
       description: Список статей
       content:
@@ -1198,6 +1265,9 @@ components:
                   - title: Вторая статья
                     alias: second-article
                     body: Контент второй статьи
+      headers:
+        X-Request-TraceId:
+          $ref: '#/components/headers/requestTraceId'
     adminArticleCreate:
       description: Статья создана
       content:
@@ -1206,12 +1276,18 @@ components:
             oneOf:
               - $ref: '#/components/schemas/article'
               - $ref: '#/components/schemas/error'
+      headers:
+        X-Request-TraceId:
+          $ref: '#/components/headers/requestTraceId'
     adminArticleInfo:
       description: Информация по статье
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/article'
+      headers:
+        X-Request-TraceId:
+          $ref: '#/components/headers/requestTraceId'
     adminArticleUpdate:
       description: Статья обновлена
       content:
@@ -1220,6 +1296,9 @@ components:
             oneOf:
               - $ref: '#/components/schemas/article'
               - $ref: '#/components/schemas/error'
+      headers:
+        X-Request-TraceId:
+          $ref: '#/components/headers/requestTraceId'
     settingList:
       description: Список настроек
       content:
@@ -1240,6 +1319,9 @@ components:
                       $ref: '#/components/schemas/settingType'
                     value:
                       $ref: '#/components/schemas/settingValue'
+      headers:
+        X-Request-TraceId:
+          $ref: '#/components/headers/requestTraceId'
     adminSettingList:
       description: Список настроек
       content:
@@ -1269,6 +1351,9 @@ components:
                       $ref: '#/components/schemas/createdAt'
                     updatedAt:
                       $ref: '#/components/schemas/updatedAt'
+      headers:
+        X-Request-TraceId:
+          $ref: '#/components/headers/requestTraceId'
     seoInfo:
       description: SEO параметры
       content:
@@ -1295,6 +1380,9 @@ components:
                     nullable: true
                     description: Ключевые слова
                     example: ключевые слова
+      headers:
+        X-Request-TraceId:
+          $ref: '#/components/headers/requestTraceId'
     success:
       description: Успешный ответ
       content:
@@ -1305,6 +1393,9 @@ components:
             data:
               status: success
             status: success
+      headers:
+        X-Request-TraceId:
+          $ref: '#/components/headers/requestTraceId'
     invalidRequest:
       description: Ошибка запроса
       content:
@@ -1317,6 +1408,9 @@ components:
               message: Неверный формат запроса
               errors: [ 'invalid_request' ]
             status: error
+      headers:
+        X-Request-TraceId:
+          $ref: '#/components/headers/requestTraceId'
     authRequired:
       description: Доступ запрещен
       content:
@@ -1327,6 +1421,9 @@ components:
             code: 401
             message: Необходимо пройти аутентификацию
             errors: [ 'auth_required' ]
+      headers:
+        X-Request-TraceId:
+          $ref: '#/components/headers/requestTraceId'
     notFound:
       description: Запись не найдена
       content:
@@ -1339,6 +1436,29 @@ components:
               message: Запись не найдена
               errors: [ 'Запись не найдена' ]
             status: error
+    tooManyRequests:
+      description: Не удалось выполнить запрос
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            Ответ с ошибкой:
+              value:
+                data:
+                  code: 429
+                  message: Превышено количество запросов
+                  errors: [ 'Превышено количество запросов. Повторите попытку через 59 c' ]
+                status: error
+      headers:
+        X-Request-TraceId:
+          $ref: '#/components/headers/requestTraceId'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+        X-RateLimit-Retry-After:
+          $ref: '#/components/headers/rateLimitRetryAfter'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitLimit'
   schemas:
     success:
       type: object

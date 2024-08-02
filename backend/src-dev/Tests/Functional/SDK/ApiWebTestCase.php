@@ -12,6 +12,7 @@ use Override;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\CacheClearer\Psr6CacheClearer;
 use Symfony\Component\Uid\Uuid;
 use Webmozart\Assert\Assert;
 
@@ -33,6 +34,14 @@ abstract class ApiWebTestCase extends WebTestCase
 
     /**
      * Отправить запрос
+     *
+     * @param string $method HTTP метод запроса
+     * @param string $uri Адрес запроса
+     * @param string|null $body Тело запроса
+     * @param string|null $token Токен авторизации
+     * @param bool $validateRequestSchema Валидация запроса
+     * @param bool $validateResponseSchema Валидация ответа
+     * @param bool $resetRateLimiter Сброс состояния рейт лимитера после запроса
      */
     final public static function request(
         string $method,
@@ -41,6 +50,7 @@ abstract class ApiWebTestCase extends WebTestCase
         ?string $token = null,
         bool $validateRequestSchema = true,
         bool $validateResponseSchema = true,
+        bool $resetRateLimiter = true
     ): Response {
         Assert::notEmpty($method);
         Assert::notEmpty($uri);
@@ -60,6 +70,12 @@ abstract class ApiWebTestCase extends WebTestCase
             // передаем признак в OpenApiValidateSubscriber что не нужно проверять ответ
             OpenApiValidateSubscriber::VALIDATE_RESPONSE_KEY => $validateResponseSchema,
         ], [], $headers, $body);
+
+        if ($resetRateLimiter) {
+            /** @var Psr6CacheClearer $clearer */
+            $clearer = self::getContainer()->get('cache.global_clearer');
+            $clearer->clearPool('cache.rate_limiter');
+        }
 
         return self::$client->getResponse();
     }
@@ -143,6 +159,11 @@ abstract class ApiWebTestCase extends WebTestCase
     final public static function assertForbidden(Response $response): void
     {
         self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+    }
+
+    final public static function assertTooManyRequests(Response $response): void
+    {
+        self::assertSame(Response::HTTP_TOO_MANY_REQUESTS, $response->getStatusCode());
     }
 
     final public static function notValidTokenDataProvider(): Iterator

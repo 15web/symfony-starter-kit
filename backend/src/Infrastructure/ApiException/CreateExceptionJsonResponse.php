@@ -33,6 +33,16 @@ final readonly class CreateExceptionJsonResponse
             JsonEncoder::FORMAT
         );
 
-        return new JsonResponse($content, $e->getHttpCode(), [], true);
+        $headers = [];
+        if ($e instanceof ApiHeaders) {
+            $headers = $e->getHeaders();
+        }
+
+        return new JsonResponse(
+            data: $content,
+            status: $e->getHttpCode(),
+            headers: $headers,
+            json: true,
+        );
     }
 }

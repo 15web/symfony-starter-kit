@@ -7,6 +7,7 @@ namespace App\User\SignIn\Http;
 use App\Infrastructure\ApiException\ApiBadResponseException;
 use App\Infrastructure\ApiException\ApiErrorCode;
 use App\Infrastructure\ApiRequestValueResolver;
+use App\Infrastructure\CheckRateLimiter;
 use App\Infrastructure\Flush;
 use App\Infrastructure\Response\ApiObjectResponse;
 use App\Infrastructure\ValueObject\Email;
@@ -19,6 +20,8 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
+use Symfony\Component\HttpKernel\Controller\ArgumentResolver\RequestValueResolver;
+use Symfony\Component\RateLimiter\RateLimiterFactory;
 use Symfony\Component\Routing\Attribute\Route;
 
 /**
@@ -35,13 +38,25 @@ final readonly class SignInAction
         #[Autowire('%app.hash_cost%')]
         private int $hashCost,
         private SignIn $signIn,
+        private RateLimiterFactory $signInLimiter,
+        private CheckRateLimiter $checkRateLimiter,
         private Flush $flush,
     ) {}
 
     public function __invoke(
+        #[ValueResolver(RequestValueResolver::class)]
+        Request $request,
         #[ValueResolver(ApiRequestValueResolver::class)]
         SignInRequest $signInRequest,
     ): ApiObjectResponse {
+        /** @var non-empty-string|null $rateLimiterKey */
+        $rateLimiterKey = $request->getClientIp();
+
+        $limiter = ($this->checkRateLimiter)(
+            rateLimiter: $this->signInLimiter,
+            key: $rateLimiterKey,
+        );
+
         $token = AuthToken::generate(
             hashCost: $this->hashCost,
         );
@@ -64,6 +79,8 @@ final readonly class SignInAction
                 apiCode: ApiErrorCode::Unauthenticated,
             );
         }
+
+        $limiter->reset();
 
         return new ApiObjectResponse(
             data: new UserTokenData(

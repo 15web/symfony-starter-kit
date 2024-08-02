@@ -8,6 +8,7 @@ use App\Infrastructure\ApiException\ApiBadRequestException;
 use App\Infrastructure\ApiException\ApiBadResponseException;
 use App\Infrastructure\ApiException\ApiErrorCode;
 use App\Infrastructure\ApiRequestValueResolver;
+use App\Infrastructure\CheckRateLimiter;
 use App\Infrastructure\Flush;
 use App\Infrastructure\Response\ApiObjectResponse;
 use App\User\Password\Command\ChangePassword;
@@ -28,6 +29,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
+use Symfony\Component\RateLimiter\RateLimiterFactory;
 use Symfony\Component\Routing\Attribute\Route;
 
 /**
@@ -48,6 +50,8 @@ final readonly class ChangePasswordAction
         private FindUser $findUser,
         private CreateToken $createToken,
         private UserTokenRepository $userTokenRepository,
+        private RateLimiterFactory $changePasswordLimiter,
+        private CheckRateLimiter $checkRateLimiter,
         private Flush $flush,
         private LoggerInterface $logger,
     ) {}
@@ -71,6 +75,14 @@ final readonly class ChangePasswordAction
             throw new ApiBadRequestException(['Ошибка аутентификации']);
         }
 
+        /** @var non-empty-string $rateLimiterKey */
+        $rateLimiterKey = (string) $userData->userId;
+
+        $limiter = ($this->checkRateLimiter)(
+            rateLimiter: $this->changePasswordLimiter,
+            key: $rateLimiterKey,
+        );
+
         $currentPassword = new UserPassword(
             cleanPassword: $request->currentPassword,
             hashCost: $this->hashCost,
@@ -86,6 +98,8 @@ final readonly class ChangePasswordAction
                 apiCode: ApiErrorCode::Unauthenticated,
             );
         }
+
+        $limiter->reset();
 
         $token = AuthToken::generate(
             hashCost: $this->hashCost,

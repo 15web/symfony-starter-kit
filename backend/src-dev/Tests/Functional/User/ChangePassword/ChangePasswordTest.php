@@ -11,6 +11,7 @@ use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @internal
@@ -85,6 +86,37 @@ final class ChangePasswordTest extends ApiWebTestCase
         );
 
         self::assertApiError($response, ApiErrorCode::Unauthenticated->value);
+    }
+
+    #[TestDox('Превышено количество запросов')]
+    public function testTooManyRequests(): void
+    {
+        $token = User::auth();
+
+        $body = [
+            'currentPassword' => 'fakePassword',
+            'newPassword' => 'newPassword',
+            'newPasswordConfirmation' => 'newPassword',
+        ];
+
+        $request = static fn (): Response => self::request(
+            method: Request::METHOD_POST,
+            uri: '/api/change-password',
+            body: json_encode($body, JSON_THROW_ON_ERROR),
+            token: $token,
+            resetRateLimiter: false,
+        );
+
+        for ($i = 0; $i < 3; ++$i) {
+            self::assertApiError(($request)(), ApiErrorCode::Unauthenticated->value);
+        }
+
+        $response = ($request)();
+        self::assertTooManyRequests(($request)());
+
+        self::assertSame('0', $response->headers->get('X-RateLimit-Remaining'));
+        self::assertSame('60', $response->headers->get('X-RateLimit-Retry-After'));
+        self::assertSame('3', $response->headers->get('X-RateLimit-Limit'));
     }
 
     /**
