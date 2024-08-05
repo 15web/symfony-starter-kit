@@ -11,7 +11,8 @@ use App\Infrastructure\Response\ApiObjectResponse;
 use App\Infrastructure\Response\SuccessResponse;
 use App\User\Password\Command\RecoverPassword;
 use App\User\Password\Command\RecoverPasswordCommand;
-use App\User\Password\Command\RecoveryTokenNotFoundException;
+use App\User\Password\Domain\RecoveryTokenRepository;
+use App\User\User\Domain\UserTokenRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
@@ -26,7 +27,12 @@ use Symfony\Component\Uid\Uuid;
 #[AsController]
 final readonly class RecoverPasswordAction
 {
-    public function __construct(private RecoverPassword $recoverPassword, private Flush $flush) {}
+    public function __construct(
+        private RecoverPassword $recoverPassword,
+        private Flush $flush,
+        private RecoveryTokenRepository $recoveryTokenRepository,
+        private UserTokenRepository $userTokenRepository,
+    ) {}
 
     public function __invoke(
         #[ValueResolver(UidValueResolver::class)]
@@ -34,16 +40,22 @@ final readonly class RecoverPasswordAction
         #[ValueResolver(ApiRequestValueResolver::class)]
         RecoverPasswordCommand $recoverPasswordCommand,
     ): ApiObjectResponse {
-        try {
-            ($this->recoverPassword)(
-                recoveryToken: $recoveryToken,
-                recoverPasswordCommand: $recoverPasswordCommand,
-            );
+        $token = $this->recoveryTokenRepository->findByToken($recoveryToken);
 
-            ($this->flush)();
-        } catch (RecoveryTokenNotFoundException) {
+        if ($token === null) {
             throw new ApiNotFoundException(['Токен восстановления пароля не найден']);
         }
+
+        ($this->recoverPassword)(
+            recoveryToken: $token,
+            recoverPasswordCommand: $recoverPasswordCommand,
+        );
+
+        $this->recoveryTokenRepository->remove($token);
+
+        $this->userTokenRepository->removeAllByUserId($token->getUserId());
+
+        ($this->flush)();
 
         return new ApiObjectResponse(
             data: new SuccessResponse(),
