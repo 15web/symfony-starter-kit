@@ -20,20 +20,11 @@ final readonly class SettingsRepository
         $this->entityManager->persist($entity);
     }
 
-    /**
-     * @throws SettingNotFoundException
-     */
-    public function getByType(SettingType $type): Setting
+    public function findByType(SettingType $type): ?Setting
     {
-        $setting = $this->entityManager
+        return $this->entityManager
             ->getRepository(Setting::class)
             ->findOneBy(['type' => $type->value]);
-
-        if ($setting === null) {
-            throw new SettingNotFoundException();
-        }
-
-        return $setting;
     }
 
     /**

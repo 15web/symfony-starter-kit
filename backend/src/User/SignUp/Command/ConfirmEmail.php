@@ -37,7 +37,11 @@ final readonly class ConfirmEmail
             throw new UserNotFoundException();
         }
 
-        $user = $this->userRepository->getById(new UserId($userData->userId));
+        $user = $this->userRepository->findById(new UserId($userData->userId));
+
+        if ($user === null) {
+            throw new UserNotFoundException();
+        }
 
         $user->confirm();
     }

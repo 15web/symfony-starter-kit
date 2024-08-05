@@ -8,7 +8,6 @@ use App\Infrastructure\AsService;
 use App\User\User\Domain\AuthToken;
 use App\User\User\Domain\UserToken;
 use App\User\User\Domain\UserTokenRepository;
-use DomainException;
 use InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,9 +47,9 @@ final readonly class TokenManager
             throw new TokenException('Токен не найден');
         }
 
-        try {
-            $userToken = $this->userTokenRepository->getById($authToken->tokenId);
-        } catch (DomainException) {
+        $userToken = $this->userTokenRepository->findById($authToken->tokenId);
+
+        if ($userToken === null) {
             throw new TokenException('Токен не найден');
         }
 

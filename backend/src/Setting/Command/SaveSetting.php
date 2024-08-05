@@ -22,7 +22,11 @@ final readonly class SaveSetting
      */
     public function __invoke(SaveSettingCommand $command): Setting
     {
-        $setting = $this->settingsRepository->getByType($command->type);
+        $setting = $this->settingsRepository->findByType($command->type);
+
+        if ($setting === null) {
+            throw new SettingNotFoundException();
+        }
 
         $setting->change($command->value);
 
