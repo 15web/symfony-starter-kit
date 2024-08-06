@@ -36,6 +36,11 @@ final class Kernel extends BaseKernel implements CompilerPassInterface
         foreach ($container->getDefinitions() as $definitionId => $definition) {
             $this->removeUntaggedServicesFromContainer($container, $definition, $definitionId);
         }
+
+        // todo разобраться как можно вынести в отдельный конфиг
+        if ($this->environment === 'test') {
+            $container->getDefinition('cache.adapter.array')->setClass(KeepCacheArrayAdapter::class);
+        }
     }
 
     protected function configureContainer(ContainerConfigurator $container): void

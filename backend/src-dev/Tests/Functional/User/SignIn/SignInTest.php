@@ -6,9 +6,11 @@ namespace Dev\Tests\Functional\User\SignIn;
 
 use App\Infrastructure\ApiException\ApiErrorCode;
 use Dev\Tests\Functional\SDK\ApiWebTestCase;
+use Dev\Tests\Functional\SDK\User;
 use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @internal
@@ -44,7 +46,8 @@ final class SignInTest extends ApiWebTestCase
 
         /** @var array{
          *     data: array{token: string}
-         * } $signInResponse */
+         * } $signInResponse
+         */
         $signInResponse = self::jsonDecode($response->getContent());
 
         self::assertNotEmpty($signInResponse['data']['token']);
@@ -140,5 +143,34 @@ final class SignInTest extends ApiWebTestCase
         $confirmToken = $email->getHeaders()->get('confirmToken')?->getBody();
 
         self::assertNotEmpty($confirmToken);
+    }
+
+    #[TestDox('Превышено количество запросов')]
+    public function testTooManyRequests(): void
+    {
+        User::auth();
+
+        $body = [
+            'email' => 'first@example.com',
+            'password' => 'password',
+        ];
+
+        $request = static fn (): Response => self::request(
+            method: Request::METHOD_POST,
+            uri: '/api/sign-in',
+            body: json_encode($body, JSON_THROW_ON_ERROR),
+            resetRateLimiter: false,
+        );
+
+        for ($i = 0; $i < 3; ++$i) {
+            self::assertApiError(($request)(), ApiErrorCode::Unauthenticated->value);
+        }
+
+        $response = ($request)();
+        self::assertTooManyRequests(($request)());
+
+        self::assertSame('0', $response->headers->get('X-RateLimit-Remaining'));
+        self::assertSame('60', $response->headers->get('X-RateLimit-Retry-After'));
+        self::assertSame('3', $response->headers->get('X-RateLimit-Limit'));
     }
 }
