@@ -6,7 +6,6 @@ namespace App\User\User\Domain;
 
 use App\Infrastructure\AsService;
 use Doctrine\ORM\EntityManagerInterface;
-use DomainException;
 
 /**
  * Репозиторий токенов пользователя
@@ -16,17 +15,11 @@ final readonly class UserTokenRepository
 {
     public function __construct(private EntityManagerInterface $entityManager) {}
 
-    public function getById(UserTokenId $userTokenId): UserToken
+    public function findById(UserTokenId $userTokenId): ?UserToken
     {
-        $userToken = $this->entityManager
+        return $this->entityManager
             ->getRepository(UserToken::class)
             ->find($userTokenId->value);
-
-        if (!$userToken instanceof UserToken) {
-            throw new DomainException('Токен пользователя не найден.');
-        }
-
-        return $userToken;
     }
 
     public function remove(UserToken $userToken): void

@@ -6,6 +6,7 @@ namespace App\User\Password\Command;
 
 use App\Infrastructure\AsService;
 use App\User\Password\Domain\RecoveryToken;
+use App\User\User\Domain\Exception\UserNotFoundException;
 use App\User\User\Domain\UserPassword;
 use App\User\User\Domain\UserRepository;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -25,11 +26,18 @@ final readonly class RecoverPassword
         private UserRepository $userRepository,
     ) {}
 
+    /**
+     * @throws UserNotFoundException
+     */
     public function __invoke(
         RecoveryToken $recoveryToken,
         RecoverPasswordCommand $recoverPasswordCommand,
     ): void {
-        $user = $this->userRepository->getById($recoveryToken->getUserId());
+        $user = $this->userRepository->findById($recoveryToken->getUserId());
+
+        if ($user === null) {
+            throw new UserNotFoundException();
+        }
 
         $user->applyPassword(
             new UserPassword(
