@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\EventSubscriber;
+namespace Dev\Infrastructure\EventSubscriber;
 
 use App\Infrastructure\AsService;
 use League\OpenAPIValidation\PSR7\OperationAddress;
