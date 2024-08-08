@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Infrastructure\ValueObject;
 
 use Doctrine\ORM\Mapping as ORM;
+use SensitiveParameter;
 use Webmozart\Assert\Assert;
 
 /**
@@ -21,8 +22,10 @@ final class Phone
     /**
      * @param non-empty-string $value
      */
-    public function __construct(string $value)
-    {
+    public function __construct(
+        #[SensitiveParameter]
+        string $value
+    ) {
         Assert::regex($value, self::PHONE_NUMBER_REGEX, 'Укажите телефон в правильном формате');
 
         $this->value = $value;

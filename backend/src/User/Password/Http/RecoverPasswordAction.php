@@ -14,6 +14,7 @@ use App\User\Password\Command\RecoverPasswordCommand;
 use App\User\Password\Domain\RecoveryTokenRepository;
 use App\User\User\Domain\Exception\UserNotFoundException;
 use App\User\User\Domain\UserTokenRepository;
+use SensitiveParameter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
@@ -37,6 +38,7 @@ final readonly class RecoverPasswordAction
 
     public function __invoke(
         #[ValueResolver(UidValueResolver::class)]
+        #[SensitiveParameter]
         Uuid $recoveryToken,
         #[ValueResolver(ApiRequestValueResolver::class)]
         RecoverPasswordCommand $recoverPasswordCommand,

@@ -11,6 +11,7 @@ use App\User\User\Domain\UserId;
 use App\User\User\Domain\UserRepository;
 use App\User\User\Query\FindUser;
 use App\User\User\Query\FindUserQuery;
+use SensitiveParameter;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -27,8 +28,10 @@ final readonly class ConfirmEmail
     /**
      * @throws EmailAlreadyIsConfirmedException|UserNotFoundException
      */
-    public function __invoke(Uuid $confirmToken): void
-    {
+    public function __invoke(
+        #[SensitiveParameter]
+        Uuid $confirmToken
+    ): void {
         $userData = ($this->findUser)(
             new FindUserQuery(confirmToken: $confirmToken)
         );

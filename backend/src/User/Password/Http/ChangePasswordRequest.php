@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\User\Password\Http;
 
+use SensitiveParameter;
 use Webmozart\Assert\Assert;
 
 /**
@@ -17,8 +18,11 @@ final readonly class ChangePasswordRequest
      * @param non-empty-string $newPasswordConfirmation Подтверждение нового пароля
      */
     public function __construct(
+        #[SensitiveParameter]
         public string $currentPassword,
+        #[SensitiveParameter]
         public string $newPassword,
+        #[SensitiveParameter]
         public string $newPasswordConfirmation,
     ) {
         Assert::minLength($this->newPassword, 6);

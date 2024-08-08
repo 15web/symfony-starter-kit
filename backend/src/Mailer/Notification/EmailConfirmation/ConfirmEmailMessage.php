@@ -6,6 +6,7 @@ namespace App\Mailer\Notification\EmailConfirmation;
 
 use App\Infrastructure\Message;
 use App\Infrastructure\ValueObject\Email;
+use SensitiveParameter;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -14,6 +15,7 @@ use Symfony\Component\Uid\Uuid;
 final readonly class ConfirmEmailMessage implements Message
 {
     public function __construct(
+        #[SensitiveParameter]
         public Uuid $confirmToken,
         public Email $email,
     ) {}

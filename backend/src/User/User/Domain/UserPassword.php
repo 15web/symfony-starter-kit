@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\User\User\Domain;
 
 use Doctrine\ORM\Mapping as ORM;
+use SensitiveParameter;
 use Webmozart\Assert\Assert;
 
 /**
@@ -24,6 +25,7 @@ final readonly class UserPassword
      * @param non-empty-string $cleanPassword
      */
     public function __construct(
+        #[SensitiveParameter]
         private string $cleanPassword,
         private int $hashCost,
     ) {

@@ -7,6 +7,7 @@ namespace App\User\User\Query;
 use App\Infrastructure\ValueObject\Email;
 use App\User\User\Domain\UserId;
 use DomainException;
+use SensitiveParameter;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -17,6 +18,7 @@ final readonly class FindUserQuery
     public function __construct(
         public ?UserId $userId = null,
         public ?Email $userEmail = null,
+        #[SensitiveParameter]
         public ?Uuid $confirmToken = null,
     ) {
         if ($userId !== null) {

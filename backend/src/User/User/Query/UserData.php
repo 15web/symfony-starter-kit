@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\User\User\Query;
 
 use App\User\User\Domain\UserRole;
+use SensitiveParameter;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -18,10 +19,13 @@ final readonly class UserData
      */
     public function __construct(
         public Uuid $userId,
+        #[SensitiveParameter]
         public string $email,
         public UserRole $role,
+        #[SensitiveParameter]
         public string $password,
         public bool $isConfirmed,
+        #[SensitiveParameter]
         public ?Uuid $confirmToken,
     ) {}
 }
