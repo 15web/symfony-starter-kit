@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Dev\Tests\Functional\SDK;
 
-use App\Infrastructure\EventSubscriber\OpenApiValidateSubscriber;
 use App\Infrastructure\Response\ResponseStatus;
+use Dev\Infrastructure\EventSubscriber\OpenApiValidateSubscriber;
 use Doctrine\DBAL\Connection;
 use Iterator;
 use Override;
