@@ -7,4 +7,4 @@ namespace App\Infrastructure\Response;
 /**
  * Интерфейс для ответов API
  */
-interface ResponseInterface {}
+interface ApiResponse {}

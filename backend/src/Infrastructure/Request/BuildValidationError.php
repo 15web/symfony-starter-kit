@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\ApiException;
+namespace App\Infrastructure\Request;
 
 use App\Infrastructure\AsService;
 use CuyZ\Valinor\Mapper\MappingError;
@@ -12,7 +12,7 @@ use CuyZ\Valinor\Mapper\Tree\Message\Messages;
  * Собирает массив ошибок валидации
  */
 #[AsService]
-final readonly class BuildMappingErrorMessages
+final readonly class BuildValidationError
 {
     /**
      * @return non-empty-list<non-empty-string>
@@ -25,7 +25,9 @@ final readonly class BuildMappingErrorMessages
 
         $allMessages = [];
         foreach ($messages->errors() as $message) {
-            $allMessages[] = $message->withParameter('source_value', $message->node()->path())->toString();
+            $allMessages[] = $message
+                ->withBody('{node_path}: {original_message}')
+                ->toString();
         }
 
         /**

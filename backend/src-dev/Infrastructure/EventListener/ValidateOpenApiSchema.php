@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Dev\Infrastructure\EventSubscriber;
+namespace Dev\Infrastructure\EventListener;
 
 use App\Infrastructure\AsService;
 use League\OpenAPIValidation\PSR7\OperationAddress;
@@ -10,11 +10,10 @@ use League\OpenAPIValidation\PSR7\RequestValidator;
 use League\OpenAPIValidation\PSR7\ResponseValidator;
 use League\OpenAPIValidation\PSR7\ValidatorBuilder;
 use Nyholm\Psr7\Factory\Psr17Factory;
-use Override;
 use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\When;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
@@ -25,7 +24,7 @@ use Symfony\Component\HttpKernel\Event\ResponseEvent;
 #[AsService]
 #[When('dev')]
 #[When('test')]
-final readonly class OpenApiValidateSubscriber implements EventSubscriberInterface
+final readonly class ValidateOpenApiSchema
 {
     public const string VALIDATE_REQUEST_KEY = 'validate_request';
     public const string VALIDATE_RESPONSE_KEY = 'validate_response';
@@ -46,19 +45,12 @@ final readonly class OpenApiValidateSubscriber implements EventSubscriberInterfa
         $this->responseValidator = $validatorBuilder->getResponseValidator();
     }
 
-    #[Override]
-    public static function getSubscribedEvents(): array
-    {
-        return [
-            RequestEvent::class => ['onKernelRequest', 9], // запускать после TraceableFirewallListener, иначе первой будет ошибка аутентификации
-            ResponseEvent::class => 'onKernelResponse',
-        ];
-    }
-
     /**
-     * Проверяет на соответствие запроса и описанной схемы в документации OpenApi
+     * Проверяет на соответствие запроса и описанной схемы в документации OpenApi.
+     * Запускать после TraceableFirewallListener, иначе первой будет ошибка аутентификации.
      */
-    public function onKernelRequest(RequestEvent $event): void
+    #[AsEventListener(priority: 9)]
+    public function validateRequest(RequestEvent $event): void
     {
         if (!$this->needValidate($event)) {
             return;
@@ -74,7 +66,8 @@ final readonly class OpenApiValidateSubscriber implements EventSubscriberInterfa
         $this->requestValidator->validate($psrRequest);
     }
 
-    public function onKernelResponse(ResponseEvent $event): void
+    #[AsEventListener]
+    public function validateResponse(ResponseEvent $event): void
     {
         if (!$this->needValidate($event)) {
             return;
@@ -99,7 +92,7 @@ final readonly class OpenApiValidateSubscriber implements EventSubscriberInterfa
 
     private function needValidate(RequestEvent|ResponseEvent $event): bool
     {
-        if (!$event->isMainRequest() || !$this->activateValidation) {
+        if (!$this->activateValidation || !$event->isMainRequest()) {
             return false;
         }
 

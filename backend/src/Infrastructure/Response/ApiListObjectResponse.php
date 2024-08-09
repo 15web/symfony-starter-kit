@@ -9,7 +9,7 @@ use App\Infrastructure\Response\Pagination\PaginationResponse;
 /**
  * Ответ со списками и пагинацией
  */
-final readonly class ApiListObjectResponse implements ResponseInterface
+final readonly class ApiListObjectResponse implements ApiResponse
 {
     /**
      * @param iterable<object> $data
