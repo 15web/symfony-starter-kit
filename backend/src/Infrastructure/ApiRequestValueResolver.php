@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Infrastructure;
 
 use App\Infrastructure\ApiException\ApiBadRequestException;
-use App\Infrastructure\ApiException\BuildMappingErrorMessages;
+use App\Infrastructure\Request\BuildValidationError;
 use CuyZ\Valinor\Mapper\MappingError;
 use CuyZ\Valinor\Mapper\Source\Exception\InvalidSource;
 use CuyZ\Valinor\Mapper\Source\JsonSource;
@@ -27,7 +27,7 @@ use Webmozart\Assert\InvalidArgumentException;
 #[AsService]
 final readonly class ApiRequestValueResolver implements ValueResolverInterface
 {
-    public function __construct(private BuildMappingErrorMessages $buildMappingErrorMessages) {}
+    public function __construct(private BuildValidationError $buildValidationError) {}
 
     /**
      * @return iterable<TApiRequest>
@@ -58,7 +58,7 @@ final readonly class ApiRequestValueResolver implements ValueResolverInterface
                     source: new JsonSource($request->getContent()),
                 );
         } catch (MappingError $e) {
-            $errorMessages = ($this->buildMappingErrorMessages)($e);
+            $errorMessages = ($this->buildValidationError)($e);
 
             throw new ApiBadRequestException($errorMessages, $e);
         } catch (InvalidSource $e) {

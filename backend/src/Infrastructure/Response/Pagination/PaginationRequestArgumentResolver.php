@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Infrastructure\Response\Pagination;
 
 use App\Infrastructure\ApiException\ApiBadRequestException;
-use App\Infrastructure\ApiException\BuildMappingErrorMessages;
 use App\Infrastructure\AsService;
+use App\Infrastructure\Request\BuildValidationError;
 use CuyZ\Valinor\Mapper\MappingError;
 use CuyZ\Valinor\MapperBuilder;
 use Override;
@@ -23,7 +23,7 @@ final readonly class PaginationRequestArgumentResolver implements ValueResolverI
     private const string QUERY_LIMIT_NAME = 'limit';
     private const string QUERY_OFFSET_NAME = 'offset';
 
-    public function __construct(private BuildMappingErrorMessages $buildMappingErrorMessages) {}
+    public function __construct(private BuildValidationError $buildValidationError) {}
 
     /**
      * @return iterable<PaginationRequest>
@@ -46,7 +46,7 @@ final readonly class PaginationRequestArgumentResolver implements ValueResolverI
                 ]
             );
         } catch (MappingError $e) {
-            $errorMessages = ($this->buildMappingErrorMessages)($e);
+            $errorMessages = ($this->buildValidationError)($e);
 
             throw new ApiBadRequestException($errorMessages, $e);
         }
