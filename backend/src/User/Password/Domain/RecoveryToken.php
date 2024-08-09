@@ -6,6 +6,7 @@ namespace App\User\Password\Domain;
 
 use App\User\User\Domain\UserId;
 use Doctrine\ORM\Mapping as ORM;
+use SensitiveParameter;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -25,8 +26,12 @@ class RecoveryToken
     #[ORM\Column(type: 'uuid')]
     private Uuid $token;
 
-    public function __construct(Uuid $id, UserId $userId, Uuid $token)
-    {
+    public function __construct(
+        Uuid $id,
+        UserId $userId,
+        #[SensitiveParameter]
+        Uuid $token
+    ) {
         $this->id = $id;
         $this->userId = $userId->value;
         $this->token = $token;

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\User\User\Domain;
 
 use Doctrine\ORM\Mapping as ORM;
+use SensitiveParameter;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -16,8 +17,10 @@ final readonly class ConfirmToken
     #[ORM\Column(type: 'uuid', unique: true)]
     public Uuid $value;
 
-    public function __construct(Uuid $value)
-    {
+    public function __construct(
+        #[SensitiveParameter]
+        Uuid $value
+    ) {
         $this->value = $value;
     }
 

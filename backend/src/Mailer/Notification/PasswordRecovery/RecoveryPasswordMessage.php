@@ -6,6 +6,7 @@ namespace App\Mailer\Notification\PasswordRecovery;
 
 use App\Infrastructure\Message;
 use App\Infrastructure\ValueObject\Email;
+use SensitiveParameter;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -13,5 +14,9 @@ use Symfony\Component\Uid\Uuid;
  */
 final readonly class RecoveryPasswordMessage implements Message
 {
-    public function __construct(public Uuid $token, public Email $email) {}
+    public function __construct(
+        #[SensitiveParameter]
+        public Uuid $token,
+        public Email $email
+    ) {}
 }

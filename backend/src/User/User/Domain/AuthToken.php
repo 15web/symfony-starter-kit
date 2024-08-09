@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\User\User\Domain;
 
 use Override;
+use SensitiveParameter;
 use Stringable;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV7;
@@ -23,6 +24,7 @@ final readonly class AuthToken implements Stringable
      */
     public function __construct(
         public UserTokenId $tokenId,
+        #[SensitiveParameter]
         public Uuid $token,
         private int $hashCost,
     ) {}

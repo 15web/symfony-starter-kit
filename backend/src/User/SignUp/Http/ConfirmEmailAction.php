@@ -13,6 +13,7 @@ use App\Infrastructure\Response\SuccessResponse;
 use App\User\SignUp\Command\ConfirmEmail;
 use App\User\User\Domain\Exception\EmailAlreadyIsConfirmedException;
 use App\User\User\Domain\Exception\UserNotFoundException;
+use SensitiveParameter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
@@ -34,6 +35,7 @@ final readonly class ConfirmEmailAction
 
     public function __invoke(
         #[ValueResolver(UidValueResolver::class)]
+        #[SensitiveParameter]
         Uuid $confirmToken,
     ): ApiObjectResponse {
         try {

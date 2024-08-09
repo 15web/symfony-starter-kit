@@ -6,6 +6,7 @@ namespace App\User\SignIn\Command;
 
 use App\Infrastructure\ValueObject\Email;
 use App\User\User\Domain\AuthToken;
+use SensitiveParameter;
 
 /**
  * Команда для логина
@@ -17,6 +18,7 @@ final readonly class SignInCommand
      */
     public function __construct(
         public Email $email,
+        #[SensitiveParameter]
         public string $password,
         public AuthToken $authToken,
     ) {}

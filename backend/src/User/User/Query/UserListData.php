@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\User\User\Query;
 
 use App\Infrastructure\ValueObject\Email;
+use SensitiveParameter;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -17,8 +18,11 @@ final readonly class UserListData
     /**
      * @param non-empty-string $email
      */
-    public function __construct(public Uuid $id, string $email)
-    {
+    public function __construct(
+        public Uuid $id,
+        #[SensitiveParameter]
+        string $email
+    ) {
         $this->email = new Email($email);
     }
 }
