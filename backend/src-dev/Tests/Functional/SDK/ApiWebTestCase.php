@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Dev\Tests\Functional\SDK;
 
 use App\Infrastructure\Response\ResponseStatus;
-use Dev\Infrastructure\EventSubscriber\OpenApiValidateSubscriber;
+use Dev\Infrastructure\EventListener\ValidateOpenApiSchema;
 use Doctrine\DBAL\Connection;
 use Iterator;
 use Override;
@@ -65,10 +65,10 @@ abstract class ApiWebTestCase extends WebTestCase
         }
 
         self::$client->request($method, $uri, [
-            // передаем признак в OpenApiValidateSubscriber что не нужно проверять запрос
-            OpenApiValidateSubscriber::VALIDATE_REQUEST_KEY => $validateRequestSchema,
-            // передаем признак в OpenApiValidateSubscriber что не нужно проверять ответ
-            OpenApiValidateSubscriber::VALIDATE_RESPONSE_KEY => $validateResponseSchema,
+            // передаем признак в ValidateOpenApiSchema что не нужно проверять запрос
+            ValidateOpenApiSchema::VALIDATE_REQUEST_KEY => $validateRequestSchema,
+            // передаем признак в ValidateOpenApiSchema что не нужно проверять ответ
+            ValidateOpenApiSchema::VALIDATE_RESPONSE_KEY => $validateResponseSchema,
         ], [], $headers, $body);
 
         if ($resetRateLimiter) {

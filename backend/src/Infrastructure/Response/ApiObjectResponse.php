@@ -7,7 +7,7 @@ namespace App\Infrastructure\Response;
 /**
  * Обычный ответ от сервера
  */
-final readonly class ApiObjectResponse implements ResponseInterface
+final readonly class ApiObjectResponse implements ApiResponse
 {
     public function __construct(
         public object $data,
