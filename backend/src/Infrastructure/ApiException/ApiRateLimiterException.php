@@ -54,7 +54,7 @@ final class ApiRateLimiterException extends Exception implements ApiException, A
     #[Override]
     public function getErrors(): array
     {
-        return [sprintf(self::MESSAGE, $this->retryAfter)];
+        return [\sprintf(self::MESSAGE, $this->retryAfter)];
     }
 
     #[Override]

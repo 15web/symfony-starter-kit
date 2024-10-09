@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="5.22.2@d768d914152dbbf3486c36398802f74e80cfde48">
-  <file src="../src/Infrastructure/ApiException/ValinorConfigurator.php">
+<files psalm-version="dev-master@dee5fe4e848ebe974581cf92bb59abe868b3367a">
+  <file src="../src/Infrastructure/Request/ValinorConfigurator.php">
     <InvalidArgument>
       <code><![CDATA[Uuid::fromString(...)]]></code>
     </InvalidArgument>

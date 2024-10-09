@@ -36,7 +36,7 @@ final readonly class RequestLogger
         $error = null;
         $request = $event->getRequest();
 
-        $message = sprintf('<<< %s %s', $request->getMethod(), $request->getRequestUri());
+        $message = \sprintf('<<< %s %s', $request->getMethod(), $request->getRequestUri());
 
         try {
             $payload = $request->getPayload()->all();
@@ -62,7 +62,7 @@ final readonly class RequestLogger
 
         $response = $event->getResponse();
 
-        $message = sprintf('>>> %s', $response->getStatusCode());
+        $message = \sprintf('>>> %s', $response->getStatusCode());
 
         $this->logger->info($message, [
             'content' => $this->prepareResponseContent($response),

@@ -34,6 +34,6 @@ final readonly class FillMailFields
         }
 
         $email->from(new Address($this->fromEmail, $this->fromName));
-        $email->subject(sprintf('%s. %s', $this->fromName, $email->getSubject() ?? ''));
+        $email->subject(\sprintf('%s. %s', $this->fromName, $email->getSubject() ?? ''));
     }
 }

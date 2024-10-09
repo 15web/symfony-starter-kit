@@ -134,7 +134,7 @@ check-openapi-diff: # Валидация соответствия роутов �
 check-openapi-schema: spectral # Валидация openapi.yaml
 
 spectral: # Валидация openapi.yaml с помощью spectral
-	docker run --rm -it -v ${PWD}/backend:/app stoplight/spectral lint /app/src-dev/openapi.yaml -F warn --ruleset=/app/src-dev/.spectral.yaml
+	docker run --rm -it -v ${PWD}/backend:/app stoplight/spectral:latest lint /app/src-dev/openapi.yaml -F warn --ruleset=/app/src-dev/.spectral.yaml
 
 deprecations-check: # Проверка на устаревший функционал
 	docker compose run --rm backend-cli bin/console debug:container --deprecations

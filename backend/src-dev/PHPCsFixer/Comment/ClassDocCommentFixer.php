@@ -43,7 +43,7 @@ final class ClassDocCommentFixer implements FixerInterface, WhitespacesAwareFixe
     #[Override]
     public function getName(): string
     {
-        return sprintf('ClassDocComment/%s', 'class_doc_comment');
+        return \sprintf('ClassDocComment/%s', 'class_doc_comment');
     }
 
     #[Override]

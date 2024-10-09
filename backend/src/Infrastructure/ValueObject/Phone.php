@@ -12,12 +12,11 @@ use Webmozart\Assert\Assert;
  * Телефон
  */
 #[ORM\Embeddable]
-final class Phone
+final readonly class Phone
 {
     private const string PHONE_NUMBER_REGEX = '/^\d{11}+$/';
-
     #[ORM\Column]
-    private readonly string $value;
+    private string $value;
 
     /**
      * @param non-empty-string $value

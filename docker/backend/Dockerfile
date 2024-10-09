@@ -1,4 +1,4 @@
-FROM php:8.3.9-fpm AS base
+FROM php:8.3.12-fpm AS base
 
 RUN apt-get update; \
     apt-get install -y --no-install-recommends unzip git;

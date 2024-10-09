@@ -57,7 +57,7 @@ final readonly class SendUncompletedTaskToUserScheduler
         }
 
         $this->logger->info(
-            sprintf(
+            \sprintf(
                 'Отправлено %d писем о невыполненных задачах',
                 $emailSent
             )

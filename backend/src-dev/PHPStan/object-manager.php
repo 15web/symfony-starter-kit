@@ -11,8 +11,6 @@ require __DIR__.'/../../vendor/autoload.php';
 (new Dotenv())->bootEnv(__DIR__.'/../../.env');
 
 /**
- * @psalm-suppress UnnecessaryVarAnnotation
- *
  * @var string $appEnv
  */
 $appEnv = $_SERVER['APP_ENV'] ?? $_ENV['APP_ENV'] ?? 'dev';
