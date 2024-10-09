@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\ApiException;
+namespace App\Infrastructure\Request;
 
 use App\Infrastructure\AsService;
 use CuyZ\Valinor\Mapper\Tree\Message\ErrorMessage;

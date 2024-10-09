@@ -116,7 +116,7 @@ final class ExampleTest
     #[Override]
     public function getName(): string
     {
-        return sprintf('Testdox/%s', 'test_requires_testdox');
+        return \sprintf('Testdox/%s', 'test_requires_testdox');
     }
 
     #[Override]
@@ -155,7 +155,7 @@ final class ExampleTest
                  * @psalm-suppress InternalClass
                  * @psalm-suppress InternalMethod
                  */
-                Utils::triggerDeprecation(new InvalidArgumentException(sprintf(
+                Utils::triggerDeprecation(new InvalidArgumentException(\sprintf(
                     'Option "%s" for rule "%s" is deprecated and will be removed in version %d.0. %s',
                     $name,
                     $this->getName(),
@@ -179,7 +179,7 @@ final class ExampleTest
              */
             throw new RequiredFixerConfigurationException(
                 $this->getName(),
-                sprintf('Missing required configuration: %s', $exception->getMessage()),
+                \sprintf('Missing required configuration: %s', $exception->getMessage()),
                 $exception
             );
         } catch (InvalidOptionsForEnvException $exception) {
@@ -189,7 +189,7 @@ final class ExampleTest
              */
             throw new InvalidForEnvFixerConfigurationException(
                 $this->getName(),
-                sprintf('Invalid configuration for env: %s', $exception->getMessage()),
+                \sprintf('Invalid configuration for env: %s', $exception->getMessage()),
                 $exception
             );
         }

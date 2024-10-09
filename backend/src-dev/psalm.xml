@@ -6,6 +6,7 @@
         xsi:schemaLocation="https://getpsalm.org/schema/config ../vendor/vimeo/psalm/config.xsd"
         findUnusedBaselineEntry="true"
         findUnusedCode="false"
+        findUnusedPsalmSuppress="true"
         cacheDirectory="../var/cache/psalm"
         errorBaseline="psalm-baseline.xml"
 >
@@ -25,12 +26,14 @@
 
     <forbiddenFunctions>
         <function name="dd"/>
+        <function name="die"/>
         <function name="dump"/>
-        <function name="var_dump"/>
-        <function name="print_r"/>
+        <function name="echo"/>
+        <function name="empty"/>
+        <function name="eval"/>
+        <function name="exit"/>
+        <function name="print"/>
+        <function name="sleep"/>
+        <function name="usleep"/>
     </forbiddenFunctions>
-
-    <issueHandlers>
-        <PluginIssue name="IssueNameEmittedByPlugin" errorLevel="info" />
-    </issueHandlers>
 </psalm>

@@ -35,7 +35,7 @@ final readonly class AuthToken implements Stringable
     #[Override]
     public function __toString(): string
     {
-        return sprintf('%s-%s', $this->tokenId->value, $this->token);
+        return \sprintf('%s-%s', $this->tokenId->value, $this->token);
     }
 
     /**

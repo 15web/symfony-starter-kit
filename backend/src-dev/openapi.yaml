@@ -1113,20 +1113,21 @@ components:
                 type: object
               data:
                 type: array
-                properties:
-                  id:
-                    type: string
-                    format: uuid
-                    description: ID комментария
-                    example: dc8dbada-b154-4ffb-b21c-da70162e2704
-                  body:
-                    type: string
-                    description: Текст комментария
-                    example: Мой первый комментарий
-                  createdAt:
-                    $ref: '#/components/schemas/createdAt'
-                  updatedAt:
-                    $ref: '#/components/schemas/updatedAt'
+                items:
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                        description: ID комментария
+                        example: dc8dbada-b154-4ffb-b21c-da70162e2704
+                      body:
+                        type: string
+                        description: Текст комментария
+                        example: Мой первый комментарий
+                      createdAt:
+                        $ref: '#/components/schemas/createdAt'
+                      updatedAt:
+                        $ref: '#/components/schemas/updatedAt'
               status:
                 $ref: '#/components/schemas/succeedStatus'
       headers:
@@ -1494,6 +1495,9 @@ components:
               type: string
             errors:
               type: array
+              items:
+                  type: string
+                  example: Пример ошибки
         status:
           $ref: '#/components/schemas/succeedStatus'
     authorized:

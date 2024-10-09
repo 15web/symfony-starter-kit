@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Dev\Functional\Task\Scheduler;
+namespace Dev\Tests\Functional\Task\Scheduler;
 
 use App\Task\Scheduler\SendUncompletedTaskToUserScheduler;
 use Dev\Tests\Functional\SDK\ApiWebTestCase;
