@@ -9,13 +9,10 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Setup docker env
         run: ./setup_envs.bash setup-envs && cat .env
-
-      - name: Validate composer.json and composer.lock
-        run: make composer-validate
 
       - name: Cache Composer packages
         id: composer-cache
@@ -26,11 +23,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-php-
 
+      - name: Install packages
+        run: make composer-install
+
+      - name: Validate all composer rules
+        run: make composer-check-all
+
       - name: Install services
         run: make test-install
-
-      - name: Check packages for known security vulnerabilities
-        run: make composer-audit
 
       - name: Check code quality
         run: make lint

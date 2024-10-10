@@ -9,6 +9,12 @@ init: # Запуск проекта и установка зависимосте
 	make db-migrate
 	make setup-transports
 
+build: # Сборка образов и установка зависимостей
+	make setup-env
+	docker compose build
+	make composer-install
+	make up
+
 test-install: # Подготовка тестового окружения
 	make init
 	@for i in 1 2 3 4 ; do \
@@ -16,10 +22,6 @@ test-install: # Подготовка тестового окружения
 		docker compose exec pgsql createdb -O postgres db_name_test$$i; \
 		docker compose run --rm backend bash -c "TEST_TOKEN=$$i bin/console --env=test doctrine:migrations:migrate --no-interaction"; \
 	done
-
-check: composer-validate composer-audit cache-clear lint test check-openapi-diff check-openapi-schema # Проверка кода
-
-fix: fixer-fix rector-fix # Запуск правок кода
 
 up:	# Запуск контейнеров
 	make setup-env
@@ -31,12 +33,6 @@ down: # Остановка контейнеров
 
 update:	# Обновление зависимостей
 	docker compose run --rm backend-cli composer update
-
-build: # Сборка образов и установка зависимостей
-	make setup-env
-	docker compose build
-	make composer-install
-	make up
 
 db-migrate: # Миграции БД
 	docker compose run --rm backend-cli bin/console doctrine:migrations:migrate --no-interaction
@@ -58,7 +54,13 @@ logs: # Просмотр логов сервиса, пример: make logs back
 	make setup-env
 	@docker compose logs $(Arguments)
 
+check: composer-check-all cache-clear lint test check-openapi-diff check-openapi-schema # Проверка кода
+
+fix: fixer-fix rector-fix # Запуск правок кода
+
 lint: container-lint twig-lint fixer-check rector-check phpstan psalm deptrac-check-unassigned cache-prod-check
+
+composer-check-all: composer-validate composer-audit composer-normalize-check # Проверка пакетов composer
 
 composer-install: # Установка пакетов
 	docker compose run --rm backend-cli composer install --no-scripts --prefer-dist
@@ -68,6 +70,12 @@ composer-validate: # Валидация композера
 
 composer-audit: # Проверка пакетов
 	docker compose run --rm backend-cli composer audit --format=plain
+
+composer-normalize-check: # Проверка composer.json на стандартизацию
+	docker compose run --rm backend-cli composer normalize --dry-run
+
+composer-normalize: # Стандартизация composer.json
+	docker compose run --rm backend-cli composer normalize
 
 cache-clear: # Очистка кеша
 	docker compose run --rm backend-cli bin/console cache:clear
