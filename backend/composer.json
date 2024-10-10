@@ -1,10 +1,8 @@
 {
     "name": "15web/symfony-starter-kit",
     "description": "Starter kit for symfony projects",
-    "type": "project",
     "license": "proprietary",
-    "minimum-stability": "stable",
-    "prefer-stable": true,
+    "type": "project",
     "require": {
         "php": ">=8.3",
         "ext-bcmath": "*",
@@ -26,10 +24,10 @@
         "symfony/monolog-bundle": "^3.10",
         "symfony/property-access": "^7.1",
         "symfony/property-info": "^7.1",
-        "symfony/proxy-manager-bridge": "6.4.*",
-        "symfony/rate-limiter": "7.1.*",
+        "symfony/proxy-manager-bridge": "~6.4.0",
+        "symfony/rate-limiter": "~7.1.0",
         "symfony/runtime": "^7.1",
-        "symfony/scheduler": "7.1.*",
+        "symfony/scheduler": "~7.1.0",
         "symfony/serializer": "^7.1",
         "symfony/twig-bundle": "^7.1",
         "symfony/uid": "^7.1",
@@ -41,6 +39,7 @@
     "require-dev": {
         "brianium/paratest": "^7.4",
         "dama/doctrine-test-bundle": "^8.2",
+        "ergebnis/composer-normalize": "^2.44",
         "friendsofphp/php-cs-fixer": "^3.58",
         "league/openapi-psr7-validator": "^0.21",
         "nyholm/psr7": "^1.8",
@@ -57,31 +56,6 @@
         "symfony/web-profiler-bundle": "^7.1",
         "vimeo/psalm": "dev-master"
     },
-    "config": {
-        "allow-plugins": {
-            "composer/package-versions-deprecated": true,
-            "symfony/flex": true,
-            "symfony/runtime": true
-        },
-        "optimize-autoloader": true,
-        "preferred-install": {
-            "*": "dist"
-        },
-        "sort-packages": true,
-        "audit": {
-            "abandoned": "fail"
-        }
-    },
-    "autoload": {
-        "psr-4": {
-            "App\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Dev\\": "src-dev/"
-        }
-    },
     "replace": {
         "symfony/polyfill-bcmath": "*",
         "symfony/polyfill-ctype": "*",
@@ -93,25 +67,53 @@
         "symfony/polyfill-php81": "*",
         "symfony/polyfill-php82": "*"
     },
-    "scripts": {
-        "auto-scripts": {
-            "cache:clear": "symfony-cmd",
-            "assets:install %PUBLIC_DIR%": "symfony-cmd"
-        },
-        "post-install-cmd": [
-            "@auto-scripts"
-        ],
-        "post-update-cmd": [
-            "@auto-scripts"
-        ]
-    },
     "conflict": {
         "symfony/symfony": "*"
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Dev\\": "src-dev/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/package-versions-deprecated": true,
+            "ergebnis/composer-normalize": true,
+            "symfony/flex": true,
+            "symfony/runtime": true
+        },
+        "audit": {
+            "abandoned": "fail"
+        },
+        "optimize-autoloader": true,
+        "preferred-install": {
+            "*": "dist"
+        },
+        "sort-packages": true
     },
     "extra": {
         "symfony": {
             "allow-contrib": false,
             "require": "7.1.*"
+        }
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "@auto-scripts"
+        ],
+        "post-update-cmd": [
+            "@auto-scripts"
+        ],
+        "auto-scripts": {
+            "cache:clear": "symfony-cmd",
+            "assets:install %PUBLIC_DIR%": "symfony-cmd"
         }
     }
 }
