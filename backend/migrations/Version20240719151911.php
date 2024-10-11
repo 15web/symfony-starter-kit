@@ -26,7 +26,7 @@ final class Version20240719151911 extends AbstractMigration
 
         $this->addSql(
             "INSERT INTO setting (id, type, value, is_public, created_at, updated_at)
-                    VALUES (gen_random_uuid(), :setting_type, :setting_value, false, now(), now());",
+                    VALUES (gen_random_uuid(), :setting_type, :setting_value, true, now(), now());",
             [
                 'setting_type' => SettingType::SITE_NAME->value,
                 'setting_value' => 'symfony-starter-kit'

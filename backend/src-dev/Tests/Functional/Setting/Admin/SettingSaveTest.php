@@ -7,6 +7,8 @@ namespace Dev\Tests\Functional\Setting\Admin;
 use App\Setting\Domain\SettingType;
 use Dev\Tests\Functional\SDK\ApiWebTestCase;
 use Dev\Tests\Functional\SDK\User;
+use Doctrine\Bundle\DoctrineBundle\Registry;
+use Doctrine\DBAL\Connection;
 use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -58,8 +60,8 @@ final class SettingSaveTest extends ApiWebTestCase
         }
     }
 
-    #[TestDox('Настройка не найдена в enum')]
-    public function testNotFound(): void
+    #[TestDox('Такой тип настройки не поддерживается')]
+    public function testBadType(): void
     {
         $token = User::auth();
 
@@ -70,6 +72,28 @@ final class SettingSaveTest extends ApiWebTestCase
 
         $response = self::request(Request::METHOD_POST, '/api/admin/settings', $body, token: $token);
         self::assertBadRequest($response);
+    }
+
+    #[TestDox('Настройка не найдена')]
+    public function testSettingNotFound(): void
+    {
+        /** @var Registry $registry */
+        $registry = self::getContainer()->get('doctrine');
+
+        /** @var Connection $connection */
+        $connection = $registry->getConnection();
+
+        $connection->delete('setting', ['type' => SettingType::EMAIL_SITE->value]);
+
+        $token = User::auth();
+
+        $body = [];
+        $body['type'] = SettingType::EMAIL_SITE->value;
+        $body['value'] = 'symfony-starter-kit-test';
+        $body = json_encode($body, JSON_THROW_ON_ERROR);
+
+        $response = self::request(Request::METHOD_POST, '/api/admin/settings', $body, token: $token);
+        self::assertNotFound($response);
     }
 
     #[DataProvider('notValidTokenDataProvider')]

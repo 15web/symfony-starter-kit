@@ -41,5 +41,5 @@ jobs:
       - name: Check OpenApi schema
         run: docker run --rm -v ${PWD}/backend:/app stoplight/spectral lint /app/src-dev/openapi.yaml -F warn --ruleset=/app/src-dev/.spectral.yaml
 
-      - name: Run functional tests
-        run: make test
+      - name: Run functional tests with code coverage
+        run: make test-coverage

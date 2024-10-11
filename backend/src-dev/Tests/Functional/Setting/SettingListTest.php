@@ -24,6 +24,8 @@ final class SettingListTest extends ApiWebTestCase
 
         $publicSettings = Setting::publicList();
 
+        self::assertNotEmpty($publicSettings);
+
         self::assertCount(\count($filteredSettings), $publicSettings);
 
         foreach ($publicSettings as $publicSetting) {

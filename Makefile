@@ -124,7 +124,11 @@ deptrac-check-unassigned: # Покрытие кода с deptrac
 
 test: # Запуск тестов
 	docker compose run --rm backend-cli bin/console --env=test cache:clear
-	docker compose run --rm backend-cli bash -c 'APP_ENV=test vendor/bin/paratest --configuration=src-dev/phpunit.xml -p4'
+	docker compose run --rm backend-cli bash -c 'APP_ENV=test vendor/bin/paratest --configuration=src-dev/phpunit.xml --processes=4'
+
+test-coverage: # Запуск тестов
+	docker compose run --rm backend-cli bin/console --env=test cache:clear
+	docker compose run --rm backend-cli bash -c 'APP_ENV=test vendor/bin/paratest --configuration=src-dev/phpunit.xml --processes=4 --coverage-text'
 
 test-verbose: # Запуск тестов с детальным описанием
 	make setup-env
