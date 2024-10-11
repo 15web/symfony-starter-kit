@@ -21,6 +21,19 @@
         </testsuite>
     </testsuites>
 
+    <source restrictNotices="true" restrictWarnings="true">
+        <include>
+            <directory>../src</directory>
+        </include>
+        <exclude>
+            <file>/app/src/User/config.php</file>
+            <file>/app/src/Mailer/config.php</file>
+            <file>/app/src/Infrastructure/Kernel.php</file>
+            <file>/app/src/Infrastructure/di.php</file>
+            <file>/app/src/Infrastructure/Request/ValinorConfigurator.php</file>
+        </exclude>
+    </source>
+
     <extensions>
         <bootstrap class="DAMA\DoctrineTestBundle\PHPUnit\PHPUnitExtension"/>
     </extensions>

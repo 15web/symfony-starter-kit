@@ -35,5 +35,8 @@
         <function name="print"/>
         <function name="sleep"/>
         <function name="usleep"/>
+        <function name="var_dump"/>
+        <function name="print_r"/>
     </forbiddenFunctions>
+
 </psalm>

@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * @internal
  */
-#[TestDox('Список публичных настроек')]
+#[TestDox('Список всех настроек')]
 final class ListTest extends ApiWebTestCase
 {
     #[TestDox('Получение списка')]

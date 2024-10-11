@@ -5,11 +5,10 @@ RUN apt-get update; \
 
 COPY php.ini /usr/local/etc/php/php.ini
 
-COPY --from=composer:2.7.7 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2.8.1 /usr/bin/composer /usr/bin/composer
 
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
-RUN install-php-extensions pdo_pgsql intl sysvsem
-RUN docker-php-ext-install bcmath
+RUN install-php-extensions pdo_pgsql intl sysvsem pcov bcmath
 
 RUN ln -sf /usr/share/zoneinfo/Europe/Moscow /etc/localtime
 
