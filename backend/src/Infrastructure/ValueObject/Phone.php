@@ -23,7 +23,7 @@ final readonly class Phone
      */
     public function __construct(
         #[SensitiveParameter]
-        string $value
+        string $value,
     ) {
         Assert::regex($value, self::PHONE_NUMBER_REGEX, 'Укажите телефон в правильном формате');
 

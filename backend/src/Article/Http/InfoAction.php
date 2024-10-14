@@ -25,7 +25,7 @@ final readonly class InfoAction
 
     public function __invoke(
         #[ValueResolver(RequestAttributeValueResolver::class)]
-        string $alias
+        string $alias,
     ): ApiObjectResponse {
         $article = $this->articleRepository->findByAlias($alias);
         if ($article === null) {
@@ -33,7 +33,7 @@ final readonly class InfoAction
         }
 
         return new ApiObjectResponse(
-            data: $this->buildResponseData($article)
+            data: $this->buildResponseData($article),
         );
     }
 
@@ -41,7 +41,7 @@ final readonly class InfoAction
     {
         return new InfoData(
             title: $article->getTitle(),
-            body: $article->getBody()
+            body: $article->getBody(),
         );
     }
 }

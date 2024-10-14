@@ -50,7 +50,7 @@ final readonly class XmlExporter implements Exporter
         $response->headers->set('Content-Type', $response->getFile()->getMimeType());
         $response->setContentDisposition(
             disposition: ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            filename: 'tasks.xml'
+            filename: 'tasks.xml',
         );
 
         return $response;

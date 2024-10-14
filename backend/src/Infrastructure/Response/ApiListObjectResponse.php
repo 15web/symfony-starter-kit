@@ -19,6 +19,6 @@ final readonly class ApiListObjectResponse implements ApiResponse
         public iterable $data,
         public PaginationResponse $pagination,
         public ?object $meta = null,
-        public ResponseStatus $status = ResponseStatus::Success
+        public ResponseStatus $status = ResponseStatus::Success,
     ) {}
 }

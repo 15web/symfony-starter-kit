@@ -18,6 +18,6 @@ final readonly class SignUpCommand
     public function __construct(
         public Email $email,
         #[SensitiveParameter]
-        public string $password
+        public string $password,
     ) {}
 }

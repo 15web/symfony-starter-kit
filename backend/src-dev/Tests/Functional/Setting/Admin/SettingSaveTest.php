@@ -30,11 +30,20 @@ final class SettingSaveTest extends ApiWebTestCase
         $body['value'] = 'symfony-starter-kit-test';
         $bodyJson = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request(Request::METHOD_POST, '/api/admin/settings', $bodyJson, token: $token);
+        $response = self::request(
+            method: Request::METHOD_POST,
+            uri: '/api/admin/settings',
+            body: $bodyJson,
+            token: $token,
+        );
 
         self::assertSuccessResponse($response);
 
-        $responseList = self::request(Request::METHOD_GET, '/api/admin/settings', token: $token);
+        $responseList = self::request(
+            method: Request::METHOD_GET,
+            uri: '/api/admin/settings',
+            token: $token,
+        );
         self::assertSuccessResponse($responseList);
 
         /** @var array{
@@ -70,7 +79,13 @@ final class SettingSaveTest extends ApiWebTestCase
         $body['value'] = 'symfony-starter-kit-test';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request(Request::METHOD_POST, '/api/admin/settings', $body, token: $token);
+        $response = self::request(
+            method: Request::METHOD_POST,
+            uri: '/api/admin/settings',
+            body: $body,
+            token: $token,
+        );
+
         self::assertBadRequest($response);
     }
 
@@ -92,7 +107,13 @@ final class SettingSaveTest extends ApiWebTestCase
         $body['value'] = 'symfony-starter-kit-test';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request(Request::METHOD_POST, '/api/admin/settings', $body, token: $token);
+        $response = self::request(
+            method: Request::METHOD_POST,
+            uri: '/api/admin/settings',
+            body: $body,
+            token: $token,
+        );
+
         self::assertNotFound($response);
     }
 
@@ -105,7 +126,12 @@ final class SettingSaveTest extends ApiWebTestCase
         $body['value'] = 'symfony-starter-kit-test';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request(Request::METHOD_POST, '/api/admin/settings', $body, token: $notValidToken);
+        $response = self::request(
+            method: Request::METHOD_POST,
+            uri: '/api/admin/settings',
+            body: $body,
+            token: $notValidToken,
+        );
 
         self::assertAccessDenied($response);
     }
@@ -121,11 +147,11 @@ final class SettingSaveTest extends ApiWebTestCase
 
         $body = json_encode($body, JSON_THROW_ON_ERROR);
         $response = self::request(
-            Request::METHOD_POST,
-            '/api/admin/settings',
-            $body,
+            method: Request::METHOD_POST,
+            uri: '/api/admin/settings',
+            body: $body,
             token: $token,
-            validateRequestSchema: false
+            validateRequestSchema: false,
         );
 
         self::assertBadRequest($response);

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Dev\Tests\Functional\User\Profile;
+namespace Dev\Tests\Functional\User;
 
 use Dev\Tests\Functional\SDK\ApiWebTestCase;
 use Dev\Tests\Functional\SDK\Profile;
@@ -25,12 +25,17 @@ final class ProfileInfoTest extends ApiWebTestCase
         $token = User::auth();
 
         Profile::save(
-            $profileName = 'Тестовое имя 1',
-            $profilePhone = self::PHONE_NUMBER,
-            $token
+            name: $profileName = 'Тестовое имя 1',
+            phone: $profilePhone = self::PHONE_NUMBER,
+            token: $token,
         );
 
-        $response = self::request(Request::METHOD_GET, '/api/profile', token: $token);
+        $response = self::request(
+            method: Request::METHOD_GET,
+            uri: '/api/profile',
+            token: $token,
+        );
+
         self::assertSuccessResponse($response);
 
         /** @var array{
@@ -47,7 +52,12 @@ final class ProfileInfoTest extends ApiWebTestCase
     {
         $token = User::auth();
 
-        $response = self::request(Request::METHOD_GET, '/api/profile', token: $token);
+        $response = self::request(
+            method: Request::METHOD_GET,
+            uri: '/api/profile',
+            token: $token,
+        );
+
         self::assertSuccessResponse($response);
 
         /** @var array{
@@ -64,9 +74,17 @@ final class ProfileInfoTest extends ApiWebTestCase
     public function testAccessDenied(string $notValidToken): void
     {
         $token = User::auth();
-        Profile::save('Имя 1', self::PHONE_NUMBER, $token);
+        Profile::save(
+            name: 'Имя 1',
+            phone: self::PHONE_NUMBER,
+            token: $token,
+        );
 
-        $response = self::request(Request::METHOD_GET, '/api/profile', token: $notValidToken);
+        $response = self::request(
+            method: Request::METHOD_GET,
+            uri: '/api/profile',
+            token: $notValidToken,
+        );
 
         self::assertAccessDenied($response);
     }

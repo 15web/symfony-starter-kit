@@ -30,7 +30,7 @@ final readonly class ListAction
 
         return new ApiListObjectResponse(
             data: $this->buildResponseData($settings),
-            pagination: new PaginationResponse(\count($settings))
+            pagination: new PaginationResponse(\count($settings)),
         );
     }
 

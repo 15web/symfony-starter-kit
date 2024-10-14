@@ -20,7 +20,7 @@ final readonly class FillMailFields
         #[Autowire('%env(string:MAILER_FROM_EMAIL)%')]
         private string $fromEmail,
         #[Autowire('%env(string:MAILER_FROM_NAME)%')]
-        private string $fromName
+        private string $fromName,
     ) {}
 
     /**

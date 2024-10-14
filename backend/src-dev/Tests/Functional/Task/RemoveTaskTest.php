@@ -23,10 +23,22 @@ final class RemoveTaskTest extends ApiWebTestCase
     {
         $token = User::auth();
 
-        $task1Id = Task::createAndReturnId('Тестовая задача 1', $token);
-        $task2Id = Task::createAndReturnId('Тестовая задача 2', $token);
+        $task1Id = Task::createAndReturnId(
+            taskName: 'Тестовая задача 1',
+            token: $token,
+        );
 
-        $response = self::request(Request::METHOD_DELETE, "/api/tasks/{$task1Id}", token: $token);
+        $task2Id = Task::createAndReturnId(
+            taskName: 'Тестовая задача 2',
+            token: $token,
+        );
+
+        $response = self::request(
+            method: Request::METHOD_DELETE,
+            uri: \sprintf('/api/tasks/%s', $task1Id),
+            token: $token,
+        );
+
         self::assertSuccessContentResponse($response);
 
         $response = Task::list($token);
@@ -41,10 +53,18 @@ final class RemoveTaskTest extends ApiWebTestCase
     {
         $token = User::auth();
 
-        Task::create('Тестовая задача 1', $token);
+        Task::create(
+            taskName: 'Тестовая задача 1',
+            token: $token,
+        );
 
         $taskId = (string) Uuid::v4();
-        $response = self::request(Request::METHOD_DELETE, "/api/tasks/{$taskId}", token: $token);
+        $response = self::request(
+            method: Request::METHOD_DELETE,
+            uri: \sprintf('/api/tasks/%s', $taskId),
+            token: $token,
+        );
+
         self::assertNotFound($response);
     }
 
@@ -53,9 +73,16 @@ final class RemoveTaskTest extends ApiWebTestCase
     public function testAccessDenied(string $notValidToken): void
     {
         $token = User::auth();
-        $taskId = Task::createAndReturnId('Тестовая задача 1', $token);
+        $taskId = Task::createAndReturnId(
+            taskName: 'Тестовая задача 1',
+            token: $token,
+        );
 
-        $response = self::request(Request::METHOD_DELETE, "/api/tasks/{$taskId}", token: $notValidToken);
+        $response = self::request(
+            method: Request::METHOD_DELETE,
+            uri: \sprintf('/api/tasks/%s', $taskId),
+            token: $notValidToken,
+        );
 
         self::assertAccessDenied($response);
     }
@@ -64,12 +91,22 @@ final class RemoveTaskTest extends ApiWebTestCase
     public function testNoAccessAnotherUser(): void
     {
         $token = User::auth();
-        Task::create('Тестовая задача №1', $token);
+        Task::create(
+            taskName: 'Тестовая задача №1',
+            token: $token,
+        );
 
         $tokenSecond = User::auth('second@example.com');
-        $taskId = Task::createAndReturnId('Тестовая задача №2 ', $tokenSecond);
+        $taskId = Task::createAndReturnId(
+            taskName: 'Тестовая задача №2 ',
+            token: $tokenSecond,
+        );
 
-        $response = self::request(Request::METHOD_DELETE, "/api/tasks/{$taskId}", token: $token);
+        $response = self::request(
+            method: Request::METHOD_DELETE,
+            uri: \sprintf('/api/tasks/%s', $taskId),
+            token: $token,
+        );
 
         self::assertNotFound($response);
     }

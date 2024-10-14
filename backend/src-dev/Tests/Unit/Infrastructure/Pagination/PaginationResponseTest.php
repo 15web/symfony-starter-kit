@@ -18,7 +18,7 @@ final class PaginationResponseTest extends TestCase
     #[TestDox('Проверка конструктора')]
     public function testSuccess(): void
     {
-        $paginationResponse = new PaginationResponse(total: 10);
+        $paginationResponse = new PaginationResponse(10);
 
         self::assertSame(10, $paginationResponse->total);
     }

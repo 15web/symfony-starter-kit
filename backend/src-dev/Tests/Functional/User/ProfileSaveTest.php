@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Dev\Tests\Functional\User\Profile;
+namespace Dev\Tests\Functional\User;
 
 use Dev\Tests\Functional\SDK\ApiWebTestCase;
 use Dev\Tests\Functional\SDK\Profile;
@@ -23,7 +23,11 @@ final class ProfileSaveTest extends ApiWebTestCase
     public function testSuccess(): void
     {
         $token = User::auth();
-        $response = Profile::save($name = 'Имя 1', self::PHONE_NUMBER, $token);
+        $response = Profile::save(
+            name: $name = 'Имя 1',
+            phone: self::PHONE_NUMBER,
+            token: $token,
+        );
 
         self::assertSuccessResponse($response);
         $response = Profile::info($token);
@@ -43,8 +47,16 @@ final class ProfileSaveTest extends ApiWebTestCase
     {
         $token = User::auth();
 
-        Profile::save($name1 = 'Имя 1', self::PHONE_NUMBER, $token);
-        Profile::save($name2 = 'Имя 2', $phone = '89272222221', $token);
+        Profile::save(
+            name: $name1 = 'Имя 1',
+            phone: self::PHONE_NUMBER,
+            token: $token,
+        );
+        Profile::save(
+            name: $name2 = 'Имя 2',
+            phone: $phone = '89272222221',
+            token: $token,
+        );
 
         $response = Profile::info($token);
 
@@ -65,7 +77,11 @@ final class ProfileSaveTest extends ApiWebTestCase
     #[TestDox('Доступ запрещен')]
     public function testAccessDenied(string $notValidToken): void
     {
-        $response = Profile::save('Тестовый профиль', self::PHONE_NUMBER, $notValidToken);
+        $response = Profile::save(
+            name: 'Тестовый профиль',
+            phone: self::PHONE_NUMBER,
+            token: $notValidToken,
+        );
 
         self::assertAccessDenied($response);
     }
@@ -80,7 +96,14 @@ final class ProfileSaveTest extends ApiWebTestCase
         $this->assertBadRequests(['name' => '', 'phone' => ''], $token);
 
         $badJson = '{"name"=1,"phone"=89272222222}';
-        $response = self::request(Request::METHOD_POST, '/api/profile', $badJson, token: $token, validateRequestSchema: false);
+        $response = self::request(
+            method: Request::METHOD_POST,
+            uri: '/api/profile',
+            body: $badJson,
+            token: $token,
+            validateRequestSchema: false,
+        );
+
         self::assertBadRequest($response);
     }
 
@@ -91,7 +114,14 @@ final class ProfileSaveTest extends ApiWebTestCase
     {
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request(Request::METHOD_POST, '/api/profile', $body, token: $token, validateRequestSchema: false);
+        $response = self::request(
+            method: Request::METHOD_POST,
+            uri: '/api/profile',
+            body: $body,
+            token: $token,
+            validateRequestSchema: false,
+        );
+
         self::assertBadRequest($response);
     }
 }

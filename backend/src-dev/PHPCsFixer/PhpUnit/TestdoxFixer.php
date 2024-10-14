@@ -107,9 +107,9 @@ final class ExampleTest
     {
     }
 }
-'
+',
                 ),
-            ]
+            ],
         );
     }
 
@@ -164,7 +164,7 @@ final class ExampleTest
                      * @psalm-suppress InternalMethod
                      */
                     Application::getMajorVersion() + 1,
-                    str_replace('`', '"', $option->getDeprecationMessage())
+                    str_replace('`', '"', $option->getDeprecationMessage()),
                 )));
             }
         }
@@ -180,7 +180,7 @@ final class ExampleTest
             throw new RequiredFixerConfigurationException(
                 $this->getName(),
                 \sprintf('Missing required configuration: %s', $exception->getMessage()),
-                $exception
+                $exception,
             );
         } catch (InvalidOptionsForEnvException $exception) {
             /**
@@ -190,7 +190,7 @@ final class ExampleTest
             throw new InvalidForEnvFixerConfigurationException(
                 $this->getName(),
                 \sprintf('Invalid configuration for env: %s', $exception->getMessage()),
-                $exception
+                $exception,
             );
         }
     }

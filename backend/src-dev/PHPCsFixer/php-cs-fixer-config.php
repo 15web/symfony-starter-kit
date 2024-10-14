@@ -67,5 +67,6 @@ return (new Config())
 
         'ClassDocComment/class_doc_comment' => true,
         'Testdox/test_requires_testdox' => ['exclude' => 'SDK'],
+        'trailing_comma_in_multiline' => ['after_heredoc' => true, 'elements' => ['arguments', 'array_destructuring', 'arrays', 'match', 'parameters']],
     ])
     ->setFinder($finder);

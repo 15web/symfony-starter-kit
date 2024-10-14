@@ -46,7 +46,7 @@ final readonly class AddCommentOnTaskAction
         #[ValueResolver(ApiRequestValueResolver::class)]
         AddCommentOnTaskCommand $addCommentOnTaskCommand,
         #[ValueResolver(UserIdArgumentValueResolver::class)]
-        UserId $userId
+        UserId $userId,
     ): ApiObjectResponse {
         if (!$userId->equalTo($task->getUserId())) {
             throw new ApiNotFoundException(['Запись не найдена']);
@@ -72,7 +72,7 @@ final readonly class AddCommentOnTaskAction
         }
 
         return new ApiObjectResponse(
-            data: new SuccessResponse()
+            data: new SuccessResponse(),
         );
     }
 }

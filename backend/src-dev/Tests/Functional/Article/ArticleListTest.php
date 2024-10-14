@@ -21,9 +21,17 @@ final class ArticleListTest extends ApiWebTestCase
     {
         $token = User::auth();
 
-        Article::create($title = 'Статья', $alias = 'statya', $content = '<p>Контент</p>', $token);
+        Article::create(
+            title: $title = 'Статья',
+            alias: $alias = 'statya',
+            content: $content = '<p>Контент</p>',
+            token: $token,
+        );
 
-        $response = self::request(Request::METHOD_GET, '/api/articles');
+        $response = self::request(
+            method: Request::METHOD_GET,
+            uri: '/api/articles',
+        );
         self::assertSuccessResponse($response);
 
         $responseData = self::jsonDecode($response->getContent());

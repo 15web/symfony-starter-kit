@@ -48,9 +48,9 @@ final readonly class SendUncompletedTaskToUserScheduler
                     email: $user->email,
                     tasks: array_map(
                         static fn (QueryTaskData $task): TaskData => new TaskData(taskName: $task->taskName, createdAt: $task->createdAt),
-                        $uncompletedTasks
-                    )
-                )
+                        $uncompletedTasks,
+                    ),
+                ),
             );
 
             ++$emailSent;
@@ -59,8 +59,8 @@ final readonly class SendUncompletedTaskToUserScheduler
         $this->logger->info(
             \sprintf(
                 'Отправлено %d писем о невыполненных задачах',
-                $emailSent
-            )
+                $emailSent,
+            ),
         );
     }
 }

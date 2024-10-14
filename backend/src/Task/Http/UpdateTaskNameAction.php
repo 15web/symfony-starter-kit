@@ -42,7 +42,7 @@ final readonly class UpdateTaskNameAction
         #[ValueResolver(ApiRequestValueResolver::class)]
         UpdateTaskNameCommand $command,
         #[ValueResolver(UserIdArgumentValueResolver::class)]
-        UserId $userId
+        UserId $userId,
     ): ApiObjectResponse {
         if (!$userId->equalTo($task->getUserId())) {
             throw new ApiNotFoundException(['Запись не найдена']);
@@ -61,7 +61,7 @@ final readonly class UpdateTaskNameAction
         ]);
 
         return new ApiObjectResponse(
-            data: new SuccessResponse()
+            data: new SuccessResponse(),
         );
     }
 }

@@ -23,10 +23,10 @@ final class InfoAction
 {
     public function __invoke(
         #[ValueResolver(ArticleArgumentValueResolver::class)]
-        Article $article
+        Article $article,
     ): ApiObjectResponse {
         return new ApiObjectResponse(
-            data: $article
+            data: $article,
         );
     }
 }

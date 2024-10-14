@@ -49,14 +49,14 @@ final readonly class TaskListAction
         $tasks = ($this->findAllTasksByUserId)($query);
         $allTasksCount = ($this->countAllTasksByUserId)($query);
 
-        $incompletedTasksCount = \count(array_filter($tasks, static fn (TaskData $task): bool => $task->isCompleted === false));
+        $uncompletedTasksCount = \count(array_filter($tasks, static fn (TaskData $task): bool => $task->isCompleted === false));
 
         $pagination = new PaginationResponse($allTasksCount);
 
         return new ApiListObjectResponse(
             data: $tasks,
             pagination: $pagination,
-            meta: new TaskListMetaData(incompletedTasksCount: $incompletedTasksCount)
+            meta: new TaskListMetaData(uncompletedTasksCount: $uncompletedTasksCount),
         );
     }
 }

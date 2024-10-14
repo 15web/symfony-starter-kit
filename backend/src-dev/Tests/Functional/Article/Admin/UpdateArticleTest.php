@@ -23,7 +23,12 @@ final class UpdateArticleTest extends ApiWebTestCase
     public function testSuccess(): void
     {
         $token = User::auth();
-        $articleId = Article::createAndReturnId('Статья', 'statya', '<p>Контент</p>', $token);
+        $articleId = Article::createAndReturnId(
+            title: 'Статья',
+            alias: 'statya',
+            content: '<p>Контент</p>',
+            token: $token,
+        );
 
         $body = [];
         $body['title'] = $title = 'Статья 2';
@@ -31,7 +36,12 @@ final class UpdateArticleTest extends ApiWebTestCase
         $body['body'] = $content = 'Контент 2';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request(Request::METHOD_POST, "/api/admin/articles/{$articleId}", $body, token: $token);
+        $response = self::request(
+            method: Request::METHOD_POST,
+            uri: \sprintf('/api/admin/articles/%s', $articleId),
+            body: $body,
+            token: $token,
+        );
 
         self::assertSuccessResponse($response);
 
@@ -59,7 +69,12 @@ final class UpdateArticleTest extends ApiWebTestCase
     public function testNotFound(): void
     {
         $token = User::auth();
-        Article::create('Статья', 'statya', '<p>Контент</p>', $token);
+        Article::create(
+            title: 'Статья',
+            alias: 'statya',
+            content: '<p>Контент</p>',
+            token: $token,
+        );
 
         $body = [];
         $body['title'] = 'Статья 2';
@@ -68,7 +83,13 @@ final class UpdateArticleTest extends ApiWebTestCase
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
         $articleId = (string) Uuid::v4();
-        $response = self::request(Request::METHOD_POST, "/api/admin/articles/{$articleId}", $body, token: $token);
+        $response = self::request(
+            method: Request::METHOD_POST,
+            uri: \sprintf('/api/admin/articles/%s', $articleId),
+            body: $body,
+            token: $token,
+        );
+
         self::assertNotFound($response);
     }
 
@@ -77,8 +98,19 @@ final class UpdateArticleTest extends ApiWebTestCase
     {
         $token = User::auth();
 
-        Article::create('Статья', 'statya1', '<p>Контент</p>', $token);
-        $articleId = Article::createAndReturnId('Статья', 'statya2', '<p>Контент</p>', $token);
+        Article::create(
+            title: 'Статья',
+            alias: 'statya1',
+            content: '<p>Контент</p>',
+            token: $token,
+        );
+
+        $articleId = Article::createAndReturnId(
+            title: 'Статья',
+            alias: 'statya2',
+            content: '<p>Контент</p>',
+            token: $token,
+        );
 
         $body = [];
         $body['title'] = 'Статья 2';
@@ -86,7 +118,12 @@ final class UpdateArticleTest extends ApiWebTestCase
         $body['body'] = 'Контент 2';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request(Request::METHOD_POST, "/api/admin/articles/{$articleId}", $body, token: $token);
+        $response = self::request(
+            method: Request::METHOD_POST,
+            uri: \sprintf('/api/admin/articles/%s', $articleId),
+            body: $body,
+            token: $token,
+        );
 
         self::assertApiError($response, 2);
     }
@@ -96,7 +133,12 @@ final class UpdateArticleTest extends ApiWebTestCase
     public function testAccessDenied(string $notValidToken): void
     {
         $token = User::auth();
-        $articleId = Article::createAndReturnId('Статья', 'statya', '<p>Контент</p>', $token);
+        $articleId = Article::createAndReturnId(
+            title: 'Статья',
+            alias: 'statya',
+            content: '<p>Контент</p>',
+            token: $token,
+        );
 
         $body = [];
         $body['title'] = 'Статья 2';
@@ -104,7 +146,12 @@ final class UpdateArticleTest extends ApiWebTestCase
         $body['body'] = 'Контент 2';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request(Request::METHOD_POST, "/api/admin/articles/{$articleId}", $body, token: $notValidToken);
+        $response = self::request(
+            method: Request::METHOD_POST,
+            uri: \sprintf('/api/admin/articles/%s', $articleId),
+            body: $body,
+            token: $notValidToken,
+        );
 
         self::assertAccessDenied($response);
     }
@@ -117,15 +164,20 @@ final class UpdateArticleTest extends ApiWebTestCase
     public function testBadRequest(array $body): void
     {
         $token = User::auth();
-        $articleId = Article::createAndReturnId('Статья', 'statya', '<p>Контент</p>', $token);
+        $articleId = Article::createAndReturnId(
+            title: 'Статья',
+            alias: 'statya',
+            content: '<p>Контент</p>',
+            token: $token,
+        );
 
         $body = json_encode($body, JSON_THROW_ON_ERROR);
         $response = self::request(
-            Request::METHOD_POST,
-            "/api/admin/articles/{$articleId}",
-            $body,
+            method: Request::METHOD_POST,
+            uri: \sprintf('/api/admin/articles/%s', $articleId),
+            body: $body,
             token: $token,
-            validateRequestSchema: false
+            validateRequestSchema: false,
         );
 
         self::assertBadRequest($response);

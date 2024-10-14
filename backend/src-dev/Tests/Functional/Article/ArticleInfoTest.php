@@ -21,9 +21,18 @@ final class ArticleInfoTest extends ApiWebTestCase
     {
         $token = User::auth();
 
-        Article::create($title = 'Статья', $alias = 'statya', $content = '<p>Контент</p>', $token);
+        Article::create(
+            title: $title = 'Статья',
+            alias: $alias = 'statya',
+            content: $content = '<p>Контент</p>',
+            token: $token,
+        );
 
-        $response = self::request(Request::METHOD_GET, "/api/articles/{$alias}");
+        $response = self::request(
+            method: Request::METHOD_GET,
+            uri: \sprintf('/api/articles/%s', $alias),
+        );
+
         self::assertSuccessResponse($response);
 
         /** @var array{
@@ -47,9 +56,18 @@ final class ArticleInfoTest extends ApiWebTestCase
     {
         $token = User::auth();
 
-        Article::create('Статья', 'statya', '<p>Контент</p>', $token);
+        Article::create(
+            title: 'Статья',
+            alias: 'statya',
+            content: '<p>Контент</p>',
+            token: $token,
+        );
 
-        $response = self::request(Request::METHOD_GET, '/api/articles/another-alias');
+        $response = self::request(
+            method: Request::METHOD_GET,
+            uri: '/api/articles/another-alias',
+        );
+
         self::assertNotFound($response);
     }
 }

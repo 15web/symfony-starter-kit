@@ -23,10 +23,26 @@ final class RemoveArticleTest extends ApiWebTestCase
     {
         $token = User::auth();
 
-        $articleId1 = Article::createAndReturnId('Статья1', 'statya', '<p>Контент</p>', $token);
-        $articleId2 = Article::createAndReturnId('Статья2', 'statya2', '<p>Контент</p>', $token);
+        $articleId1 = Article::createAndReturnId(
+            title: 'Статья1',
+            alias: 'statya',
+            content: '<p>Контент</p>',
+            token: $token,
+        );
 
-        $response = self::request(Request::METHOD_DELETE, "/api/admin/articles/{$articleId1}", token: $token);
+        $articleId2 = Article::createAndReturnId(
+            title: 'Статья2',
+            alias: 'statya2',
+            content: '<p>Контент</p>',
+            token: $token,
+        );
+
+        $response = self::request(
+            method: Request::METHOD_DELETE,
+            uri: \sprintf('/api/admin/articles/%s', $articleId1),
+            token: $token,
+        );
+
         self::assertSuccessContentResponse($response);
 
         $articles = Article::list($token);
@@ -40,10 +56,20 @@ final class RemoveArticleTest extends ApiWebTestCase
     {
         $token = User::auth();
 
-        Article::create('Статья', 'statya', '<p>Контент</p>', $token);
+        Article::create(
+            title: 'Статья',
+            alias: 'statya',
+            content: '<p>Контент</p>',
+            token: $token,
+        );
 
         $articleId = (string) Uuid::v4();
-        $response = self::request(Request::METHOD_DELETE, "/api/admin/articles/{$articleId}", token: $token);
+        $response = self::request(
+            method: Request::METHOD_DELETE,
+            uri: \sprintf('/api/admin/articles/%s', $articleId),
+            token: $token,
+        );
+
         self::assertNotFound($response);
     }
 
@@ -52,9 +78,18 @@ final class RemoveArticleTest extends ApiWebTestCase
     public function testAccessDenied(string $notValidToken): void
     {
         $token = User::auth();
-        $articleId = Article::createAndReturnId('Статья1', 'statya', '<p>Контент</p>', $token);
+        $articleId = Article::createAndReturnId(
+            title: 'Статья1',
+            alias: 'statya',
+            content: '<p>Контент</p>',
+            token: $token,
+        );
 
-        $response = self::request(Request::METHOD_DELETE, "/api/admin/articles/{$articleId}", token: $notValidToken);
+        $response = self::request(
+            method: Request::METHOD_DELETE,
+            uri: \sprintf('/api/admin/articles/%s', $articleId),
+            token: $notValidToken,
+        );
 
         self::assertAccessDenied($response);
     }

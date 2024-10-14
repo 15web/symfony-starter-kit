@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Dev\Tests\Functional\User\ChangePassword;
+namespace Dev\Tests\Functional\User;
 
 use App\Infrastructure\ApiException\ApiErrorCode;
 use Dev\Tests\Functional\SDK\ApiWebTestCase;
@@ -46,7 +46,7 @@ final class ChangePasswordTest extends ApiWebTestCase
 
         $userTokens = self::getConnection()
             ->createQueryBuilder()
-            ->select(...['*'])
+            ->select('id')
             ->from('user_token')
             ->fetchAllAssociative();
 

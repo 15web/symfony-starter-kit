@@ -23,12 +23,24 @@ final class CompleteTaskTest extends ApiWebTestCase
     {
         $token = User::auth();
 
-        $taskId = Task::createAndReturnId('Тестовая задача 1', $token);
+        $taskId = Task::createAndReturnId(
+            taskName: 'Тестовая задача 1',
+            token: $token,
+        );
 
-        $response = self::request(Request::METHOD_POST, "/api/tasks/{$taskId}/complete", token: $token);
+        $response = self::request(
+            method: Request::METHOD_POST,
+            uri: \sprintf('/api/tasks/%s/complete', $taskId),
+            token: $token,
+        );
+
         self::assertSuccessContentResponse($response);
 
-        $response = self::request(Request::METHOD_GET, "/api/tasks/{$taskId}", token: $token);
+        $response = self::request(
+            method: Request::METHOD_GET,
+            uri: \sprintf('/api/tasks/%s', $taskId),
+            token: $token,
+        );
 
         /** @var array{
          *     data: array{
@@ -52,11 +64,23 @@ final class CompleteTaskTest extends ApiWebTestCase
     {
         $token = User::auth();
 
-        $taskId = Task::createAndReturnId('Тестовая задача 1', $token);
+        $taskId = Task::createAndReturnId(
+            taskName: 'Тестовая задача 1',
+            token: $token,
+        );
 
-        self::request(Request::METHOD_POST, "/api/tasks/{$taskId}/complete", token: $token);
+        self::request(
+            method: Request::METHOD_POST,
+            uri: \sprintf('/api/tasks/%s/complete', $taskId),
+            token: $token,
+        );
 
-        $response = self::request(Request::METHOD_POST, "/api/tasks/{$taskId}/complete", token: $token);
+        $response = self::request(
+            method: Request::METHOD_POST,
+            uri: \sprintf('/api/tasks/%s/complete', $taskId),
+            token: $token,
+        );
+
         self::assertBadRequest($response);
     }
 
@@ -65,10 +89,18 @@ final class CompleteTaskTest extends ApiWebTestCase
     {
         $token = User::auth();
 
-        Task::create('Тестовая задача 1', $token);
+        Task::create(
+            taskName: 'Тестовая задача 1',
+            token: $token,
+        );
 
         $taskId = (string) Uuid::v4();
-        $response = self::request(Request::METHOD_POST, "/api/tasks/{$taskId}/complete", token: $token);
+        $response = self::request(
+            method: Request::METHOD_POST,
+            uri: \sprintf('/api/tasks/%s/complete', $taskId),
+            token: $token,
+        );
+
         self::assertNotFound($response);
     }
 
@@ -77,11 +109,14 @@ final class CompleteTaskTest extends ApiWebTestCase
     public function testAccessDenied(string $notValidToken): void
     {
         $token = User::auth();
-        $taskId = Task::createAndReturnId('Тестовая задача 1', $token);
+        $taskId = Task::createAndReturnId(
+            taskName: 'Тестовая задача 1',
+            token: $token,
+        );
 
         $response = self::request(
-            Request::METHOD_POST,
-            "/api/tasks/{$taskId}/complete",
+            method: Request::METHOD_POST,
+            uri: \sprintf('/api/tasks/%s/complete', $taskId),
             token: $notValidToken,
         );
 
@@ -92,14 +127,20 @@ final class CompleteTaskTest extends ApiWebTestCase
     public function testNoAccessAnotherUser(): void
     {
         $token = User::auth();
-        Task::create('Тестовая задача №1', $token);
+        Task::create(
+            taskName: 'Тестовая задача №1',
+            token: $token,
+        );
 
         $tokenSecond = User::auth('second@example.com');
-        $taskId = Task::createAndReturnId('Тестовая задача №2 ', $tokenSecond);
+        $taskId = Task::createAndReturnId(
+            taskName: 'Тестовая задача №2 ',
+            token: $tokenSecond,
+        );
 
         $response = self::request(
-            Request::METHOD_POST,
-            "/api/tasks/{$taskId}/complete",
+            method: Request::METHOD_POST,
+            uri: \sprintf('/api/tasks/%s/complete', $taskId),
             token: $token,
         );
 

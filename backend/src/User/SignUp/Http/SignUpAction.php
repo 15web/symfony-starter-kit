@@ -45,7 +45,7 @@ final readonly class SignUpAction
         }
 
         return new ApiObjectResponse(
-            data: new SuccessResponse()
+            data: new SuccessResponse(),
         );
     }
 }

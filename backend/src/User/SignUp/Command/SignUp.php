@@ -62,7 +62,7 @@ final readonly class SignUp
             new UserPassword(
                 cleanPassword: $signUpCommand->password,
                 hashCost: $this->hashCost,
-            )
+            ),
         );
 
         $this->userRepository->add($user);

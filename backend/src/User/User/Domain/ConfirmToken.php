@@ -19,7 +19,7 @@ final readonly class ConfirmToken
 
     public function __construct(
         #[SensitiveParameter]
-        Uuid $value
+        Uuid $value,
     ) {
         $this->value = $value;
     }

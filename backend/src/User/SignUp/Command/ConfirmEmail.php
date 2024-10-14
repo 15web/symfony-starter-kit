@@ -22,7 +22,7 @@ final readonly class ConfirmEmail
 {
     public function __construct(
         private FindUser $findUser,
-        private UserRepository $userRepository
+        private UserRepository $userRepository,
     ) {}
 
     /**
@@ -30,7 +30,7 @@ final readonly class ConfirmEmail
      */
     public function __invoke(
         #[SensitiveParameter]
-        Uuid $confirmToken
+        Uuid $confirmToken,
     ): void {
         $userData = ($this->findUser)(
             new FindUserQuery(confirmToken: $confirmToken)

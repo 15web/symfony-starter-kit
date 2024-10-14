@@ -20,7 +20,7 @@ final readonly class BuildValidationError
     public function __invoke(MappingError $error): array
     {
         $messages = Messages::flattenFromNode(
-            node: $error->node()
+            node: $error->node(),
         );
 
         $allMessages = [];

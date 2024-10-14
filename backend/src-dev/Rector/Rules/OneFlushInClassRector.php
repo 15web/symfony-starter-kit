@@ -58,7 +58,7 @@ final class OneFlushInClassRector extends AbstractRector
                     {
                     }
                 }
-                CODE_SAMPLE
+                CODE_SAMPLE,
         )]);
     }
 

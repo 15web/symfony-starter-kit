@@ -21,8 +21,19 @@ final class ArticleListTest extends ApiWebTestCase
     public function testSuccess(): void
     {
         $token = User::auth();
-        $articleId1 = Article::createAndReturnId($title1 = 'Статья1', 'statya', '<p>Контент</p>', $token);
-        $articleId2 = Article::createAndReturnId($title2 = 'Статья2', 'statya2', '<p>Контент</p>', $token);
+        $articleId1 = Article::createAndReturnId(
+            title: $title1 = 'Статья1',
+            alias: 'statya',
+            content: '<p>Контент</p>',
+            token: $token,
+        );
+
+        $articleId2 = Article::createAndReturnId(
+            title: $title2 = 'Статья2',
+            alias: 'statya2',
+            content: '<p>Контент</p>',
+            token: $token,
+        );
 
         $articles = Article::list($token);
 
@@ -42,7 +53,11 @@ final class ArticleListTest extends ApiWebTestCase
     #[TestDox('Доступ запрещен')]
     public function testAccessDenied(string $notValidToken): void
     {
-        $response = self::request(Request::METHOD_GET, '/api/admin/articles', token: $notValidToken);
+        $response = self::request(
+            method: Request::METHOD_GET,
+            uri: '/api/admin/articles',
+            token: $notValidToken,
+        );
 
         self::assertAccessDenied($response);
     }

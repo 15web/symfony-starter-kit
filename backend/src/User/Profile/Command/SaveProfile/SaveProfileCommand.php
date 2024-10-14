@@ -18,6 +18,6 @@ final readonly class SaveProfileCommand
     public function __construct(
         #[SensitiveParameter]
         public string $phone,
-        public string $name
+        public string $name,
     ) {}
 }

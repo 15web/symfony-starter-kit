@@ -47,7 +47,7 @@ final readonly class SeoSaveAction
         ]);
 
         return new ApiObjectResponse(
-            data: new SuccessResponse()
+            data: new SuccessResponse(),
         );
     }
 }

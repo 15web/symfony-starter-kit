@@ -23,9 +23,19 @@ final class ArticleInfoTest extends ApiWebTestCase
     {
         $token = User::auth();
 
-        $articleId = Article::createAndReturnId($title = 'Статья', $alias = 'statya', $content = '<p>Контент</p>', $token);
+        $articleId = Article::createAndReturnId(
+            title: $title = 'Статья',
+            alias: $alias = 'statya',
+            content: $content = '<p>Контент</p>',
+            token: $token,
+        );
 
-        $response = self::request(Request::METHOD_GET, "/api/admin/articles/{$articleId}", token: $token);
+        $response = self::request(
+            method: Request::METHOD_GET,
+            uri: \sprintf('/api/admin/articles/%s', $articleId),
+            token: $token,
+        );
+
         self::assertSuccessResponse($response);
 
         /** @var array{
@@ -52,10 +62,20 @@ final class ArticleInfoTest extends ApiWebTestCase
     public function testNotFound(): void
     {
         $token = User::auth();
-        Article::create('Статья', 'statya', '<p>Контент</p>', $token);
+        Article::create(
+            title: 'Статья',
+            alias: 'statya',
+            content: '<p>Контент</p>',
+            token: $token,
+        );
 
         $articleId = (string) Uuid::v4();
-        $response = self::request(Request::METHOD_GET, "/api/admin/articles/{$articleId}", token: $token);
+        $response = self::request(
+            method: Request::METHOD_GET,
+            uri: \sprintf('/api/admin/articles/%s', $articleId),
+            token: $token,
+        );
+
         self::assertNotFound($response);
     }
 
@@ -64,9 +84,18 @@ final class ArticleInfoTest extends ApiWebTestCase
     public function testAccessDenied(string $notValidToken): void
     {
         $token = User::auth();
-        $articleId = Article::createAndReturnId('Статья', 'statya', '<p>Контент</p>', $token);
+        $articleId = Article::createAndReturnId(
+            title: 'Статья',
+            alias: 'statya',
+            content: '<p>Контент</p>',
+            token: $token,
+        );
 
-        $response = self::request(Request::METHOD_GET, "/api/admin/articles/{$articleId}", token: $notValidToken);
+        $response = self::request(
+            method: Request::METHOD_GET,
+            uri: \sprintf('/api/admin/articles/%s', $articleId),
+            token: $notValidToken,
+        );
 
         self::assertAccessDenied($response);
     }

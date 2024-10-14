@@ -33,7 +33,7 @@ class Profile
         ProfileId $profileId,
         UserId $userId,
         Phone $phone,
-        string $name
+        string $name,
     ) {
         $this->id = $profileId->value;
         $this->userId = $userId->value;

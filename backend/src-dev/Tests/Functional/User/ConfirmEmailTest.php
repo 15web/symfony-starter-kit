@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Dev\Tests\Functional\User\SignUp;
+namespace Dev\Tests\Functional\User;
 
 use Dev\Tests\Functional\SDK\ApiWebTestCase;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -24,7 +24,11 @@ final class ConfirmEmailTest extends ApiWebTestCase
         $body['password'] = '123456';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request(Request::METHOD_POST, '/api/sign-up', $body);
+        $response = self::request(
+            method: Request::METHOD_POST,
+            uri: '/api/sign-up',
+            body: $body,
+        );
         self::assertSuccessResponse($response);
 
         self::assertEmailCount(1);
@@ -37,7 +41,10 @@ final class ConfirmEmailTest extends ApiWebTestCase
 
         self::assertNotEmpty($confirmToken);
 
-        $response = self::request(Request::METHOD_GET, "/api/confirm-email/{$confirmToken}");
+        $response = self::request(
+            method: Request::METHOD_GET,
+            uri: \sprintf('/api/confirm-email/%s', $confirmToken),
+        );
         self::assertSuccessResponse($response);
     }
 
@@ -49,7 +56,11 @@ final class ConfirmEmailTest extends ApiWebTestCase
         $body['password'] = '123456';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        self::request(Request::METHOD_POST, '/api/sign-up', $body);
+        self::request(
+            method: Request::METHOD_POST,
+            uri: '/api/sign-up',
+            body: $body,
+        );
 
         /** @var TemplatedEmail $email */
         $email = self::getMailerMessage();
@@ -58,9 +69,15 @@ final class ConfirmEmailTest extends ApiWebTestCase
         $confirmToken = $email->getHeaders()->get('confirmToken')?->getBody();
 
         self::assertNotEmpty($confirmToken);
-        self::request(Request::METHOD_GET, "/api/confirm-email/{$confirmToken}");
+        self::request(
+            method: Request::METHOD_GET,
+            uri: \sprintf('/api/confirm-email/%s', $confirmToken),
+        );
 
-        $response = self::request(Request::METHOD_GET, "/api/confirm-email/{$confirmToken}");
+        $response = self::request(
+            method: Request::METHOD_GET,
+            uri: \sprintf('/api/confirm-email/%s', $confirmToken),
+        );
 
         self::assertNotFound($response);
     }
@@ -73,13 +90,20 @@ final class ConfirmEmailTest extends ApiWebTestCase
         $body['password'] = '123456';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request(Request::METHOD_POST, '/api/sign-up', $body);
+        $response = self::request(
+            method: Request::METHOD_POST,
+            uri: '/api/sign-up',
+            body: $body,
+        );
         self::assertSuccessResponse($response);
         self::assertEmailCount(1);
 
         $confirmToken = Uuid::v4();
 
-        $response = self::request(Request::METHOD_GET, "/api/confirm-email/{$confirmToken}");
+        $response = self::request(
+            method: Request::METHOD_GET,
+            uri: \sprintf('/api/confirm-email/%s', $confirmToken),
+        );
         self::assertNotFound($response);
     }
 }

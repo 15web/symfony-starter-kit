@@ -25,11 +25,22 @@ final class ExportTasksTest extends ApiWebTestCase
     public function testCsvExport(): void
     {
         $token = User::auth();
-        Task::create('Тестовая задача 1', $token);
-        Task::create('Тестовая задача 2', $token);
+        Task::create(
+            taskName: 'Тестовая задача 1',
+            token: $token,
+        );
+        Task::create(
+            taskName: 'Тестовая задача 2',
+            token: $token,
+        );
 
         /** @var BinaryFileResponse $response */
-        $response = self::request(Request::METHOD_GET, '/api/export/tasks.csv', token: $token);
+        $response = self::request(
+            method: Request::METHOD_GET,
+            uri: '/api/export/tasks.csv',
+            token: $token,
+        );
+
         self::assertSuccessResponse($response);
 
         $file = $response->getFile();
@@ -55,12 +66,28 @@ final class ExportTasksTest extends ApiWebTestCase
     public function testXmlExport(): void
     {
         $token = User::auth();
-        Task::create('Тестовая задача 1', $token);
-        Task::create('Тестовая задача 2', $token);
-        Task::create('Тестовая задача 3', $token);
+        Task::create(
+            taskName: 'Тестовая задача 1',
+            token: $token,
+        );
+
+        Task::create(
+            taskName: 'Тестовая задача 2',
+            token: $token,
+        );
+
+        Task::create(
+            taskName: 'Тестовая задача 3',
+            token: $token,
+        );
 
         /** @var BinaryFileResponse $response */
-        $response = self::request(Request::METHOD_GET, '/api/export/tasks.xml', token: $token);
+        $response = self::request(
+            method: Request::METHOD_GET,
+            uri: '/api/export/tasks.xml',
+            token: $token,
+        );
+
         self::assertSuccessResponse($response);
 
         $file = $response->getFile();
@@ -88,12 +115,28 @@ final class ExportTasksTest extends ApiWebTestCase
     public function testLimit(): void
     {
         $token = User::auth();
-        Task::create('Тестовая задача 1', $token);
-        Task::create('Тестовая задача 2', $token);
-        Task::create('Тестовая задача 3', $token);
+        Task::create(
+            taskName: 'Тестовая задача 1',
+            token: $token,
+        );
+
+        Task::create(
+            taskName: 'Тестовая задача 2',
+            token: $token,
+        );
+
+        Task::create(
+            taskName: 'Тестовая задача 3',
+            token: $token,
+        );
 
         /** @var BinaryFileResponse $response */
-        $response = self::request(Request::METHOD_GET, '/api/export/tasks.xml?limit=2', token: $token);
+        $response = self::request(
+            method: Request::METHOD_GET,
+            uri: '/api/export/tasks.xml?limit=2',
+            token: $token,
+        );
+
         self::assertSuccessResponse($response);
 
         $file = $response->getFile();
@@ -115,12 +158,28 @@ final class ExportTasksTest extends ApiWebTestCase
     public function testOffset(): void
     {
         $token = User::auth();
-        Task::create('Тестовая задача 1', $token);
-        Task::create('Тестовая задача 2', $token);
-        Task::create('Тестовая задача 3', $token);
+        Task::create(
+            taskName: 'Тестовая задача 1',
+            token: $token,
+        );
+
+        Task::create(
+            taskName: 'Тестовая задача 2',
+            token: $token,
+        );
+
+        Task::create(
+            taskName: 'Тестовая задача 3',
+            token: $token,
+        );
 
         /** @var BinaryFileResponse $response */
-        $response = self::request(Request::METHOD_GET, '/api/export/tasks.xml?limit=2&offset=2', token: $token);
+        $response = self::request(
+            method: Request::METHOD_GET,
+            uri: '/api/export/tasks.xml?limit=2&offset=2',
+            token: $token,
+        );
+
         self::assertSuccessResponse($response);
 
         $file = $response->getFile();
@@ -143,7 +202,11 @@ final class ExportTasksTest extends ApiWebTestCase
     {
         $token = User::auth();
 
-        $response = self::request(Request::METHOD_GET, '/api/export/tasks.csv', token: $token);
+        $response = self::request(
+            method: Request::METHOD_GET,
+            uri: '/api/export/tasks.csv',
+            token: $token,
+        );
 
         self::assertApiError($response, ApiErrorCode::NotFoundTasksForExport->value);
     }
@@ -153,7 +216,11 @@ final class ExportTasksTest extends ApiWebTestCase
     {
         $token = User::auth();
 
-        $response = self::request(Request::METHOD_GET, '/api/export/tasks.xml', token: $token);
+        $response = self::request(
+            method: Request::METHOD_GET,
+            uri: '/api/export/tasks.xml',
+            token: $token,
+        );
 
         self::assertApiError($response, ApiErrorCode::NotFoundTasksForExport->value);
     }
@@ -165,11 +232,19 @@ final class ExportTasksTest extends ApiWebTestCase
         $token = User::auth();
         Task::create('Тестовая задача 1', $token);
 
-        $response = self::request(Request::METHOD_GET, '/api/export/tasks.xml', token: $notValidToken);
+        $response = self::request(
+            method: Request::METHOD_GET,
+            uri: '/api/export/tasks.xml',
+            token: $notValidToken,
+        );
 
         self::assertAccessDenied($response);
 
-        $response = self::request(Request::METHOD_GET, '/api/export/tasks.csv', token: $notValidToken);
+        $response = self::request(
+            method: Request::METHOD_GET,
+            uri: '/api/export/tasks.csv',
+            token: $notValidToken,
+        );
 
         self::assertAccessDenied($response);
     }
@@ -178,15 +253,34 @@ final class ExportTasksTest extends ApiWebTestCase
     public function testNoAccessAnotherUser(): void
     {
         $token = User::auth();
-        Task::create('Тестовая задача 1', $token);
-        Task::create('Тестовая задача 2', $token);
+        Task::create(
+            taskName: 'Тестовая задача 1',
+            token: $token,
+        );
+
+        Task::create(
+            taskName: 'Тестовая задача 2',
+            token: $token,
+        );
 
         $tokenSecond = User::auth('second@example.com');
-        $taskId3 = Task::createAndReturnId($taskName3 = 'Тестовая задача 3', $tokenSecond);
-        $taskId4 = Task::createAndReturnId($taskName4 = 'Тестовая задача 4', $tokenSecond);
+        $taskId3 = Task::createAndReturnId(
+            taskName: $taskName3 = 'Тестовая задача 3',
+            token: $tokenSecond,
+        );
+
+        $taskId4 = Task::createAndReturnId(
+            taskName: $taskName4 = 'Тестовая задача 4',
+            token: $tokenSecond,
+        );
 
         /** @var BinaryFileResponse $response */
-        $response = self::request(Request::METHOD_GET, '/api/export/tasks.csv', token: $token);
+        $response = self::request(
+            method: Request::METHOD_GET,
+            uri: '/api/export/tasks.csv',
+            token: $token,
+        );
+
         self::assertSuccessResponse($response);
 
         $file = $response->getFile();

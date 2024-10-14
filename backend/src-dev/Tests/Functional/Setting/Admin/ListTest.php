@@ -34,7 +34,12 @@ final class ListTest extends ApiWebTestCase
     #[TestDox('Доступ запрещен')]
     public function testAccessDenied(string $notValidToken): void
     {
-        $response = self::request(Request::METHOD_GET, '/api/admin/settings', token: $notValidToken);
+        $response = self::request(
+            method: Request::METHOD_GET,
+            uri: '/api/admin/settings',
+            token: $notValidToken,
+        );
+
         self::assertAccessDenied($response);
     }
 }

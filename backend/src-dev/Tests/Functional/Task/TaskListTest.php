@@ -27,8 +27,15 @@ final class TaskListTest extends ApiWebTestCase
     {
         $token = User::auth();
 
-        Task::create('Тестовая задача 1', $token);
-        Task::create('Тестовая задача 2', $token);
+        Task::create(
+            taskName: 'Тестовая задача 1',
+            token: $token,
+        );
+
+        Task::create(
+            taskName: 'Тестовая задача 2',
+            token: $token,
+        );
 
         $response = Task::list($token);
         $tasks = $response[self::TASK_DATA_KEY];
@@ -37,7 +44,7 @@ final class TaskListTest extends ApiWebTestCase
 
         self::assertCount(2, $tasks);
         self::assertSame(2, $pagination[self::TOTAL]);
-        self::assertSame(2, $meta['incompletedTasksCount']);
+        self::assertSame(2, $meta['uncompletedTasksCount']);
 
         foreach ($tasks as $task) {
             self::assertNotEmpty($task['id']);
@@ -64,8 +71,15 @@ final class TaskListTest extends ApiWebTestCase
     {
         $token = User::auth();
 
-        Task::create('Тестовая задача 1', $token);
-        Task::create('Тестовая задача 2', $token);
+        Task::create(
+            taskName: 'Тестовая задача 1',
+            token: $token,
+        );
+
+        Task::create(
+            taskName: 'Тестовая задача 2',
+            token: $token,
+        );
 
         $response = Task::list($token, 1);
         $tasks = $response[self::TASK_DATA_KEY];
@@ -80,8 +94,15 @@ final class TaskListTest extends ApiWebTestCase
     {
         $token = User::auth();
 
-        Task::create('Тестовая задача 1', $token);
-        Task::create('Тестовая задача 2', $token);
+        Task::create(
+            taskName: 'Тестовая задача 1',
+            token: $token,
+        );
+
+        Task::create(
+            taskName: 'Тестовая задача 2',
+            token: $token,
+        );
 
         $response = Task::list($token, 10, 3);
         $tasks = $response[self::TASK_DATA_KEY];
@@ -96,9 +117,20 @@ final class TaskListTest extends ApiWebTestCase
     {
         $token = User::auth();
 
-        Task::create('Тестовая задача 1', $token);
-        Task::create('Тестовая задача 2', $token);
-        Task::create('Тестовая задача 3', $token);
+        Task::create(
+            taskName: 'Тестовая задача 1',
+            token: $token,
+        );
+
+        Task::create(
+            taskName: 'Тестовая задача 2',
+            token: $token,
+        );
+
+        Task::create(
+            taskName: 'Тестовая задача 3',
+            token: $token,
+        );
 
         $response = Task::list($token, 1, 2);
         $tasks = $response[self::TASK_DATA_KEY];
@@ -112,12 +144,25 @@ final class TaskListTest extends ApiWebTestCase
     public function testNoAccessAnotherUser(): void
     {
         $token = User::auth();
-        Task::create('Тестовая задача 1', $token);
-        Task::create('Тестовая задача 2', $token);
+        Task::create(
+            taskName: 'Тестовая задача 1',
+            token: $token,
+        );
+
+        Task::create(
+            taskName: 'Тестовая задача 2',
+            token: $token,
+        );
 
         $tokenSecond = User::auth('second@example.com');
-        $taskId3 = Task::createAndReturnId($taskName3 = 'Тестовая задача 3', $tokenSecond);
-        $taskId4 = Task::createAndReturnId($taskName4 = 'Тестовая задача 4', $tokenSecond);
+        $taskId3 = Task::createAndReturnId(
+            taskName: $taskName3 = 'Тестовая задача 3',
+            token: $tokenSecond,
+        );
+        $taskId4 = Task::createAndReturnId(
+            taskName: $taskName4 = 'Тестовая задача 4',
+            token: $tokenSecond,
+        );
 
         $response = Task::list($token);
         $tasks = $response[self::TASK_DATA_KEY];
@@ -137,7 +182,11 @@ final class TaskListTest extends ApiWebTestCase
     #[TestDox('Доступ запрещен')]
     public function testAccessDenied(string $notValidToken): void
     {
-        $response = self::request(Request::METHOD_GET, '/api/tasks', token: $notValidToken);
+        $response = self::request(
+            method: Request::METHOD_GET,
+            uri: '/api/tasks',
+            token: $notValidToken,
+        );
 
         self::assertAccessDenied($response);
     }

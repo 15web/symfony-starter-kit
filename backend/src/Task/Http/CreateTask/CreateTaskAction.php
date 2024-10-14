@@ -55,7 +55,7 @@ final readonly class CreateTaskAction
         ]);
 
         return new ApiObjectResponse(
-            data: new TaskData($taskId->value)
+            data: new TaskData($taskId->value),
         );
     }
 }

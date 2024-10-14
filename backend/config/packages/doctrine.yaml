@@ -23,7 +23,7 @@ doctrine:
                 prefix: 'App\'
                 alias: App
         controller_resolver:
-            auto_mapping: true
+            auto_mapping: false
 
 when@test:
     parameters:

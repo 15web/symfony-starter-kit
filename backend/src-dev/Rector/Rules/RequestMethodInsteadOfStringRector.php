@@ -32,8 +32,8 @@ final class RequestMethodInsteadOfStringRector extends AbstractRector
                 ,
                 <<<'CODE_SAMPLE'
                         #[Route('/admin/articles', methods: [Request::METHOD_POST])]
-                    CODE_SAMPLE
-            )]
+                    CODE_SAMPLE,
+            )],
         );
     }
 

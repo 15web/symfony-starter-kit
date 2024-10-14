@@ -25,7 +25,11 @@ final class User extends ApiWebTestCase
         $body['password'] = $password;
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        self::request(Request::METHOD_POST, '/api/sign-up', $body);
+        self::request(
+            method: Request::METHOD_POST,
+            uri: '/api/sign-up',
+            body: $body,
+        );
 
         /** @var TemplatedEmail $email */
         $email = self::getMailerMessage();
@@ -33,14 +37,21 @@ final class User extends ApiWebTestCase
         /** @var string $confirmToken */
         $confirmToken = $email->getHeaders()->get('confirmToken')?->getBody();
 
-        self::request(Request::METHOD_GET, "/api/confirm-email/{$confirmToken}");
+        self::request(
+            method: Request::METHOD_GET,
+            uri: \sprintf('/api/confirm-email/%s', $confirmToken),
+        );
 
         $body = [];
         $body['email'] = $userEmail;
         $body['password'] = $password;
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request(Request::METHOD_POST, '/api/sign-in', $body);
+        $response = self::request(
+            method: Request::METHOD_POST,
+            uri: '/api/sign-in',
+            body: $body,
+        );
 
         /** @var array{
          *     data: array{token: string}

@@ -38,7 +38,7 @@ final readonly class UpdateAction
         if ($sameArticle !== null && $sameArticle->getId() !== $article->getId()) {
             throw new ApiBadResponseException(
                 errors: ['Запись с таким алиасом уже существует'],
-                apiCode: ApiErrorCode::ArticleAlreadyExist
+                apiCode: ApiErrorCode::ArticleAlreadyExist,
             );
         }
 
@@ -51,7 +51,7 @@ final readonly class UpdateAction
         ($this->flush)();
 
         return new ApiObjectResponse(
-            data: $article
+            data: $article,
         );
     }
 }

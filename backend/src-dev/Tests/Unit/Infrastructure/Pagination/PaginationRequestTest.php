@@ -26,7 +26,10 @@ final class PaginationRequestTest extends TestCase
     #[TestDox('Проверка аргументов')]
     public function testSuccess(): void
     {
-        $paginationRequest = new PaginationRequest(3, 15);
+        $paginationRequest = new PaginationRequest(
+            offset: 3,
+            limit: 15,
+        );
 
         self::assertSame(3, $paginationRequest->offset);
         self::assertSame(15, $paginationRequest->limit);

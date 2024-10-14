@@ -20,7 +20,12 @@ final class Article extends ApiWebTestCase
         $body['body'] = $content;
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        return self::request(Request::METHOD_POST, '/api/admin/articles', $body, token: $token);
+        return self::request(
+            method: Request::METHOD_POST,
+            uri: '/api/admin/articles',
+            body: $body,
+            token: $token,
+        );
     }
 
     public static function createAndReturnId(string $title, string $alias, string $content, string $token): string
@@ -31,7 +36,12 @@ final class Article extends ApiWebTestCase
         $body['body'] = $content;
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request(Request::METHOD_POST, '/api/admin/articles', $body, token: $token);
+        $response = self::request(
+            method: Request::METHOD_POST,
+            uri: '/api/admin/articles',
+            body: $body,
+            token: $token,
+        );
 
         /** @var array{
          *     data: array{
@@ -60,7 +70,11 @@ final class Article extends ApiWebTestCase
      */
     public static function list(string $token): array
     {
-        $response = self::request(Request::METHOD_GET, '/api/admin/articles', token: $token);
+        $response = self::request(
+            method: Request::METHOD_GET,
+            uri: '/api/admin/articles',
+            token: $token,
+        );
 
         self::assertSuccessResponse($response);
 

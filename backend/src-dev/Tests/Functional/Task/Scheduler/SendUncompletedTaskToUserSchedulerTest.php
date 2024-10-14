@@ -23,10 +23,13 @@ final class SendUncompletedTaskToUserSchedulerTest extends ApiWebTestCase
         $token = User::auth();
         Task::create($taskName1 = 'Тестовая задача для отправки писем №1', $token);
 
-        $taskId2 = Task::createAndReturnId('Тестовая задача для отправки писем №2', $token);
+        $taskId2 = Task::createAndReturnId(
+            taskName: 'Тестовая задача для отправки писем №2',
+            token: $token,
+        );
         self::request(
             method: Request::METHOD_POST,
-            uri: "/api/tasks/{$taskId2}/complete",
+            uri: \sprintf('/api/tasks/%s/complete', $taskId2),
             token: $token,
         );
 
@@ -50,17 +53,24 @@ final class SendUncompletedTaskToUserSchedulerTest extends ApiWebTestCase
     {
         $token = User::auth();
 
-        $taskId1 = Task::createAndReturnId('Тестовая задача для отправки писем №1', $token);
+        $taskId1 = Task::createAndReturnId(
+            taskName: 'Тестовая задача для отправки писем №1',
+            token: $token,
+        );
         self::request(
             method: Request::METHOD_POST,
-            uri: "/api/tasks/{$taskId1}/complete",
+            uri: \sprintf('/api/tasks/%s/complete', $taskId1),
             token: $token,
         );
 
-        $taskId2 = Task::createAndReturnId('Тестовая задача для отправки писем №2', $token);
+        $taskId2 = Task::createAndReturnId(
+            taskName: 'Тестовая задача для отправки писем №2',
+            token: $token,
+        );
+
         self::request(
             method: Request::METHOD_POST,
-            uri: "/api/tasks/{$taskId2}/complete",
+            uri: \sprintf('/api/tasks/%s/complete', $taskId2),
             token: $token,
         );
 

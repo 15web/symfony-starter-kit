@@ -40,7 +40,7 @@ final readonly class TaskCommentsListAction
 
         return new ApiListObjectResponse(
             data: $taskComments,
-            pagination: new PaginationResponse(total: \count($taskComments))
+            pagination: new PaginationResponse(total: \count($taskComments)),
         );
     }
 
