@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 final readonly class RequestIdLoggerProcessor implements ProcessorInterface
 {
     public function __construct(
-        private RequestStack $requestStack
+        private RequestStack $requestStack,
     ) {}
 
     #[Override]

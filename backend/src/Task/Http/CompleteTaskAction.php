@@ -40,7 +40,7 @@ final readonly class CompleteTaskAction
         #[ValueResolver(TaskArgumentValueResolver::class)]
         Task $task,
         #[ValueResolver(UserIdArgumentValueResolver::class)]
-        UserId $userId
+        UserId $userId,
     ): ApiObjectResponse {
         if (!$userId->equalTo($task->getUserId())) {
             throw new ApiNotFoundException(['Запись не найдена']);
@@ -60,7 +60,7 @@ final readonly class CompleteTaskAction
         }
 
         return new ApiObjectResponse(
-            data: new SuccessResponse()
+            data: new SuccessResponse(),
         );
     }
 }

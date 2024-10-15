@@ -13,7 +13,7 @@ use PhpCsFixer\Tokenizer\TokensAnalyzer;
 final readonly class TestdoxForMethods
 {
     public function __construct(
-        private DocCommentHelper $commentHelper
+        private DocCommentHelper $commentHelper,
     ) {}
 
     public function addTestdoxAnnotation(Tokens $tokens, int $startIndex, int $endIndex): void

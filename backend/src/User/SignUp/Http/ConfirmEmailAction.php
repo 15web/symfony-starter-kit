@@ -51,7 +51,7 @@ final readonly class ConfirmEmailAction
         }
 
         return new ApiObjectResponse(
-            data: new SuccessResponse()
+            data: new SuccessResponse(),
         );
     }
 }

@@ -29,7 +29,7 @@ final readonly class ProfileInfoAction
 
     public function __invoke(
         #[ValueResolver(UserIdArgumentValueResolver::class)]
-        UserId $userId
+        UserId $userId,
     ): ApiObjectResponse {
         return new ApiObjectResponse(
             data: $this->buildResponseData($userId),

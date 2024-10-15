@@ -28,13 +28,13 @@ final readonly class RemoveAction
 
     public function __invoke(
         #[ValueResolver(ArticleArgumentValueResolver::class)]
-        Article $article
+        Article $article,
     ): ApiObjectResponse {
         $this->articleRepository->remove($article);
         ($this->flush)();
 
         return new ApiObjectResponse(
-            data: new SuccessResponse()
+            data: new SuccessResponse(),
         );
     }
 }

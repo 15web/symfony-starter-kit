@@ -54,7 +54,7 @@ final readonly class SettingSaveAction
         }
 
         return new ApiObjectResponse(
-            data: new SuccessResponse()
+            data: new SuccessResponse(),
         );
     }
 }

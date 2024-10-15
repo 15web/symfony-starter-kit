@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Dev\Tests\Functional\User\SignIn;
+namespace Dev\Tests\Functional\User;
 
 use Dev\Tests\Functional\SDK\ApiWebTestCase;
 use Dev\Tests\Functional\SDK\User;
@@ -20,10 +20,20 @@ final class LogoutTest extends ApiWebTestCase
     {
         $token = User::auth();
 
-        $response = self::request(Request::METHOD_GET, '/api/logout', token: $token);
+        $response = self::request(
+            method: Request::METHOD_GET,
+            uri: '/api/logout',
+            token: $token,
+        );
+
         self::assertSuccessResponse($response);
 
-        $response = self::request(Request::METHOD_GET, '/api/logout', token: $token);
+        $response = self::request(
+            method: Request::METHOD_GET,
+            uri: '/api/logout',
+            token: $token,
+        );
+
         self::assertAccessDenied($response);
     }
 }

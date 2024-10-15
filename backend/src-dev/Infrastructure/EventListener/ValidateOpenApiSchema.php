@@ -38,7 +38,7 @@ final readonly class ValidateOpenApiSchema
         #[Autowire('%kernel.project_dir%%env(string:OPENAPI_YAML_FILE)%')]
         string $openApiFilePath,
         #[Autowire('%env(bool:OPEN_API_VALIDATION)%')]
-        private bool $activateValidation
+        private bool $activateValidation,
     ) {
         $validatorBuilder = (new ValidatorBuilder())->fromYamlFile($openApiFilePath);
         $this->requestValidator = $validatorBuilder->getRequestValidator();
@@ -84,9 +84,9 @@ final readonly class ValidateOpenApiSchema
         $this->responseValidator->validate(
             opAddr: new OperationAddress(
                 $request->getPathInfo(),
-                strtolower($request->getMethod())
+                strtolower($request->getMethod()),
             ),
-            response: $psrResponse
+            response: $psrResponse,
         );
     }
 

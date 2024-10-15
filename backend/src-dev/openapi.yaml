@@ -977,10 +977,10 @@ components:
               meta:
                 type: object
                 required:
-                  - incompletedTasksCount
+                  - uncompletedTasksCount
                 additionalProperties: false
                 properties:
-                  incompletedTasksCount:
+                  uncompletedTasksCount:
                     type: number
                     minimum: 0
                     description: Количество незакрытых задач

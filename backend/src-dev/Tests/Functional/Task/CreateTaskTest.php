@@ -21,7 +21,10 @@ final class CreateTaskTest extends ApiWebTestCase
     public function testSuccess(): void
     {
         $token = User::auth();
-        $response = Task::create($taskName = 'Тестовая задача', $token);
+        $response = Task::create(
+            taskName: $taskName = 'Тестовая задача',
+            token: $token,
+        );
 
         self::assertSuccessResponse($response);
 
@@ -45,7 +48,10 @@ final class CreateTaskTest extends ApiWebTestCase
     #[TestDox('Доступ запрещен')]
     public function testAccessDenied(string $notValidToken): void
     {
-        $response = Task::create('Тестовая задача', $notValidToken);
+        $response = Task::create(
+            taskName: 'Тестовая задача',
+            token: $notValidToken,
+        );
 
         self::assertAccessDenied($response);
     }
@@ -60,7 +66,14 @@ final class CreateTaskTest extends ApiWebTestCase
         $this->assertBadRequests(['taskName' => ''], $token);
 
         $badJson = '{"taskName"=1}';
-        $response = self::request(Request::METHOD_POST, '/api/tasks', $badJson, token: $token, validateRequestSchema: false);
+        $response = self::request(
+            method: Request::METHOD_POST,
+            uri: '/api/tasks',
+            body: $badJson,
+            token: $token,
+            validateRequestSchema: false,
+        );
+
         self::assertBadRequest($response);
     }
 
@@ -71,7 +84,14 @@ final class CreateTaskTest extends ApiWebTestCase
     {
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request(Request::METHOD_POST, '/api/tasks', $body, token: $token, validateRequestSchema: false);
+        $response = self::request(
+            method: Request::METHOD_POST,
+            uri: '/api/tasks',
+            body: $body,
+            token: $token,
+            validateRequestSchema: false,
+        );
+
         self::assertBadRequest($response);
     }
 }

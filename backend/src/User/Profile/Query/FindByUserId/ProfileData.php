@@ -14,6 +14,6 @@ final readonly class ProfileData
     public function __construct(
         #[SensitiveParameter]
         public ?string $phone = null,
-        public ?string $name = null
+        public ?string $name = null,
     ) {}
 }

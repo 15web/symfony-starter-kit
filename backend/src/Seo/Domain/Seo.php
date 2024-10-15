@@ -64,7 +64,7 @@ class Seo
     public function change(
         string $title,
         ?string $description,
-        ?string $keywords
+        ?string $keywords,
     ): void {
         $this->title = $title;
         $this->description = $description;

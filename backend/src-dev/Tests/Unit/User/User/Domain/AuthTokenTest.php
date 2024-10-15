@@ -28,7 +28,6 @@ final class AuthTokenTest extends TestCase
             hashCost: 4,
         );
 
-        self::assertInstanceOf(AuthToken::class, $generatedToken);
         self::assertInstanceOf(UserTokenId::class, $generatedToken->tokenId);
     }
 
@@ -61,7 +60,6 @@ final class AuthTokenTest extends TestCase
             hashCost: 4,
         );
 
-        self::assertInstanceOf(AuthToken::class, $parsedToken);
         self::assertInstanceOf(UserTokenId::class, $parsedToken->tokenId);
     }
 

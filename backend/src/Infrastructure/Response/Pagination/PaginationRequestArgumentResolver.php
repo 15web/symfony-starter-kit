@@ -43,7 +43,7 @@ final readonly class PaginationRequestArgumentResolver implements ValueResolverI
                 [
                     self::QUERY_OFFSET_NAME => $request->query->getInt(self::QUERY_OFFSET_NAME),
                     self::QUERY_LIMIT_NAME => $request->query->getInt(self::QUERY_LIMIT_NAME, 10),
-                ]
+                ],
             );
         } catch (MappingError $e) {
             $errorMessages = ($this->buildValidationError)($e);

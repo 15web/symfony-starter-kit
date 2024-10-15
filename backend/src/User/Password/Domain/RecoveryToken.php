@@ -30,7 +30,7 @@ class RecoveryToken
         Uuid $id,
         UserId $userId,
         #[SensitiveParameter]
-        Uuid $token
+        Uuid $token,
     ) {
         $this->id = $id;
         $this->userId = $userId->value;

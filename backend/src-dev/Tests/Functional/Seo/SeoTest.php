@@ -25,10 +25,13 @@ final class SeoTest extends ApiWebTestCase
             identity: $id = (string) Uuid::v7(),
             title: $title = 'title',
             description: $description = 'description',
-            keywords: $keywords = 'keywords'
+            keywords: $keywords = 'keywords',
         );
 
-        $response = self::request(Request::METHOD_GET, "/api/seo/{$type}/{$id}");
+        $response = self::request(
+            method: Request::METHOD_GET,
+            uri: \sprintf('/api/seo/%s/%s', $type, $id),
+        );
         self::assertSuccessResponse($response);
 
         /** @var array{
@@ -44,17 +47,21 @@ final class SeoTest extends ApiWebTestCase
     #[TestDox('Получение seo данных с несуществующим идентификатором')]
     public function testNotFound(): void
     {
-        $response = self::request(Request::METHOD_GET, '/api/seo/'.SeoResourceType::ARTICLE->value.'/'.Uuid::v7());
+        $response = self::request(
+            method: Request::METHOD_GET,
+            uri: \sprintf('/api/seo/%s/%s', SeoResourceType::ARTICLE->value, Uuid::v7()),
+        );
 
         self::assertSuccessResponse($response);
 
         /** @var array{
-         *     data: array{title: string, description: string, keywords:string}
-         * } $seo */
+         *     data: array{title: ?string, description: ?string, keywords: ?string}
+         * } $seo
+         */
         $seo = self::jsonDecode($response->getContent());
 
-        self::assertSame($seo['data']['title'], null);
-        self::assertSame($seo['data']['description'], null);
-        self::assertSame($seo['data']['keywords'], null);
+        self::assertNull($seo['data']['title']);
+        self::assertNull($seo['data']['description']);
+        self::assertNull($seo['data']['keywords']);
     }
 }

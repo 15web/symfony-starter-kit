@@ -32,7 +32,7 @@ final readonly class SerializeExceptionResponse
 
         if ($exception instanceof HttpExceptionInterface) {
             $exception = new ApiSystemException(
-                errors: ["Http ошибка: {$exception->getMessage()}"],
+                errors: [\sprintf('Http ошибка: %s', $exception->getMessage())],
                 status: $exception->getStatusCode(),
                 previous: $exception,
             );
@@ -40,7 +40,7 @@ final readonly class SerializeExceptionResponse
 
         if (!$exception instanceof ApiException) {
             $exception = new ApiSystemException(
-                errors: ["Ошибка приложения, код ошибки {$exception->getCode()}"],
+                errors: [\sprintf('Ошибка приложения, код ошибки %s', $exception->getCode())],
                 status: Response::HTTP_INTERNAL_SERVER_ERROR,
                 previous: $exception,
             );
@@ -59,9 +59,9 @@ final readonly class SerializeExceptionResponse
                     errors: $exception->getErrors(),
                     code: $exception->getApiCode(),
                 ),
-                status: ResponseStatus::Error
+                status: ResponseStatus::Error,
             ),
-            format: JsonEncoder::FORMAT
+            format: JsonEncoder::FORMAT,
         );
 
         $headers = [];

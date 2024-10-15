@@ -56,9 +56,9 @@ final class ClassDocCommentFixer implements FixerInterface, WhitespacesAwareFixe
                     '<?php
 final class Sample
 {}
-'
+',
                 ),
-            ]
+            ],
         );
     }
 

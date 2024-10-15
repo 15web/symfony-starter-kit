@@ -16,6 +16,6 @@ final readonly class RecoverPasswordCommand
      */
     public function __construct(
         #[SensitiveParameter]
-        public string $password
+        public string $password,
     ) {}
 }

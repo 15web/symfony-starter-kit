@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Dev\Tests\Functional\User\RecoveryPassword;
+namespace Dev\Tests\Functional\User;
 
 use Dev\Tests\Functional\SDK\ApiWebTestCase;
 use Iterator;
@@ -54,7 +54,7 @@ final class RecoverPasswordTest extends ApiWebTestCase
 
         $response = self::request(
             method: Request::METHOD_POST,
-            uri: "/api/recover-password/{$recoverToken}",
+            uri: \sprintf('/api/recover-password/%s', $recoverToken),
             body: json_encode(['password' => $password], JSON_THROW_ON_ERROR),
         );
         self::assertSuccessResponse($response);
@@ -73,7 +73,7 @@ final class RecoverPasswordTest extends ApiWebTestCase
 
         $response = self::request(
             method: Request::METHOD_POST,
-            uri: "/api/recover-password/{$recoverToken}",
+            uri: \sprintf('/api/recover-password/%s', $recoverToken),
             body: json_encode(['password' => $password], JSON_THROW_ON_ERROR),
         );
 
@@ -81,7 +81,7 @@ final class RecoverPasswordTest extends ApiWebTestCase
 
         $userTokens = self::getConnection()
             ->createQueryBuilder()
-            ->select(...['*'])
+            ->select('id')
             ->from('user_token')
             ->fetchAllAssociative();
 
@@ -96,7 +96,7 @@ final class RecoverPasswordTest extends ApiWebTestCase
 
         $response = self::request(
             method: Request::METHOD_POST,
-            uri: "/api/recover-password/{$token}",
+            uri: \sprintf('/api/recover-password/%s', $token),
             body: json_encode(['password' => '123456'], JSON_THROW_ON_ERROR),
             validateRequestSchema: false,
         );

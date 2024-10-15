@@ -17,6 +17,6 @@ final readonly class RecoveryPasswordMessage implements Message
     public function __construct(
         #[SensitiveParameter]
         public Uuid $token,
-        public Email $email
+        public Email $email,
     ) {}
 }

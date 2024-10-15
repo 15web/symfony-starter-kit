@@ -50,7 +50,7 @@ abstract class ApiWebTestCase extends WebTestCase
         ?string $token = null,
         bool $validateRequestSchema = true,
         bool $validateResponseSchema = true,
-        bool $resetRateLimiter = true
+        bool $resetRateLimiter = true,
     ): Response {
         Assert::notEmpty($method);
         Assert::notEmpty($uri);
@@ -64,12 +64,18 @@ abstract class ApiWebTestCase extends WebTestCase
             $headers['HTTP_X_AUTH_TOKEN'] = $token;
         }
 
-        self::$client->request($method, $uri, [
-            // передаем признак в ValidateOpenApiSchema что не нужно проверять запрос
-            ValidateOpenApiSchema::VALIDATE_REQUEST_KEY => $validateRequestSchema,
-            // передаем признак в ValidateOpenApiSchema что не нужно проверять ответ
-            ValidateOpenApiSchema::VALIDATE_RESPONSE_KEY => $validateResponseSchema,
-        ], [], $headers, $body);
+        self::$client->request(
+            method: $method,
+            uri: $uri,
+            parameters: [
+                // передаем признак в ValidateOpenApiSchema что не нужно проверять запрос
+                ValidateOpenApiSchema::VALIDATE_REQUEST_KEY => $validateRequestSchema,
+                // передаем признак в ValidateOpenApiSchema что не нужно проверять ответ
+                ValidateOpenApiSchema::VALIDATE_RESPONSE_KEY => $validateResponseSchema,
+            ],
+            server: $headers,
+            content: $body,
+        );
 
         if ($resetRateLimiter) {
             /** @var Psr6CacheClearer $clearer */

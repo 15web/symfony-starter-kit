@@ -21,7 +21,7 @@ final readonly class UserListData
     public function __construct(
         public Uuid $id,
         #[SensitiveParameter]
-        string $email
+        string $email,
     ) {
         $this->email = new Email($email);
     }

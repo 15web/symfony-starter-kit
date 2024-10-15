@@ -18,7 +18,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
 final readonly class IsGrantedSubscriber implements EventSubscriberInterface
 {
     public function __construct(
-        private CheckRoleGranted $checkRoleGranted
+        private CheckRoleGranted $checkRoleGranted,
     ) {}
 
     /**

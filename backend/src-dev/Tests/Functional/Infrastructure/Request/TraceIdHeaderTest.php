@@ -36,7 +36,7 @@ final class TraceIdHeaderTest extends ApiWebTestCase
         self::assertSuccessResponse($response);
 
         self::assertNotNull(
-            $response->headers->get('X-Request-TraceId')
+            $response->headers->get('X-Request-TraceId'),
         );
     }
 
@@ -51,7 +51,7 @@ final class TraceIdHeaderTest extends ApiWebTestCase
         self::assertSuccessResponse($response);
 
         self::assertNull(
-            $response->headers->get('X-Request-TraceId')
+            $response->headers->get('X-Request-TraceId'),
         );
     }
 }

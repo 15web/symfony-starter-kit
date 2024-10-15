@@ -25,7 +25,11 @@ final class Setting extends ApiWebTestCase
     {
         $token = User::auth();
 
-        $response = self::request(Request::METHOD_GET, '/api/admin/settings', token: $token);
+        $response = self::request(
+            method: Request::METHOD_GET,
+            uri: '/api/admin/settings',
+            token: $token,
+        );
 
         self::assertSuccessResponse($response);
 
@@ -54,7 +58,10 @@ final class Setting extends ApiWebTestCase
      */
     public static function publicList(): array
     {
-        $response = self::request(Request::METHOD_GET, '/api/settings');
+        $response = self::request(
+            method: Request::METHOD_GET,
+            uri: '/api/settings',
+        );
 
         self::assertSuccessResponse($response);
 

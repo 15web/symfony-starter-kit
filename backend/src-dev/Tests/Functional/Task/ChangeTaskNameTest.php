@@ -22,16 +22,29 @@ final class ChangeTaskNameTest extends ApiWebTestCase
     public function testSuccess(): void
     {
         $token = User::auth();
-        $taskId = Task::createAndReturnId('Тестовая задача 1', $token);
+        $taskId = Task::createAndReturnId(
+            taskName: 'Тестовая задача 1',
+            token: $token,
+        );
 
         $body = [];
         $body['taskName'] = $secondName = 'Тестовая задача 2';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request(Request::METHOD_POST, "/api/tasks/{$taskId}/update-task-name", $body, token: $token);
+        $response = self::request(
+            method: Request::METHOD_POST,
+            uri: \sprintf('/api/tasks/%s/update-task-name', $taskId),
+            body: $body,
+            token: $token,
+        );
+
         self::assertSuccessContentResponse($response);
 
-        $response = self::request(Request::METHOD_GET, "/api/tasks/{$taskId}", token: $token);
+        $response = self::request(
+            method: Request::METHOD_GET,
+            uri: \sprintf('/api/tasks/%s', $taskId),
+            token: $token,
+        );
 
         /** @var array{
          *     data: array{
@@ -53,14 +66,23 @@ final class ChangeTaskNameTest extends ApiWebTestCase
     public function testNotFound(): void
     {
         $token = User::auth();
-        Task::create('Тестовая задача 1', $token);
+        Task::create(
+            taskName: 'Тестовая задача 1',
+            token: $token,
+        );
 
         $body = [];
         $body['taskName'] = 'Тестовая задача 2';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
         $taskId = (string) Uuid::v4();
-        $response = self::request(Request::METHOD_POST, "/api/tasks/{$taskId}/update-task-name", $body, token: $token);
+        $response = self::request(
+            method: Request::METHOD_POST,
+            uri: \sprintf('/api/tasks/%s/update-task-name', $taskId),
+            body: $body,
+            token: $token,
+        );
+
         self::assertNotFound($response);
     }
 
@@ -78,17 +100,20 @@ final class ChangeTaskNameTest extends ApiWebTestCase
     public function testAccessDenied(string $notValidToken): void
     {
         $token = User::auth();
-        $taskId = Task::createAndReturnId('Тестовая задача 1', $token);
+        $taskId = Task::createAndReturnId(
+            taskName: 'Тестовая задача 1',
+            token: $token,
+        );
 
         $body = [];
         $body['taskName'] = 'Тестовая задача 2';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
         $response = self::request(
-            Request::METHOD_POST,
-            "/api/tasks/{$taskId}/update-task-name",
-            $body,
-            token: $notValidToken
+            method: Request::METHOD_POST,
+            uri: \sprintf('/api/tasks/%s/update-task-name', $taskId),
+            body: $body,
+            token: $notValidToken,
         );
 
         self::assertAccessDenied($response);
@@ -101,17 +126,20 @@ final class ChangeTaskNameTest extends ApiWebTestCase
         Task::create('Тестовая задача №1', $userToken);
 
         $anotherUserToken = User::auth('second@example.com');
-        $anotherTaskId = Task::createAndReturnId('Тестовая задача №2 ', $anotherUserToken);
+        $anotherTaskId = Task::createAndReturnId(
+            taskName: 'Тестовая задача №2 ',
+            token: $anotherUserToken,
+        );
 
         $body = [];
         $body['taskName'] = 'Тестовая задача 2';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
         $response = self::request(
-            Request::METHOD_POST,
-            "/api/tasks/{$anotherTaskId}/update-task-name",
-            $body,
-            token: $userToken
+            method: Request::METHOD_POST,
+            uri: \sprintf('/api/tasks/%s/update-task-name', $anotherTaskId),
+            body: $body,
+            token: $userToken,
         );
 
         self::assertNotFound($response);
@@ -122,16 +150,19 @@ final class ChangeTaskNameTest extends ApiWebTestCase
      */
     private function assertBadRequests(array $body, string $token): void
     {
-        $taskId = Task::createAndReturnId('Тестовая задача 1', $token);
+        $taskId = Task::createAndReturnId(
+            taskName: 'Тестовая задача 1',
+            token: $token,
+        );
 
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
         $response = self::request(
-            Request::METHOD_POST,
-            "/api/tasks/{$taskId}/update-task-name",
-            $body,
+            method: Request::METHOD_POST,
+            uri: \sprintf('/api/tasks/%s/update-task-name', $taskId),
+            body: $body,
             token: $token,
-            validateRequestSchema: false
+            validateRequestSchema: false,
         );
         self::assertBadRequest($response);
     }

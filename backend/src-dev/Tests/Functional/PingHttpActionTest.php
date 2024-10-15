@@ -18,7 +18,10 @@ final class PingHttpActionTest extends ApiWebTestCase
     #[TestDox('Получение ответа')]
     public function testSuccess(): void
     {
-        $response = self::request(Request::METHOD_GET, '/api/ping');
+        $response = self::request(
+            method: Request::METHOD_GET,
+            uri: '/api/ping',
+        );
 
         /** @var array{
          *     data: array{result: string},

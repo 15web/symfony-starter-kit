@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Dev\Tests\Functional\User\SignUp;
+namespace Dev\Tests\Functional\User;
 
 use App\Infrastructure\ApiException\ApiErrorCode;
 use Dev\Tests\Functional\SDK\ApiWebTestCase;
@@ -24,7 +24,12 @@ final class SignUpTest extends ApiWebTestCase
         $body['password'] = '123456';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request(Request::METHOD_POST, '/api/sign-up', $body);
+        $response = self::request(
+            method: Request::METHOD_POST,
+            uri: '/api/sign-up',
+            body: $body,
+        );
+
         self::assertSuccessResponse($response);
 
         self::assertEmailCount(1);
@@ -44,8 +49,17 @@ final class SignUpTest extends ApiWebTestCase
         $body['password'] = '123456';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        self::request(Request::METHOD_POST, '/api/sign-up', $body);
-        $response = self::request(Request::METHOD_POST, '/api/sign-up', $body);
+        self::request(
+            method: Request::METHOD_POST,
+            uri: '/api/sign-up',
+            body: $body,
+        );
+
+        $response = self::request(
+            method: Request::METHOD_POST,
+            uri: '/api/sign-up',
+            body: $body,
+        );
 
         self::assertApiError($response, ApiErrorCode::UserAlreadyExist->value);
     }
@@ -54,7 +68,13 @@ final class SignUpTest extends ApiWebTestCase
     public function testBadRequest(): void
     {
         $body = json_encode(['email' => 'test', 'password' => '123456'], JSON_THROW_ON_ERROR);
-        $response = self::request(Request::METHOD_POST, '/api/sign-up', $body, validateRequestSchema: false);
+        $response = self::request(
+            method: Request::METHOD_POST,
+            uri: '/api/sign-up',
+            body: $body,
+            validateRequestSchema: false,
+        );
+
         self::assertBadRequest($response);
     }
 }

@@ -23,14 +23,22 @@ final class TaskInfoTest extends ApiWebTestCase
     {
         $token = User::auth();
 
-        $taskId = Task::createAndReturnId($taskName = 'Тестовая задача 1', $token);
+        $taskId = Task::createAndReturnId(
+            taskName: $taskName = 'Тестовая задача 1',
+            token: $token,
+        );
 
         $response = Task::list($token);
         $tasks = $response['data'];
 
         self::assertCount(1, $tasks);
 
-        $response = self::request(Request::METHOD_GET, "/api/tasks/{$taskId}", token: $token);
+        $response = self::request(
+            method: Request::METHOD_GET,
+            uri: \sprintf('/api/tasks/%s', $taskId),
+            token: $token,
+        );
+
         self::assertSuccessResponse($response);
 
         /** @var array{
@@ -58,10 +66,18 @@ final class TaskInfoTest extends ApiWebTestCase
     {
         $token = User::auth();
 
-        Task::create('Тестовая задача 1', $token);
+        Task::create(
+            taskName: 'Тестовая задача 1',
+            token: $token,
+        );
 
         $taskId = (string) Uuid::v4();
-        $response = self::request(Request::METHOD_GET, "/api/tasks/{$taskId}", token: $token);
+        $response = self::request(
+            method: Request::METHOD_GET,
+            uri: \sprintf('/api/tasks/%s', $taskId),
+            token: $token,
+        );
+
         self::assertNotFound($response);
     }
 
@@ -69,12 +85,23 @@ final class TaskInfoTest extends ApiWebTestCase
     public function testNoAccessAnotherUser(): void
     {
         $token = User::auth();
-        Task::create('Тестовая задача №1', $token);
+        Task::create(
+            taskName: 'Тестовая задача №1',
+            token: $token,
+        );
 
         $tokenSecond = User::auth('second@example.com');
-        $taskId = Task::createAndReturnId('Тестовая задача №2 ', $tokenSecond);
+        $taskId = Task::createAndReturnId(
+            taskName: 'Тестовая задача №2 ',
+            token: $tokenSecond,
+        );
 
-        $response = self::request(Request::METHOD_GET, "/api/tasks/{$taskId}", token: $token);
+        $response = self::request(
+            method: Request::METHOD_GET,
+            uri: \sprintf('/api/tasks/%s', $taskId),
+            token: $token,
+        );
+
         self::assertNotFound($response);
     }
 
@@ -83,9 +110,16 @@ final class TaskInfoTest extends ApiWebTestCase
     public function testAccessDenied(string $notValidToken): void
     {
         $token = User::auth();
-        $taskId = Task::createAndReturnId('Тестовая задача 1', $token);
+        $taskId = Task::createAndReturnId(
+            taskName: 'Тестовая задача 1',
+            token: $token,
+        );
 
-        $response = self::request(Request::METHOD_GET, "/api/tasks/{$taskId}", token: $notValidToken);
+        $response = self::request(
+            method: Request::METHOD_GET,
+            uri: \sprintf('/api/tasks/%s', $taskId),
+            token: $notValidToken,
+        );
 
         self::assertAccessDenied($response);
     }

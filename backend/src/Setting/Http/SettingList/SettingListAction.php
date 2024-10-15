@@ -27,7 +27,7 @@ final readonly class SettingListAction
 
         return new ApiListObjectResponse(
             data: $this->buildResponseData($settings),
-            pagination: new PaginationResponse(total: \count($settings))
+            pagination: new PaginationResponse(total: \count($settings)),
         );
     }
 

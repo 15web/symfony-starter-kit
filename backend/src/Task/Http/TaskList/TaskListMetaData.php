@@ -10,6 +10,6 @@ namespace App\Task\Http\TaskList;
 final class TaskListMetaData
 {
     public function __construct(
-        public int $incompletedTasksCount
+        public int $uncompletedTasksCount,
     ) {}
 }

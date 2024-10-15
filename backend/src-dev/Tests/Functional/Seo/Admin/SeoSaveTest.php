@@ -32,12 +32,21 @@ final class SeoSaveTest extends ApiWebTestCase
         $body['keywords'] = 'keywords';
         $bodyJson = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request(Request::METHOD_POST, '/api/admin/seo', $bodyJson, token: $token);
+        $response = self::request(
+            method: Request::METHOD_POST,
+            uri: '/api/admin/seo',
+            body: $bodyJson,
+            token: $token,
+        );
+
         self::assertSuccessResponse($response);
 
-        $url = '/api/seo/'.$body['type'].'/'.$body['identity'];
+        $url = \sprintf('/api/seo/%s/%s', $body['type'], $body['identity']);
 
-        $response = self::request(Request::METHOD_GET, $url);
+        $response = self::request(
+            method: Request::METHOD_GET,
+            uri: $url,
+        );
         self::assertSuccessResponse($response);
 
         /** @var array{
@@ -62,7 +71,12 @@ final class SeoSaveTest extends ApiWebTestCase
         $body['keywords'] = 'keywords';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $response = self::request(Request::METHOD_POST, '/api/admin/seo', $body, token: $notValidToken);
+        $response = self::request(
+            method: Request::METHOD_POST,
+            uri: '/api/admin/seo',
+            body: $body,
+            token: $notValidToken,
+        );
 
         self::assertAccessDenied($response);
     }
@@ -78,11 +92,11 @@ final class SeoSaveTest extends ApiWebTestCase
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
         $response = self::request(
-            Request::METHOD_POST,
-            '/api/admin/seo',
-            $body,
+            method: Request::METHOD_POST,
+            uri: '/api/admin/seo',
+            body: $body,
             token: $token,
-            validateRequestSchema: false
+            validateRequestSchema: false,
         );
 
         self::assertBadRequest($response);

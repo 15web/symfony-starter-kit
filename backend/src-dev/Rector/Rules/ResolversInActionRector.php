@@ -40,7 +40,7 @@ final class ResolversInActionRector extends AbstractRector
                         #[ValueResolver('TODO: Добавь резолвер')]
                         UserId $userId,
                     ): TaskData {}
-                CODE_SAMPLE
+                CODE_SAMPLE,
         )]);
     }
 
@@ -70,7 +70,7 @@ final class ResolversInActionRector extends AbstractRector
 
                     $param->attrGroups[] = new AttributeGroup([
                         new Attribute(
-                            new Name('ValueResolver(\'TODO: добавь резолвер\')')
+                            new Name('ValueResolver(\'TODO: добавь резолвер\')'),
                         ),
                     ]);
                 }

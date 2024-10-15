@@ -11,6 +11,6 @@ final readonly class ApiObjectResponse implements ApiResponse
 {
     public function __construct(
         public object $data,
-        public ResponseStatus $status = ResponseStatus::Success
+        public ResponseStatus $status = ResponseStatus::Success,
     ) {}
 }

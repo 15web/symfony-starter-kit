@@ -34,7 +34,7 @@ final readonly class CheckRateLimiter
         if ($limit->isAccepted() === false) {
             $this->logger->info(
                 message: 'Превышено допустимое количество запросов',
-                context: ['key' => $key]
+                context: ['key' => $key],
             );
 
             throw new ApiRateLimiterException($limit);

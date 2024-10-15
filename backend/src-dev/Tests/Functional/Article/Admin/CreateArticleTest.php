@@ -22,7 +22,12 @@ final class CreateArticleTest extends ApiWebTestCase
     public function testSuccess(): void
     {
         $token = User::auth();
-        $response = Article::create($title = 'Статья', $alias = 'statya', $content = '<p>Контент</p>', $token);
+        $response = Article::create(
+            title: $title = 'Статья',
+            alias: $alias = 'statya',
+            content: $content = '<p>Контент</p>',
+            token: $token,
+        );
 
         self::assertSuccessResponse($response);
 
@@ -51,9 +56,19 @@ final class CreateArticleTest extends ApiWebTestCase
     {
         $token = User::auth();
 
-        Article::create('Статья', $alias = 'statya', '<p>Контент</p>', $token);
+        Article::create(
+            title: 'Статья',
+            alias: $alias = 'statya',
+            content: '<p>Контент</p>',
+            token: $token,
+        );
 
-        $response = Article::create('Статья2', $alias, '<p>Контент</p>', $token);
+        $response = Article::create(
+            title: 'Статья2',
+            alias: $alias,
+            content: '<p>Контент</p>',
+            token: $token,
+        );
 
         self::assertApiError($response, 2);
     }
@@ -62,7 +77,12 @@ final class CreateArticleTest extends ApiWebTestCase
     #[TestDox('Доступ запрещен')]
     public function testAccessDenied(string $notValidToken): void
     {
-        $response = Article::create('Статья', 'statya', '<p>Контент</p>', $notValidToken);
+        $response = Article::create(
+            title: 'Статья',
+            alias: 'statya',
+            content: '<p>Контент</p>',
+            token: $notValidToken,
+        );
 
         self::assertAccessDenied($response);
     }
@@ -77,7 +97,15 @@ final class CreateArticleTest extends ApiWebTestCase
         $token = User::auth();
 
         $body = json_encode($body, JSON_THROW_ON_ERROR);
-        $response = self::request(Request::METHOD_POST, '/api/admin/articles', $body, token: $token, validateRequestSchema: false);
+
+        $response = self::request(
+            method: Request::METHOD_POST,
+            uri: '/api/admin/articles',
+            body: $body,
+            token: $token,
+            validateRequestSchema: false,
+        );
+
         self::assertBadRequest($response);
     }
 

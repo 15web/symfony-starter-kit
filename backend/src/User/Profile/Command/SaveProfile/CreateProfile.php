@@ -27,7 +27,7 @@ final readonly class CreateProfile
             profileId: new ProfileId(),
             userId: $userId,
             phone: new Phone($command->phone),
-            name: $command->name
+            name: $command->name,
         );
 
         $this->profileRepository->add($profile);

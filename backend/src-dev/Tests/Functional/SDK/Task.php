@@ -18,12 +18,20 @@ final class Task extends ApiWebTestCase
         $body['taskName'] = $taskName;
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        return self::request(Request::METHOD_POST, '/api/tasks', $body, token: $token);
+        return self::request(
+            method: Request::METHOD_POST,
+            uri: '/api/tasks',
+            body: $body,
+            token: $token,
+        );
     }
 
     public static function createAndReturnId(string $taskName, string $token): string
     {
-        $response = self::create($taskName, $token);
+        $response = self::create(
+            taskName: $taskName,
+            token: $token,
+        );
 
         /** @var array{
          *     data: array{id: string}
@@ -41,7 +49,7 @@ final class Task extends ApiWebTestCase
      *          isCompleted: bool
      *     }>,
      *     pagination: array{total: int},
-     *     meta: array{incompletedTasksCount: int}
+     *     meta: array{uncompletedTasksCount: int}
      * }
      */
     public static function list(string $token, int $limit = 10, int $offset = 0): array
@@ -51,9 +59,13 @@ final class Task extends ApiWebTestCase
             'offset' => $offset,
         ];
 
-        $uri = '/api/tasks?'.http_build_query($params);
+        $uri = \sprintf('/api/tasks?%s', http_build_query($params));
 
-        $response = self::request(Request::METHOD_GET, $uri, token: $token);
+        $response = self::request(
+            method: Request::METHOD_GET,
+            uri: $uri,
+            token: $token,
+        );
 
         self::assertSuccessResponse($response);
 
@@ -64,7 +76,7 @@ final class Task extends ApiWebTestCase
          *          isCompleted: bool
          *     }>,
          *     pagination: array{total: int},
-         *     meta: array{incompletedTasksCount: int}
+         *     meta: array{uncompletedTasksCount: int}
          * } $tasks
          */
         $tasks = self::jsonDecode($response->getContent());
