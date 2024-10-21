@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Functional\Infrastructure\Response;
+namespace Dev\Tests\Functional\Infrastructure\Response;
 
 use Dev\Tests\Functional\SDK\ApiWebTestCase;
 use PHPUnit\Framework\Attributes\TestDox;
