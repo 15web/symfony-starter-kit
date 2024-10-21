@@ -14,7 +14,7 @@ use Symfony\Component\Uid\Uuid;
 #[ORM\Embeddable]
 final readonly class ConfirmToken
 {
-    #[ORM\Column(type: 'uuid', unique: true)]
+    #[ORM\Column(type: 'uuid', unique: true, nullable: true)]
     public Uuid $value;
 
     public function __construct(
