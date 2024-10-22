@@ -34,10 +34,6 @@ make init
 
 ## Запуск проверок исходного кода
 
-Предварительно нужно выполнить настройку тестового окружения:
-```shell
-make test-install
-```
 Запуск проверок:
 ```shell
 make check
@@ -46,10 +42,6 @@ make check
 ```shell
 make help
 ```
-
-## Генерация кода
-
-[Maker](./backend/src-dev/Maker/README.md)
 
 ## Инструкция по очистке, для старта проектов
 
@@ -61,7 +53,6 @@ make help
   - `backend/tests/Unit`
 - Все миграции из директории `backend/migrations` и сгенерировать новые.
 - Переменные окружения из файла `docker/backend/.env.dist`
-- Задания `cron` из файла `docker/backend/cron/crontab`
 - Разделы документации из файла `backend/src-dev/openapi.yaml`
 - Слои и правила `deptrac` из файла `backend/src-dev/deptrac.yaml`
 - Убрать секцию `paths` в конфиге `twig` из файла `backend/config/packages/twig.yaml`
