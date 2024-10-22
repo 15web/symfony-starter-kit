@@ -30,7 +30,10 @@ jobs:
         run: make composer-check-all
 
       - name: Install services
-        run: make test-install
+        run: make init
+
+      - name: Validate database mapping
+        run: make db-validate
 
       - name: Check code quality
         run: make lint
