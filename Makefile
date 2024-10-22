@@ -15,14 +15,6 @@ build: # Сборка образов и установка зависимост�
 	make composer-install
 	make up
 
-test-install: # Подготовка тестового окружения
-	make init
-	@for i in 1 2 3 4 ; do \
-		docker compose exec pgsql dropdb -f --if-exists db_name_test$$i; \
-		docker compose exec pgsql createdb -O postgres db_name_test$$i; \
-		docker compose run --rm backend bash -c "TEST_TOKEN=$$i bin/console --env=test doctrine:migrations:migrate --no-interaction"; \
-	done
-
 up:	# Запуск контейнеров
 	make setup-env
 	docker compose up -d --force-recreate --remove-orphans
@@ -43,6 +35,9 @@ db-create-migration: # Создание миграций БД
 db-migration-prev: # Откатить последнюю миграцию
 	docker compose run --rm backend-cli bin/console doctrine:migrations:migrate prev
 
+db-validate: # Проверка валидности схемы БД
+	docker compose run --rm backend-cli bash -c "bin/console doctrine:schema:validate  --skip-sync && bin/console doctrine:migrations:up-to-date && ! bin/console doctrine:migrations:diff"
+
 setup-transports: # Настройка очередей
 	docker compose run --rm backend-cli bin/console messenger:setup-transports
 
@@ -54,7 +49,7 @@ logs: # Просмотр логов сервиса, пример: make logs back
 	make setup-env
 	@docker compose logs $(Arguments)
 
-check: composer-check-all cache-clear lint test check-openapi-diff check-openapi-schema # Проверка кода
+check: composer-check-all cache-clear lint test check-openapi-diff check-openapi-schema db-validate # Проверка кода
 
 fix: fixer-fix rector-fix # Запуск правок кода
 
@@ -82,9 +77,6 @@ cache-clear: # Очистка кеша
 
 container-lint: # Проверка контейнера зависимостей
 	docker compose run --rm backend-cli bin/console lint:container
-
-validate-doctrine-schema: # Проверка валидности схемы БД
-	docker compose run --rm backend-cli bin/console doctrine:schema:validate -v
 
 twig-lint: # Линтер твиг-шаблонов
 	docker compose run --rm backend-cli bin/console lint:twig src/Mailer/templates
@@ -122,11 +114,21 @@ deptrac-check: # Контроль зависимостей
 deptrac-check-unassigned: # Покрытие кода с deptrac
 	docker compose run --rm backend-cli vendor/bin/deptrac debug:unassigned --config-file=src-dev/deptrac.yaml | tee /dev/stderr | grep 'There are no unassigned tokens'
 
+test-install: # Подготовка тестового окружения
+	make init
+	@for i in 1 2 3 4 ; do \
+		docker compose exec pgsql dropdb -f --if-exists db_name_test$$i; \
+		docker compose exec pgsql createdb -O postgres db_name_test$$i; \
+		docker compose run --rm backend-cli bash -c "TEST_TOKEN=$$i bin/console --env=test doctrine:migrations:migrate --no-interaction"; \
+	done
+
 test: # Запуск тестов
+	make test-install
 	docker compose run --rm backend-cli bin/console --env=test cache:clear
 	docker compose run --rm backend-cli bash -c 'APP_ENV=test vendor/bin/paratest --configuration=src-dev/phpunit.xml --processes=4'
 
-test-coverage: # Запуск тестов
+test-coverage: # Запуск тестов с покрытием кода
+	make test-install
 	docker compose run --rm backend-cli bin/console --env=test cache:clear
 	docker compose run --rm backend-cli bash -c 'APP_ENV=test vendor/bin/paratest --configuration=src-dev/phpunit.xml --processes=4 --coverage-text'
 
