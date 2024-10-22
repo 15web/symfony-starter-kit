@@ -2,7 +2,7 @@
 
 [![Code quality status](https://github.com/15web/symfony-starter-kit/actions/workflows/check-code-quality.yml/badge.svg?branch=main)](https://github.com/15web/symfony-starter-kit/actions)
 
-Заготовка для старта проектов на Symfony 6, PHP 8.2, Posgres 16
+Заготовка для старта проектов на Symfony 7, PHP 8.3, Posgres 17
 
 ## Список модулей
 
