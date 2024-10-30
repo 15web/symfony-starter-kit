@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Task\Http\CreateTask;
 
-use App\Infrastructure\ApiRequestValueResolver;
 use App\Infrastructure\Flush;
+use App\Infrastructure\Request\ApiRequestValueResolver;
 use App\Infrastructure\Response\ApiObjectResponse;
 use App\Task\Command\CreateTask\CreateTask;
 use App\Task\Command\CreateTask\CreateTaskCommand;

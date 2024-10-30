@@ -6,9 +6,9 @@ namespace App\User\SignIn\Http;
 
 use App\Infrastructure\ApiException\ApiBadResponseException;
 use App\Infrastructure\ApiException\ApiErrorCode;
-use App\Infrastructure\ApiRequestValueResolver;
 use App\Infrastructure\CheckRateLimiter;
 use App\Infrastructure\Flush;
+use App\Infrastructure\Request\ApiRequestValueResolver;
 use App\Infrastructure\Response\ApiObjectResponse;
 use App\Infrastructure\ValueObject\Email;
 use App\User\SignIn\Command\SignIn;

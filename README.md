@@ -4,14 +4,24 @@
 
 Заготовка для старта проектов на Symfony 7, PHP 8.3, Posgres 17
 
-## Список модулей
+## Модули
+
+Проект имеет модульную архитектуру, что позволяет каждый модуль реализовывать по-своему.
+
+Например, crud-модули не требуют сложной логики и реализовываются по-простому.
+
+Модули разделены согласно своему контексту и должны иметь слабые связи между собой (cohesion).
 
 - [Infrastructure - инфраструктура](backend/src/Infrastructure/README.md)
-- [Article - CRUD на примере блога](backend/src/Article/README.md)
+- [Article - статьи как пример CRUD-модуля](backend/src/Article/README.md)
 - [Mailer - отправка электронной почты](backend/src/Mailer/README.md)
-- [Setting - пользовательские настройки приложения](backend/src/Setting/README.md)
-- [Task - CQS на примере трекера задач](backend/src/Task/README.md)
-- [User - CQS на примере управления пользователями](backend/src/User/README.md)
+- [Ping - пинг приложения](backend/src/Ping/README.md)
+- [SEO - SEO модуль](backend/src/Seo/README.md)
+- [Setting - настройки приложения](backend/src/Setting/README.md)
+- [Task - todo-лист как пример модуля с богатой логикой](backend/src/Task/README.md)
+- [User - пользователи](backend/src/User/README.md)
+
+
 
 ## Запуск
 
@@ -30,9 +40,13 @@ make init
 
 Документация OpenAPI доступна по адресу http://localhost:8088/docs
 
+[Исходник OpenAPI документации проекта](backend/src-dev/openapi.yaml)
+
 Тестирование писем http://localhost:8088/mailhog
 
 ## Запуск проверок исходного кода
+
+Все инструменты по проверке кода и тесты вынесены в отдельную папку src-dev. Это позволяет легко исключить ее из деплоя на production. 
 
 Запуск проверок:
 ```shell

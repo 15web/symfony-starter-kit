@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Task\Http;
 
 use App\Infrastructure\ApiException\ApiNotFoundException;
-use App\Infrastructure\ApiRequestValueResolver;
 use App\Infrastructure\Flush;
+use App\Infrastructure\Request\ApiRequestValueResolver;
 use App\Infrastructure\Response\ApiObjectResponse;
 use App\Infrastructure\Response\SuccessResponse;
 use App\Task\Command\UpdateTaskName\UpdateTaskName;
