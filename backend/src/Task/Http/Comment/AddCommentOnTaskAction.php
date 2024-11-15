@@ -6,8 +6,8 @@ namespace App\Task\Http\Comment;
 
 use App\Infrastructure\ApiException\ApiBadRequestException;
 use App\Infrastructure\ApiException\ApiNotFoundException;
-use App\Infrastructure\ApiRequestValueResolver;
 use App\Infrastructure\Flush;
+use App\Infrastructure\Request\ApiRequestValueResolver;
 use App\Infrastructure\Response\ApiObjectResponse;
 use App\Infrastructure\Response\SuccessResponse;
 use App\Task\Command\Comment\Add\AddCommentOnTask;

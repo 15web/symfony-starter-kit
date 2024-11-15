@@ -11,7 +11,7 @@ use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
 
 /**
- * Заполняет from секцию и subject поля для отправки сообщений из конфига
+ * Заполняет from секцию и subject поля для отправки писем.
  */
 #[AsEventListener]
 final readonly class FillMailFields

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\User\Profile\Http;
 
-use App\Infrastructure\ApiRequestValueResolver;
 use App\Infrastructure\Flush;
+use App\Infrastructure\Request\ApiRequestValueResolver;
 use App\Infrastructure\Response\ApiObjectResponse;
 use App\User\Profile\Command\SaveProfile\SaveProfile;
 use App\User\Profile\Command\SaveProfile\SaveProfileCommand;

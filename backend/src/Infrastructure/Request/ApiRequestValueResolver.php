@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure;
+namespace App\Infrastructure\Request;
 
 use App\Infrastructure\ApiException\ApiBadRequestException;
-use App\Infrastructure\Request\BuildValidationError;
+use App\Infrastructure\AsService;
 use CuyZ\Valinor\Mapper\MappingError;
 use CuyZ\Valinor\Mapper\Source\Exception\InvalidSource;
 use CuyZ\Valinor\Mapper\Source\JsonSource;
@@ -20,7 +20,7 @@ use Throwable;
 use Webmozart\Assert\InvalidArgumentException;
 
 /**
- * Преобразует Request в объект запроса
+ * Преобразует Request в объект запроса, валидирует
  *
  * @template TApiRequest of object
  */

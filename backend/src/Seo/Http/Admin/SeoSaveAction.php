@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Seo\Http\Admin;
 
-use App\Infrastructure\ApiRequestValueResolver;
 use App\Infrastructure\Flush;
+use App\Infrastructure\Request\ApiRequestValueResolver;
 use App\Infrastructure\Response\ApiObjectResponse;
 use App\Infrastructure\Response\SuccessResponse;
 use App\Seo\Command\SaveSeo;
