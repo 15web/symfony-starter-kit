@@ -62,7 +62,7 @@ final class TaskListTest extends ApiWebTestCase
         $tasks = $response[self::TASK_DATA_KEY];
         $pagination = $response[self::PAGINATION_KEY];
 
-        self::assertCount(0, $tasks);
+        self::assertEmpty($tasks);
         self::assertSame(0, $pagination[self::TOTAL]);
     }
 
@@ -108,7 +108,7 @@ final class TaskListTest extends ApiWebTestCase
         $tasks = $response[self::TASK_DATA_KEY];
         $pagination = $response[self::PAGINATION_KEY];
 
-        self::assertCount(0, $tasks);
+        self::assertEmpty($tasks);
         self::assertSame(2, $pagination[self::TOTAL]);
     }
 

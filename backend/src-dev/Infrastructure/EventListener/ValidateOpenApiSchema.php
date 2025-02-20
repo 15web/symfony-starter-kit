@@ -108,8 +108,8 @@ final readonly class ValidateOpenApiSchema
 
     private function needValidateTest(Request $request, string $requestParameterName): bool
     {
-        $parameterValue = $request->query->get($requestParameterName) ??
-            $request->request->get($requestParameterName);
+        $parameterValue = $request->query->get($requestParameterName)
+            ?? $request->request->get($requestParameterName);
 
         return $this->appEnv === 'test' && $parameterValue === '1';
     }

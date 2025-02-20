@@ -9,11 +9,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 
 /**
+ * @final
+ *
  * Токен пользователя
  */
 #[ORM\Entity]
 #[ORM\Index(name: 'ix_user_token_user_id', fields: ['userId'])]
-/** @final */
 class UserToken
 {
     #[ORM\Id, ORM\Column(type: 'uuid', unique: true)]

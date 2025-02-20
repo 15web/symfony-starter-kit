@@ -10,11 +10,12 @@ use SensitiveParameter;
 use Symfony\Component\Uid\Uuid;
 
 /**
+ * @final
+ *
  * Восстановление пароля
  */
 #[ORM\Entity]
 #[ORM\Index(name: 'ix_recovery_token_user_id', fields: ['userId'])]
-/** @final */
 class RecoveryToken
 {
     #[ORM\Id, ORM\Column(type: 'uuid', unique: true)]

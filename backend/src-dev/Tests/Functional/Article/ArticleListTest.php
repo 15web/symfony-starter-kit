@@ -52,6 +52,6 @@ final class ArticleListTest extends ApiWebTestCase
         self::assertSame($articles[0]['alias'], $alias);
         self::assertSame($articles[0]['body'], $content);
 
-        self::assertSame($paginationResponse['total'], 1);
+        self::assertSame(1, $paginationResponse['total']);
     }
 }

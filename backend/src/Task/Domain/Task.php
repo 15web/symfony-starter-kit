@@ -12,11 +12,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 
 /**
+ * @final
+ *
  * Задача
  */
 #[ORM\Entity]
 #[ORM\Index(name: 'ix_task_user_id', fields: ['userId'])]
-/** @final */
 class Task
 {
     #[ORM\Id, ORM\Column(type: 'uuid', unique: true)]
