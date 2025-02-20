@@ -11,10 +11,11 @@ use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV7;
 
 /**
+ * @final
+ *
  * SEO
  */
 #[ORM\Entity]
-/** @final */
 class Seo
 {
     #[ORM\Id, ORM\Column(type: 'uuid', unique: true)]

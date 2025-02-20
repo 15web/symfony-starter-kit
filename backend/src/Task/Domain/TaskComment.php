@@ -9,10 +9,11 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 
 /**
+ * @final
+ *
  * Комментарий задачи
  */
 #[ORM\Entity]
-/** @final */
 class TaskComment
 {
     #[ORM\Id, ORM\Column(type: 'uuid', unique: true)]

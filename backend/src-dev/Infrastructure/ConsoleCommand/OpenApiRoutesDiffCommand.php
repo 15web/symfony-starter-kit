@@ -75,15 +75,17 @@ final class OpenApiRoutesDiffCommand extends Command
      */
     private function getOpenApiPaths(string $file): array
     {
+        /**
+         * @var array{
+         *     paths?: array<string, array<array-key, mixed>>
+         * } $openApiValues
+         */
         $openApiValues = (array) Yaml::parseFile($file);
 
         if (!\array_key_exists('paths', $openApiValues)) {
             throw new InvalidArgumentException('Invalid yaml file');
         }
 
-        /**
-         * @psalm-suppress MixedArgument
-         */
         $openApiPaths = array_keys($openApiValues['paths']);
 
         $result = [];
