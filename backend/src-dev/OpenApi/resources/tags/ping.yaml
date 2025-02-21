@@ -1,0 +1,41 @@
+openapi: 3.0.3
+info:
+  title: symfony-starter-kit
+  version: 1.0.0
+tags:
+  - name: general
+    description: Общее
+paths:
+  /ping:
+    get:
+      operationId: ping
+      summary: Пинг приложения
+      description: Пинг приложения
+      tags:
+        - general
+      security: [ ]
+      responses:
+        '200':
+          $ref: '#/components/responses/ping'
+components:
+  responses:
+    ping:
+      description: Возвращает ответ Pong
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                required:
+                  - result
+                additionalProperties: false
+                properties:
+                  result:
+                    type: string
+                    description: Ответ
+                    minLength: 1
+                    example: Pong
+              status:
+                $ref: '../common.yaml#/components/schemas/succeedStatus'

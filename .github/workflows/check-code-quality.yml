@@ -14,6 +14,9 @@ jobs:
       - name: Setup docker env
         run: ./setup_envs.bash setup-envs && cat .env
 
+      - name: Validate commit message
+        run: ./docker/bin/check_commit_message.bash
+
       - name: Cache Composer packages
         id: composer-cache
         uses: actions/cache@v3
@@ -42,7 +45,7 @@ jobs:
         run: make check-openapi-diff
 
       - name: Check OpenApi schema
-        run: docker run --rm -v ${PWD}/backend:/app stoplight/spectral lint /app/src-dev/openapi.yaml -F warn --ruleset=/app/src-dev/.spectral.yaml
+        run: docker run --rm -v ${PWD}/backend:/app stoplight/spectral lint /app/src-dev/OpenApi/openapi.yaml -F warn --ruleset=/app/src-dev/OpenApi/.spectral.yaml
 
       - name: Run functional tests with code coverage
         run: make test-coverage

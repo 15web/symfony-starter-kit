@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Response\Pagination;
+namespace App\Infrastructure\Response;
 
 use Webmozart\Assert\Assert;
 

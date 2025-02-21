@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Task\Http\Comment;
 
 use App\Infrastructure\Response\ApiListObjectResponse;
-use App\Infrastructure\Response\Pagination\PaginationResponse;
+use App\Infrastructure\Response\PaginationResponse;
 use App\Task\Query\Comment\FindAll\CommentData;
 use App\Task\Query\Comment\FindAll\FindAllCommentQuery;
 use App\Task\Query\Comment\FindAll\FindAllCommentsByTaskIdAndUserId;

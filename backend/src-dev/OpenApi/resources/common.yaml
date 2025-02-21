@@ -1,0 +1,200 @@
+openapi: 3.0.3
+info:
+  title: symfony-starter-kit
+  version: 1.0.0
+tags: []
+paths: {}
+servers:
+  - url: /api
+security:
+  - ApiTokenAuth: [ ]
+components:
+  securitySchemes:
+    ApiTokenAuth:
+      type: apiKey
+      in: header
+      name: X-AUTH-TOKEN
+  headers:
+    requestTraceId:
+      schema:
+        type: string
+      description: Уникальный идентификатор запроса
+      example: 01904f4d-d18f-778e-a981-432d6af77425
+    rateLimitRemaining:
+      schema:
+        type: integer
+        minimum: 0
+      description: Количество оставшихся попыток в период времени
+      example: 3
+    rateLimitRetryAfter:
+      schema:
+        type: integer
+        minimum: 1
+      description: Количество секунд до повторного запроса
+      example: 120
+    rateLimitLimit:
+      schema:
+        type: integer
+        minimum: 1
+      description: Количество допустимых попыток в период времени
+      example: 60
+  responses:
+    success:
+      description: Успешный ответ
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/success'
+          example:
+            data:
+              status: success
+            status: success
+      headers:
+        X-Request-TraceId:
+          $ref: '#/components/headers/requestTraceId'
+    invalidRequest:
+      description: Ошибка запроса
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            data:
+              code: 400
+              message: Неверный формат запроса
+              errors: [ 'invalid_request' ]
+            status: error
+      headers:
+        X-Request-TraceId:
+          $ref: '#/components/headers/requestTraceId'
+    authRequired:
+      description: Доступ запрещен
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            code: 401
+            message: Необходимо пройти аутентификацию
+            errors: [ 'auth_required' ]
+      headers:
+        X-Request-TraceId:
+          $ref: '#/components/headers/requestTraceId'
+    notFound:
+      description: Запись не найдена
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            data:
+              code: 404
+              message: Запись не найдена
+              errors: [ 'Запись не найдена' ]
+            status: error
+    tooManyRequests:
+      description: Не удалось выполнить запрос
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            Ответ с ошибкой:
+              value:
+                data:
+                  code: 429
+                  message: Превышено количество запросов
+                  errors: [ 'Превышено количество запросов. Повторите попытку через 59 c' ]
+                status: error
+      headers:
+        X-Request-TraceId:
+          $ref: '#/components/headers/requestTraceId'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+        X-RateLimit-Retry-After:
+          $ref: '#/components/headers/rateLimitRetryAfter'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitLimit'
+  schemas:
+    success:
+      type: object
+      required:
+        - data
+        - status
+      additionalProperties: false
+      properties:
+        data:
+          type: object
+          required:
+            - status
+          additionalProperties: false
+          properties:
+            status:
+              $ref: '#/components/schemas/succeedStatus'
+        status:
+          $ref: '#/components/schemas/succeedStatus'
+    error:
+      type: object
+      properties:
+        data:
+          type: object
+          required:
+            - code
+            - message
+            - errors
+          additionalProperties: false
+          properties:
+            code:
+              type: integer
+            message:
+              type: string
+            errors:
+              type: array
+              items:
+                type: string
+                example: Пример ошибки
+        status:
+          $ref: '#/components/schemas/succeedStatus'
+    succeedStatus:
+      type: string
+      description: Статус запроса
+      example: success
+    email:
+      type: string
+      format: email
+      description: Email пользователя
+      minLength: 1
+      example: test@test.ru
+    pagination:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: Количество всех данных
+          example: 2
+    createdAt:
+      type: string
+      description: Дата создания
+      example: '2021-10-28T16:19:44+00:00'
+    updatedAt:
+      type: string
+      description: Дата обновления
+      example: '2021-10-28T16:19:44+00:00'
+      nullable: true
+  parameters:
+    limit:
+      in: query
+      name: limit
+      required: false
+      description: Лимит
+      example: 10
+      schema:
+        type: integer
+    offset:
+      in: query
+      name: offset
+      required: false
+      description: Смещение
+      example: 1
+      schema:
+        type: integer

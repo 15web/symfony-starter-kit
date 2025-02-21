@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Dev\Tests\Functional\SDK;
 
 use App\Infrastructure\Response\ResponseStatus;
-use Dev\Infrastructure\EventListener\ValidateOpenApiSchema;
+use Dev\OpenApi\EventListener\ValidateOpenApiSchema;
 use Doctrine\DBAL\Connection;
 use Iterator;
 use Override;
@@ -64,15 +64,17 @@ abstract class ApiWebTestCase extends WebTestCase
             $headers['HTTP_X_AUTH_TOKEN'] = $token;
         }
 
+        // передаем признак в ValidateOpenApiSchema что нужно проверять запрос
+        $validateRequestHeaderKey = \sprintf('HTTP_%s', ValidateOpenApiSchema::VALIDATE_REQUEST_HEADER);
+        $headers[$validateRequestHeaderKey] = $validateRequestSchema;
+
+        // передаем признак в ValidateOpenApiSchema что нужно проверять ответ
+        $validateResponseHeaderKey = \sprintf('HTTP_%s', ValidateOpenApiSchema::VALIDATE_RESPONSE_HEADER);
+        $headers[$validateResponseHeaderKey] = $validateResponseSchema;
+
         self::$client->request(
             method: $method,
             uri: $uri,
-            parameters: [
-                // передаем признак в ValidateOpenApiSchema что не нужно проверять запрос
-                ValidateOpenApiSchema::VALIDATE_REQUEST_KEY => $validateRequestSchema,
-                // передаем признак в ValidateOpenApiSchema что не нужно проверять ответ
-                ValidateOpenApiSchema::VALIDATE_RESPONSE_KEY => $validateResponseSchema,
-            ],
             server: $headers,
             content: $body,
         );

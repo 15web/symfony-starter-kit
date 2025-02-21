@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Dev\Tests\Unit\Infrastructure\Pagination;
 
-use App\Infrastructure\Response\Pagination\PaginationResponse;
+use App\Infrastructure\Response\PaginationResponse;
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;

@@ -6,7 +6,7 @@ namespace App\Article\Http\Admin;
 
 use App\Article\Domain\ArticleRepository;
 use App\Infrastructure\Response\ApiListObjectResponse;
-use App\Infrastructure\Response\Pagination\PaginationResponse;
+use App\Infrastructure\Response\PaginationResponse;
 use App\User\Security\Http\IsGranted;
 use App\User\User\Domain\UserRole;
 use Symfony\Component\HttpFoundation\Request;

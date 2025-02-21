@@ -1,0 +1,13 @@
+openapi: 3.0.3
+info:
+  title: symfony-starter-kit
+  version: 1.0.0
+tags: []
+paths: {}
+components:
+    securitySchemes: {}
+    headers: {}
+    parameters: {}
+    requestBodies: {}
+    responses: {}
+    schemas: {}

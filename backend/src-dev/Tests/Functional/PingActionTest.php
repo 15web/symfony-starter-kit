@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
  * @internal
  */
 #[TestDox('Пинг приложения')]
-final class PingHttpActionTest extends ApiWebTestCase
+final class PingActionTest extends ApiWebTestCase
 {
     #[TestDox('Получение ответа')]
     public function testSuccess(): void

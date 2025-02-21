@@ -4,13 +4,17 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Response;
 
+use CuyZ\Valinor\MapperBuilder;
+use CuyZ\Valinor\Normalizer\Format;
+use CuyZ\Valinor\Normalizer\JsonNormalizer;
+use DateTimeImmutable;
+use DateTimeInterface;
 use RuntimeException;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * Преобразовывает объект ответа контроллеров в JsonResponse
@@ -18,9 +22,16 @@ use Symfony\Component\Serializer\SerializerInterface;
 #[AsEventListener]
 final readonly class SerializeApiResponse
 {
-    public function __construct(
-        private SerializerInterface $serializer,
-    ) {}
+    private JsonNormalizer $normalizer;
+
+    public function __construct(MapperBuilder $builder)
+    {
+        $this->normalizer = $builder
+            ->registerTransformer(static fn (Uuid $uuid): string => $uuid->toString())
+            ->registerTransformer(static fn (DateTimeImmutable $date): string => $date->format(DateTimeInterface::ATOM))
+            ->normalizer(Format::json())
+            ->withOptions(JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
+    }
 
     public function __invoke(ViewEvent $event): void
     {
@@ -30,10 +41,7 @@ final readonly class SerializeApiResponse
             throw new RuntimeException('Не поддерживаемый ответ');
         }
 
-        $serializedResult = $this->serializer->serialize(
-            data: $controllerResult,
-            format: JsonEncoder::FORMAT,
-        );
+        $serializedResult = $this->normalizer->normalize($controllerResult);
 
         $response = new JsonResponse(
             data: $serializedResult,

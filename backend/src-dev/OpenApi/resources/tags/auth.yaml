@@ -1,0 +1,319 @@
+openapi: 3.0.3
+info:
+  title: symfony-starter-kit
+  version: 1.0.0
+tags:
+  - name: auth
+    description: Аутентификация
+paths:
+  /sign-up:
+    post:
+      operationId: signUp
+      summary: Регистрация пользователя
+      description: Регистрация нового пользователя
+      tags:
+        - auth
+      security: [ ]
+      requestBody:
+        $ref: '#/components/requestBodies/signUp'
+      responses:
+        '200':
+          $ref: '#/components/responses/signUp'
+        '400':
+          $ref: '../common.yaml#/components/responses/invalidRequest'
+  /confirm-email/{confirmToken}:
+    get:
+      operationId: confirmEmail
+      summary: Подтверждение email
+      description: Подтверждает email пользователя
+      tags:
+        - auth
+      security: [ ]
+      parameters:
+        - $ref: '#/components/parameters/confirmToken'
+      responses:
+        '200':
+          $ref: '../common.yaml#/components/responses/success'
+        '400':
+          $ref: '../common.yaml#/components/responses/invalidRequest'
+        '404':
+          $ref: '../common.yaml#/components/responses/notFound'
+  /sign-in:
+    post:
+      operationId: signIn
+      summary: Аутентификация пользователя
+      description: Аутентификация пользователя
+      tags:
+        - auth
+      security: [ ]
+      requestBody:
+        $ref: '#/components/requestBodies/signIn'
+      responses:
+        '200':
+          $ref: '#/components/responses/signIn'
+        '400':
+          $ref: '../common.yaml#/components/responses/invalidRequest'
+        '429':
+          $ref: '../common.yaml#/components/responses/tooManyRequests'
+  /logout:
+    get:
+      operationId: logout
+      summary: Выйти из приложения
+      description: Выполняет выход пользователя из приложения
+      tags:
+        - auth
+      responses:
+        '200':
+          $ref: '../common.yaml#/components/responses/success'
+        '401':
+          $ref: '../common.yaml#/components/responses/authRequired'
+  /change-password:
+    post:
+      operationId: changePassword
+      summary: Смена текущего пароля
+      description: Смена текущего пароля
+      tags:
+        - auth
+      security: [ ]
+      requestBody:
+        $ref: '#/components/requestBodies/changePassword'
+      responses:
+        '200':
+          $ref: '#/components/responses/changePassword'
+        '400':
+          $ref: '../common.yaml#/components/responses/invalidRequest'
+        '401':
+          $ref: '../common.yaml#/components/responses/authRequired'
+        '429':
+          $ref: '../common.yaml#/components/responses/tooManyRequests'
+  /request-password-recovery:
+    post:
+      operationId: recoverPasswordRequest
+      summary: Запрос на восстановление пароля
+      description: Запрос на восстановление пароля
+      tags:
+        - auth
+      security: [ ]
+      requestBody:
+        $ref: '#/components/requestBodies/recoverPasswordRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/recoverPasswordRequest'
+        '400':
+          $ref: '../common.yaml#/components/responses/invalidRequest'
+  /recover-password/{recoveryToken}:
+    post:
+      operationId: recoverPassword
+      summary: Восстановление пароля
+      description: Восстанавливает пароль пользователя
+      tags:
+        - auth
+      security: [ ]
+      parameters:
+        - $ref: '#/components/parameters/recoveryToken'
+      requestBody:
+        $ref: '#/components/requestBodies/recoverPassword'
+      responses:
+        '200':
+          $ref: '../common.yaml#/components/responses/success'
+        '404':
+          $ref: '../common.yaml#/components/responses/notFound'
+components:
+  parameters:
+    confirmToken:
+      in: path
+      name: confirmToken
+      required: true
+      description: Токен подтверждения
+      example: 123e4567-e89b-12d3-a456-426614174000
+      schema:
+        type: string
+        format: uuid
+    recoveryToken:
+      in: path
+      name: recoveryToken
+      required: true
+      description: Токен восстановления
+      example: 123e4567-e89b-12d3-a456-426614174000
+      schema:
+        type: string
+        format: uuid
+  requestBodies:
+    signUp:
+      description: Запрос на регистрацию
+      content:
+        application/json:
+          schema:
+            properties:
+              email:
+                $ref: '../common.yaml#/components/schemas/email'
+              password:
+                $ref: '#/components/schemas/password'
+            additionalProperties: false
+            required:
+              - email
+              - password
+    signIn:
+      description: Запрос на аутентификацию
+      content:
+        application/json:
+          schema:
+            properties:
+              email:
+                $ref: '../common.yaml#/components/schemas/email'
+              password:
+                $ref: '#/components/schemas/password'
+            additionalProperties: false
+            required:
+              - email
+              - password
+    changePassword:
+      description: Смена текущего пароля
+      content:
+        application/json:
+          schema:
+            properties:
+              currentPassword:
+                type: string
+                description: Текущий пароль
+                example: password
+              newPassword:
+                type: string
+                minLength: 6
+                description: Новый пароль
+                example: qwerty
+              newPasswordConfirmation:
+                type: string
+                minLength: 6
+                description: Подтверждение нового пароля
+                example: qwerty
+            additionalProperties: false
+            required:
+              - currentPassword
+              - newPassword
+              - newPasswordConfirmation
+    recoverPasswordRequest:
+      description: Запрос на восстановление пароля
+      content:
+        application/json:
+          schema:
+            properties:
+              email:
+                type: string
+                format: email
+                description: Email пользователя
+                example: test@test.ru
+            additionalProperties: false
+            required:
+              - email
+    recoverPassword:
+      description: Восстановление пароля
+      content:
+        application/json:
+          schema:
+            properties:
+              password:
+                type: string
+                nullable: false
+                description: Пароль пользователя
+                example: qwer1234
+                minLength: 6
+            additionalProperties: false
+            required:
+              - password
+  responses:
+    signIn:
+      description: Аутентификация прошла успешно
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - $ref: '#/components/schemas/authorized'
+              - $ref: '../common.yaml#/components/schemas/error'
+          examples:
+            Успешный ответ:
+              value:
+                data:
+                  token: 0191051e-7dab-7e31-b203-2974b8f75500-0191051e-b811-7c3c-a5bb-c22fc62986cd
+                status: success
+            Неверно указан логин или пароль:
+              value:
+                data:
+                  code: 6
+                  message: Ошибка
+                  errors: [ 'Неверно указан логин или пароль' ]
+                status: error
+      headers:
+        X-Request-TraceId:
+          $ref: '../common.yaml#/components/headers/requestTraceId'
+    signUp:
+      description: Пользователь успешно зарегистрирован
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - $ref: '../common.yaml#/components/schemas/success'
+              - $ref: '../common.yaml#/components/schemas/error'
+      headers:
+        X-Request-TraceId:
+          $ref: '../common.yaml#/components/headers/requestTraceId'
+    changePassword:
+      description: Пароль успешно сменен
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                required:
+                  - token
+                properties:
+                  token:
+                    $ref: '#/components/schemas/authToken'
+              status:
+                $ref: '../common.yaml#/components/schemas/succeedStatus'
+      headers:
+        X-Request-TraceId:
+          $ref: '../common.yaml#/components/headers/requestTraceId'
+    recoverPasswordRequest:
+      description: Токен отправлен
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                oneOf:
+                  - $ref: '../common.yaml#/components/schemas/success'
+                  - $ref: '../common.yaml#/components/schemas/error'
+      headers:
+        X-Request-TraceId:
+          $ref: '../common.yaml#/components/headers/requestTraceId'
+  schemas:
+    authorized:
+      type: object
+      required:
+        - data
+        - status
+      additionalProperties: false
+      properties:
+        data:
+          type: object
+          required:
+            - token
+          additionalProperties: false
+          properties:
+            token:
+              $ref: '#/components/schemas/authToken'
+        status:
+          $ref: '../common.yaml#/components/schemas/succeedStatus'
+    password:
+      type: string
+      description: Пароль пользователя
+      minLength: 6
+      example: '123456'
+    authToken:
+      type: string
+      example: 123e4567-e89b-12d3-a456-426614174000-019103df-3d51-78db-9026-bd39044ba025
+

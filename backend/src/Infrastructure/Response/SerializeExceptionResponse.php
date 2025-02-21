@@ -8,13 +8,14 @@ use App\Infrastructure\ApiException\ApiErrorResponse;
 use App\Infrastructure\ApiException\ApiException;
 use App\Infrastructure\ApiException\ApiHeaders;
 use App\Infrastructure\ApiException\ApiSystemException;
+use CuyZ\Valinor\MapperBuilder;
+use CuyZ\Valinor\Normalizer\Format;
+use CuyZ\Valinor\Normalizer\JsonNormalizer;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * Формирование ответа при ошибках
@@ -22,9 +23,14 @@ use Symfony\Component\Serializer\SerializerInterface;
 #[AsEventListener(priority: -1)]
 final readonly class SerializeExceptionResponse
 {
-    public function __construct(
-        private SerializerInterface $serializer,
-    ) {}
+    private JsonNormalizer $normalizer;
+
+    public function __construct(MapperBuilder $builder)
+    {
+        $this->normalizer = $builder
+            ->normalizer(Format::json())
+            ->withOptions(JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
+    }
 
     public function __invoke(ExceptionEvent $event): void
     {
@@ -52,8 +58,8 @@ final readonly class SerializeExceptionResponse
 
     private function createJson(ApiException $exception): JsonResponse
     {
-        $content = $this->serializer->serialize(
-            data: new ApiObjectResponse(
+        $content = $this->normalizer->normalize(
+            new ApiObjectResponse(
                 data: new ApiErrorResponse(
                     message: $exception->getErrorMessage(),
                     errors: $exception->getErrors(),
@@ -61,7 +67,6 @@ final readonly class SerializeExceptionResponse
                 ),
                 status: ResponseStatus::Error,
             ),
-            format: JsonEncoder::FORMAT,
         );
 
         $headers = [];

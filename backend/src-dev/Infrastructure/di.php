@@ -10,8 +10,11 @@ return static function (ContainerConfigurator $di): void {
     $services = $di->services()->defaults()->autowire()->autoconfigure();
 
     $services
-        ->load('Dev\\Infrastructure\\', './*')
+        ->load('Dev\\', '../*')
         ->exclude([
             './{di.php}',
+            '../**/{di.php}',
+            '../**/{config.php}',
+            '../Tests',
         ]);
 };

@@ -16,7 +16,6 @@ final class Version20220603114543 extends AbstractMigration
         return 'Проверка базы данных';
     }
 
-    #[Override]
     public function up(Schema $schema): void
     {
         $this->addSql("SELECT '1';");

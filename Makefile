@@ -10,17 +10,14 @@ init: # Запуск проекта и установка зависимосте
 	make setup-transports
 
 build: # Сборка образов и установка зависимостей
-	make setup-env
 	docker compose build
 	make composer-install
 	make up
 
 up:	# Запуск контейнеров
-	make setup-env
 	docker compose up -d --force-recreate --remove-orphans
 
 down: # Остановка контейнеров
-	make setup-env
 	docker compose down --remove-orphans
 
 update:	# Обновление зависимостей
@@ -36,20 +33,18 @@ db-migration-prev: # Откатить последнюю миграцию
 	docker compose run --rm backend-cli bin/console doctrine:migrations:migrate prev
 
 db-validate: # Проверка валидности схемы БД
-	docker compose run --rm backend-cli bash -c "bin/console doctrine:schema:validate  --skip-sync && bin/console doctrine:migrations:up-to-date && ! bin/console doctrine:migrations:diff"
+	docker compose run --rm backend bin/console doctrine:schema:validate
 
 setup-transports: # Настройка очередей
 	docker compose run --rm backend-cli bin/console messenger:setup-transports
 
 run-backend: # Выполнение команды на бэкенде, пример: make run-backend echo "hello"
-	make setup-env
 	@docker compose run --rm backend-cli $(Arguments)
 
 logs: # Просмотр логов сервиса, пример: make logs backend
-	make setup-env
 	@docker compose logs $(Arguments)
 
-check: composer-check-all cache-clear lint test check-openapi-diff check-openapi-schema db-validate # Проверка кода
+check: cache-clear composer-check-all db-validate lint check-openapi-diff check-openapi-schema test # Проверка кода
 
 fix: fixer-fix rector-fix # Запуск правок кода
 
@@ -115,7 +110,6 @@ deptrac-check-unassigned: # Покрытие кода с deptrac
 	docker compose run --rm backend-cli vendor/bin/deptrac debug:unassigned --config-file=src-dev/deptrac.yaml | tee /dev/stderr | grep 'There are no unassigned tokens'
 
 test-install: # Подготовка тестового окружения
-	make init
 	@for i in 1 2 3 4 ; do \
 		docker compose exec pgsql dropdb -f --if-exists db_name_test$$i; \
 		docker compose exec pgsql createdb -O postgres db_name_test$$i; \
@@ -133,25 +127,26 @@ test-coverage: # Запуск тестов с покрытием кода
 	docker compose run --rm backend-cli bash -c 'APP_ENV=test vendor/bin/paratest --configuration=src-dev/phpunit.xml --processes=4 --coverage-text'
 
 test-verbose: # Запуск тестов с детальным описанием
-	make setup-env
 	docker compose run --rm backend-cli bin/console --env=test cache:clear
 	docker compose run --rm backend-cli bash -c 'APP_ENV=test vendor/bin/paratest --configuration=src-dev/phpunit.xml -p4 --testdox'
 
 test-single: # Запуск одного теста, пример: make test-single class=TaskCommentBodyTest
-	make setup-env
 	docker compose run --rm backend-cli bin/console --env=test cache:clear
 	@docker compose run --rm backend-cli bash -c "APP_ENV=test vendor/bin/phpunit --configuration=src-dev/phpunit.xml --filter=$(class)"
 
 check-openapi-diff: # Валидация соответствия роутов и схемы openapi
-	docker compose run --rm backend-cli bin/console app:openapi-routes-diff ./src-dev/openapi.yaml
+	docker compose run --rm backend-cli bin/console app:openapi-routes-diff ./src-dev/OpenApi/openapi.yaml
 
 check-openapi-schema: spectral # Валидация openapi.yaml
 
 spectral: # Валидация openapi.yaml с помощью spectral
-	docker run --rm -it -v ${PWD}/backend:/app stoplight/spectral:latest lint /app/src-dev/openapi.yaml -F warn --ruleset=/app/src-dev/.spectral.yaml
+	docker run --rm -it -v ${PWD}/backend:/app stoplight/spectral:latest lint /app/src-dev/OpenApi/openapi.yaml -F warn --ruleset=/app/src-dev/OpenApi/.spectral.yaml
 
 deprecations-check: # Проверка на устаревший функционал
 	docker compose run --rm backend-cli bin/console debug:container --deprecations
+
+generate-openapi: # Сборка файла спецификации OpenAPI
+	docker compose run --rm backend-cli bin/console app:generate-openapi
 
 help:	# Справка по командам
 	@grep -E '^[a-zA-Z0-9 -]+:.*#'  Makefile | sort | while read -r l; do printf "\033[1;32m$$(echo $$l | cut -f 1 -d':')\033[00m:$$(echo $$l | cut -f 2- -d'#')\n"; done

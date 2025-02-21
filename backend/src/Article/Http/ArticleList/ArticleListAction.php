@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Article\Http\ArticleList;
 
 use App\Article\Domain\ArticleRepository;
+use App\Infrastructure\Request\Pagination\PaginationRequest;
+use App\Infrastructure\Request\Pagination\PaginationRequestArgumentResolver;
 use App\Infrastructure\Response\ApiListObjectResponse;
-use App\Infrastructure\Response\Pagination\PaginationRequest;
-use App\Infrastructure\Response\Pagination\PaginationRequestArgumentResolver;
-use App\Infrastructure\Response\Pagination\PaginationResponse;
+use App\Infrastructure\Response\PaginationResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
