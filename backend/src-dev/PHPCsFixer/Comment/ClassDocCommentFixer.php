@@ -166,8 +166,8 @@ final class Sample
          */
         $originalIndent = WhitespacesAnalyzer::detectIndent($tokens, $nextBlockIndex);
         $toInsert = [
-            new Token([T_DOC_COMMENT, '/**'.$lineEnd."{$originalIndent} * TODO: Опиши за что отвечает данный класс, ".
-                'какие проблемы решает'.$lineEnd."{$originalIndent} */"]),
+            new Token([T_DOC_COMMENT, '/**'.$lineEnd."{$originalIndent} * TODO: Опиши за что отвечает данный класс, "
+                .'какие проблемы решает'.$lineEnd."{$originalIndent} */"]),
             new Token([T_WHITESPACE, $lineEnd.$originalIndent]),
         ];
 

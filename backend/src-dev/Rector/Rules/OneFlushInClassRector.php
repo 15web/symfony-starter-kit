@@ -26,7 +26,6 @@ final class OneFlushInClassRector extends AbstractRector
     private const string FLUSHER_CLASS = Flush::class;
     private const string FLUSH_METHOD = 'flush';
 
-    #[Override]
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove one flush if it occurs 2 or more times', [new CodeSample(

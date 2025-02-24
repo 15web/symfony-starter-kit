@@ -1,4 +1,4 @@
-FROM postgres:17.0
+FROM postgres:17.3
 
 RUN ln -sf /usr/share/zoneinfo/UTC /etc/localtime
 

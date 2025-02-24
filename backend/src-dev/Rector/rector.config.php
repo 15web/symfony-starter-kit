@@ -11,6 +11,7 @@ use Rector\Config\RectorConfig;
 use Rector\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector;
 use Rector\Doctrine\Set\DoctrineSetList;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
+use Rector\PHPUnit\CodeQuality\Rector\Class_\PreferPHPUnitSelfCallRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\PreferPHPUnitThisCallRector;
 use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Symfony\Set\SymfonySetList;
@@ -28,8 +29,13 @@ return RectorConfig::configure()
     ->withPhpSets(php83: true)
     ->withImportNames(importShortClasses: false)
     ->withTypeCoverageLevel(100)
-    ->withDeadCodeLevel(50)
+    ->withComposerBased(
+        doctrine: true,
+        phpunit: true,
+        symfony: true,
+    )
     ->withPreparedSets(
+        deadCode: true,
         codeQuality: true,
         privatization: true,
         instanceOf: true,
@@ -39,14 +45,18 @@ return RectorConfig::configure()
         phpunitCodeQuality: true,
         doctrineCodeQuality: true,
         symfonyCodeQuality: true,
-        phpunit: true,
     )
     ->withSets([
-        SymfonySetList::SYMFONY_64,
+        SymfonySetList::SYMFONY_72,
         DoctrineSetList::ANNOTATIONS_TO_ATTRIBUTES,
         DoctrineSetList::DOCTRINE_DBAL_40,
-        PHPUnitSetList::PHPUNIT_100,
         PHPUnitSetList::PHPUNIT_110,
+    ])
+    ->withRules([
+        RequestMethodInsteadOfStringRector::class,
+        OneFlushInClassRector::class,
+        ResolversInActionRector::class,
+        PreferPHPUnitSelfCallRector::class,
     ])
     ->withSkip([
         ClassPropertyAssignToConstructorPromotionRector::class => [dirname(__DIR__, 2).'/src/*/Domain/*'],
@@ -58,9 +68,4 @@ return RectorConfig::configure()
             __DIR__.'/../PHPCsFixer',
         ],
         __DIR__.'/../Tests/bootstrap.php',
-    ])
-    ->withRules([
-        RequestMethodInsteadOfStringRector::class,
-        OneFlushInClassRector::class,
-        ResolversInActionRector::class,
     ]);

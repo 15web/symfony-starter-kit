@@ -1,8 +1,2 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="dev-master@dee5fe4e848ebe974581cf92bb59abe868b3367a">
-  <file src="../src/Infrastructure/Request/ValinorConfigurator.php">
-    <InvalidArgument>
-      <code><![CDATA[Uuid::fromString(...)]]></code>
-    </InvalidArgument>
-  </file>
-</files>
+<files psalm-version="6.8.4" />

@@ -22,7 +22,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ResolversInActionRector extends AbstractRector
 {
-    #[Override]
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Obliges to specify ValueResolver in the arguments of actions', [new CodeSample(

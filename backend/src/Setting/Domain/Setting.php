@@ -10,10 +10,11 @@ use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV7;
 
 /**
+ * @final
+ *
  * Настройки
  */
 #[ORM\Entity]
-/** @final */
 class Setting
 {
     #[ORM\Id, ORM\Column(type: 'uuid', unique: true)]

@@ -10,11 +10,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 
 /**
+ * @final
+ *
  * Профиль пользователя
  */
 #[ORM\Entity]
 #[ORM\Index(name: 'ix_profile_user_id', fields: ['userId'])]
-/** @final */
 class Profile
 {
     #[ORM\Id, ORM\Column(type: 'uuid', unique: true)]
