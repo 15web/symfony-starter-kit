@@ -12,6 +12,7 @@ $finder = (new Finder())
     ->in([
         __DIR__.'/../../src',
         __DIR__.'/../../src-dev',
+        __DIR__.'/../../migrations',
     ])
     ->append([
         __FILE__,
@@ -65,7 +66,7 @@ return (new Config())
 
         'php_unit_test_class_requires_covers' => false,
 
-        'ClassDocComment/class_doc_comment' => true,
+        'ClassDocComment/class_doc_comment' => ['exclude' => 'migrations'],
         'Testdox/test_requires_testdox' => ['exclude' => 'SDK'],
         'trailing_comma_in_multiline' => ['after_heredoc' => true, 'elements' => ['arguments', 'array_destructuring', 'arrays', 'match', 'parameters']],
     ])

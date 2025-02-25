@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Setting\Http\SettingList;
 
 use App\Infrastructure\Response\ApiListObjectResponse;
-use App\Infrastructure\Response\Pagination\PaginationResponse;
+use App\Infrastructure\Response\PaginationResponse;
 use App\Setting\Domain\Setting;
 use App\Setting\Domain\SettingsRepository;
 use Symfony\Component\HttpFoundation\Request;

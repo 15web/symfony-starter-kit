@@ -6,8 +6,8 @@ namespace App\Task\Http\Export;
 
 use App\Infrastructure\ApiException\ApiBadResponseException;
 use App\Infrastructure\ApiException\ApiErrorCode;
-use App\Infrastructure\Response\Pagination\PaginationRequest;
-use App\Infrastructure\Response\Pagination\PaginationRequestArgumentResolver;
+use App\Infrastructure\Request\Pagination\PaginationRequest;
+use App\Infrastructure\Request\Pagination\PaginationRequestArgumentResolver;
 use App\User\Security\Http\IsGranted;
 use App\User\Security\Http\UserIdArgumentValueResolver;
 use App\User\User\Domain\UserId;

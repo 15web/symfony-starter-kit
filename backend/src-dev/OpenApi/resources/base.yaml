@@ -1,0 +1,16 @@
+openapi: 3.0.3
+info:
+  title: symfony-starter-kit
+  version: 1.0.0
+  description: Заготовка для проектов на Symfony, примеры модулей
+  contact:
+    name: Студия 15
+    url: https://www.15web.ru
+    email: info@15web.ru
+servers:
+  - url: /api
+security:
+  - ApiTokenAuth: [ ]
+tags: [ ]
+paths: { }
+components: { }

@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
  * @internal
  */
 #[TestDox('Системная ошибка')]
-final class SystemExceptionTest extends ApiWebTestCase
+final class ApiSystemExceptionTest extends ApiWebTestCase
 {
     #[TestDox('Урл не найден')]
     public function testUriNotFound(): void

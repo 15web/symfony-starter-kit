@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Response;
 
-use App\Infrastructure\Response\Pagination\PaginationResponse;
-
 /**
  * Ответ со списками и пагинацией
  */

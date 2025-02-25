@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Dev\Infrastructure\ConsoleCommand;
+namespace Dev\OpenApi\ConsoleCommand;
 
 use InvalidArgumentException;
 use Override;
@@ -91,7 +91,7 @@ final class OpenApiRoutesDiffCommand extends Command
         $result = [];
 
         foreach ($openApiPaths as $openApiPath) {
-            $result[] = '/api'.$openApiPath;
+            $result[] = \sprintf('/api/%s', ltrim($openApiPath, '/'));
         }
 
         return $result;

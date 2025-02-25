@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Task\Http\TaskList;
 
+use App\Infrastructure\Request\Pagination\PaginationRequest;
+use App\Infrastructure\Request\Pagination\PaginationRequestArgumentResolver;
 use App\Infrastructure\Response\ApiListObjectResponse;
-use App\Infrastructure\Response\Pagination\PaginationRequest;
-use App\Infrastructure\Response\Pagination\PaginationRequestArgumentResolver;
-use App\Infrastructure\Response\Pagination\PaginationResponse;
+use App\Infrastructure\Response\PaginationResponse;
 use App\Task\Query\Task\FindAllByUserId\CountAllTasksByUserId;
 use App\Task\Query\Task\FindAllByUserId\FindAllTasksByUserId;
 use App\Task\Query\Task\FindAllByUserId\FindAllTasksByUserIdQuery;

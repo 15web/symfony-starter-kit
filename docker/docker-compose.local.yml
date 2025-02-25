@@ -64,7 +64,7 @@ services:
             SWAGGER_JSON_URL: /docs/openapi.yaml
             BASE_URL: /docs
         volumes:
-            - ../backend/src-dev/openapi.yaml:/usr/share/nginx/html/openapi.yaml:ro
+            - ../backend/src-dev/OpenApi/openapi.yaml:/usr/share/nginx/html/openapi.yaml:ro
 volumes:
     pgsql:
     composer_cache:

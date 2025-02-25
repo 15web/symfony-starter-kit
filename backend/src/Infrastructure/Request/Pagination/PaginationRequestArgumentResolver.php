@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Response\Pagination;
+namespace App\Infrastructure\Request\Pagination;
 
 use App\Infrastructure\ApiException\ApiBadRequestException;
 use App\Infrastructure\AsService;
@@ -23,7 +23,9 @@ final readonly class PaginationRequestArgumentResolver implements ValueResolverI
     private const string QUERY_LIMIT_NAME = 'limit';
     private const string QUERY_OFFSET_NAME = 'offset';
 
-    public function __construct(private BuildValidationError $buildValidationError) {}
+    public function __construct(
+        private BuildValidationError $buildValidationError,
+    ) {}
 
     /**
      * @return iterable<PaginationRequest>

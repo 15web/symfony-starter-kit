@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Dev\Tests\Unit\Infrastructure\Pagination;
 
-use App\Infrastructure\Response\Pagination\PaginationRequest;
+use App\Infrastructure\Request\Pagination\PaginationRequest;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
