@@ -48,7 +48,7 @@ check: cache-clear composer-check-all db-validate lint check-openapi-diff check-
 
 fix: fixer-fix rector-fix # Запуск правок кода
 
-lint: container-lint twig-lint fixer-check rector-check phpstan psalm deptrac-check-unassigned cache-prod-check
+lint: check-git-lf container-lint twig-lint fixer-check rector-check phpstan psalm deptrac-check-unassigned cache-prod-check
 
 composer-check-all: composer-validate composer-audit composer-normalize-check # Проверка пакетов composer
 
@@ -147,6 +147,9 @@ deprecations-check: # Проверка на устаревший функцио�
 
 generate-openapi: # Сборка файла спецификации OpenAPI
 	docker compose run --rm backend-cli bin/console app:generate-openapi
+
+check-git-lf: # Находит файлы в индексе с переносом строк, отличным от LF
+	git ls-files --eol | grep --color=always -i '^i/[^lf|none]' && exit 1 || echo 'LF Ok'
 
 help:	# Справка по командам
 	@grep -E '^[a-zA-Z0-9 -]+:.*#'  Makefile | sort | while read -r l; do printf "\033[1;32m$$(echo $$l | cut -f 1 -d':')\033[00m:$$(echo $$l | cut -f 2- -d'#')\n"; done
