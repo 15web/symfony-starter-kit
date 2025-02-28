@@ -2,29 +2,45 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Request;
+namespace App\Logger\Http;
 
 use App\Infrastructure\AsService;
+use App\User\Security\Http\IsGranted;
+use App\User\Security\Service\TokenException;
+use App\User\Security\Service\TokenManager;
 use Psr\Log\LoggerInterface;
+use ReflectionClass;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\Exception\JsonException;
 use Symfony\Component\HttpFoundation\HeaderBag;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\KernelEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
+use Symfony\Component\Routing\Exception\ExceptionInterface;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Serializer\Encoder\DecoderInterface;
 
 /**
  * Логирование всех запросов и ответов
  */
 #[AsService]
-final readonly class RequestLogger
+final class RequestLogger
 {
+    /**
+     * @var ReflectionClass<object>|null
+     */
+    private ?ReflectionClass $controllerReflection;
+
     public function __construct(
-        private LoggerInterface $logger,
-        private DecoderInterface $decoder,
-    ) {}
+        private readonly TokenManager $tokenManager,
+        private readonly RouterInterface $router,
+        private readonly LoggerInterface $logger,
+        private readonly DecoderInterface $decoder,
+    ) {
+        $this->controllerReflection = null;
+    }
 
     #[AsEventListener]
     public function logRequest(RequestEvent $event): void
@@ -45,12 +61,21 @@ final readonly class RequestLogger
             $payload = $request->getContent();
         }
 
-        $this->logger->info($message, [
+        $context = [
             'payload' => $payload,
             'headers' => $this->collectHeaders($request->headers),
             'ip' => $request->getClientIp(),
             'error' => $error,
-        ]);
+        ];
+
+        $this->setControllerReflection($request);
+
+        // Запись ID авторизованного пользователя
+        if ($this->shouldLogUser()) {
+            $context['userId'] = $this->getUserId($request);
+        }
+
+        $this->logger->info($message, $context);
     }
 
     #[AsEventListener]
@@ -130,5 +155,44 @@ final readonly class RequestLogger
         );
 
         return $preparedContent;
+    }
+
+    private function shouldLogUser(): bool
+    {
+        if ($this->controllerReflection === null) {
+            return false;
+        }
+
+        $foundAttribute = $this->controllerReflection->getAttributes(IsGranted::class);
+
+        return $foundAttribute !== [];
+    }
+
+    private function getUserId(Request $request): ?string
+    {
+        try {
+            $token = $this->tokenManager->getToken($request);
+        } catch (TokenException) {
+            return null;
+        }
+
+        return (string) $token->getUserId()->value;
+    }
+
+    private function setControllerReflection(Request $request): void
+    {
+        try {
+            /** @var array{_controller: class-string} $route */
+            $route = $this->router->match($request->getPathInfo());
+        } catch (ExceptionInterface) {
+            return;
+        }
+
+        $controllerClass = $route['_controller'];
+        if (!class_exists($controllerClass)) {
+            return;
+        }
+
+        $this->controllerReflection = new ReflectionClass($controllerClass);
     }
 }
