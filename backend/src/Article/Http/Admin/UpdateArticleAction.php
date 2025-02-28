@@ -24,7 +24,7 @@ use Symfony\Component\Routing\Attribute\Route;
 #[IsGranted(UserRole::User)]
 #[Route('/admin/articles/{id}', methods: [Request::METHOD_POST])]
 #[AsController]
-final readonly class UpdateAction
+final readonly class UpdateArticleAction
 {
     public function __construct(private ArticleRepository $articleRepository, private Flush $flush) {}
 
@@ -32,7 +32,7 @@ final readonly class UpdateAction
         #[ValueResolver(ArticleArgumentValueResolver::class)]
         Article $article,
         #[ValueResolver(ApiRequestValueResolver::class)]
-        UpdateRequest $updateRequest,
+        UpdateArticleRequest $updateRequest,
     ): ApiObjectResponse {
         $sameArticle = $this->articleRepository->findByAlias($updateRequest->alias);
         if ($sameArticle !== null && $sameArticle->getId() !== $article->getId()) {

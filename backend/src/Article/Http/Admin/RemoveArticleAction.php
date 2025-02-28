@@ -22,7 +22,7 @@ use Symfony\Component\Routing\Attribute\Route;
 #[IsGranted(UserRole::User)]
 #[Route('/admin/articles/{id}', methods: [Request::METHOD_DELETE])]
 #[AsController]
-final readonly class RemoveAction
+final readonly class RemoveArticleAction
 {
     public function __construct(private ArticleRepository $articleRepository, private Flush $flush) {}
 

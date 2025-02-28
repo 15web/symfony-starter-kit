@@ -7,7 +7,7 @@ namespace App\Article\Http;
 /**
  * Информация о статье
  */
-final readonly class InfoData
+final readonly class ArticleInfoData
 {
     public function __construct(
         public string $title,

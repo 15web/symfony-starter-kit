@@ -24,13 +24,13 @@ use Symfony\Component\Routing\Attribute\Route;
 #[IsGranted(UserRole::User)]
 #[Route('/admin/articles', methods: [Request::METHOD_POST])]
 #[AsController]
-final readonly class CreateAction
+final readonly class CreateArticleAction
 {
     public function __construct(private ArticleRepository $articleRepository, private Flush $flush) {}
 
     public function __invoke(
         #[ValueResolver(ApiRequestValueResolver::class)]
-        CreateRequest $createRequest,
+        CreateArticleRequest $createRequest,
     ): ApiObjectResponse {
         $sameArticle = $this->articleRepository->findByAlias($createRequest->alias);
         if ($sameArticle !== null) {
