@@ -8,7 +8,7 @@ services:
         volumes:
             - ../backend:/app/
             - composer_cache:/home/dev/.composer
-        env_file: backend/.env
+        env_file: ../backend/.env
         depends_on:
             pgsql:
                 condition: service_healthy
@@ -21,7 +21,7 @@ services:
         volumes:
             - ../backend:/app/
             - composer_cache:/home/dev/.composer
-        env_file: backend/.env
+        env_file: ../backend/.env
         entrypoint: [ "" ]
         command: [ "php", "-v" ]
 
@@ -33,7 +33,7 @@ services:
                 USER_ID: ${USER_ID}
         volumes:
             - ../backend:/app/
-        env_file: backend/.env
+        env_file: ../backend/.env
         depends_on:
             pgsql:
                 condition: service_healthy
