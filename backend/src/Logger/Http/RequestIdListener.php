@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Request;
+namespace App\Logger\Http;
 
 use App\Infrastructure\AsService;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
