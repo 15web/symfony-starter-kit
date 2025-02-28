@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Setup docker env
-        run: ./setup_envs.bash setup-envs && cat .env
+        run: ./docker/bin/setup_envs.bash setup-envs && cat .env
 
       - name: Validate commit message
         run: ./docker/bin/check_commit_message.bash

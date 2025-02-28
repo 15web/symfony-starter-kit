@@ -1,7 +1,7 @@
 .PHONY: all
 
 setup-env: # Установка переменных окружения
-	./setup_envs.bash
+	./docker/bin/setup_envs.bash
 
 init: # Запуск проекта и установка зависимостей
 	make setup-env

@@ -20,7 +20,6 @@ replace_env "${COMPOSE_ENV_PATH}" 'COMPOSE_PROJECT_NAME' 'symfony-starter-kit-lo
 replace_env "${COMPOSE_ENV_PATH}" 'COMPOSE_FILE' './docker/docker-compose.local.yml'
 replace_env "${COMPOSE_ENV_PATH}" 'USER_ID' "$(id -u)"
 
-[ ! -f 'docker/backend/.env' ] && cp 'docker/backend/.env.dist' 'docker/backend/.env'
 [ ! -f 'docker/pgsql/.env' ] && cp 'docker/pgsql/.env.dist' 'docker/pgsql/.env'
 
 echo 'Envs set up!';
