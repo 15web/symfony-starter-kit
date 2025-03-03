@@ -17,6 +17,7 @@
         <ignoreFiles>
             <directory name="../vendor" />
             <directory name="../var/cache" />
+            <directory name="./Maker" />
             <file name="../src/**/config.php" />
             <file name="../src/Infrastructure/Kernel.php" />
             <file name="../src/Infrastructure/di.php" />
