@@ -7,7 +7,7 @@ namespace App\Article\Http\Admin;
 /**
  * Объект запроса для обновления статьи
  */
-final readonly class UpdateRequest
+final readonly class UpdateArticleRequest
 {
     /**
      * @param non-empty-string $title

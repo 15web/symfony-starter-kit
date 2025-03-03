@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Article\Domain;
 
 use App\Infrastructure\AsService;
+use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Uid\Uuid;
 
@@ -37,19 +38,34 @@ final readonly class ArticleRepository
     }
 
     /**
-     * @return Article[]
+     * @return list<Article>
      */
     public function getAll(int $limit = 10, int $offset = 0): array
     {
-        /** @var Article[] $articles */
-        $articles = $this->entityManager->getRepository(Article::class)->createQueryBuilder('a')
+        /** @var list<Article> */
+        return $this->entityManager->getRepository(Article::class)->createQueryBuilder('a')
             ->setFirstResult($offset)
             ->setMaxResults($limit)
             ->orderBy('a.createdAt', 'DESC')
             ->getQuery()
             ->getResult();
+    }
 
-        return $articles;
+    /**
+     * @param non-empty-list<Uuid> $ids
+     *
+     * @return list<Article>
+     */
+    public function getByIds(array $ids): array
+    {
+        /** @var list<Article> */
+        return $this->entityManager
+            ->getRepository(Article::class)
+            ->createQueryBuilder('a')
+            ->where('a.id in (:ids)')
+            ->setParameter('ids', $ids, ArrayParameterType::STRING)
+            ->getQuery()
+            ->getResult();
     }
 
     public function countAll(): int

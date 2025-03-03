@@ -19,7 +19,7 @@ use Symfony\Component\Routing\Attribute\Route;
 #[IsGranted(UserRole::User)]
 #[Route('/admin/articles/{id}', methods: [Request::METHOD_GET])]
 #[AsController]
-final class InfoAction
+final class ArticleInfoAction
 {
     public function __invoke(
         #[ValueResolver(ArticleArgumentValueResolver::class)]

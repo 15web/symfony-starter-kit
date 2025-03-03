@@ -19,7 +19,7 @@ use Symfony\Component\Routing\Attribute\Route;
 #[IsGranted(UserRole::User)]
 #[Route('/admin/articles', methods: [Request::METHOD_GET])]
 #[AsController]
-final readonly class ListAction
+final readonly class ArticleListAction
 {
     public function __construct(private ArticleRepository $articleRepository) {}
 

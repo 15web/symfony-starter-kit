@@ -19,7 +19,7 @@ use Symfony\Component\Routing\Attribute\Route;
  */
 #[Route('/articles/{alias}', methods: [Request::METHOD_GET])]
 #[AsController]
-final readonly class InfoAction
+final readonly class ArticleInfoAction
 {
     public function __construct(private ArticleRepository $articleRepository) {}
 
@@ -37,9 +37,9 @@ final readonly class InfoAction
         );
     }
 
-    private function buildResponseData(Article $article): InfoData
+    private function buildResponseData(Article $article): ArticleInfoData
     {
-        return new InfoData(
+        return new ArticleInfoData(
             title: $article->getTitle(),
             body: $article->getBody(),
         );

@@ -68,6 +68,22 @@ paths:
           $ref: '../common.yaml#/components/responses/invalidRequest'
         '401':
           $ref: '../common.yaml#/components/responses/authRequired'
+  /admin/articles-list:
+    post:
+      operationId: articleListByIds
+      summary: Получить статьи по списку Id
+      description: Получить статьи по списку Id
+      tags:
+        - article
+      requestBody:
+        $ref: '#/components/requestBodies/articleListByIds'
+      responses:
+        '200':
+          $ref: '#/components/responses/articleList'
+        '400':
+          $ref: '../common.yaml#/components/responses/invalidRequest'
+        '401':
+          $ref: '../common.yaml#/components/responses/authRequired'
   /admin/articles/{id}:
     get:
       operationId: adminArticleInfo
@@ -130,6 +146,24 @@ components:
         type: string
         format: uuid
   requestBodies:
+    articleListByIds:
+      description: Запрос на получение статей по списку Id
+      content:
+        application/json:
+          schema:
+            properties:
+              ids:
+                type: array
+                description: Список Id статей
+                minItems: 1
+                items:
+                  type: string
+                  format: uuid
+                  description: ID
+                  example: dc8dbada-b154-4ffb-b21c-da70162e2704
+            additionalProperties: false
+            required:
+              - ids
     adminArticleCreate:
       description: Запрос на создание статьи
       content:
