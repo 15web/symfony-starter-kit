@@ -148,6 +148,9 @@ deprecations-check: # Проверка на устаревший функцио�
 generate-openapi: # Сборка файла спецификации OpenAPI
 	docker compose run --rm backend-cli bin/console app:generate-openapi
 
+crud-module: # Создание CRUD-модуля
+	docker compose run --rm backend bin/console make:module
+
 check-git-lf: # Находит файлы в индексе с переносом строк, отличным от LF
 	git ls-files --eol | grep --color=always -i '^i/[^lf|none]' && exit 1 || echo 'LF Ok'
 

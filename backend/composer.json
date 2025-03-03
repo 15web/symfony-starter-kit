@@ -51,6 +51,7 @@
         "rector/rector": "^2.0",
         "symfony/browser-kit": "^7.2",
         "symfony/css-selector": "^7.2",
+        "symfony/maker-bundle": "^1.62",
         "symfony/psr-http-message-bridge": "^7.2",
         "symfony/stopwatch": "^7.2",
         "symfony/web-profiler-bundle": "^7.2",
