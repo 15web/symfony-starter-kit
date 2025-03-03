@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Attribute\Route;
 /**
  * Ручка списка статей
  */
-#[IsGranted(UserRole::User)]
+#[IsGranted(UserRole::Admin)]
 #[Route('/admin/articles', methods: [Request::METHOD_GET])]
 #[AsController]
 final readonly class ArticleListAction

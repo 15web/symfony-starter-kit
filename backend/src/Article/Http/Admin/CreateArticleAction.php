@@ -21,7 +21,7 @@ use Symfony\Component\Routing\Attribute\Route;
 /**
  * Ручка создания статьи
  */
-#[IsGranted(UserRole::User)]
+#[IsGranted(UserRole::Admin)]
 #[Route('/admin/articles', methods: [Request::METHOD_POST])]
 #[AsController]
 final readonly class CreateArticleAction

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Dev\Tests\Functional\Article\Admin;
 
+use App\User\User\Domain\UserRole;
 use Dev\Tests\Functional\SDK\ApiWebTestCase;
 use Dev\Tests\Functional\SDK\Article;
 use Dev\Tests\Functional\SDK\User;
@@ -22,7 +23,7 @@ final class UpdateArticleTest extends ApiWebTestCase
     #[TestDox('Статья обновлена')]
     public function testSuccess(): void
     {
-        $token = User::auth();
+        $token = User::auth(role: UserRole::Admin);
         $articleId = Article::createAndReturnId(
             title: 'Статья',
             alias: 'statya',
@@ -54,7 +55,8 @@ final class UpdateArticleTest extends ApiWebTestCase
          *     createdAt: string|null,
          *     updatedAt: string|null
          *    }
-         * } $articleResponse */
+         * } $articleResponse
+         */
         $articleResponse = self::jsonDecode($response->getContent());
 
         self::assertNotNull($articleResponse['data']['id']);
@@ -68,7 +70,7 @@ final class UpdateArticleTest extends ApiWebTestCase
     #[TestDox('Статья не найдена')]
     public function testNotFound(): void
     {
-        $token = User::auth();
+        $token = User::auth(role: UserRole::Admin);
         Article::create(
             title: 'Статья',
             alias: 'statya',
@@ -82,7 +84,7 @@ final class UpdateArticleTest extends ApiWebTestCase
         $body['body'] = 'Контент 2';
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
-        $articleId = (string) Uuid::v4();
+        $articleId = (string) Uuid::v7();
         $response = self::request(
             method: Request::METHOD_POST,
             uri: \sprintf('/api/admin/articles/%s', $articleId),
@@ -96,7 +98,7 @@ final class UpdateArticleTest extends ApiWebTestCase
     #[TestDox('Нельзя обновить статью, такой алиас уже существует')]
     public function testExistArticleWithSuchAlias(): void
     {
-        $token = User::auth();
+        $token = User::auth(role: UserRole::Admin);
 
         Article::create(
             title: 'Статья',
@@ -132,7 +134,7 @@ final class UpdateArticleTest extends ApiWebTestCase
     #[TestDox('Доступ запрещен')]
     public function testAccessDenied(string $notValidToken): void
     {
-        $token = User::auth();
+        $token = User::auth(role: UserRole::Admin);
         $articleId = Article::createAndReturnId(
             title: 'Статья',
             alias: 'statya',
@@ -156,6 +158,36 @@ final class UpdateArticleTest extends ApiWebTestCase
         self::assertAccessDenied($response);
     }
 
+    #[TestDox('Пользователю доступ запрещен')]
+    public function testForbidden(): void
+    {
+        $token = User::auth(role: UserRole::Admin);
+
+        $articleId = Article::createAndReturnId(
+            title: 'Статья',
+            alias: 'statya',
+            content: '<p>Контент</p>',
+            token: $token,
+        );
+
+        $userToken = User::auth('user@example.com');
+
+        $body = [
+            'title' => 'Статья 2',
+            'alias' => 'statya 2',
+            'body' => 'Контент 2',
+        ];
+
+        $response = self::request(
+            method: Request::METHOD_POST,
+            uri: \sprintf('/api/admin/articles/%s', $articleId),
+            body: json_encode($body, JSON_THROW_ON_ERROR),
+            token: $userToken,
+        );
+
+        self::assertForbidden($response);
+    }
+
     /**
      * @param array<int|string> $body
      */
@@ -163,7 +195,7 @@ final class UpdateArticleTest extends ApiWebTestCase
     #[TestDox('Неправильный запрос')]
     public function testBadRequest(array $body): void
     {
-        $token = User::auth();
+        $token = User::auth(role: UserRole::Admin);
         $articleId = Article::createAndReturnId(
             title: 'Статья',
             alias: 'statya',

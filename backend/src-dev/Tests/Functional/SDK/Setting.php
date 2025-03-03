@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Dev\Tests\Functional\SDK;
 
+use App\User\User\Domain\UserRole;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -23,7 +24,7 @@ final class Setting extends ApiWebTestCase
      */
     public static function adminList(): array
     {
-        $token = User::auth();
+        $token = User::auth(role: UserRole::Admin);
 
         $response = self::request(
             method: Request::METHOD_GET,
