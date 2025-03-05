@@ -1,0 +1,75 @@
+openapi: 3.0.3
+info:
+  title: symfony-starter-kit
+  version: 1.0.0
+tags:
+  - name: seo
+    description: SEO
+paths:
+  /seo/{type}/{identity}:
+    get:
+      operationId: seoInfo
+      summary: Получить SEO параметры объекта
+      description: Получить SEO параметры объекта
+      tags:
+        - seo
+      parameters:
+        - $ref: '#/components/parameters/entityType'
+        - $ref: '#/components/parameters/entityId'
+      security: [ ]
+      responses:
+        '200':
+          $ref: '#/components/responses/seoInfo'
+components:
+  parameters:
+    entityId:
+      name: identity
+      in: path
+      required: true
+      description: ID объекта
+      example: 123e4567-e89b-12d3-a456-426614174000
+      schema:
+        type: string
+        format: uuid
+    entityType:
+      name: type
+      in: path
+      required: true
+      description: Тип объекта
+      example: article
+      schema:
+        type: string
+        enum:
+          - article
+          - task
+  responses:
+    seoInfo:
+      description: SEO параметры
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                description: SEO информация
+                properties:
+                  title:
+                    type: string
+                    nullable: true
+                    description: Заголовок
+                    example: Первая статья
+                  description:
+                    type: string
+                    nullable: true
+                    description: Описание
+                    example: Описание первой статьи
+                  keywords:
+                    type: string
+                    nullable: true
+                    description: Ключевые слова
+                    example: ключевые слова
+      headers:
+        X-Request-TraceId:
+          $ref: '../common.yaml#/components/headers/requestTraceId'
+

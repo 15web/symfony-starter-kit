@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Dev\Tests\Functional\Article\Admin;
 
+use App\User\User\Domain\UserRole;
 use Dev\Tests\Functional\SDK\ApiWebTestCase;
 use Dev\Tests\Functional\SDK\Article;
 use Dev\Tests\Functional\SDK\User;
@@ -21,7 +22,7 @@ final class CreateArticleTest extends ApiWebTestCase
     #[TestDox('Статья создана')]
     public function testSuccess(): void
     {
-        $token = User::auth();
+        $token = User::auth(role: UserRole::Admin);
         $response = Article::create(
             title: $title = 'Статья',
             alias: $alias = 'statya',
@@ -54,7 +55,7 @@ final class CreateArticleTest extends ApiWebTestCase
     #[TestDox('Нельзя создать статьи с одинаковым алиасом')]
     public function testExistArticleWithSuchAlias(): void
     {
-        $token = User::auth();
+        $token = User::auth(role: UserRole::Admin);
 
         Article::create(
             title: 'Статья',
@@ -87,6 +88,21 @@ final class CreateArticleTest extends ApiWebTestCase
         self::assertAccessDenied($response);
     }
 
+    #[TestDox('Пользователю доступ запрещен')]
+    public function testForbidden(): void
+    {
+        $userToken = User::auth('user@example.com');
+
+        $response = Article::create(
+            title: 'Статья',
+            alias: 'statya',
+            content: '<p>Контент</p>',
+            token: $userToken,
+        );
+
+        self::assertForbidden($response);
+    }
+
     /**
      * @param array<int|string> $body
      */
@@ -94,7 +110,7 @@ final class CreateArticleTest extends ApiWebTestCase
     #[TestDox('Неправильный запрос')]
     public function testBadRequest(array $body): void
     {
-        $token = User::auth();
+        $token = User::auth(role: UserRole::Admin);
 
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
