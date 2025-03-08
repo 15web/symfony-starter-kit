@@ -8,6 +8,10 @@ use App\Infrastructure\AsService;
 use App\User\Security\Http\IsGranted;
 use App\User\Security\Service\TokenException;
 use App\User\Security\Service\TokenManager;
+use CuyZ\Valinor\Mapper\Source\JsonSource;
+use CuyZ\Valinor\MapperBuilder;
+use CuyZ\Valinor\Normalizer\ArrayNormalizer;
+use CuyZ\Valinor\Normalizer\Format;
 use Psr\Log\LoggerInterface;
 use ReflectionClass;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
@@ -20,7 +24,6 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\Routing\Exception\ExceptionInterface;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Serializer\Encoder\DecoderInterface;
 
 /**
  * Логирование всех запросов и ответов
@@ -33,13 +36,16 @@ final class RequestLogger
      */
     private ?ReflectionClass $controllerReflection;
 
+    private readonly ArrayNormalizer $normalizer;
+
     public function __construct(
         private readonly TokenManager $tokenManager,
         private readonly RouterInterface $router,
         private readonly LoggerInterface $logger,
-        private readonly DecoderInterface $decoder,
+        MapperBuilder $builder,
     ) {
         $this->controllerReflection = null;
+        $this->normalizer = $builder->normalizer(Format::array());
     }
 
     #[AsEventListener]
@@ -136,7 +142,7 @@ final class RequestLogger
     }
 
     /**
-     * @return array<string, mixed>|string
+     * @return array<array-key, mixed>|string
      */
     private function prepareResponseContent(Response $response): array|string
     {
@@ -146,15 +152,10 @@ final class RequestLogger
             return $content;
         }
 
-        /**
-         * @var array<string, mixed> $preparedContent
-         */
-        $preparedContent = $this->decoder->decode(
-            data: $content,
-            format: 'json',
+        /** @var array<array-key, mixed> */
+        return $this->normalizer->normalize(
+            new JsonSource($content),
         );
-
-        return $preparedContent;
     }
 
     private function shouldLogUser(): bool
