@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Dev\Tests\Functional\Article\Admin;
 
+use App\User\User\Domain\UserRole;
 use Dev\Tests\Functional\SDK\ApiWebTestCase;
 use Dev\Tests\Functional\SDK\Article;
 use Dev\Tests\Functional\SDK\User;
@@ -20,7 +21,8 @@ final class ArticleListTest extends ApiWebTestCase
     #[TestDox('Получен список из созданных статей')]
     public function testSuccess(): void
     {
-        $token = User::auth();
+        $token = User::auth(role: UserRole::Admin);
+
         $articleId1 = Article::createAndReturnId(
             title: $title1 = 'Статья1',
             alias: 'statya',
@@ -60,5 +62,19 @@ final class ArticleListTest extends ApiWebTestCase
         );
 
         self::assertAccessDenied($response);
+    }
+
+    #[TestDox('Пользователю доступ запрещен')]
+    public function testForbidden(): void
+    {
+        $userToken = User::auth('user@example.com');
+
+        $response = self::request(
+            method: Request::METHOD_GET,
+            uri: '/api/admin/articles',
+            token: $userToken,
+        );
+
+        self::assertForbidden($response);
     }
 }

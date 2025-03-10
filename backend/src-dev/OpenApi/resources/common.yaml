@@ -80,6 +80,19 @@ components:
       headers:
         X-Request-TraceId:
           $ref: '#/components/headers/requestTraceId'
+    forbidden:
+      description: Доступ запрещен
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            code: 403
+            message: Доступ запрещен
+            errors: [ 'access_forbidden' ]
+      headers:
+        X-Request-TraceId:
+          $ref: '#/components/headers/requestTraceId'
     notFound:
       description: Запись не найдена
       content:

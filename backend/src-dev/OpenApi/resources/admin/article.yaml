@@ -1,0 +1,297 @@
+openapi: 3.0.3
+info:
+  title: symfony-starter-kit/admin
+  version: 1.0.0
+tags:
+  - name: admin-article
+    description: Статьи
+paths:
+  /admin/articles:
+    get:
+      operationId: adminArticleList
+      summary: Получить список статей
+      description: Получить список статей
+      tags:
+        - admin-article
+      responses:
+        '200':
+          $ref: '#/components/responses/adminArticleList'
+        '401':
+          $ref: '../common.yaml#/components/responses/authRequired'
+        '403':
+          $ref: '../common.yaml#/components/responses/forbidden'
+    post:
+      operationId: adminArticleCreate
+      summary: Создать статью
+      description: Создать статью
+      tags:
+        - admin-article
+      requestBody:
+        $ref: '#/components/requestBodies/adminArticleCreate'
+      responses:
+        '200':
+          $ref: '#/components/responses/adminArticleCreate'
+        '400':
+          $ref: '../common.yaml#/components/responses/invalidRequest'
+        '401':
+          $ref: '../common.yaml#/components/responses/authRequired'
+        '403':
+          $ref: '../common.yaml#/components/responses/forbidden'
+  /admin/articles-list:
+    post:
+      operationId: adminArticleListByIds
+      summary: Получить статьи по списку Id
+      description: Получить статьи по списку Id
+      tags:
+        - admin-article
+      requestBody:
+        $ref: '#/components/requestBodies/articleListByIds'
+      responses:
+        '200':
+          $ref: '#/components/responses/adminArticleList'
+        '400':
+          $ref: '../common.yaml#/components/responses/invalidRequest'
+        '401':
+          $ref: '../common.yaml#/components/responses/authRequired'
+        '403':
+          $ref: '../common.yaml#/components/responses/forbidden'
+  /admin/articles/{id}:
+    get:
+      operationId: adminArticleInfo
+      summary: Получить информацию по статье
+      description: Получить информацию по статье
+      tags:
+        - admin-article
+      parameters:
+        - $ref: '#/components/parameters/adminArticleId'
+      responses:
+        '200':
+          $ref: '#/components/responses/adminArticleInfo'
+        '401':
+          $ref: '../common.yaml#/components/responses/authRequired'
+        '403':
+          $ref: '../common.yaml#/components/responses/forbidden'
+        '404':
+          $ref: '../common.yaml#/components/responses/notFound'
+    delete:
+      operationId: adminArticleRemove
+      summary: Удалить статью
+      description: Удалить статью
+      tags:
+        - admin-article
+      parameters:
+        - $ref: '#/components/parameters/adminArticleId'
+      responses:
+        '200':
+          $ref: '../common.yaml#/components/responses/success'
+        '401':
+          $ref: '../common.yaml#/components/responses/authRequired'
+        '403':
+          $ref: '../common.yaml#/components/responses/forbidden'
+        '404':
+          $ref: '../common.yaml#/components/responses/notFound'
+    post:
+      operationId: adminArticleUpdate
+      summary: Обновить статью
+      description: Обновить статью
+      tags:
+        - admin-article
+      parameters:
+        - $ref: '#/components/parameters/adminArticleId'
+      requestBody:
+        $ref: '#/components/requestBodies/adminArticleUpdate'
+      responses:
+        '200':
+          $ref: '#/components/responses/adminArticleUpdate'
+        '400':
+          $ref: '../common.yaml#/components/responses/invalidRequest'
+        '401':
+          $ref: '../common.yaml#/components/responses/authRequired'
+        '403':
+          $ref: '../common.yaml#/components/responses/forbidden'
+        '404':
+          $ref: '../common.yaml#/components/responses/notFound'
+components:
+  parameters:
+    adminArticleId:
+      name: id
+      in: path
+      required: true
+      description: ID статьи
+      example: 123e4567-e89b-12d3-a456-426614174000
+      schema:
+        type: string
+        format: uuid
+  requestBodies:
+    articleListByIds:
+      description: Запрос на получение статей по списку Id
+      content:
+        application/json:
+          schema:
+            properties:
+              ids:
+                type: array
+                description: Список Id статей
+                minItems: 1
+                items:
+                  type: string
+                  format: uuid
+                  description: ID
+                  example: dc8dbada-b154-4ffb-b21c-da70162e2704
+            additionalProperties: false
+            required:
+              - ids
+    adminArticleCreate:
+      description: Запрос на создание статьи
+      content:
+        application/json:
+          schema:
+            properties:
+              title:
+                $ref: '#/components/schemas/adminArticleTitle'
+              alias:
+                $ref: '#/components/schemas/adminArticleAlias'
+              body:
+                $ref: '#/components/schemas/adminArticleBody'
+            additionalProperties: false
+            required:
+              - title
+              - alias
+    adminArticleUpdate:
+      description: Запрос на обновление статьи
+      content:
+        application/json:
+          schema:
+            properties:
+              title:
+                $ref: '#/components/schemas/adminArticleTitle'
+              alias:
+                $ref: '#/components/schemas/adminArticleAlias'
+              body:
+                $ref: '#/components/schemas/adminArticleBody'
+            additionalProperties: false
+            required:
+              - title
+              - alias
+  responses:
+    adminArticleList:
+      description: Список статей
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - data
+              - pagination
+              - meta
+            properties:
+              pagination:
+                $ref: '../common.yaml#/components/schemas/pagination'
+              meta:
+                type: object
+                nullable: true
+              data:
+                type: array
+                items:
+                  properties:
+                    title:
+                      type: string
+                      description: Заголовок
+                    alias:
+                      type: string
+                      description: Алиас
+                    body:
+                      type: string
+                      description: Контент
+                      nullable: true
+                example:
+                  - title: Первая статья
+                    alias: first-article
+                    body: Контент первой статьи
+                  - title: Вторая статья
+                    alias: second-article
+                    body: Контент второй статьи
+      headers:
+        X-Request-TraceId:
+          $ref: '../common.yaml#/components/headers/requestTraceId'
+    adminArticleCreate:
+      description: Статья создана
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - $ref: '#/components/schemas/adminArticle'
+              - $ref: '../common.yaml#/components/schemas/error'
+      headers:
+        X-Request-TraceId:
+          $ref: '../common.yaml#/components/headers/requestTraceId'
+    adminArticleInfo:
+      description: Информация по статье
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/adminArticle'
+      headers:
+        X-Request-TraceId:
+          $ref: '../common.yaml#/components/headers/requestTraceId'
+    adminArticleUpdate:
+      description: Статья обновлена
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - $ref: '#/components/schemas/adminArticle'
+              - $ref: '../common.yaml#/components/schemas/error'
+      headers:
+        X-Request-TraceId:
+          $ref: '../common.yaml#/components/headers/requestTraceId'
+  schemas:
+    adminArticle:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+            - title
+            - alias
+            - createdAt
+          properties:
+            id:
+              type: string
+              format: uuid
+              description: ID
+              example: dc8dbada-b154-4ffb-b21c-da70162e2704
+            title:
+              $ref: '#/components/schemas/adminArticleTitle'
+            alias:
+              $ref: '#/components/schemas/adminArticleAlias'
+            body:
+              type: string
+              description: Контент
+              example: Контент статьи
+              nullable: true
+            createdAt:
+              $ref: '../common.yaml#/components/schemas/createdAt'
+            updatedAt:
+              $ref: '../common.yaml#/components/schemas/updatedAt'
+        status:
+          $ref: '../common.yaml#/components/schemas/succeedStatus'
+    adminArticleTitle:
+      type: string
+      description: Заголовок
+      minLength: 1
+      example: Первая статья
+    adminArticleAlias:
+      type: string
+      description: Алиас
+      minLength: 1
+      example: first-article
+    adminArticleBody:
+      type: string
+      description: Контент
+      example: Контент первой статьи
+      nullable: true
+

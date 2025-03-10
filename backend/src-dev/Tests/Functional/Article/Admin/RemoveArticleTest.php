@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Dev\Tests\Functional\Article\Admin;
 
+use App\User\User\Domain\UserRole;
 use Dev\Tests\Functional\SDK\ApiWebTestCase;
 use Dev\Tests\Functional\SDK\Article;
 use Dev\Tests\Functional\SDK\User;
@@ -21,7 +22,7 @@ final class RemoveArticleTest extends ApiWebTestCase
     #[TestDox('Статья удалена')]
     public function testSuccess(): void
     {
-        $token = User::auth();
+        $token = User::auth(role: UserRole::Admin);
 
         $articleId1 = Article::createAndReturnId(
             title: 'Статья1',
@@ -54,7 +55,7 @@ final class RemoveArticleTest extends ApiWebTestCase
     #[TestDox('Статья не найдена')]
     public function testNotFound(): void
     {
-        $token = User::auth();
+        $token = User::auth(role: UserRole::Admin);
 
         Article::create(
             title: 'Статья',
@@ -63,7 +64,7 @@ final class RemoveArticleTest extends ApiWebTestCase
             token: $token,
         );
 
-        $articleId = (string) Uuid::v4();
+        $articleId = (string) Uuid::v7();
         $response = self::request(
             method: Request::METHOD_DELETE,
             uri: \sprintf('/api/admin/articles/%s', $articleId),
@@ -77,7 +78,7 @@ final class RemoveArticleTest extends ApiWebTestCase
     #[TestDox('Доступ запрещен')]
     public function testAccessDenied(string $notValidToken): void
     {
-        $token = User::auth();
+        $token = User::auth(role: UserRole::Admin);
         $articleId = Article::createAndReturnId(
             title: 'Статья1',
             alias: 'statya',
@@ -92,5 +93,28 @@ final class RemoveArticleTest extends ApiWebTestCase
         );
 
         self::assertAccessDenied($response);
+    }
+
+    #[TestDox('Пользователю доступ запрещен')]
+    public function testForbidden(): void
+    {
+        $token = User::auth(role: UserRole::Admin);
+
+        $articleId = Article::createAndReturnId(
+            title: 'Статья',
+            alias: 'statya',
+            content: '<p>Контент</p>',
+            token: $token,
+        );
+
+        $userToken = User::auth('user@example.com');
+
+        $response = self::request(
+            method: Request::METHOD_DELETE,
+            uri: \sprintf('/api/admin/articles/%s', $articleId),
+            token: $userToken,
+        );
+
+        self::assertForbidden($response);
     }
 }

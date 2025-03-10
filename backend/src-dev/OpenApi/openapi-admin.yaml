@@ -1,0 +1,636 @@
+openapi: 3.0.3
+info:
+  title: symfony-starter-kit
+  version: 1.0.0
+  description: 'Заготовка для проектов на Symfony, примеры модулей'
+  contact:
+    name: 'Студия 15'
+    url: 'https://www.15web.ru'
+    email: info@15web.ru
+servers:
+  -
+    url: /api
+security:
+  -
+    ApiTokenAuth: []
+tags:
+  -
+    name: admin-article
+    description: Статьи
+  -
+    name: admin-seo
+    description: SEO
+  -
+    name: admin-setting
+    description: Настройки
+paths:
+  /admin/articles:
+    get:
+      operationId: adminArticleList
+      summary: 'Получить список статей'
+      description: 'Получить список статей'
+      tags:
+        - admin-article
+      responses:
+        '200':
+          $ref: '#/components/responses/adminArticleList'
+        '401':
+          $ref: '#/components/responses/authRequired'
+        '403':
+          $ref: '#/components/responses/forbidden'
+    post:
+      operationId: adminArticleCreate
+      summary: 'Создать статью'
+      description: 'Создать статью'
+      tags:
+        - admin-article
+      requestBody:
+        $ref: '#/components/requestBodies/adminArticleCreate'
+      responses:
+        '200':
+          $ref: '#/components/responses/adminArticleCreate'
+        '400':
+          $ref: '#/components/responses/invalidRequest'
+        '401':
+          $ref: '#/components/responses/authRequired'
+        '403':
+          $ref: '#/components/responses/forbidden'
+  /admin/articles-list:
+    post:
+      operationId: adminArticleListByIds
+      summary: 'Получить статьи по списку Id'
+      description: 'Получить статьи по списку Id'
+      tags:
+        - admin-article
+      requestBody:
+        $ref: '#/components/requestBodies/articleListByIds'
+      responses:
+        '200':
+          $ref: '#/components/responses/adminArticleList'
+        '400':
+          $ref: '#/components/responses/invalidRequest'
+        '401':
+          $ref: '#/components/responses/authRequired'
+        '403':
+          $ref: '#/components/responses/forbidden'
+  '/admin/articles/{id}':
+    get:
+      operationId: adminArticleInfo
+      summary: 'Получить информацию по статье'
+      description: 'Получить информацию по статье'
+      tags:
+        - admin-article
+      parameters:
+        -
+          $ref: '#/components/parameters/adminArticleId'
+      responses:
+        '200':
+          $ref: '#/components/responses/adminArticleInfo'
+        '401':
+          $ref: '#/components/responses/authRequired'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/notFound'
+    delete:
+      operationId: adminArticleRemove
+      summary: 'Удалить статью'
+      description: 'Удалить статью'
+      tags:
+        - admin-article
+      parameters:
+        -
+          $ref: '#/components/parameters/adminArticleId'
+      responses:
+        '200':
+          $ref: '#/components/responses/success'
+        '401':
+          $ref: '#/components/responses/authRequired'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/notFound'
+    post:
+      operationId: adminArticleUpdate
+      summary: 'Обновить статью'
+      description: 'Обновить статью'
+      tags:
+        - admin-article
+      parameters:
+        -
+          $ref: '#/components/parameters/adminArticleId'
+      requestBody:
+        $ref: '#/components/requestBodies/adminArticleUpdate'
+      responses:
+        '200':
+          $ref: '#/components/responses/adminArticleUpdate'
+        '400':
+          $ref: '#/components/responses/invalidRequest'
+        '401':
+          $ref: '#/components/responses/authRequired'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/notFound'
+  /admin/seo:
+    post:
+      operationId: adminSaveSeo
+      summary: 'Сохранить SEO параметры объекта'
+      description: 'Сохранить SEO параметры объекта'
+      tags:
+        - admin-seo
+      requestBody:
+        $ref: '#/components/requestBodies/adminSaveSeo'
+      responses:
+        '200':
+          $ref: '#/components/responses/success'
+        '400':
+          $ref: '#/components/responses/invalidRequest'
+        '401':
+          $ref: '#/components/responses/authRequired'
+        '403':
+          $ref: '#/components/responses/forbidden'
+  /admin/settings:
+    get:
+      operationId: adminSettingList
+      summary: 'Получить список настроек'
+      description: 'Получить список настроек'
+      tags:
+        - admin-setting
+      responses:
+        '200':
+          $ref: '#/components/responses/adminSettingList'
+        '401':
+          $ref: '#/components/responses/authRequired'
+        '403':
+          $ref: '#/components/responses/forbidden'
+    post:
+      operationId: adminSaveSetting
+      summary: 'Сохранить изменения настройки'
+      description: 'Сохранить изменения настройки'
+      tags:
+        - admin-setting
+      requestBody:
+        $ref: '#/components/requestBodies/saveSetting'
+      responses:
+        '200':
+          $ref: '#/components/responses/success'
+        '400':
+          $ref: '#/components/responses/invalidRequest'
+        '401':
+          $ref: '#/components/responses/authRequired'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/notFound'
+components:
+  securitySchemes:
+    ApiTokenAuth:
+      type: apiKey
+      in: header
+      name: X-AUTH-TOKEN
+  headers:
+    requestTraceId:
+      schema:
+        type: string
+      description: 'Уникальный идентификатор запроса'
+      example: 01904f4d-d18f-778e-a981-432d6af77425
+    rateLimitRemaining:
+      schema:
+        type: integer
+        minimum: 0
+      description: 'Количество оставшихся попыток в период времени'
+      example: 3
+    rateLimitRetryAfter:
+      schema:
+        type: integer
+        minimum: 1
+      description: 'Количество секунд до повторного запроса'
+      example: 120
+    rateLimitLimit:
+      schema:
+        type: integer
+        minimum: 1
+      description: 'Количество допустимых попыток в период времени'
+      example: 60
+  responses:
+    success:
+      description: 'Успешный ответ'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/success'
+          example:
+            data:
+              status: success
+            status: success
+      headers:
+        X-Request-TraceId:
+          $ref: '#/components/headers/requestTraceId'
+    invalidRequest:
+      description: 'Ошибка запроса'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            data:
+              code: 400
+              message: 'Неверный формат запроса'
+              errors:
+                - invalid_request
+            status: error
+      headers:
+        X-Request-TraceId:
+          $ref: '#/components/headers/requestTraceId'
+    authRequired:
+      description: 'Доступ запрещен'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            code: 401
+            message: 'Необходимо пройти аутентификацию'
+            errors:
+              - auth_required
+      headers:
+        X-Request-TraceId:
+          $ref: '#/components/headers/requestTraceId'
+    forbidden:
+      description: 'Доступ запрещен'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            code: 403
+            message: 'Доступ запрещен'
+            errors:
+              - access_forbidden
+      headers:
+        X-Request-TraceId:
+          $ref: '#/components/headers/requestTraceId'
+    notFound:
+      description: 'Запись не найдена'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            data:
+              code: 404
+              message: 'Запись не найдена'
+              errors:
+                - 'Запись не найдена'
+            status: error
+    tooManyRequests:
+      description: 'Не удалось выполнить запрос'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            'Ответ с ошибкой':
+              value:
+                data:
+                  code: 429
+                  message: 'Превышено количество запросов'
+                  errors: ['Превышено количество запросов. Повторите попытку через 59 c']
+                status: error
+      headers:
+        X-Request-TraceId:
+          $ref: '#/components/headers/requestTraceId'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+        X-RateLimit-Retry-After:
+          $ref: '#/components/headers/rateLimitRetryAfter'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitLimit'
+    adminArticleList:
+      description: 'Список статей'
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - data
+              - pagination
+              - meta
+            properties:
+              pagination:
+                $ref: '#/components/schemas/pagination'
+              meta:
+                type: object
+                nullable: true
+              data:
+                type: array
+                items:
+                  properties: { title: { type: string, description: Заголовок }, alias: { type: string, description: Алиас }, body: { type: string, description: Контент, nullable: true } }
+                example:
+                  - { title: 'Первая статья', alias: first-article, body: 'Контент первой статьи' }
+                  - { title: 'Вторая статья', alias: second-article, body: 'Контент второй статьи' }
+      headers:
+        X-Request-TraceId:
+          $ref: '#/components/headers/requestTraceId'
+    adminArticleCreate:
+      description: 'Статья создана'
+      content:
+        application/json:
+          schema:
+            oneOf:
+              -
+                $ref: '#/components/schemas/adminArticle'
+              -
+                $ref: '#/components/schemas/error'
+      headers:
+        X-Request-TraceId:
+          $ref: '#/components/headers/requestTraceId'
+    adminArticleInfo:
+      description: 'Информация по статье'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/adminArticle'
+      headers:
+        X-Request-TraceId:
+          $ref: '#/components/headers/requestTraceId'
+    adminArticleUpdate:
+      description: 'Статья обновлена'
+      content:
+        application/json:
+          schema:
+            oneOf:
+              -
+                $ref: '#/components/schemas/adminArticle'
+              -
+                $ref: '#/components/schemas/error'
+      headers:
+        X-Request-TraceId:
+          $ref: '#/components/headers/requestTraceId'
+    adminSettingList:
+      description: 'Список настроек'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  type: object
+                  additionalProperties: false
+                  required: [type, value, isPublic, createdAt]
+                  properties: { type: { $ref: '#/components/schemas/adminSettingType' }, value: { $ref: '#/components/schemas/adminSettingValue' }, isPublic: { type: boolean, description: 'Публична ли настройка' }, createdAt: { $ref: '#/components/schemas/createdAt' }, updatedAt: { $ref: '#/components/schemas/updatedAt' } }
+      headers:
+        X-Request-TraceId:
+          $ref: '#/components/headers/requestTraceId'
+  schemas:
+    success:
+      type: object
+      required:
+        - data
+        - status
+      additionalProperties: false
+      properties:
+        data:
+          type: object
+          required:
+            - status
+          additionalProperties: false
+          properties:
+            status:
+              $ref: '#/components/schemas/succeedStatus'
+        status:
+          $ref: '#/components/schemas/succeedStatus'
+    error:
+      type: object
+      properties:
+        data:
+          type: object
+          required:
+            - code
+            - message
+            - errors
+          additionalProperties: false
+          properties:
+            code:
+              type: integer
+            message:
+              type: string
+            errors:
+              type: array
+              items:
+                type: string
+                example: 'Пример ошибки'
+        status:
+          $ref: '#/components/schemas/succeedStatus'
+    succeedStatus:
+      type: string
+      description: 'Статус запроса'
+      example: success
+    email:
+      type: string
+      format: email
+      description: 'Email пользователя'
+      minLength: 1
+      example: test@test.ru
+    pagination:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: 'Количество всех данных'
+          example: 2
+    createdAt:
+      type: string
+      description: 'Дата создания'
+      example: '2021-10-28T16:19:44+00:00'
+    updatedAt:
+      type: string
+      description: 'Дата обновления'
+      example: '2021-10-28T16:19:44+00:00'
+      nullable: true
+    adminArticle:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+            - title
+            - alias
+            - createdAt
+          properties:
+            id:
+              type: string
+              format: uuid
+              description: ID
+              example: dc8dbada-b154-4ffb-b21c-da70162e2704
+            title:
+              $ref: '#/components/schemas/adminArticleTitle'
+            alias:
+              $ref: '#/components/schemas/adminArticleAlias'
+            body:
+              type: string
+              description: Контент
+              example: 'Контент статьи'
+              nullable: true
+            createdAt:
+              $ref: '#/components/schemas/createdAt'
+            updatedAt:
+              $ref: '#/components/schemas/updatedAt'
+        status:
+          $ref: '#/components/schemas/succeedStatus'
+    adminArticleTitle:
+      type: string
+      description: Заголовок
+      minLength: 1
+      example: 'Первая статья'
+    adminArticleAlias:
+      type: string
+      description: Алиас
+      minLength: 1
+      example: first-article
+    adminArticleBody:
+      type: string
+      description: Контент
+      example: 'Контент первой статьи'
+      nullable: true
+    adminSettingType:
+      type: string
+      description: 'Тип настройки'
+      example: site_name
+    adminSettingValue:
+      type: string
+      description: 'Значение настройки'
+      example: symfony-starter-kit
+  parameters:
+    limit:
+      in: query
+      name: limit
+      required: false
+      description: Лимит
+      example: 10
+      schema:
+        type: integer
+    offset:
+      in: query
+      name: offset
+      required: false
+      description: Смещение
+      example: 1
+      schema:
+        type: integer
+    adminArticleId:
+      name: id
+      in: path
+      required: true
+      description: 'ID статьи'
+      example: 123e4567-e89b-12d3-a456-426614174000
+      schema:
+        type: string
+        format: uuid
+  requestBodies:
+    articleListByIds:
+      description: 'Запрос на получение статей по списку Id'
+      content:
+        application/json:
+          schema:
+            properties:
+              ids:
+                type: array
+                description: 'Список Id статей'
+                minItems: 1
+                items:
+                  type: string
+                  format: uuid
+                  description: ID
+                  example: dc8dbada-b154-4ffb-b21c-da70162e2704
+            additionalProperties: false
+            required:
+              - ids
+    adminArticleCreate:
+      description: 'Запрос на создание статьи'
+      content:
+        application/json:
+          schema:
+            properties:
+              title:
+                $ref: '#/components/schemas/adminArticleTitle'
+              alias:
+                $ref: '#/components/schemas/adminArticleAlias'
+              body:
+                $ref: '#/components/schemas/adminArticleBody'
+            additionalProperties: false
+            required:
+              - title
+              - alias
+    adminArticleUpdate:
+      description: 'Запрос на обновление статьи'
+      content:
+        application/json:
+          schema:
+            properties:
+              title:
+                $ref: '#/components/schemas/adminArticleTitle'
+              alias:
+                $ref: '#/components/schemas/adminArticleAlias'
+              body:
+                $ref: '#/components/schemas/adminArticleBody'
+            additionalProperties: false
+            required:
+              - title
+              - alias
+    adminSaveSeo:
+      description: 'Запрос на сохранение'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              type:
+                type: string
+                description: 'Тип объекта'
+                enum:
+                  - article
+                  - task
+              identity:
+                type: string
+                description: 'Идентификатор объекта'
+                example: dc8dbada-b154-4ffb-b21c-da70162e2704
+              title:
+                type: string
+                nullable: true
+                description: Заголовок
+                example: 'Первая статья'
+              description:
+                type: string
+                nullable: true
+                description: Описание
+                example: 'Описание первой статьи'
+              keywords:
+                type: string
+                nullable: true
+                description: 'Ключевые слова'
+                example: 'ключевые слова'
+            additionalProperties: false
+            required:
+              - type
+              - identity
+    saveSetting:
+      description: 'Запрос на сохранение настройки'
+      content:
+        application/json:
+          schema:
+            properties:
+              type:
+                $ref: '#/components/schemas/adminSettingType'
+              value:
+                $ref: '#/components/schemas/adminSettingValue'
+            additionalProperties: false
+            required:
+              - type
+              - value
