@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Attribute\Route;
 /**
  * Ручка списка настроек
  */
-#[IsGranted(UserRole::User)]
+#[IsGranted(UserRole::Admin)]
 #[Route('/admin/settings', methods: [Request::METHOD_GET])]
 #[AsController]
 final readonly class ListAction

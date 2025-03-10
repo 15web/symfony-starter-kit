@@ -21,7 +21,7 @@ use Symfony\Component\Routing\Attribute\Route;
 /**
  * Ручка сохранения SEO
  */
-#[IsGranted(UserRole::User)]
+#[IsGranted(UserRole::Admin)]
 #[Route('/admin/seo', methods: [Request::METHOD_POST])]
 #[AsController]
 final readonly class SeoSaveAction
