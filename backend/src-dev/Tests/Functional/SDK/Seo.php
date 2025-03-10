@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Dev\Tests\Functional\SDK;
 
+use App\User\User\Domain\UserRole;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -19,7 +20,7 @@ final class Seo extends ApiWebTestCase
         ?string $description,
         ?string $keywords,
     ): Response {
-        $token = User::auth();
+        $token = User::auth(role: UserRole::Admin);
 
         $body = [];
         $body['type'] = $type;

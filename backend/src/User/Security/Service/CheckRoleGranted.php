@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\User\Security\Service;
 
+use App\Infrastructure\ApiException\ApiAccessForbiddenException;
 use App\Infrastructure\ApiException\ApiUnauthorizedException;
 use App\Infrastructure\AsService;
 use App\User\User\Domain\UserRole;
@@ -52,7 +53,7 @@ final readonly class CheckRoleGranted
                 self::class => __FUNCTION__,
             ]);
 
-            throw new ApiUnauthorizedException(['Доступ запрещен']);
+            throw new ApiAccessForbiddenException(['Доступ запрещен']);
         }
     }
 }
