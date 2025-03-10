@@ -20,7 +20,8 @@ final class ArticleListTest extends ApiWebTestCase
     #[TestDox('Получен список из созданных статей')]
     public function testSuccess(): void
     {
-        $token = User::auth();
+        $token = User::auth('admin@example.test');
+
         $articleId1 = Article::createAndReturnId(
             title: $title1 = 'Статья1',
             alias: 'statya',
@@ -60,5 +61,19 @@ final class ArticleListTest extends ApiWebTestCase
         );
 
         self::assertAccessDenied($response);
+    }
+
+    #[TestDox('Пользователю доступ запрещен')]
+    public function testForbidden(): void
+    {
+        $userToken = User::auth();
+
+        $response = self::request(
+            method: Request::METHOD_GET,
+            uri: '/api/admin/articles',
+            token: $userToken,
+        );
+
+        self::assertForbidden($response);
     }
 }

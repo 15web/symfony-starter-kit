@@ -13,22 +13,45 @@ use Symfony\Component\HttpFoundation\Request;
 final class User extends ApiWebTestCase
 {
     /**
+     * Аутентификация пользователя
+     *
+     * @return string Access token
+     */
+    public static function auth(string $userEmail = 'user@example.test', string $password = '123456'): string
+    {
+        $body = [
+            'email' => $userEmail,
+            'password' => $password,
+        ];
+
+        $response = self::request(
+            method: Request::METHOD_POST,
+            uri: '/api/sign-in',
+            body: json_encode($body, JSON_THROW_ON_ERROR),
+        );
+
+        /** @var array{data: array{token: string}} $signInResponse */
+        $signInResponse = self::jsonDecode($response->getContent());
+
+        return $signInResponse['data']['token'];
+    }
+
+    /**
      * Регистрация пользователя по емейл, аутентификация.
      *
-     * @return string api token
+     * @return string Access token
      */
-    public static function auth(string $userEmail = 'first@example.com'): string
+    public static function registerAndAuth(string $userEmail, string $password = '123456'): string
     {
-        $password = '123456';
-        $body = [];
-        $body['email'] = $userEmail;
-        $body['password'] = $password;
-        $body = json_encode($body, JSON_THROW_ON_ERROR);
+        $body = [
+            'email' => $userEmail,
+            'password' => $password,
+        ];
 
         self::request(
             method: Request::METHOD_POST,
             uri: '/api/sign-up',
-            body: $body,
+            body: json_encode($body, JSON_THROW_ON_ERROR),
         );
 
         /** @var TemplatedEmail $email */
@@ -42,22 +65,9 @@ final class User extends ApiWebTestCase
             uri: \sprintf('/api/confirm-email/%s', $confirmToken),
         );
 
-        $body = [];
-        $body['email'] = $userEmail;
-        $body['password'] = $password;
-        $body = json_encode($body, JSON_THROW_ON_ERROR);
-
-        $response = self::request(
-            method: Request::METHOD_POST,
-            uri: '/api/sign-in',
-            body: $body,
+        return self::auth(
+            userEmail: $userEmail,
+            password: $password,
         );
-
-        /** @var array{
-         *     data: array{token: string}
-         * } $signInResponse */
-        $signInResponse = self::jsonDecode($response->getContent());
-
-        return $signInResponse['data']['token'];
     }
 }

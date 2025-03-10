@@ -22,7 +22,7 @@ final class SeoSaveTest extends ApiWebTestCase
     #[TestDox('seo данные сохранены')]
     public function testSuccess(): void
     {
-        $token = User::auth();
+        $token = User::auth('admin@example.test');
 
         $body = [];
         $body['type'] = SeoResourceType::ARTICLE->value;
@@ -51,7 +51,8 @@ final class SeoSaveTest extends ApiWebTestCase
 
         /** @var array{
          *     data: array{title: string, description: string, keywords:string}
-         * } $seo */
+         * } $seo
+         */
         $seo = self::jsonDecode($response->getContent());
 
         self::assertSame($body['title'], $seo['data']['title']);
@@ -81,6 +82,29 @@ final class SeoSaveTest extends ApiWebTestCase
         self::assertAccessDenied($response);
     }
 
+    #[TestDox('Пользователю доступ запрещен')]
+    public function testForbidden(): void
+    {
+        $userToken = User::auth();
+
+        $body = [
+            'type' => SeoResourceType::ARTICLE->value,
+            'identity' => (string) Uuid::v7(),
+            'title' => 'Заголовок seo',
+            'description' => 'description',
+            'keywords' => 'keywords',
+        ];
+
+        $response = self::request(
+            method: Request::METHOD_POST,
+            uri: '/api/admin/seo',
+            body: json_encode($body, JSON_THROW_ON_ERROR),
+            token: $userToken,
+        );
+
+        self::assertForbidden($response);
+    }
+
     /**
      * @param array<int|string> $body
      */
@@ -108,24 +132,30 @@ final class SeoSaveTest extends ApiWebTestCase
 
         yield 'неверное имя поля в запросе' => [['badKey']];
 
-        yield 'пустой заголовок' => [[
-            'type' => SeoResourceType::ARTICLE->value,
-            'identity' => (string) Uuid::v7(),
-            'title' => '',
-        ]];
+        yield 'пустой заголовок' => [
+            [
+                'type' => SeoResourceType::ARTICLE->value,
+                'identity' => (string) Uuid::v7(),
+                'title' => '',
+            ],
+        ];
 
-        yield 'пустой description' => [[
-            'type' => SeoResourceType::ARTICLE->value,
-            'identity' => (string) Uuid::v7(),
-            'title' => 'title',
-            'description' => '',
-        ]];
+        yield 'пустой description' => [
+            [
+                'type' => SeoResourceType::ARTICLE->value,
+                'identity' => (string) Uuid::v7(),
+                'title' => 'title',
+                'description' => '',
+            ],
+        ];
 
-        yield 'пустой keywords' => [[
-            'type' => SeoResourceType::ARTICLE->value,
-            'identity' => (string) Uuid::v7(),
-            'title' => 'title',
-            'keywords' => '',
-        ]];
+        yield 'пустой keywords' => [
+            [
+                'type' => SeoResourceType::ARTICLE->value,
+                'identity' => (string) Uuid::v7(),
+                'title' => 'title',
+                'keywords' => '',
+            ],
+        ];
     }
 }

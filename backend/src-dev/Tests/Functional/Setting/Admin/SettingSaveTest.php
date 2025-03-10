@@ -23,7 +23,7 @@ final class SettingSaveTest extends ApiWebTestCase
     #[TestDox('Настройка сохранена')]
     public function testSuccess(): void
     {
-        $token = User::auth();
+        $token = User::auth('admin@example.test');
 
         $body = [];
         $body['type'] = SettingType::EMAIL_SITE;
@@ -72,7 +72,7 @@ final class SettingSaveTest extends ApiWebTestCase
     #[TestDox('Такой тип настройки не поддерживается')]
     public function testBadType(): void
     {
-        $token = User::auth();
+        $token = User::auth('admin@example.test');
 
         $body = [];
         $body['type'] = 'not-found-type';
@@ -100,7 +100,7 @@ final class SettingSaveTest extends ApiWebTestCase
 
         $connection->delete('setting', ['type' => SettingType::EMAIL_SITE->value]);
 
-        $token = User::auth();
+        $token = User::auth('admin@example.test');
 
         $body = [];
         $body['type'] = SettingType::EMAIL_SITE->value;
@@ -136,6 +136,26 @@ final class SettingSaveTest extends ApiWebTestCase
         self::assertAccessDenied($response);
     }
 
+    #[TestDox('Пользователю доступ запрещен')]
+    public function testForbidden(): void
+    {
+        $userToken = User::auth();
+
+        $body = [
+            'type' => SettingType::EMAIL_SITE,
+            'value' => 'symfony-starter-kit-test',
+        ];
+
+        $response = self::request(
+            method: Request::METHOD_POST,
+            uri: '/api/admin/settings',
+            body: json_encode($body, JSON_THROW_ON_ERROR),
+            token: $userToken,
+        );
+
+        self::assertForbidden($response);
+    }
+
     /**
      * @param array<array<string>> $body
      */
@@ -143,7 +163,7 @@ final class SettingSaveTest extends ApiWebTestCase
     #[TestDox('Неправильный запрос')]
     public function testBadRequest(array $body): void
     {
-        $token = User::auth();
+        $token = User::auth('admin@example.test');
 
         $body = json_encode($body, JSON_THROW_ON_ERROR);
         $response = self::request(

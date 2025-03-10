@@ -21,7 +21,7 @@ final class ArticleInfoTest extends ApiWebTestCase
     #[TestDox('Получена информация по созданной статье')]
     public function testSuccess(): void
     {
-        $token = User::auth();
+        $token = User::auth('admin@example.test');
 
         $articleId = Article::createAndReturnId(
             title: $title = 'Статья',
@@ -61,7 +61,7 @@ final class ArticleInfoTest extends ApiWebTestCase
     #[TestDox('Статья не найдена')]
     public function testNotFound(): void
     {
-        $token = User::auth();
+        $token = User::auth('admin@example.test');
         Article::create(
             title: 'Статья',
             alias: 'statya',
@@ -69,7 +69,7 @@ final class ArticleInfoTest extends ApiWebTestCase
             token: $token,
         );
 
-        $articleId = (string) Uuid::v4();
+        $articleId = (string) Uuid::v7();
         $response = self::request(
             method: Request::METHOD_GET,
             uri: \sprintf('/api/admin/articles/%s', $articleId),
@@ -83,7 +83,7 @@ final class ArticleInfoTest extends ApiWebTestCase
     #[TestDox('Доступ запрещен')]
     public function testAccessDenied(string $notValidToken): void
     {
-        $token = User::auth();
+        $token = User::auth('admin@example.test');
         $articleId = Article::createAndReturnId(
             title: 'Статья',
             alias: 'statya',
@@ -98,5 +98,28 @@ final class ArticleInfoTest extends ApiWebTestCase
         );
 
         self::assertAccessDenied($response);
+    }
+
+    #[TestDox('Пользователю доступ запрещен')]
+    public function testForbidden(): void
+    {
+        $token = User::auth('admin@example.test');
+
+        $articleId = Article::createAndReturnId(
+            title: 'Статья',
+            alias: 'statya',
+            content: '<p>Контент</p>',
+            token: $token,
+        );
+
+        $userToken = User::auth();
+
+        $response = self::request(
+            method: Request::METHOD_GET,
+            uri: \sprintf('/api/admin/articles/%s', $articleId),
+            token: $userToken,
+        );
+
+        self::assertForbidden($response);
     }
 }

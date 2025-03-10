@@ -10,7 +10,6 @@ use App\Infrastructure\CheckRateLimiter;
 use App\Infrastructure\Flush;
 use App\Infrastructure\Request\ApiRequestValueResolver;
 use App\Infrastructure\Response\ApiObjectResponse;
-use App\Infrastructure\ValueObject\Email;
 use App\User\SignIn\Command\SignIn;
 use App\User\SignIn\Command\SignInCommand;
 use App\User\User\Domain\AuthToken;
@@ -63,10 +62,11 @@ final readonly class SignInAction
 
         try {
             ($this->signIn)(new SignInCommand(
-                email: new Email($signInRequest->email),
+                email: $signInRequest->email,
                 password: $signInRequest->password,
                 authToken: $token,
             ));
+
             ($this->flush)();
         } catch (EmailIsNotConfirmedException) {
             throw new ApiBadResponseException(

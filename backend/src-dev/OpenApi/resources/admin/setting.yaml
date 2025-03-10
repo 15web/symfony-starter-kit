@@ -1,0 +1,100 @@
+openapi: 3.0.3
+info:
+  title: symfony-starter-kit/admin
+  version: 1.0.0
+tags:
+  - name: admin-setting
+    description: Настройки
+paths:
+  /admin/settings:
+    get:
+      operationId: adminSettingList
+      summary: Получить список настроек
+      description: Получить список настроек
+      tags:
+        - admin-setting
+      responses:
+        '200':
+          $ref: '#/components/responses/adminSettingList'
+        '401':
+          $ref: '../common.yaml#/components/responses/authRequired'
+        '403':
+          $ref: '../common.yaml#/components/responses/forbidden'
+    post:
+      operationId: adminSaveSetting
+      summary: Сохранить изменения настройки
+      description: Сохранить изменения настройки
+      tags:
+        - admin-setting
+      requestBody:
+        $ref: '#/components/requestBodies/saveSetting'
+      responses:
+        '200':
+          $ref: '../common.yaml#/components/responses/success'
+        '400':
+          $ref: '../common.yaml#/components/responses/invalidRequest'
+        '401':
+          $ref: '../common.yaml#/components/responses/authRequired'
+        '403':
+          $ref: '../common.yaml#/components/responses/forbidden'
+        '404':
+          $ref: '../common.yaml#/components/responses/notFound'
+components:
+  requestBodies:
+    saveSetting:
+      description: Запрос на сохранение настройки
+      content:
+        application/json:
+          schema:
+            properties:
+              type:
+                $ref: '#/components/schemas/adminSettingType'
+              value:
+                $ref: '#/components/schemas/adminSettingValue'
+            additionalProperties: false
+            required:
+              - type
+              - value
+  responses:
+    adminSettingList:
+      description: Список настроек
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  type: object
+                  additionalProperties: false
+                  required:
+                    - type
+                    - value
+                    - isPublic
+                    - createdAt
+                  properties:
+                    type:
+                      $ref: '#/components/schemas/adminSettingType'
+                    value:
+                      $ref: '#/components/schemas/adminSettingValue'
+                    isPublic:
+                      type: boolean
+                      description: Публична ли настройка
+                    createdAt:
+                      $ref: '../common.yaml#/components/schemas/createdAt'
+                    updatedAt:
+                      $ref: '../common.yaml#/components/schemas/updatedAt'
+      headers:
+        X-Request-TraceId:
+          $ref: '../common.yaml#/components/headers/requestTraceId'
+  schemas:
+    adminSettingType:
+      type: string
+      description: Тип настройки
+      example: site_name
+    adminSettingValue:
+      type: string
+      description: Значение настройки
+      example: symfony-starter-kit
+

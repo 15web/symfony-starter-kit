@@ -23,7 +23,7 @@ use Symfony\Component\Routing\Attribute\Route;
 /**
  * Ручка сохранения настройки
  */
-#[IsGranted(UserRole::User)]
+#[IsGranted(UserRole::Admin)]
 #[Route('/admin/settings', methods: [Request::METHOD_POST])]
 #[AsController]
 final readonly class SettingSaveAction

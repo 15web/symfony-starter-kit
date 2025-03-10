@@ -21,7 +21,7 @@ final class ArticleListByIdsTest extends ApiWebTestCase
     #[TestDox('Получен список из созданных статей')]
     public function testSuccess(): void
     {
-        $token = User::auth();
+        $token = User::auth('admin@example.test');
 
         $articleId1 = Article::createAndReturnId(
             title: $title1 = 'Статья1',
@@ -86,7 +86,7 @@ final class ArticleListByIdsTest extends ApiWebTestCase
     #[TestDox('Часть статей не найдено')]
     public function testArticleNotFound(): void
     {
-        $token = User::auth();
+        $token = User::auth('admin@example.test');
 
         $articleId = Article::createAndReturnId(
             title: $title = 'Статья1',
@@ -154,6 +154,25 @@ final class ArticleListByIdsTest extends ApiWebTestCase
         self::assertAccessDenied($response);
     }
 
+    #[TestDox('Пользователю доступ запрещен')]
+    public function testForbidden(): void
+    {
+        $userToken = User::auth();
+
+        $body = [
+            'ids' => ['01954db6-9d00-75a8-8307-e4fc27fd28b8'],
+        ];
+
+        $response = self::request(
+            method: Request::METHOD_POST,
+            uri: '/api/admin/articles-list',
+            body: json_encode($body, JSON_THROW_ON_ERROR),
+            token: $userToken,
+        );
+
+        self::assertForbidden($response);
+    }
+
     /**
      * @param array{ids: list<string>} $body
      */
@@ -161,7 +180,7 @@ final class ArticleListByIdsTest extends ApiWebTestCase
     #[TestDox('Неправильный запрос')]
     public function testBadRequest(array $body): void
     {
-        $token = User::auth();
+        $token = User::auth('admin@example.test');
 
         $body = json_encode($body, JSON_THROW_ON_ERROR);
 
