@@ -21,7 +21,7 @@ use Symfony\Component\Routing\Attribute\Route;
 /**
  * Ручка обновления статьи
  */
-#[IsGranted(UserRole::User)]
+#[IsGranted(UserRole::Admin)]
 #[Route('/admin/articles/{id}', methods: [Request::METHOD_POST])]
 #[AsController]
 final readonly class UpdateArticleAction

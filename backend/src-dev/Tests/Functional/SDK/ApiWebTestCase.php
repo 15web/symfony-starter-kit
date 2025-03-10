@@ -7,6 +7,8 @@ namespace Dev\Tests\Functional\SDK;
 use App\Infrastructure\Response\ResponseStatus;
 use Dev\OpenApi\EventListener\ValidateOpenApiSchema;
 use Doctrine\DBAL\Connection;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Iterator;
 use Override;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -94,6 +96,12 @@ abstract class ApiWebTestCase extends WebTestCase
         $connection = self::getContainer()->get(Connection::class);
 
         return $connection;
+    }
+
+    final public static function getEntityManager(): EntityManager
+    {
+        /** @var EntityManager */
+        return self::getContainer()->get(EntityManagerInterface::class);
     }
 
     /**

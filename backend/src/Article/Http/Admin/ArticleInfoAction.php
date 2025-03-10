@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Attribute\Route;
 /**
  * Ручка информации статьи
  */
-#[IsGranted(UserRole::User)]
+#[IsGranted(UserRole::Admin)]
 #[Route('/admin/articles/{id}', methods: [Request::METHOD_GET])]
 #[AsController]
 final class ArticleInfoAction
