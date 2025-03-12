@@ -23,7 +23,17 @@ final class GenerateOpenApiSpecCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->generate(
-            resourcesDirs: [__DIR__.'/../resources/tags'],
+            resourcesDirs: [__DIR__.'/../resources/admin/'],
+            resultFileName: 'openapi-admin.yaml',
+        );
+
+        $this->generate(
+            resourcesDirs: [__DIR__.'/../resources/site/'],
+            resultFileName: 'openapi-site.yaml',
+        );
+
+        $this->generate(
+            resourcesDirs: [__DIR__.'/../resources/site/', __DIR__.'/../resources/admin/'],
             resultFileName: 'openapi.yaml',
         );
 

@@ -7,6 +7,7 @@ namespace Dev\Tests\Functional\Setting\Admin;
 use App\Setting\Domain\SettingType;
 use Dev\Tests\Functional\SDK\ApiWebTestCase;
 use Dev\Tests\Functional\SDK\Setting;
+use Dev\Tests\Functional\SDK\User;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Component\HttpFoundation\Request;
@@ -41,5 +42,19 @@ final class SettingListTest extends ApiWebTestCase
         );
 
         self::assertAccessDenied($response);
+    }
+
+    #[TestDox('Пользователю доступ запрещен')]
+    public function testForbidden(): void
+    {
+        $userToken = User::auth();
+
+        $response = self::request(
+            method: Request::METHOD_GET,
+            uri: '/api/admin/settings',
+            token: $userToken,
+        );
+
+        self::assertForbidden($response);
     }
 }

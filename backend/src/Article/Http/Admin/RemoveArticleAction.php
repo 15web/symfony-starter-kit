@@ -19,7 +19,7 @@ use Symfony\Component\Routing\Attribute\Route;
 /**
  * Ручка удаления статьи
  */
-#[IsGranted(UserRole::User)]
+#[IsGranted(UserRole::Admin)]
 #[Route('/admin/articles/{id}', methods: [Request::METHOD_DELETE])]
 #[AsController]
 final readonly class RemoveArticleAction

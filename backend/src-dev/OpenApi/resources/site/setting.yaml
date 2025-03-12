@@ -1,0 +1,54 @@
+openapi: 3.0.3
+info:
+  title: symfony-starter-kit
+  version: 1.0.0
+tags:
+  - name: setting
+    description: Настройки
+paths:
+  /settings:
+    get:
+      operationId: settingList
+      summary: Получить список настроек
+      description: Получить список настроек
+      tags:
+        - setting
+      security: [ ]
+      responses:
+        '200':
+          $ref: '#/components/responses/settingList'
+components:
+  responses:
+    settingList:
+      description: Список настроек
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  type: object
+                  additionalProperties: false
+                  required:
+                    - type
+                    - value
+                  properties:
+                    type:
+                      $ref: '#/components/schemas/settingType'
+                    value:
+                      $ref: '#/components/schemas/settingValue'
+      headers:
+        X-Request-TraceId:
+          $ref: '../common.yaml#/components/headers/requestTraceId'
+  schemas:
+    settingType:
+      type: string
+      description: Тип настройки
+      example: site_name
+    settingValue:
+      type: string
+      description: Значение настройки
+      example: symfony-starter-kit
+

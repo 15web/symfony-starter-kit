@@ -21,7 +21,7 @@ final class RemoveArticleTest extends ApiWebTestCase
     #[TestDox('Статья удалена')]
     public function testSuccess(): void
     {
-        $token = User::auth();
+        $token = User::auth('admin@example.test');
 
         $articleId1 = Article::createAndReturnId(
             title: 'Статья1',
@@ -54,7 +54,7 @@ final class RemoveArticleTest extends ApiWebTestCase
     #[TestDox('Статья не найдена')]
     public function testNotFound(): void
     {
-        $token = User::auth();
+        $token = User::auth('admin@example.test');
 
         Article::create(
             title: 'Статья',
@@ -63,7 +63,7 @@ final class RemoveArticleTest extends ApiWebTestCase
             token: $token,
         );
 
-        $articleId = (string) Uuid::v4();
+        $articleId = (string) Uuid::v7();
         $response = self::request(
             method: Request::METHOD_DELETE,
             uri: \sprintf('/api/admin/articles/%s', $articleId),
@@ -77,7 +77,7 @@ final class RemoveArticleTest extends ApiWebTestCase
     #[TestDox('Доступ запрещен')]
     public function testAccessDenied(string $notValidToken): void
     {
-        $token = User::auth();
+        $token = User::auth('admin@example.test');
         $articleId = Article::createAndReturnId(
             title: 'Статья1',
             alias: 'statya',
@@ -92,5 +92,28 @@ final class RemoveArticleTest extends ApiWebTestCase
         );
 
         self::assertAccessDenied($response);
+    }
+
+    #[TestDox('Пользователю доступ запрещен')]
+    public function testForbidden(): void
+    {
+        $token = User::auth('admin@example.test');
+
+        $articleId = Article::createAndReturnId(
+            title: 'Статья',
+            alias: 'statya',
+            content: '<p>Контент</p>',
+            token: $token,
+        );
+
+        $userToken = User::auth();
+
+        $response = self::request(
+            method: Request::METHOD_DELETE,
+            uri: \sprintf('/api/admin/articles/%s', $articleId),
+            token: $userToken,
+        );
+
+        self::assertForbidden($response);
     }
 }

@@ -1,0 +1,451 @@
+openapi: 3.0.3
+info:
+  title: symfony-starter-kit
+  version: 1.0.0
+tags:
+  - name: task
+    description: Задачи
+servers:
+  - url: /api
+security:
+  - ApiTokenAuth: [ ]
+paths:
+  /tasks:
+    get:
+      operationId: tasksList
+      summary: Список задач
+      description: Список задач
+      tags:
+        - task
+      parameters:
+        - $ref: '../common.yaml#/components/parameters/limit'
+        - $ref: '../common.yaml#/components/parameters/offset'
+      responses:
+        '200':
+          $ref: '#/components/responses/tasksList'
+        '401':
+          $ref: '../common.yaml#/components/responses/authRequired'
+        '403':
+          $ref: '../common.yaml#/components/responses/forbidden'
+    post:
+      operationId: createTask
+      summary: Создать задачу
+      description: Создать задачу
+      tags:
+        - task
+      requestBody:
+        $ref: '#/components/requestBodies/createTask'
+      responses:
+        '200':
+          $ref: '#/components/responses/createTask'
+        '400':
+          $ref: '../common.yaml#/components/responses/invalidRequest'
+        '401':
+          $ref: '../common.yaml#/components/responses/authRequired'
+        '403':
+          $ref: '../common.yaml#/components/responses/forbidden'
+  /tasks/{id}:
+    get:
+      operationId: taskInfo
+      summary: Подробная информация по задаче
+      description: Подробная информация по задаче
+      tags:
+        - task
+      parameters:
+        - $ref: '#/components/parameters/taskId'
+      responses:
+        '200':
+          $ref: '#/components/responses/taskInfo'
+        '401':
+          $ref: '../common.yaml#/components/responses/authRequired'
+        '403':
+          $ref: '../common.yaml#/components/responses/forbidden'
+        '404':
+          $ref: '../common.yaml#/components/responses/notFound'
+    delete:
+      operationId: removeTask
+      summary: Удаляет задачу
+      description: Удаляет задачу
+      tags:
+        - task
+      parameters:
+        - $ref: '#/components/parameters/taskId'
+      responses:
+        '200':
+          $ref: '../common.yaml#/components/responses/success'
+        '401':
+          $ref: '../common.yaml#/components/responses/authRequired'
+        '403':
+          $ref: '../common.yaml#/components/responses/forbidden'
+        '404':
+          $ref: '../common.yaml#/components/responses/notFound'
+  /tasks/{id}/update-task-name:
+    post:
+      operationId: updateTaskName
+      summary: Обновить наименование задачи
+      description: Обновить наименование задачи
+      tags:
+        - task
+      parameters:
+        - $ref: '#/components/parameters/taskId'
+      requestBody:
+        $ref: '#/components/requestBodies/updateTaskName'
+      responses:
+        '200':
+          $ref: '../common.yaml#/components/responses/success'
+        '400':
+          $ref: '../common.yaml#/components/responses/invalidRequest'
+        '401':
+          $ref: '../common.yaml#/components/responses/authRequired'
+        '403':
+          $ref: '../common.yaml#/components/responses/forbidden'
+        '404':
+          $ref: '../common.yaml#/components/responses/notFound'
+  /tasks/{id}/complete:
+    post:
+      operationId: completeTask
+      summary: Завершает задачу
+      description: Завершает задачу
+      tags:
+        - task
+      parameters:
+        - $ref: '#/components/parameters/taskId'
+      responses:
+        '200':
+          $ref: '../common.yaml#/components/responses/success'
+        '400':
+          $ref: '../common.yaml#/components/responses/invalidRequest'
+        '401':
+          $ref: '../common.yaml#/components/responses/authRequired'
+        '403':
+          $ref: '../common.yaml#/components/responses/forbidden'
+        '404':
+          $ref: '../common.yaml#/components/responses/notFound'
+  /tasks/{id}/add-comment:
+    post:
+      operationId: addCommentToTask
+      summary: Добавление комментария к задаче
+      description: Добавление комментария к задаче
+      tags:
+        - task
+      parameters:
+        - $ref: '#/components/parameters/taskId'
+      requestBody:
+        $ref: '#/components/requestBodies/addCommentToTask'
+      responses:
+        '200':
+          $ref: '../common.yaml#/components/responses/success'
+        '400':
+          $ref: '../common.yaml#/components/responses/invalidRequest'
+        '401':
+          $ref: '../common.yaml#/components/responses/authRequired'
+        '403':
+          $ref: '../common.yaml#/components/responses/forbidden'
+        '404':
+          $ref: '../common.yaml#/components/responses/notFound'
+  /tasks/{id}/comments:
+    get:
+      operationId: listTaskComments
+      summary: Получить список комментариев к задаче
+      description: Получить список комментариев к задаче
+      tags:
+        - task
+      parameters:
+        - $ref: '#/components/parameters/taskId'
+      responses:
+        '200':
+          $ref: '#/components/responses/listTaskComments'
+        '400':
+          $ref: '../common.yaml#/components/responses/invalidRequest'
+        '401':
+          $ref: '../common.yaml#/components/responses/authRequired'
+        '403':
+          $ref: '../common.yaml#/components/responses/forbidden'
+  /export/tasks.{format}:
+    get:
+      operationId: exportTasks
+      summary: Экспорт задач в нужном формате
+      description: Экспорт задач в нужном формате
+      tags:
+        - task
+      parameters:
+        - $ref: '#/components/parameters/exportFormat'
+        - $ref: '../common.yaml#/components/parameters/limit'
+        - $ref: '../common.yaml#/components/parameters/offset'
+      responses:
+        '200':
+          $ref: '#/components/responses/exportTasks'
+        '400':
+          $ref: '#/components/responses/exportNoTasks'
+        '401':
+          $ref: '../common.yaml#/components/responses/authRequired'
+        '403':
+          $ref: '../common.yaml#/components/responses/forbidden'
+components:
+  parameters:
+    taskId:
+      name: id
+      in: path
+      required: true
+      description: ID задачи
+      example: 123e4567-e89b-12d3-a456-426614174000
+      schema:
+        type: string
+        format: uuid
+    exportFormat:
+      in: path
+      name: format
+      required: true
+      description: Формат (csv, xml)
+      example: csv
+      schema:
+        type: string
+        enum:
+          - csv
+          - xml
+  requestBodies:
+    createTask:
+      description: Запрос на создание задачи
+      content:
+        application/json:
+          schema:
+            properties:
+              taskName:
+                type: string
+                description: Наименование задачи
+                minLength: 1
+                example: Моя первая задача
+            additionalProperties: false
+            required:
+              - taskName
+    updateTaskName:
+      description: Запрос на обновление наименования задачи
+      content:
+        application/json:
+          schema:
+            properties:
+              taskName:
+                type: string
+                description: Наименование задачи
+                minLength: 1
+                example: Моя вторая задача
+            additionalProperties: false
+            required:
+              - taskName
+    addCommentToTask:
+      description: Запрос на добавление комментария
+      content:
+        application/json:
+          schema:
+            properties:
+              commentBody:
+                type: string
+                description: Текст комментария
+                minLength: 1
+                example: Мой первый комментарий
+            required:
+              - commentBody
+  responses:
+    tasksList:
+      description: Возвращает список задач
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - data
+              - pagination
+              - meta
+            additionalProperties: false
+            properties:
+              pagination:
+                $ref: '../common.yaml#/components/schemas/pagination'
+              meta:
+                type: object
+                required:
+                  - uncompletedTasksCount
+                additionalProperties: false
+                properties:
+                  uncompletedTasksCount:
+                    type: number
+                    minimum: 0
+                    description: Количество незакрытых задач
+              data:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: string
+                      format: uuid
+                      description: ID задачи
+                    taskName:
+                      type: string
+                      description: Наименование задачи
+                    isCompleted:
+                      type: boolean
+                      description: Выполнена ли задача
+                    createdAt:
+                      type: string
+                      description: Дата создания
+                example:
+                  - id: dc8dbada-b154-4ffb-b21c-da70162e2704
+                    taskName: Моя первая задача
+                    isCompleted: true
+                    createdAt: '2021-10-28T16:19:44+00:00'
+                  - id: 80b12ebd-e493-4dce-a104-7d30464cef43
+                    taskName: Моя вторая задача
+                    isCompleted: true
+                    createdAt: '2021-10-28T16:19:45+00:00'
+              status:
+                $ref: '../common.yaml#/components/schemas/succeedStatus'
+      headers:
+        X-Request-TraceId:
+          $ref: '../common.yaml#/components/headers/requestTraceId'
+    createTask:
+      description: Задача создана
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - data
+            properties:
+              data:
+                type: object
+                required:
+                  - id
+                additionalProperties: false
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    description: ID задачи
+              status:
+                type: string
+                example: success
+            example:
+              data:
+                id: dc8dbada-b154-4ffb-b21c-da70162e2704
+              status: success
+      headers:
+        X-Request-TraceId:
+          $ref: '../common.yaml#/components/headers/requestTraceId'
+    taskInfo:
+      description: Возвращает подробную информацию по задаче
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - data
+            properties:
+              data:
+                type: object
+                required:
+                  - id
+                  - taskName
+                  - isCompleted
+                  - createdAt
+                  - completedAt
+                  - updatedAt
+                additionalProperties: false
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    description: ID задачи
+                  taskName:
+                    type: string
+                    description: Наименование задачи
+                  isCompleted:
+                    type: boolean
+                    description: Выполнена ли задача
+                  createdAt:
+                    type: string
+                    description: Дата создания
+                  completedAt:
+                    type: string
+                    description: Дата завершения
+                    nullable: true
+                  updatedAt:
+                    type: string
+                    description: Дата обновления
+                    nullable: true
+              status:
+                $ref: '../common.yaml#/components/schemas/succeedStatus'
+            example:
+              data:
+                id: dc8dbada-b154-4ffb-b21c-da70162e2704
+                taskName: "Моя первая задача"
+                isCompleted: true
+                createdAt: '2021-10-28T16:19:44+00:00'
+                completedAt: '2021-10-28T16:19:44+00:00'
+                updatedAt: '2021-10-28T16:19:44+00:00'
+              status: success
+      headers:
+        X-Request-TraceId:
+          $ref: '../common.yaml#/components/headers/requestTraceId'
+    listTaskComments:
+      description: Список
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              pagination:
+                $ref: '../common.yaml#/components/schemas/pagination'
+              meta:
+                nullable: true
+                type: object
+              data:
+                type: array
+                items:
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                        description: ID комментария
+                        example: dc8dbada-b154-4ffb-b21c-da70162e2704
+                      body:
+                        type: string
+                        description: Текст комментария
+                        example: Мой первый комментарий
+                      createdAt:
+                        $ref: '../common.yaml#/components/schemas/createdAt'
+                      updatedAt:
+                        $ref: '../common.yaml#/components/schemas/updatedAt'
+              status:
+                $ref: '../common.yaml#/components/schemas/succeedStatus'
+      headers:
+        X-Request-TraceId:
+          $ref: '../common.yaml#/components/headers/requestTraceId'
+    exportTasks:
+      description: Список задач успешно экспортирован
+      content:
+        text/csv:
+          schema:
+            type: string
+          example: '2021-11-16T16:52:08+00:00,Задача 1,выполнена'
+        text/xml:
+          schema:
+            type: string
+          example: '<?xml version="1.0"?><response><item key="0"><id>da5b20a7-3c8b-4516-bc7c-7297c0e2f686</id><createdAt>2022-07-12T12:13:23+00:00</createdAt><taskName>Тестовая задача</taskName><isCompleted>0</isCompleted></item></response>'
+      headers:
+        X-Request-TraceId:
+          $ref: '../common.yaml#/components/headers/requestTraceId'
+    exportNoTasks:
+      description: Нет задач для экспорта
+      content:
+        application/json:
+          schema:
+            $ref: '../common.yaml#/components/schemas/error'
+          example:
+            data:
+              code: 400
+              message: 'Нет задач для экспорта'
+              errors: [ 'Нет задач для экспорта' ]
+            status: error
+      headers:
+        X-Request-TraceId:
+          $ref: '../common.yaml#/components/headers/requestTraceId'
+

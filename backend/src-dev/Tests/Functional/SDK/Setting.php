@@ -23,7 +23,7 @@ final class Setting extends ApiWebTestCase
      */
     public static function adminList(): array
     {
-        $token = User::auth();
+        $token = User::auth('admin@example.test');
 
         $response = self::request(
             method: Request::METHOD_GET,

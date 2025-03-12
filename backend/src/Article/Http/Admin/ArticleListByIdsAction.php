@@ -21,7 +21,7 @@ use Symfony\Component\Uid\Uuid;
 /**
  * Ручка получения статей по списку Id
  */
-#[IsGranted(UserRole::User)]
+#[IsGranted(UserRole::Admin)]
 #[Route('/admin/articles-list', methods: [Request::METHOD_POST])]
 #[AsController]
 final readonly class ArticleListByIdsAction

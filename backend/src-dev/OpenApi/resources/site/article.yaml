@@ -1,0 +1,128 @@
+openapi: 3.0.3
+info:
+  title: symfony-starter-kit
+  version: 1.0.0
+tags:
+  - name: article
+    description: Статьи
+paths:
+  /articles:
+    get:
+      operationId: articleList
+      summary: Получить список статей
+      description: Получить список статей
+      tags:
+        - article
+      parameters:
+        - $ref: '../common.yaml#/components/parameters/limit'
+        - $ref: '../common.yaml#/components/parameters/offset'
+      security: [ ]
+      responses:
+        '200':
+          $ref: '#/components/responses/articleList'
+  /articles/{alias}:
+    get:
+      operationId: articleInfo
+      summary: Получить данные по статье
+      description: Получить данные по статье
+      tags:
+        - article
+      security: [ ]
+      parameters:
+        - in: path
+          name: alias
+          required: true
+          description: Алиас статьи
+          schema:
+            $ref: '#/components/schemas/articleAlias'
+      responses:
+        '200':
+          $ref: '#/components/responses/articleInfo'
+        '404':
+          $ref: '../common.yaml#/components/responses/notFound'
+components:
+  responses:
+    articleList:
+      description: Возвращает список статей
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - data
+              - pagination
+              - meta
+            properties:
+              pagination:
+                $ref: '../common.yaml#/components/schemas/pagination'
+              meta:
+                type: object
+                nullable: true
+              data:
+                type: array
+                items:
+                  properties:
+                    title:
+                      type: string
+                      description: Заголовок
+                    alias:
+                      type: string
+                      description: Алиас
+                    body:
+                      type: string
+                      description: Контент
+                      nullable: true
+                example:
+                  - title: Первая статья
+                    alias: first-article
+                    body: Контент первой статьи
+                  - title: Вторая статья
+                    alias: second-article
+                    body: Контент второй статьи
+      headers:
+        X-Request-TraceId:
+          $ref: '../common.yaml#/components/headers/requestTraceId'
+    articleInfo:
+      description: Возвращает статью
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - data
+            properties:
+              data:
+                type: object
+                required:
+                  - title
+                  - body
+                additionalProperties: false
+                properties:
+                  title:
+                    $ref: '#/components/schemas/articleTitle'
+                  body:
+                    $ref: '#/components/schemas/articleBody'
+            example:
+              data:
+                title: Первая статья
+                body: Контент первой статьи
+      headers:
+        X-Request-TraceId:
+          $ref: '../common.yaml#/components/headers/requestTraceId'
+  schemas:
+    articleTitle:
+      type: string
+      description: Заголовок
+      minLength: 1
+      example: Первая статья
+    articleAlias:
+      type: string
+      description: Алиас
+      minLength: 1
+      example: first-article
+    articleBody:
+      type: string
+      description: Контент
+      example: Контент первой статьи
+      nullable: true
+

@@ -19,7 +19,7 @@ final class Seo extends ApiWebTestCase
         ?string $description,
         ?string $keywords,
     ): Response {
-        $token = User::auth();
+        $token = User::auth('admin@example.test');
 
         $body = [];
         $body['type'] = $type;
