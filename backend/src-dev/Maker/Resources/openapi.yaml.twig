@@ -1,0 +1,286 @@
+openapi: 3.0.3
+info:
+  title: symfony-starter-kit/admin
+  version: 1.0.0
+tags:
+  - name: {{ tagName }}
+    description: Админка / {{ name }} #todo Дать имя тегу
+paths:
+  {{ uri }}:
+    get:
+      operationId: {{ listName }}
+      summary: Получение списка {{ name }} #todo поменять
+      description: Получение списка {{ name }} #todo поменять
+      tags:
+        - {{ tagName }}
+      security:
+        - adminHttpAuth: [ ]
+      responses:
+        '200':
+          $ref: '#/components/responses/{{ listName }}'
+        '401':
+          $ref: '../common.yaml#/components/responses/authRequired'
+        '403':
+          $ref: '../common.yaml#/components/responses/forbidden'
+    post:
+      operationId: {{ createName }}
+      summary: Создание {{ name }} #todo поменять
+      description: Создание {{ name }} #todo поменять
+      tags:
+        - {{ tagName }}
+      security:
+        - adminHttpAuth: [ ]
+      requestBody:
+        $ref: '#/components/requestBodies/{{ createName }}'
+      responses:
+        '200':
+          $ref: '#/components/responses/{{ createName }}'
+        '400':
+          $ref: '../common.yaml#/components/responses/invalidRequest'
+        '401':
+          $ref: '../common.yaml#/components/responses/authRequired'
+        '403':
+          $ref: '../common.yaml#/components/responses/forbidden'
+  {{ uri }}/{id}:
+    get:
+      operationId: {{ infoName }}
+      summary: Просмотр {{ name }} #todo поменять
+      description: Просмотр {{ name }} #todo поменять
+      tags:
+        - {{ tagName }}
+      security:
+        - adminHttpAuth: [ ]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            $ref: '#/components/schemas/{{ id }}'
+          required: true
+          description: Id {{ name }} #todo поменять
+      responses:
+        '200':
+          $ref: '#/components/responses/{{ infoName }}'
+        '401':
+          $ref: '../common.yaml#/components/responses/authRequired'
+        '403':
+          $ref: '../common.yaml#/components/responses/forbidden'
+        '404':
+          $ref: '../common.yaml#/components/responses/notFound'
+    put:
+      operationId: {{ updateName }}
+      summary: Обновление данных {{ name }} #todo поменять
+      description: Обновление данных {{ name }} #todo поменять
+      tags:
+        - {{ tagName }}
+      security:
+        - adminHttpAuth: [ ]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            $ref: '#/components/schemas/{{ id }}'
+          required: true
+          description: Id {{ name }} #todo поменять
+      requestBody:
+        $ref: '#/components/requestBodies/{{ updateName }}'
+      responses:
+        '200':
+          $ref: '#/components/responses/{{ updateName }}'
+        '400':
+          $ref: '../common.yaml#/components/responses/invalidRequest'
+        '401':
+          $ref: '../common.yaml#/components/responses/authRequired'
+        '403':
+          $ref: '../common.yaml#/components/responses/forbidden'
+        '404':
+          $ref: '../common.yaml#/components/responses/notFound'
+    delete:
+      operationId: {{ deleteName }}
+      summary: Удаление {{ name }} #todo поменять
+      description: Удаление {{ name }} #todo поменять
+      tags:
+        - {{ tagName }}
+      security:
+        - adminHttpAuth: [ ]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            $ref: '#/components/schemas/{{ id }}'
+          required: true
+          description: Id {{ name }} #todo поменять
+      responses:
+        '200':
+          $ref: '../common.yaml#/components/responses/success'
+        '401':
+          $ref: '../common.yaml#/components/responses/authRequired'
+        '403':
+          $ref: '../common.yaml#/components/responses/forbidden'
+        '404':
+          $ref: '../common.yaml#/components/responses/notFound'
+components:
+  requestBodies:
+    {{ createName }}:
+      description: Запрос на создание {{ name }} #todo поменять
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+{% for field in fields %}
+              - {{ field.propertyName }}
+{% endfor  %}
+            additionalProperties: false
+            properties:
+{% for field in fields %}
+              {{ field.propertyName }}:
+                type: string
+                minLength: 1
+{% if field.nullable %}
+                nullable: true
+{% endif %}
+                description: Описание {{ field.propertyName }} #todo поменять
+                example: Пример {{ field.propertyName }} #todo поменять
+{% endfor  %}
+    {{ updateName }}:
+      description: Запрос на обновление {{ name }} #todo поменять
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+{% for field in fields %}
+              - {{ field.propertyName }}
+{% endfor  %}
+            additionalProperties: false
+            properties:
+{% for field in fields %}
+              {{ field.propertyName }}:
+                type: string
+                minLength: 1
+{% if field.nullable %}
+                nullable: true
+{% endif %}
+                description: Описание {{ field.propertyName }} #todo поменять
+                example: Пример {{ field.propertyName }} #todo поменять
+{% endfor  %}
+  responses:
+    {{ listName }}:
+      description: Список {{ name }} #todo поменять
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - data
+              - pagination
+              - meta
+              - status
+            additionalProperties: false
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/components/schemas/{{ infoName }}'
+              pagination:
+                $ref: '../common.yaml#/components/schemas/pagination'
+              meta:
+                type: object
+                nullable: true
+              status:
+                $ref: '../common.yaml#/components/schemas/succeedStatus'
+      headers:
+        X-Request-TraceId:
+          $ref: '../common.yaml#/components/headers/requestTraceId'
+    {{ createName }}:
+      description: {{ name }} создан #todo поменять
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - description: Данные {{ name }} #todo поменять
+                type: object
+                required:
+                  - data
+                  - status
+                additionalProperties: false
+                properties:
+                  data:
+                    $ref: '#/components/schemas/{{ infoName }}'
+                  status:
+                    $ref: '../common.yaml#/components/schemas/succeedStatus'
+              - $ref: '../common.yaml#/components/schemas/error'
+      headers:
+        X-Request-TraceId:
+          $ref: '../common.yaml#/components/headers/requestTraceId'
+    {{ updateName }}:
+      description: {{ name }} обновлен #todo поменять
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - description: Данные {{ name }} #todo поменять
+                type: object
+                required:
+                  - data
+                  - status
+                additionalProperties: false
+                properties:
+                  data:
+                    $ref: '#/components/schemas/{{ infoName }}'
+                  status:
+                    $ref: '../common.yaml#/components/schemas/succeedStatus'
+              - $ref: '../common.yaml#/components/schemas/error'
+      headers:
+        X-Request-TraceId:
+          $ref: '../common.yaml#/components/headers/requestTraceId'
+    {{ infoName }}:
+      description: Данные {{ name }} #todo поменять
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - data
+              - status
+            additionalProperties: false
+            properties:
+              data:
+                $ref: '#/components/schemas/{{ infoName }}'
+              status:
+                $ref: '../common.yaml#/components/schemas/succeedStatus'
+      headers:
+        X-Request-TraceId:
+          $ref: '../common.yaml#/components/headers/requestTraceId'
+  schemas:
+    {{ id }}:
+      type: string
+      format: uuid
+      description: Id {{ name }}
+      example: 0193499c-388e-752c-93ca-4c5fa3b9179c
+    {{ infoName }}:
+      description: Данные {{ name }} #todo поменять
+      type: object
+      required:
+        - id
+{% for field in fields %}
+        - {{ field.propertyName }}
+{% endfor  %}
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          $ref: '#/components/schemas/{{ id }}'
+{% for field in fields %}
+        {{ field.propertyName }}:
+          type: string
+          description: Описание {{ field.propertyName }} #todo поменять
+{% if field.nullable %}
+          nullable: true
+{% endif %}
+          example: Пример {{ field.propertyName }} #todo поменять
+{% endfor  %}
+        createdAt:
+          $ref: '../common.yaml#/components/schemas/createdAt'
+        updatedAt:
+          $ref: '../common.yaml#/components/schemas/updatedAt'

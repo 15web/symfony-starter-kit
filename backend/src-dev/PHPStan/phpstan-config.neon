@@ -10,6 +10,7 @@ parameters:
     excludePaths:
         - ../../src/*/config.php
         - ../Rector/rector.config.php
+        - ../Maker
     parallel:
         maximumNumberOfProcesses: 8
     checkUninitializedProperties: true
