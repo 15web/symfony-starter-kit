@@ -14,7 +14,7 @@ use Webmozart\Assert\Assert;
 #[ORM\Embeddable]
 final readonly class UserPassword
 {
-    private const int MIN_LENGTH = 6;
+    public const int MIN_LENGTH = 6;
 
     private const string HASH_ALGO = PASSWORD_BCRYPT;
 
@@ -29,7 +29,7 @@ final readonly class UserPassword
         private string $cleanPassword,
         private int $hashCost,
     ) {
-        Assert::minLength($cleanPassword, self::MIN_LENGTH);
+        Assert::minLength($cleanPassword, self::MIN_LENGTH, 'cleanPassword: длина не может быть ментьше %2$s симоволов, указано %s');
 
         $this->value = $this->hash();
     }

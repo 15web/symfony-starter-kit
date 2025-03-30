@@ -20,6 +20,6 @@ final readonly class Email
         #[ORM\Column]
         public string $value,
     ) {
-        Assert::email($value);
+        Assert::email($value, 'value: значение должно быть валидным email, указано %s');
     }
 }
