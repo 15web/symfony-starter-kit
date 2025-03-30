@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Dev\Rector\Rules\AssertMustHaveMessageRector;
 use Dev\Rector\Rules\OneFlushInClassRector;
 use Dev\Rector\Rules\RequestMethodInsteadOfStringRector;
 use Dev\Rector\Rules\ResolversInActionRector;
@@ -57,6 +58,7 @@ return RectorConfig::configure()
         OneFlushInClassRector::class,
         ResolversInActionRector::class,
         PreferPHPUnitSelfCallRector::class,
+        AssertMustHaveMessageRector::class,
     ])
     ->withSkip([
         ClassPropertyAssignToConstructorPromotionRector::class => [dirname(__DIR__, 2).'/src/*/Domain/*'],
@@ -68,4 +70,5 @@ return RectorConfig::configure()
             __DIR__.'/../PHPCsFixer',
         ],
         __DIR__.'/../Tests/bootstrap.php',
+        __DIR__.'/../Tests/Rector/*/Fixture/*',
     ]);
