@@ -27,5 +27,7 @@ final readonly class Create<?php echo $entity_classname; ?>Request
      * @param non-empty-string $<?php echo $entity_field->propertyName.PHP_EOL; ?>
 <?php } ?>
      */
-    public function __construct(<?php echo $properties; ?>) {}
+    public function __construct(
+<?php echo $properties; ?>
+    ) {}
 }
