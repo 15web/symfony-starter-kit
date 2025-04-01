@@ -2,12 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Dev\Maker\Vendor;
+namespace Dev\Maker\Entity;
 
 use App\Infrastructure\AsService;
 use DateTimeImmutable;
+use Dev\Maker\ClassGenerator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\MakerBundle\Doctrine\DoctrineHelper;
+use Symfony\Bundle\MakerBundle\Exception\RuntimeCommandException;
 use Symfony\Bundle\MakerBundle\Str;
 use Symfony\Bundle\MakerBundle\Util\ClassNameDetails;
 use Symfony\Bundle\MakerBundle\Util\UseStatementGenerator;
@@ -20,22 +22,36 @@ use Symfony\Component\Uid\UuidV7;
  * Создает сущность и репозиторий в нужной директории - App\ModuleName\Domain, добавляет суффикс к репозиторию (s)
  * Почти копия EntityClassGenerator(MakerBundle)
  */
-final readonly class EntityClassGeneratorForModule
+final readonly class GenerateEntityClass
 {
     public function __construct(
-        private CustomGenerator $generator,
+        private ClassGenerator $generator,
         private DoctrineHelper $doctrineHelper,
     ) {}
 
-    public function generateEntityClass(
-        string $moduleName,
-        string $entityTitle,
-        ClassNameDetails $entityClassDetails,
-        bool $generateRepositoryClass = true,
-    ): string {
+    /**
+     * @param non-empty-string $moduleName
+     * @param non-empty-string $entityName
+     * @param non-empty-string $entityTitle
+     */
+    public function __invoke(string $moduleName, string $entityName, string $entityTitle): ClassNameDetails
+    {
+        $namespacePrefix = \sprintf('%s\\Domain\\', $moduleName);
+
+        $entityClassDetails = $this->generator->createClassNameDetails(
+            name: $entityName,
+            namespacePrefix: $namespacePrefix,
+        );
+
+        if (class_exists($entityClassDetails->getFullName())) {
+            throw new RuntimeCommandException(
+                \sprintf('Сущность [%s] уже существует', $entityClassDetails->getFullName()),
+            );
+        }
+
         $repoClassDetails = $this->generator->createClassNameDetails(
             name: $entityClassDetails->getRelativeName(),
-            namespacePrefix: $moduleName.'\\Domain\\',
+            namespacePrefix: $namespacePrefix,
             suffix: 'Repository',
         );
 
@@ -55,7 +71,7 @@ final readonly class EntityClassGeneratorForModule
         ]);
 
         /** @psalm-suppress InternalMethod */
-        $entityPath = $this->generator->generateClass(
+        $this->generator->generate(
             className: $entityClassDetails->getFullName(),
             templateName: 'domain/Entity.tpl.php',
             variables: [
@@ -69,17 +85,17 @@ final readonly class EntityClassGeneratorForModule
             ],
         );
 
-        if ($generateRepositoryClass) {
-            $this->generateRepository(
-                repositoryClass: $repoClassDetails->getFullName(),
-                entityClass: $entityClassDetails->getFullName(),
-            );
-        }
+        $this->generateRepository(
+            repositoryClass: $repoClassDetails->getFullName(),
+            entityClass: $entityClassDetails->getFullName(),
+        );
 
-        return $entityPath;
+        $this->generator->writeChanges();
+
+        return $entityClassDetails;
     }
 
-    public function generateRepository(string $repositoryClass, string $entityClass): void
+    private function generateRepository(string $repositoryClass, string $entityClass): void
     {
         $shortEntityClass = Str::getShortClassName($entityClass);
         $entityVariableName = strtolower($shortEntityClass);
@@ -91,7 +107,7 @@ final readonly class EntityClassGeneratorForModule
             Uuid::class,
         ]);
 
-        $this->generator->generateClass(
+        $this->generator->generate(
             className: $repositoryClass,
             templateName: 'domain/Repository.tpl.php',
             variables: [

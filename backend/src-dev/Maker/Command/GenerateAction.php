@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Dev\Maker\SimpleModule;
+namespace Dev\Maker\Command;
 
 use App\Infrastructure\ApiException\ApiNotFoundException;
 use App\Infrastructure\AsService;
@@ -14,8 +14,8 @@ use App\Infrastructure\Response\PaginationResponse;
 use App\Infrastructure\Response\SuccessResponse;
 use App\User\Security\Http\IsGranted;
 use App\User\User\Domain\UserRole;
-use Dev\Maker\EntityFieldsManipulator;
-use Dev\Maker\Vendor\CustomGenerator;
+use Dev\Maker\ClassGenerator;
+use Dev\Maker\Entity\EntityFieldsManipulator;
 use InvalidArgumentException;
 use Override;
 use Symfony\Bundle\MakerBundle\Str;
@@ -39,50 +39,65 @@ use Webmozart\Assert\Assert;
  * Создает HTTP слой для модуля
  */
 #[AsService]
-final readonly class CRUDGenerator
+final class GenerateAction
 {
+    private ClassNameDetails $entityClassDetails;
+
+    private string $namespacePrefix;
+
+    private string $entityTitle;
+
+    private string $repoClassName;
+
+    /**
+     * @var list<ClassProperty>
+     */
+    private array $fields;
+
     public function __construct(
-        private CustomGenerator $generator,
-        private EntityFieldsManipulator $entityFieldsManipulator,
-        private Filesystem $filesystem,
+        private readonly ClassGenerator $generator,
+        private readonly EntityFieldsManipulator $entityFieldsManipulator,
+        private readonly Filesystem $filesystem,
     ) {}
 
     /**
-     * @param list<array<string, string>> $fields
+     * @param list<ClassProperty> $fields
      */
-    public function generate(
-        string $namespacePrefix,
-        ClassNameDetails $entityClass,
-        string $repoClassName,
-        array $fields,
+    public function __invoke(
+        string $moduleName,
+        ClassNameDetails $entityClassDetails,
         string $entityTitle,
+        array $fields,
     ): void {
-        $this->generateEntityArgumentValueResolver($namespacePrefix, $repoClassName, $entityClass, $entityTitle);
-        $this->generateInfoAction($namespacePrefix, $entityClass, $entityTitle);
-        $this->generateCreateAction($namespacePrefix, $repoClassName, $entityClass, $entityTitle, $fields);
-        $this->generateUpdateAction($namespacePrefix, $entityClass, $entityTitle, $fields);
-        $this->generateRemoveAction($namespacePrefix, $repoClassName, $entityClass, $entityTitle);
-        $this->generateListAction($namespacePrefix, $repoClassName, $entityClass, $entityTitle);
-        $this->generateOpenApi($entityClass, $entityTitle, $fields);
+        $this->namespacePrefix = "{$moduleName}\\Http\\Admin\\";
+        $this->entityClassDetails = $entityClassDetails;
+        $this->entityTitle = $entityTitle;
+        $this->repoClassName = "{$entityClassDetails->getShortName()}Repository";
+        $this->fields = $fields;
+
+        $this->generateEntityArgumentValueResolver();
+        $this->generateInfoAction();
+        $this->generateCreateAction();
+        $this->generateUpdateAction();
+        $this->generateRemoveAction();
+        $this->generateListAction();
+        $this->generateOpenApi();
 
         $this->generator->writeChanges();
     }
 
-    private function generateEntityArgumentValueResolver(
-        string $namespacePrefix,
-        string $repoClassName,
-        ClassNameDetails $entityClass,
-        string $entityTitle,
-    ): void {
+    private function generateEntityArgumentValueResolver(): void
+    {
         $createActionDetails = $this->generator->createClassNameDetails(
-            $entityClass->getShortName().'ArgumentValueResolver',
-            $namespacePrefix,
+            "{$this->entityClassDetails->getShortName()}ArgumentValueResolver",
+            $this->namespacePrefix,
         );
 
-        $shortEntityClass = Str::getShortClassName($entityClass->getShortName());
+        $shortEntityClass = Str::getShortClassName($this->entityClassDetails->getShortName());
+
         $useStatements = new UseStatementGenerator([
-            $entityClass->getFullName(),
-            $entityClass->getFullName().'Repository',
+            $this->entityClassDetails->getFullName(),
+            "{$this->entityClassDetails->getFullName()}Repository",
             AsService::class,
             Assert::class,
             ApiNotFoundException::class,
@@ -94,31 +109,29 @@ final readonly class CRUDGenerator
             InvalidArgumentException::class,
         ]);
 
-        $this->generator->generateClass(
-            $createActionDetails->getFullName(),
-            'http/EntityArgumentValueResolver.tpl.php',
-            [
+        $this->generator->generate(
+            className: $createActionDetails->getFullName(),
+            templateName: 'http/EntityArgumentValueResolver.tpl.php',
+            variables: [
                 'use_statements' => $useStatements,
                 'entity_classname' => $shortEntityClass,
-                'entity_repository' => $repoClassName,
-                'entity_title' => $entityTitle,
+                'entity_repository' => $this->repoClassName,
+                'entity_title' => $this->entityTitle,
             ],
         );
     }
 
-    private function generateInfoAction(
-        string $namespacePrefix,
-        ClassNameDetails $entityClass,
-        string $entityTitle,
-    ): void {
+    private function generateInfoAction(): void
+    {
         $createActionDetails = $this->generator->createClassNameDetails(
-            name: 'Get'.$entityClass->getShortName().'Action',
-            namespacePrefix: $namespacePrefix,
+            name: "Get{$this->entityClassDetails->getShortName()}Action",
+            namespacePrefix: $this->namespacePrefix,
         );
 
-        $shortEntityClass = Str::getShortClassName($entityClass->getShortName());
+        $shortEntityClass = Str::getShortClassName($this->entityClassDetails->getShortName());
+
         $useStatements = new UseStatementGenerator([
-            $entityClass->getFullName(),
+            $this->entityClassDetails->getFullName(),
             AsController::class,
             Route::class,
             Request::class,
@@ -128,15 +141,16 @@ final readonly class CRUDGenerator
             UserRole::class,
         ]);
 
-        $route = '/admin/'.lcfirst($shortEntityClass).'s/{id}';
-        $this->generator->generateClass(
+        $route = \sprintf('/admin/%ss/{id}', lcfirst($shortEntityClass));
+
+        $this->generator->generate(
             className: $createActionDetails->getFullName(),
             templateName: 'http/InfoAction.tpl.php',
             variables: [
                 'action_classname' => $createActionDetails->getShortName(),
                 'use_statements' => $useStatements,
                 'entity_classname' => $shortEntityClass,
-                'entity_title' => $entityTitle,
+                'entity_title' => $this->entityTitle,
                 'route_path' => $route,
                 'method' => 'methods: [Request::METHOD_GET]',
                 'role' => 'UserRole::Admin',
@@ -144,21 +158,18 @@ final readonly class CRUDGenerator
         );
     }
 
-    private function generateRemoveAction(
-        string $namespacePrefix,
-        string $repoClassName,
-        ClassNameDetails $entityClass,
-        string $entityTitle,
-    ): void {
+    private function generateRemoveAction(): void
+    {
         $createActionDetails = $this->generator->createClassNameDetails(
-            name: 'Delete'.$entityClass->getShortName().'Action',
-            namespacePrefix: $namespacePrefix,
+            name: "Delete{$this->entityClassDetails->getShortName()}Action",
+            namespacePrefix: $this->namespacePrefix,
         );
 
-        $shortEntityClass = Str::getShortClassName($entityClass->getShortName());
+        $shortEntityClass = Str::getShortClassName($this->entityClassDetails->getShortName());
+
         $useStatements = new UseStatementGenerator([
-            $entityClass->getFullName(),
-            $entityClass->getFullName().'Repository',
+            $this->entityClassDetails->getFullName(),
+            $this->entityClassDetails->getFullName().'Repository',
             AsController::class,
             Route::class,
             IsGranted::class,
@@ -170,16 +181,17 @@ final readonly class CRUDGenerator
             ApiObjectResponse::class,
         ]);
 
-        $route = '/admin/'.lcfirst($shortEntityClass).'s/{id}';
-        $this->generator->generateClass(
+        $route = \sprintf('/admin/%ss/{id}', lcfirst($shortEntityClass));
+
+        $this->generator->generate(
             className: $createActionDetails->getFullName(),
             templateName: 'http/RemoveAction.tpl.php',
             variables: [
                 'action_classname' => $createActionDetails->getShortName(),
                 'use_statements' => $useStatements,
                 'entity_classname' => $shortEntityClass,
-                'entity_title' => $entityTitle,
-                'repository_classname' => $repoClassName,
+                'entity_title' => $this->entityTitle,
+                'repository_classname' => $this->repoClassName,
                 'route_path' => $route,
                 'method' => 'methods: [Request::METHOD_DELETE]',
                 'role' => 'UserRole::Admin',
@@ -187,20 +199,17 @@ final readonly class CRUDGenerator
         );
     }
 
-    private function generateListAction(
-        string $namespacePrefix,
-        string $repoClassName,
-        ClassNameDetails $entityClass,
-        string $entityTitle,
-    ): void {
+    private function generateListAction(): void
+    {
         $createActionDetails = $this->generator->createClassNameDetails(
-            name: 'Get'.$entityClass->getShortName().'ListAction',
-            namespacePrefix: $namespacePrefix,
+            name: "Get{$this->entityClassDetails->getShortName()}ListAction",
+            namespacePrefix: $this->namespacePrefix,
         );
 
-        $shortEntityClass = Str::getShortClassName($entityClass->getShortName());
+        $shortEntityClass = Str::getShortClassName($this->entityClassDetails->getShortName());
+
         $useStatements = new UseStatementGenerator([
-            $entityClass->getFullName().'Repository',
+            "{$this->entityClassDetails->getFullName()}Repository",
             AsController::class,
             Route::class,
             IsGranted::class,
@@ -210,16 +219,17 @@ final readonly class CRUDGenerator
             PaginationResponse::class,
         ]);
 
-        $route = '/admin/'.lcfirst($shortEntityClass).'s';
-        $this->generator->generateClass(
+        $route = \sprintf('/admin/%ss', lcfirst($shortEntityClass));
+
+        $this->generator->generate(
             className: $createActionDetails->getFullName(),
             templateName: 'http/ListAction.tpl.php',
             variables: [
                 'action_classname' => $createActionDetails->getShortName(),
                 'use_statements' => $useStatements,
                 'entity_classname' => $shortEntityClass,
-                'entity_title' => $entityTitle,
-                'repository_classname' => $repoClassName,
+                'entity_title' => $this->entityTitle,
+                'repository_classname' => $this->repoClassName,
                 'route_path' => $route,
                 'method' => 'methods: [Request::METHOD_GET]',
                 'role' => 'UserRole::Admin',
@@ -227,27 +237,20 @@ final readonly class CRUDGenerator
         );
     }
 
-    /**
-     * @param list<array<string, string>> $fields
-     */
-    private function generateCreateAction(
-        string $namespacePrefix,
-        string $repoClassName,
-        ClassNameDetails $entityClass,
-        string $entityTitle,
-        array $fields,
-    ): void {
-        $this->generateCreateRequest($namespacePrefix, $entityClass, $entityTitle, $fields);
+    private function generateCreateAction(): void
+    {
+        $this->generateCreateRequest();
 
         $createActionDetails = $this->generator->createClassNameDetails(
-            name: 'Create'.$entityClass->getShortName().'Action',
-            namespacePrefix: $namespacePrefix,
+            name: "Create{$this->entityClassDetails->getShortName()}Action",
+            namespacePrefix: $this->namespacePrefix,
         );
 
-        $shortEntityClass = Str::getShortClassName($entityClass->getShortName());
+        $shortEntityClass = Str::getShortClassName($this->entityClassDetails->getShortName());
+
         $useStatements = new UseStatementGenerator([
-            $entityClass->getFullName(),
-            $entityClass->getFullName().'Repository',
+            $this->entityClassDetails->getFullName(),
+            "{$this->entityClassDetails->getFullName()}Repository",
             AsController::class,
             Route::class,
             IsGranted::class,
@@ -260,16 +263,17 @@ final readonly class CRUDGenerator
             UuidV7::class,
         ]);
 
-        $route = '/admin/'.lcfirst($shortEntityClass).'s';
-        $this->generator->generateClass(
+        $route = \sprintf('/admin/%ss', lcfirst($shortEntityClass));
+
+        $this->generator->generate(
             className: $createActionDetails->getFullName(),
             templateName: 'http/create/CreateAction.tpl.php',
             variables: [
                 'action_classname' => $createActionDetails->getShortName(),
                 'use_statements' => $useStatements,
                 'entity_classname' => $shortEntityClass,
-                'entity_title' => $entityTitle,
-                'repository_classname' => $repoClassName,
+                'entity_title' => $this->entityTitle,
+                'repository_classname' => $this->repoClassName,
                 'route_path' => $route,
                 'method' => 'methods: [Request::METHOD_POST]',
                 'role' => 'UserRole::Admin',
@@ -277,53 +281,40 @@ final readonly class CRUDGenerator
         );
     }
 
-    /**
-     * @param list<array<string, string>> $fields
-     */
-    private function generateCreateRequest(
-        string $namespacePrefix,
-        ClassNameDetails $entityClass,
-        string $entityTitle,
-        array $fields,
-    ): void {
+    private function generateCreateRequest(): void
+    {
         $createActionDetails = $this->generator->createClassNameDetails(
-            name: 'Create'.$entityClass->getShortName().'Request',
-            namespacePrefix: $namespacePrefix,
+            name: "Create{$this->entityClassDetails->getShortName()}Request",
+            namespacePrefix: $this->namespacePrefix,
         );
 
-        $shortEntityClass = Str::getShortClassName($entityClass->getShortName());
+        $shortEntityClass = Str::getShortClassName($this->entityClassDetails->getShortName());
 
-        $this->generator->generateClass(
+        $this->generator->generate(
             className: $createActionDetails->getFullName(),
             templateName: 'http/create/CreateRequest.tpl.php',
             variables: [
                 'entity_classname' => $shortEntityClass,
-                'entity_title' => $entityTitle,
-                'entity_fields' => $fields,
-                'properties' => $this->entityFieldsManipulator->getConstructorProperties($fields),
+                'entity_title' => $this->entityTitle,
+                'entity_fields' => $this->fields,
+                'properties' => $this->entityFieldsManipulator->getConstructorProperties($this->fields),
             ],
         );
     }
 
-    /**
-     * @param list<array<string, string>> $fields
-     */
-    private function generateUpdateAction(
-        string $namespacePrefix,
-        ClassNameDetails $entityClass,
-        string $entityTitle,
-        array $fields,
-    ): void {
-        $this->generateUpdateRequest($namespacePrefix, $entityClass, $entityTitle, $fields);
+    private function generateUpdateAction(): void
+    {
+        $this->generateUpdateRequest();
 
         $createActionDetails = $this->generator->createClassNameDetails(
-            name: 'Update'.$entityClass->getShortName().'Action',
-            namespacePrefix: $namespacePrefix,
+            name: "Update{$this->entityClassDetails->getShortName()}Action",
+            namespacePrefix: $this->namespacePrefix,
         );
 
-        $shortEntityClass = Str::getShortClassName($entityClass->getShortName());
+        $shortEntityClass = Str::getShortClassName($this->entityClassDetails->getShortName());
+
         $useStatements = new UseStatementGenerator([
-            $entityClass->getFullName(),
+            $this->entityClassDetails->getFullName(),
             AsController::class,
             Route::class,
             IsGranted::class,
@@ -335,15 +326,16 @@ final readonly class CRUDGenerator
             ApiObjectResponse::class,
         ]);
 
-        $route = '/admin/'.lcfirst($shortEntityClass).'s/{id}';
-        $this->generator->generateClass(
+        $route = \sprintf('/admin/%ss/{id}', lcfirst($shortEntityClass));
+
+        $this->generator->generate(
             className: $createActionDetails->getFullName(),
             templateName: 'http/update/UpdateAction.tpl.php',
             variables: [
                 'action_classname' => $createActionDetails->getShortName(),
                 'use_statements' => $useStatements,
                 'entity_classname' => $shortEntityClass,
-                'entity_title' => $entityTitle,
+                'entity_title' => $this->entityTitle,
                 'route_path' => $route,
                 'method' => 'methods: [Request::METHOD_PUT]',
                 'role' => 'UserRole::Admin',
@@ -351,57 +343,46 @@ final readonly class CRUDGenerator
         );
     }
 
-    /**
-     * @param list<array<string, string>> $fields
-     */
-    private function generateUpdateRequest(
-        string $namespacePrefix,
-        ClassNameDetails $entityClass,
-        string $entityTitle,
-        array $fields,
-    ): void {
+    private function generateUpdateRequest(): void
+    {
         $createActionDetails = $this->generator->createClassNameDetails(
-            name: 'Update'.$entityClass->getShortName().'Request',
-            namespacePrefix: $namespacePrefix,
+            name: "Update{$this->entityClassDetails->getShortName()}Request",
+            namespacePrefix: $this->namespacePrefix,
         );
 
-        $shortEntityClass = Str::getShortClassName($entityClass->getShortName());
+        $shortEntityClass = Str::getShortClassName($this->entityClassDetails->getShortName());
 
-        $this->generator->generateClass(
+        $this->generator->generate(
             className: $createActionDetails->getFullName(),
             templateName: 'http/update/UpdateRequest.tpl.php',
             variables: [
                 'entity_classname' => $shortEntityClass,
-                'entity_title' => $entityTitle,
-                'entity_fields' => $fields,
-                'properties' => $this->entityFieldsManipulator->getConstructorProperties($fields),
+                'entity_title' => $this->entityTitle,
+                'entity_fields' => $this->fields,
+                'properties' => $this->entityFieldsManipulator->getConstructorProperties($this->fields),
             ],
         );
     }
 
-    /**
-     * @param list<ClassProperty> $fields
-     */
-    private function generateOpenApi(
-        ClassNameDetails $entityClass,
-        string $entityTitle,
-        array $fields,
-    ): void {
-        $loader = new FilesystemLoader('src-dev/Maker/Resources');
-        $twig = new Environment($loader);
+    private function generateOpenApi(): void
+    {
+        $twig = new Environment(
+            new FilesystemLoader('src-dev/Maker/Resources'),
+        );
 
-        $moduleName = lcfirst($entityClass->getShortName());
+        $moduleName = lcfirst($this->entityClassDetails->getShortName());
+
         $result = $twig->render('openapi.yaml.twig', [
             'tagName' => "admin-{$moduleName}",
-            'name' => $entityTitle,
-            'id' => 'admin'.$entityClass->getShortName().'Id',
-            'listName' => 'getAdmin'.$entityClass->getShortName().'List',
-            'infoName' => 'getAdmin'.$entityClass->getShortName(),
-            'createName' => 'createAdmin'.$entityClass->getShortName(),
-            'updateName' => 'updateAdmin'.$entityClass->getShortName(),
-            'deleteName' => 'deleteAdmin'.$entityClass->getShortName(),
+            'name' => $this->entityTitle,
+            'id' => "admin{$this->entityClassDetails->getShortName()}Id",
+            'listName' => "getAdmin{$this->entityClassDetails->getShortName()}List",
+            'infoName' => "getAdmin{$this->entityClassDetails->getShortName()}",
+            'createName' => "createAdmin{$this->entityClassDetails->getShortName()}",
+            'updateName' => "updateAdmin{$this->entityClassDetails->getShortName()}",
+            'deleteName' => "deleteAdmin{$this->entityClassDetails->getShortName()}",
             'uri' => "/admin/{$moduleName}s",
-            'fields' => $fields,
+            'fields' => $this->fields,
         ]);
 
         $this->filesystem->dumpFile(

@@ -22,9 +22,8 @@ return RectorConfig::configure()
     ->withCache(__DIR__.'/../../var/cache/rector')
     ->withPaths([
         __DIR__.'/../../src',
-        __DIR__.'/../',
+        __DIR__.'/../../src-dev',
         __DIR__.'/../../migrations',
-        __DIR__.'/../../src-dev/Tests',
     ])
     ->withParallel()
     ->withPhpSets(php83: true)

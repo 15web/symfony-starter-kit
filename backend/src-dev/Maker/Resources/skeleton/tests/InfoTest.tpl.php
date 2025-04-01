@@ -30,7 +30,10 @@ final class <?php echo $test_name; ?> extends ApiWebTestCase
     {
         $token = User::auth('admin@example.test');
 
-        $<?php echo $entity_classname_small; ?>Id = <?php echo $entity_classname; ?>::createAndReturnId(<?php echo $create_params_with_variables; ?>, $token);
+        $<?php echo $entity_classname_small; ?>Id = <?php echo $entity_classname; ?>::createAndReturnId(
+<?php echo $create_params_with_variables; ?>
+            token: $token,
+        );
 
         $response = self::request(
             method: Request::METHOD_GET,

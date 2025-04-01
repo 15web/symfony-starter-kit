@@ -29,7 +29,11 @@ final class <?php echo $test_name; ?> extends ApiWebTestCase
     public function testSuccess(): void
     {
         $token = User::auth('admin@example.test');
-        $response = <?php echo $entity_classname; ?>::create(<?php echo $create_params_with_variables; ?>, $token);
+
+        $response = <?php echo $entity_classname; ?>::create(
+<?php echo $create_params_with_variables; ?>
+            token: $token,
+        );
 
         self::assertSuccessResponse($response);
 

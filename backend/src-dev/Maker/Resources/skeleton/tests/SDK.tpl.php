@@ -21,8 +21,10 @@ namespace <?php echo $namespace; ?>;
  */
 final class <?php echo $entity_classname; ?> extends ApiWebTestCase
 {
-    public static function createAndReturnId(<?php echo $create_params; ?>, string $token): string
-    {
+    public static function createAndReturnId(
+<?php echo $create_params; ?>
+        string $token,
+    ): string {
         $response = self::create(
 <?php foreach ($entity_fields as $field) { ?>
             <?php echo $field->propertyName; ?>: $<?php echo $field->propertyName; ?>,
@@ -36,8 +38,10 @@ final class <?php echo $entity_classname; ?> extends ApiWebTestCase
         return $entity['data']['id'];
     }
 
-    public static function create(<?php echo $create_params; ?>, string $token): Response
-    {
+    public static function create(
+<?php echo $create_params; ?>
+        string $token,
+    ): Response {
         $body = [
 <?php foreach ($entity_fields as $field) { ?>
             '<?php echo $field->propertyName; ?>' => $<?php echo $field->propertyName; ?>,

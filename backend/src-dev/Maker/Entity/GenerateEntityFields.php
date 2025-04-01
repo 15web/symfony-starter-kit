@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Dev\Maker\Vendor;
+namespace Dev\Maker\Entity;
 
 use Doctrine\DBAL\Types\Type;
-use Exception;
 use InvalidArgumentException;
 use ReflectionClass;
 use ReflectionProperty;
+use RuntimeException;
 use Symfony\Bundle\MakerBundle\ConsoleStyle;
 use Symfony\Bundle\MakerBundle\Doctrine\DoctrineHelper;
 use Symfony\Bundle\MakerBundle\Doctrine\EntityRelation;
@@ -16,10 +16,10 @@ use Symfony\Bundle\MakerBundle\Exception\RuntimeCommandException;
 use Symfony\Bundle\MakerBundle\FileManager;
 use Symfony\Bundle\MakerBundle\Str;
 use Symfony\Bundle\MakerBundle\Util\ClassDetails;
+use Symfony\Bundle\MakerBundle\Util\ClassNameDetails;
 use Symfony\Bundle\MakerBundle\Util\ClassSource\Model\ClassProperty;
 use Symfony\Bundle\MakerBundle\Util\ClassSourceManipulator;
 use Symfony\Bundle\MakerBundle\Validator;
-use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Question\Question;
 
 /**
@@ -28,59 +28,39 @@ use Symfony\Component\Console\Question\Question;
  * Содержит информацию о генерируемых полях сущности (имя, тип, nullable).
  * Используется для генерации Domain слоя.
  */
-final readonly class EntityGenerator
+final readonly class GenerateEntityFields
 {
     public function __construct(
         private FileManager $fileManager,
         private DoctrineHelper $doctrineHelper,
-        private CustomGenerator $generator,
-        private EntityClassGeneratorForModule $entityClassGenerator,
     ) {}
 
-    public function generate(InputInterface $input, ConsoleStyle $io): array
+    /**
+     * @return list<ClassProperty>
+     */
+    public function __invoke(ClassNameDetails $entityClassDetails, ConsoleStyle $io): array
     {
-        $moduleName = $input->getArgument('module-name');
-        $entityTitle = $input->getArgument('entity-title');
-        $overwrite = false;
-        $entityClassDetails = $this->generator->createClassNameDetails(
-            $input->getArgument('name'),
-            $moduleName.'\\Domain\\',
+        $entityPath = $this->fileManager->getRelativePathForFutureClass(
+            className: $entityClassDetails->getFullName(),
         );
-
-        $classExists = class_exists($entityClassDetails->getFullName());
-        if (!$classExists) {
-            $entityPath = $this->entityClassGenerator->generateEntityClass(
-                moduleName: $moduleName,
-                entityTitle: $entityTitle,
-                entityClassDetails: $entityClassDetails,
-            );
-            $this->generator->writeChanges();
-        }
 
         // Сюда записываются поля сущности (имя, тип, nullable)
         $creatingFields = [];
 
         if (!$this->doesEntityUseAttributeMapping($entityClassDetails->getFullName())) {
-            throw new RuntimeCommandException(\sprintf('Only attribute mapping is supported by make:entity, but the <info>%s</info> class uses a different format. If you would like this command to generate the properties & getter/setter methods, add your mapping configuration, and then re-run this command with the <info>--regenerate</info> flag.', $entityClassDetails->getFullName()));
-        }
-
-        if ($classExists) {
-            $entityPath = $this->getPathOfClass($entityClassDetails->getFullName());
-            $io->text([
-                'Your entity already exists! So let\'s add some new fields!',
-            ]);
-        } else {
-            $io->text([
-                '',
-                'Entity generated! Now let\'s add some fields!',
-                'You can always add more fields later manually or by re-running this command.',
-            ]);
+            throw new RuntimeCommandException(
+                \sprintf(
+                    'Only attribute mapping is supported by make:entity, but the <info>%s</info> class uses a different format. If you would like this command to generate the properties & getter/setter methods, add your mapping configuration, and then re-run this command with the <info>--regenerate</info> flag.',
+                    $entityClassDetails->getFullName(),
+                ),
+            );
         }
 
         $currentFields = $this->getPropertyNames($entityClassDetails->getFullName());
-        $manipulator = $this->createClassManipulator($entityPath, $io, $overwrite);
+        $manipulator = $this->createClassManipulator($entityPath, $io);
 
         $isFirstField = true;
+
         while (true) {
             $newField = $this->askForNextField($io, $currentFields, $entityClassDetails->getFullName(), $isFirstField);
             $isFirstField = false;
@@ -89,8 +69,9 @@ final readonly class EntityGenerator
                 break;
             }
 
-            $fileManagerOperations = [];
-            $fileManagerOperations[$entityPath] = $manipulator;
+            $fileManagerOperations = [
+                $entityPath => $manipulator,
+            ];
 
             if ($newField instanceof ClassProperty) {
                 $manipulator->addEntityField($newField);
@@ -99,12 +80,13 @@ final readonly class EntityGenerator
             } elseif ($newField instanceof EntityRelation) {
                 // both overridden below for OneToMany
                 $newFieldName = $newField->getOwningProperty();
+
                 if ($newField->isSelfReferencing()) {
                     $otherManipulatorFilename = $entityPath;
                     $otherManipulator = $manipulator;
                 } else {
                     $otherManipulatorFilename = $this->getPathOfClass($newField->getInverseClass());
-                    $otherManipulator = $this->createClassManipulator($otherManipulatorFilename, $io, $overwrite);
+                    $otherManipulator = $this->createClassManipulator($otherManipulatorFilename, $io);
                 }
 
                 switch ($newField->getType()) {
@@ -120,13 +102,21 @@ final readonly class EntityGenerator
                             // the new field being added to THIS entity is the inverse
                             $newFieldName = $newField->getInverseProperty();
                             $otherManipulatorFilename = $this->getPathOfClass($newField->getOwningClass());
-                            $otherManipulator = $this->createClassManipulator($otherManipulatorFilename, $io, $overwrite);
+
+                            $otherManipulator = $this->createClassManipulator(
+                                path: $otherManipulatorFilename,
+                                io: $io,
+                            );
 
                             // The *other* class will receive the ManyToOne
                             $otherManipulator->addManyToOneRelation($newField->getOwningRelation());
+
                             if (!$newField->getMapInverseRelation()) {
-                                throw new Exception('Somehow a OneToMany relationship is being created, but the inverse side will not be mapped?');
+                                throw new RuntimeException(
+                                    'Somehow a OneToMany relationship is being created, but the inverse side will not be mapped?',
+                                );
                             }
+
                             $manipulator->addOneToManyRelation($newField->getInverseRelation());
                         }
 
@@ -134,6 +124,7 @@ final readonly class EntityGenerator
 
                     case EntityRelation::MANY_TO_MANY:
                         $manipulator->addManyToManyRelation($newField->getOwningRelation());
+
                         if ($newField->getMapInverseRelation()) {
                             $otherManipulator->addManyToManyRelation($newField->getInverseRelation());
                         }
@@ -142,6 +133,7 @@ final readonly class EntityGenerator
 
                     case EntityRelation::ONE_TO_ONE:
                         $manipulator->addOneToOneRelation($newField->getOwningRelation());
+
                         if ($newField->getMapInverseRelation()) {
                             $otherManipulator->addOneToOneRelation($newField->getInverseRelation());
                         }
@@ -149,33 +141,32 @@ final readonly class EntityGenerator
                         break;
 
                     default:
-                        throw new Exception('Invalid relation type');
+                        throw new RuntimeException('Invalid relation type');
                 }
 
                 // save the inverse side if it's being mapped
                 if ($newField->getMapInverseRelation()) {
                     $fileManagerOperations[$otherManipulatorFilename] = $otherManipulator;
                 }
+
                 $currentFields[] = $newFieldName;
             } else {
-                throw new Exception('Invalid value');
+                throw new RuntimeException('Invalid value');
             }
 
             $creatingFields[] = $newField;
 
             foreach ($fileManagerOperations as $path => $manipulatorOrMessage) {
-                if (\is_string($manipulatorOrMessage)) {
-                    $io->comment($manipulatorOrMessage);
-                } else {
-                    $this->fileManager->dumpFile($path, $manipulatorOrMessage->getSourceCode());
-                }
+                \is_string($manipulatorOrMessage)
+                    ? $io->comment($manipulatorOrMessage)
+                    : $this->fileManager->dumpFile($path, $manipulatorOrMessage->getSourceCode());
             }
         }
 
-        return [$entityClassDetails, $creatingFields];
+        return $creatingFields;
     }
 
-    public function createEntityClassQuestion(string $questionText): Question
+    private function createEntityClassQuestion(string $questionText): Question
     {
         $question = new Question($questionText);
         $question->setValidator(static fn (?string $value = null): string => Validator::notBlank($value));
@@ -184,15 +175,17 @@ final readonly class EntityGenerator
         return $question;
     }
 
-    private function askForNextField(ConsoleStyle $io, array $fields, string $entityClass, bool $isFirstField): null|ClassProperty|EntityRelation
-    {
+    private function askForNextField(
+        ConsoleStyle $io,
+        array $fields,
+        string $entityClass,
+        bool $isFirstField,
+    ): null|ClassProperty|EntityRelation {
         $io->writeln('');
 
-        if ($isFirstField) {
-            $questionText = 'New property name (press <return> to stop adding fields)';
-        } else {
-            $questionText = 'Add another property? Enter the property name (or press <return> to stop adding fields)';
-        }
+        $questionText = $isFirstField
+            ? 'New property name (press <return> to stop adding fields)'
+            : 'Add another property? Enter the property name (or press <return> to stop adding fields)';
 
         $fieldName = $io->ask($questionText, null, function ($name) use ($fields): string|array|null|false|int|float {
             // allow it to be empty
@@ -269,16 +262,27 @@ final readonly class EntityGenerator
             $classProperty->length = $io->ask('Field length', '255', Validator::validateLength(...));
         } elseif ($type === 'decimal') {
             // 10 is the default value given in \Doctrine\DBAL\Schema\Column::$_precision
-            $classProperty->precision = $io->ask('Precision (total number of digits stored: 100.00 would be 5)', '10', Validator::validatePrecision(...));
+            $classProperty->precision = $io->ask(
+                question: 'Precision (total number of digits stored: 100.00 would be 5)',
+                default: '10',
+                validator: Validator::validatePrecision(...),
+            );
 
             // 0 is the default value given in \Doctrine\DBAL\Schema\Column::$_scale
-            $classProperty->scale = $io->ask('Scale (number of decimals to store: 100.00 would be 2)', '0', Validator::validateScale(...));
+            $classProperty->scale = $io->ask(
+                question: 'Scale (number of decimals to store: 100.00 would be 2)',
+                default: '0',
+                validator: Validator::validateScale(...),
+            );
         } elseif ($type === 'enum') {
             // ask for valid backed enum class
             $classProperty->enumType = $io->ask('Enum class', null, Validator::classIsBackedEnum(...));
 
             // set type according to user decision
-            $classProperty->type = $io->confirm('Can this field store multiple enum values', false) ? 'simple_array' : 'string';
+            $classProperty->type = $io->confirm(
+                question: 'Can this field store multiple enum values',
+                default: false,
+            ) ? 'simple_array' : 'string';
         }
 
         if ($io->confirm('Can this field be null in the database (nullable)', false)) {
@@ -339,10 +343,13 @@ final readonly class EntityGenerator
                 } elseif (\is_array($subTypes) && $subTypes !== []) {
                     $line .= \sprintf(
                         ' (or %s)',
-                        implode(', ', array_map(
-                            static fn ($subType): string => \sprintf('<comment>%s</comment>', $subType),
-                            $subTypes,
-                        )),
+                        implode(
+                            ', ',
+                            array_map(
+                                static fn ($subType): string => \sprintf('<comment>%s</comment>', $subType),
+                                $subTypes,
+                            ),
+                        ),
                     );
 
                     foreach ($subTypes as $subType) {
@@ -374,14 +381,19 @@ final readonly class EntityGenerator
         $printSection($allTypes);
     }
 
-    private function askRelationDetails(ConsoleStyle $io, string $generatedEntityClass, string $type, string $newFieldName): EntityRelation
-    {
+    private function askRelationDetails(
+        ConsoleStyle $io,
+        string $generatedEntityClass,
+        string $type,
+        string $newFieldName,
+    ): EntityRelation {
         // ask the targetEntity
         $targetEntityClass = null;
-        while ($targetEntityClass === null) {
-            $question = $this->createEntityClassQuestion('What class should this entity be related to?');
 
-            $answeredEntityClass = $io->askQuestion($question);
+        while ($targetEntityClass === null) {
+            $answeredEntityClass = $io->askQuestion(
+                $this->createEntityClassQuestion('What class should this entity be related to?'),
+            );
 
             // find the correct class name - but give priority over looking
             // in the Entity namespace versus just checking the full class
@@ -389,13 +401,16 @@ final readonly class EntityGenerator
             // in PHP's core.
             if (class_exists($this->getEntityNamespace().'\\'.$answeredEntityClass)) {
                 $targetEntityClass = $this->getEntityNamespace().'\\'.$answeredEntityClass;
-            } elseif (class_exists($answeredEntityClass)) {
-                $targetEntityClass = $answeredEntityClass;
-            } else {
-                $io->error(\sprintf('Unknown class "%s"', $answeredEntityClass));
 
                 continue;
             }
+            if (class_exists($answeredEntityClass)) {
+                $targetEntityClass = $answeredEntityClass;
+
+                continue;
+            }
+
+            $io->error(\sprintf('Unknown class "%s"', $answeredEntityClass));
         }
 
         // help the user select the type
@@ -412,18 +427,22 @@ final readonly class EntityGenerator
                 // same make:entity run. property_exists() only knows about
                 // properties that *originally* existed on this class.
                 if (property_exists($targetClass, $name)) {
-                    throw new InvalidArgumentException(\sprintf('The "%s" class already has a "%s" property.', $targetClass, $name));
+                    throw new InvalidArgumentException(
+                        \sprintf('The "%s" class already has a "%s" property.', $targetClass, $name),
+                    );
                 }
 
                 return Validator::validateDoctrineFieldName($name, $this->doctrineHelper->getRegistry());
             },
         );
 
-        $askIsNullable = static fn (string $propertyName, string $targetClass): bool => $io->confirm(\sprintf(
-            'Is the <comment>%s</comment>.<comment>%s</comment> property allowed to be null (nullable)?',
-            Str::getShortClassName($targetClass),
-            $propertyName,
-        ));
+        $askIsNullable = static fn (string $propertyName, string $targetClass): bool => $io->confirm(
+            \sprintf(
+                'Is the <comment>%s</comment>.<comment>%s</comment> property allowed to be null (nullable)?',
+                Str::getShortClassName($targetClass),
+                $propertyName,
+            ),
+        );
 
         $askOrphanRemoval = static function (string $owningClass, string $inverseClass) use ($io): bool {
             $io->text([
@@ -447,7 +466,13 @@ final readonly class EntityGenerator
                 ),
             ]);
 
-            return $io->confirm(\sprintf('Do you want to automatically delete orphaned <comment>%s</comment> objects (orphanRemoval)?', $owningClass), false);
+            return $io->confirm(
+                \sprintf(
+                    'Do you want to automatically delete orphaned <comment>%s</comment> objects (orphanRemoval)?',
+                    $owningClass,
+                ),
+                false,
+            );
         };
 
         $askInverseSide = function (EntityRelation $relation) use ($io): void {
@@ -465,6 +490,7 @@ final readonly class EntityGenerator
                 // pluralize!
                 $getterMethodName = Str::singularCamelCaseToPluralCamelCase($getterMethodName);
             }
+
             $mapInverse = $io->confirm(
                 \sprintf(
                     'Do you want to add a new property to <comment>%s</comment> so that you can access/update <comment>%s</comment> objects from it - e.g. <comment>$%s->%s()</comment>?',
@@ -487,29 +513,39 @@ final readonly class EntityGenerator
                 );
                 $relation->setOwningProperty($newFieldName);
 
-                $relation->setIsNullable($askIsNullable(
-                    $relation->getOwningProperty(),
-                    $relation->getOwningClass(),
-                ));
+                $relation->setIsNullable(
+                    $askIsNullable(
+                        $relation->getOwningProperty(),
+                        $relation->getOwningClass(),
+                    ),
+                );
 
                 $askInverseSide($relation);
                 if ($relation->getMapInverseRelation()) {
-                    $io->comment(\sprintf(
-                        'A new property will also be added to the <comment>%s</comment> class so that you can access the related <comment>%s</comment> objects from it.',
-                        Str::getShortClassName($relation->getInverseClass()),
-                        Str::getShortClassName($relation->getOwningClass()),
-                    ));
-                    $relation->setInverseProperty($askFieldName(
-                        $relation->getInverseClass(),
-                        Str::singularCamelCaseToPluralCamelCase(Str::getShortClassName($relation->getOwningClass())),
-                    ));
+                    $io->comment(
+                        \sprintf(
+                            'A new property will also be added to the <comment>%s</comment> class so that you can access the related <comment>%s</comment> objects from it.',
+                            Str::getShortClassName($relation->getInverseClass()),
+                            Str::getShortClassName($relation->getOwningClass()),
+                        ),
+                    );
+                    $relation->setInverseProperty(
+                        $askFieldName(
+                            $relation->getInverseClass(),
+                            Str::singularCamelCaseToPluralCamelCase(
+                                Str::getShortClassName($relation->getOwningClass()),
+                            ),
+                        ),
+                    );
 
                     // orphan removal only applies if the inverse relation is set
                     if (!$relation->isNullable()) {
-                        $relation->setOrphanRemoval($askOrphanRemoval(
-                            $relation->getOwningClass(),
-                            $relation->getInverseClass(),
-                        ));
+                        $relation->setOrphanRemoval(
+                            $askOrphanRemoval(
+                                $relation->getOwningClass(),
+                                $relation->getInverseClass(),
+                            ),
+                        );
                     }
                 }
 
@@ -524,26 +560,34 @@ final readonly class EntityGenerator
                 );
                 $relation->setInverseProperty($newFieldName);
 
-                $io->comment(\sprintf(
-                    'A new property will also be added to the <comment>%s</comment> class so that you can access and set the related <comment>%s</comment> object from it.',
-                    Str::getShortClassName($relation->getOwningClass()),
-                    Str::getShortClassName($relation->getInverseClass()),
-                ));
-                $relation->setOwningProperty($askFieldName(
-                    $relation->getOwningClass(),
-                    Str::asLowerCamelCase(Str::getShortClassName($relation->getInverseClass())),
-                ));
+                $io->comment(
+                    \sprintf(
+                        'A new property will also be added to the <comment>%s</comment> class so that you can access and set the related <comment>%s</comment> object from it.',
+                        Str::getShortClassName($relation->getOwningClass()),
+                        Str::getShortClassName($relation->getInverseClass()),
+                    ),
+                );
+                $relation->setOwningProperty(
+                    $askFieldName(
+                        $relation->getOwningClass(),
+                        Str::asLowerCamelCase(Str::getShortClassName($relation->getInverseClass())),
+                    ),
+                );
 
-                $relation->setIsNullable($askIsNullable(
-                    $relation->getOwningProperty(),
-                    $relation->getOwningClass(),
-                ));
+                $relation->setIsNullable(
+                    $askIsNullable(
+                        $relation->getOwningProperty(),
+                        $relation->getOwningClass(),
+                    ),
+                );
 
                 if (!$relation->isNullable()) {
-                    $relation->setOrphanRemoval($askOrphanRemoval(
-                        $relation->getOwningClass(),
-                        $relation->getInverseClass(),
-                    ));
+                    $relation->setOrphanRemoval(
+                        $askOrphanRemoval(
+                            $relation->getOwningClass(),
+                            $relation->getInverseClass(),
+                        ),
+                    );
                 }
 
                 break;
@@ -558,15 +602,21 @@ final readonly class EntityGenerator
 
                 $askInverseSide($relation);
                 if ($relation->getMapInverseRelation()) {
-                    $io->comment(\sprintf(
-                        'A new property will also be added to the <comment>%s</comment> class so that you can access the related <comment>%s</comment> objects from it.',
-                        Str::getShortClassName($relation->getInverseClass()),
-                        Str::getShortClassName($relation->getOwningClass()),
-                    ));
-                    $relation->setInverseProperty($askFieldName(
-                        $relation->getInverseClass(),
-                        Str::singularCamelCaseToPluralCamelCase(Str::getShortClassName($relation->getOwningClass())),
-                    ));
+                    $io->comment(
+                        \sprintf(
+                            'A new property will also be added to the <comment>%s</comment> class so that you can access the related <comment>%s</comment> objects from it.',
+                            Str::getShortClassName($relation->getInverseClass()),
+                            Str::getShortClassName($relation->getOwningClass()),
+                        ),
+                    );
+                    $relation->setInverseProperty(
+                        $askFieldName(
+                            $relation->getInverseClass(),
+                            Str::singularCamelCaseToPluralCamelCase(
+                                Str::getShortClassName($relation->getOwningClass()),
+                            ),
+                        ),
+                    );
                 }
 
                 break;
@@ -577,24 +627,33 @@ final readonly class EntityGenerator
                     $generatedEntityClass,
                     $targetEntityClass,
                 );
+
                 $relation->setOwningProperty($newFieldName);
 
-                $relation->setIsNullable($askIsNullable(
-                    $relation->getOwningProperty(),
-                    $relation->getOwningClass(),
-                ));
+                $relation->setIsNullable(
+                    $askIsNullable(
+                        $relation->getOwningProperty(),
+                        $relation->getOwningClass(),
+                    ),
+                );
 
                 $askInverseSide($relation);
+
                 if ($relation->getMapInverseRelation()) {
-                    $io->comment(\sprintf(
-                        'A new property will also be added to the <comment>%s</comment> class so that you can access the related <comment>%s</comment> object from it.',
-                        Str::getShortClassName($relation->getInverseClass()),
-                        Str::getShortClassName($relation->getOwningClass()),
-                    ));
-                    $relation->setInverseProperty($askFieldName(
-                        $relation->getInverseClass(),
-                        Str::asLowerCamelCase(Str::getShortClassName($relation->getOwningClass())),
-                    ));
+                    $io->comment(
+                        \sprintf(
+                            'A new property will also be added to the <comment>%s</comment> class so that you can access the related <comment>%s</comment> object from it.',
+                            Str::getShortClassName($relation->getInverseClass()),
+                            Str::getShortClassName($relation->getOwningClass()),
+                        ),
+                    );
+
+                    $relation->setInverseProperty(
+                        $askFieldName(
+                            $relation->getInverseClass(),
+                            Str::asLowerCamelCase(Str::getShortClassName($relation->getOwningClass())),
+                        ),
+                    );
                 }
 
                 break;
@@ -612,25 +671,53 @@ final readonly class EntityGenerator
 
         $originalEntityShort = Str::getShortClassName($entityClass);
         $targetEntityShort = Str::getShortClassName($targetEntityClass);
+
         $rows = [];
         $rows[] = [
             EntityRelation::MANY_TO_ONE,
-            \sprintf("Each <comment>%s</comment> relates to (has) <info>one</info> <comment>%s</comment>.\nEach <comment>%s</comment> can relate to (can have) <info>many</info> <comment>%s</comment> objects.", $originalEntityShort, $targetEntityShort, $targetEntityShort, $originalEntityShort),
+            \sprintf(
+                "Each <comment>%s</comment> relates to (has) <info>one</info> <comment>%s</comment>.\nEach <comment>%s</comment> can relate to (can have) <info>many</info> <comment>%s</comment> objects.",
+                $originalEntityShort,
+                $targetEntityShort,
+                $targetEntityShort,
+                $originalEntityShort,
+            ),
         ];
+
         $rows[] = ['', ''];
         $rows[] = [
             EntityRelation::ONE_TO_MANY,
-            \sprintf("Each <comment>%s</comment> can relate to (can have) <info>many</info> <comment>%s</comment> objects.\nEach <comment>%s</comment> relates to (has) <info>one</info> <comment>%s</comment>.", $originalEntityShort, $targetEntityShort, $targetEntityShort, $originalEntityShort),
+            \sprintf(
+                "Each <comment>%s</comment> can relate to (can have) <info>many</info> <comment>%s</comment> objects.\nEach <comment>%s</comment> relates to (has) <info>one</info> <comment>%s</comment>.",
+                $originalEntityShort,
+                $targetEntityShort,
+                $targetEntityShort,
+                $originalEntityShort,
+            ),
         ];
+
         $rows[] = ['', ''];
         $rows[] = [
             EntityRelation::MANY_TO_MANY,
-            \sprintf("Each <comment>%s</comment> can relate to (can have) <info>many</info> <comment>%s</comment> objects.\nEach <comment>%s</comment> can also relate to (can also have) <info>many</info> <comment>%s</comment> objects.", $originalEntityShort, $targetEntityShort, $targetEntityShort, $originalEntityShort),
+            \sprintf(
+                "Each <comment>%s</comment> can relate to (can have) <info>many</info> <comment>%s</comment> objects.\nEach <comment>%s</comment> can also relate to (can also have) <info>many</info> <comment>%s</comment> objects.",
+                $originalEntityShort,
+                $targetEntityShort,
+                $targetEntityShort,
+                $originalEntityShort,
+            ),
         ];
+
         $rows[] = ['', ''];
         $rows[] = [
             EntityRelation::ONE_TO_ONE,
-            \sprintf("Each <comment>%s</comment> relates to (has) exactly <info>one</info> <comment>%s</comment>.\nEach <comment>%s</comment> also relates to (has) exactly <info>one</info> <comment>%s</comment>.", $originalEntityShort, $targetEntityShort, $targetEntityShort, $originalEntityShort),
+            \sprintf(
+                "Each <comment>%s</comment> relates to (has) exactly <info>one</info> <comment>%s</comment>.\nEach <comment>%s</comment> also relates to (has) exactly <info>one</info> <comment>%s</comment>.",
+                $originalEntityShort,
+                $targetEntityShort,
+                $targetEntityShort,
+                $originalEntityShort,
+            ),
         ];
 
         $io->table([
@@ -638,14 +725,19 @@ final readonly class EntityGenerator
             'Description',
         ], $rows);
 
-        $question = new Question(\sprintf(
-            'Relation type? [%s]',
-            implode(', ', EntityRelation::getValidRelationTypes()),
-        ));
+        $question = new Question(
+            \sprintf(
+                'Relation type? [%s]',
+                implode(', ', EntityRelation::getValidRelationTypes()),
+            ),
+        );
+
         $question->setAutocompleterValues(EntityRelation::getValidRelationTypes());
         $question->setValidator(static function ($type) {
             if (!\in_array($type, EntityRelation::getValidRelationTypes(), true)) {
-                throw new InvalidArgumentException(\sprintf('Invalid type: use one of: %s', implode(', ', EntityRelation::getValidRelationTypes())));
+                throw new InvalidArgumentException(
+                    \sprintf('Invalid type: use one of: %s', implode(', ', EntityRelation::getValidRelationTypes())),
+                );
             }
 
             return $type;
@@ -654,11 +746,10 @@ final readonly class EntityGenerator
         return $io->askQuestion($question);
     }
 
-    private function createClassManipulator(string $path, ConsoleStyle $io, bool $overwrite): ClassSourceManipulator
+    private function createClassManipulator(string $path, ConsoleStyle $io): ClassSourceManipulator
     {
         $manipulator = new ClassSourceManipulator(
             sourceCode: $this->fileManager->getFileContents($path),
-            overwrite: $overwrite,
         );
 
         $manipulator->setIo($io);

@@ -11,9 +11,8 @@
         errorBaseline="psalm-baseline.xml"
 >
     <projectFiles>
-        <directory name="../src" />
-        <directory name="../src-dev/Tests" />
         <directory name="./" />
+        <directory name="../src" />
         <ignoreFiles>
             <directory name="../vendor" />
             <directory name="../var/cache" />
