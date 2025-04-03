@@ -18,6 +18,7 @@ use Dev\Maker\ClassGenerator;
 use Dev\Maker\Entity\EntityFieldsManipulator;
 use InvalidArgumentException;
 use Override;
+use Symfony\Bundle\MakerBundle\Doctrine\EntityRelation;
 use Symfony\Bundle\MakerBundle\Str;
 use Symfony\Bundle\MakerBundle\Util\ClassNameDetails;
 use Symfony\Bundle\MakerBundle\Util\ClassSource\Model\ClassProperty;
@@ -50,7 +51,7 @@ final class GenerateAction
     private string $repoClassName;
 
     /**
-     * @var list<ClassProperty>
+     * @var list<ClassProperty|EntityRelation>
      */
     private array $fields;
 
@@ -61,7 +62,7 @@ final class GenerateAction
     ) {}
 
     /**
-     * @param list<ClassProperty> $fields
+     * @param list<ClassProperty|EntityRelation> $fields
      */
     public function __invoke(
         string $moduleName,
@@ -273,6 +274,7 @@ final class GenerateAction
                 'use_statements' => $useStatements,
                 'entity_classname' => $shortEntityClass,
                 'entity_title' => $this->entityTitle,
+                'fields' => $this->fields,
                 'repository_classname' => $this->repoClassName,
                 'route_path' => $route,
                 'method' => 'methods: [Request::METHOD_POST]',
@@ -336,6 +338,7 @@ final class GenerateAction
                 'use_statements' => $useStatements,
                 'entity_classname' => $shortEntityClass,
                 'entity_title' => $this->entityTitle,
+                'fields' => $this->fields,
                 'route_path' => $route,
                 'method' => 'methods: [Request::METHOD_PUT]',
                 'role' => 'UserRole::Admin',

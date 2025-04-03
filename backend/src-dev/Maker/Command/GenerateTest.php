@@ -11,6 +11,7 @@ use Dev\Tests\Functional\SDK\User;
 use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
+use Symfony\Bundle\MakerBundle\Doctrine\EntityRelation;
 use Symfony\Bundle\MakerBundle\Util\ClassNameDetails;
 use Symfony\Bundle\MakerBundle\Util\ClassSource\Model\ClassProperty;
 use Symfony\Bundle\MakerBundle\Util\UseStatementGenerator;
@@ -41,7 +42,7 @@ final readonly class GenerateTest
     private string $entityTitle;
 
     /**
-     * @var list<ClassProperty>
+     * @var list<ClassProperty|EntityRelation>
      */
     private array $fields;
 
@@ -54,7 +55,7 @@ final readonly class GenerateTest
     /**
      * @param non-empty-string $moduleName
      * @param non-empty-string $entityTitle
-     * @param list<ClassProperty> $fields
+     * @param list<ClassProperty|EntityRelation> $fields
      */
     public function __invoke(
         string $moduleName,

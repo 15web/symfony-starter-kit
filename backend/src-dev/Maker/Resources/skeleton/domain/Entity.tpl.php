@@ -33,13 +33,18 @@ class <?php echo $class_name.PHP_EOL; ?>
 
     public function __construct(
         Uuid $id,
-        // todo entity fields
+#CONSTRUCTOR_ARGUMENTS#
     ) {
         $this->id = $id;
-
-        // todo set entity fields
-
+#CONSTRUCTOR_BINDINGS#
         $this->createdAt = new DateTimeImmutable();
         $this->updatedAt = null;
+    }
+
+    public function update(
+#CONSTRUCTOR_ARGUMENTS#
+    ): void {
+#CONSTRUCTOR_BINDINGS#
+        $this->updatedAt = new DateTimeImmutable();
     }
 }

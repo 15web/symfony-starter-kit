@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Dev\Maker\Entity;
 
 use DateTimeImmutable;
+use Symfony\Bundle\MakerBundle\Doctrine\EntityRelation;
 use Symfony\Bundle\MakerBundle\Util\ClassSource\Model\ClassProperty;
 
 /**
@@ -13,7 +14,7 @@ use Symfony\Bundle\MakerBundle\Util\ClassSource\Model\ClassProperty;
 final class EntityFieldsManipulator
 {
     /**
-     * @param list<ClassProperty> $fields
+     * @param list<ClassProperty|EntityRelation> $fields
      */
     public function getConstructorProperties(array $fields): string
     {
@@ -30,7 +31,7 @@ final class EntityFieldsManipulator
     }
 
     /**
-     * @param list<ClassProperty> $fields
+     * @param list<ClassProperty|EntityRelation> $fields
      */
     public function getMethodParametersSignature(array $fields): string
     {
@@ -46,7 +47,7 @@ final class EntityFieldsManipulator
     }
 
     /**
-     * @param list<ClassProperty> $fields
+     * @param list<ClassProperty|EntityRelation> $fields
      */
     public function getVariablesByFields(array $fields): string
     {
@@ -60,7 +61,7 @@ final class EntityFieldsManipulator
     }
 
     /**
-     * @param list<ClassProperty> $fields
+     * @param list<ClassProperty|EntityRelation> $fields
      */
     public function getValuesByFields(array $fields): string
     {
@@ -74,7 +75,7 @@ final class EntityFieldsManipulator
     }
 
     /**
-     * @param list<ClassProperty> $fields
+     * @param list<ClassProperty|EntityRelation> $fields
      *
      * @return array<string, float|int|string|null>
      */
