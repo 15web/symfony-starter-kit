@@ -36,7 +36,7 @@ final readonly class GenerateEntityFields
     ) {}
 
     /**
-     * @return list<ClassProperty>
+     * @return list<ClassProperty|EntityRelation>
      */
     public function __invoke(ClassNameDetails $entityClassDetails, ConsoleStyle $io): array
     {
@@ -162,6 +162,11 @@ final readonly class GenerateEntityFields
                     : $this->fileManager->dumpFile($path, $manipulatorOrMessage->getSourceCode());
             }
         }
+
+        $this->bindFieldsToEntity(
+            entityPath: $entityPath,
+            fields: $creatingFields,
+        );
 
         return $creatingFields;
     }
@@ -807,5 +812,33 @@ final readonly class GenerateEntityFields
     private function getTypesMap(): array
     {
         return Type::getTypesMap();
+    }
+
+    /**
+     * @param list<ClassProperty|EntityRelation> $fields
+     */
+    private function bindFieldsToEntity(string $entityPath, array $fields): void
+    {
+        $constructorArguments = [];
+        $constructorBindings = [];
+
+        foreach ($fields as $field) {
+            $constructorArguments[] = \sprintf(
+                '        %s%s $%s,',
+                $field->nullable ? '?' : '',
+                DoctrineHelper::getPropertyTypeForColumn($field->type),
+                $field->propertyName,
+            );
+
+            $constructorBindings[] = "        \$this->{$field->propertyName} = \${$field->propertyName};";
+        }
+
+        $content = str_replace(
+            ['#CONSTRUCTOR_ARGUMENTS#', '#CONSTRUCTOR_BINDINGS#'],
+            [implode(PHP_EOL, $constructorArguments), implode(PHP_EOL, $constructorBindings)],
+            $this->fileManager->getFileContents($entityPath),
+        );
+
+        $this->fileManager->dumpFile($entityPath, $content);
     }
 }
