@@ -17,7 +17,7 @@ final readonly class FindAllTasksByUserIdQuery
         public int $limit = 10,
         public int $offset = 0,
     ) {
-        Assert::positiveInteger($limit);
-        Assert::natural($offset);
+        Assert::positiveInteger($limit, 'limit: число должно быть больше нуля, указано %s');
+        Assert::natural($offset, 'offset: число не может быть отрицательным, указано %s');
     }
 }

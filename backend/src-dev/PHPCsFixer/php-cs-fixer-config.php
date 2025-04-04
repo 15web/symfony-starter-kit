@@ -14,6 +14,9 @@ $finder = (new Finder())
         __DIR__.'/../../src-dev',
         __DIR__.'/../../migrations',
     ])
+    ->exclude([
+        __DIR__.'/../Tests/Rector/*/Fixture/*',
+    ])
     ->append([
         __FILE__,
     ]);

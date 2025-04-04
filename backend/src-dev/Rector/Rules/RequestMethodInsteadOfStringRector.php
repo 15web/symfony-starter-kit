@@ -15,14 +15,14 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * Заменяет строки 'GET' 'POST' на соответствующую константу из класса Symfony Request
+ * Заменяет строки типа 'GET', 'POST' и др. на соответствующую константу из класса Symfony Request
  */
 final class RequestMethodInsteadOfStringRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Replaces the \'GET\' \'POST\' strings with the corresponding
+            'Replaces the \'GET\', \'POST\' etc. strings with the corresponding
         constant from the Symfony Request class',
             [new CodeSample(
                 <<<'CODE_SAMPLE'
@@ -45,14 +45,26 @@ final class RequestMethodInsteadOfStringRector extends AbstractRector
     #[Override]
     public function refactor(Node $node): ?Node
     {
-        /** @var String_ $node */
-        if (
-            $node->value === Request::METHOD_POST
-            || $node->value === Request::METHOD_GET
-        ) {
-            $constName = '\Symfony\Component\HttpFoundation\Request::METHOD_'.$node->value;
+        $methods = [
+            Request::METHOD_HEAD,
+            Request::METHOD_GET,
+            Request::METHOD_POST,
+            Request::METHOD_PUT,
+            Request::METHOD_PATCH,
+            Request::METHOD_DELETE,
+            Request::METHOD_PURGE,
+            Request::METHOD_OPTIONS,
+            Request::METHOD_TRACE,
+            Request::METHOD_CONNECT,
+        ];
 
-            return new ConstFetch(new Name($constName));
+        foreach ($methods as $method) {
+            /** @var String_ $node */
+            if ($node->value === $method) {
+                $constName = '\Symfony\Component\HttpFoundation\Request::METHOD_'.$node->value;
+
+                return new ConstFetch(new Name($constName));
+            }
         }
 
         return null;

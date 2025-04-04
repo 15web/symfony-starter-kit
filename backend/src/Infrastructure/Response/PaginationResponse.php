@@ -13,6 +13,6 @@ final readonly class PaginationResponse
 {
     public function __construct(public int $total)
     {
-        Assert::natural($total);
+        Assert::natural($total, 'total: число не может быть отрицательным, указано %s');
     }
 }

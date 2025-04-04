@@ -42,7 +42,7 @@ final readonly class ArticleArgumentValueResolver implements ValueResolverInterf
         }
 
         try {
-            Assert::uuid($id);
+            Assert::uuid($id, 'id: значение должно быть в формате Uuid');
 
             $article = $this->articleRepository->findById(Uuid::fromString($id));
 

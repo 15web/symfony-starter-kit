@@ -54,8 +54,8 @@ abstract class ApiWebTestCase extends WebTestCase
         bool $validateResponseSchema = true,
         bool $resetRateLimiter = true,
     ): Response {
-        Assert::notEmpty($method);
-        Assert::notEmpty($uri);
+        Assert::notEmpty($method, 'method: не может быть пустым');
+        Assert::notEmpty($uri, 'uri: не может быть пустым');
 
         $headers = [
             'HTTP_ACCEPT' => 'application/json',
