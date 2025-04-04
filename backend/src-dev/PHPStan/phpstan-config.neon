@@ -3,9 +3,8 @@ parameters:
     fileExtensions:
         - php
     paths:
-        - ../../src
-        - ../Tests
         - ../
+        - ../../src
     tmpDir: ../../var/cache/phpstan
     excludePaths:
         - ../../src/*/config.php
