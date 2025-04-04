@@ -6,6 +6,7 @@ namespace App\Infrastructure\Request;
 
 use App\Infrastructure\AsService;
 use CuyZ\Valinor\Mapper\MappingError;
+use CuyZ\Valinor\Mapper\Tree\Message\Formatter\TranslationMessageFormatter;
 use CuyZ\Valinor\Mapper\Tree\Message\Messages;
 
 /**
@@ -14,6 +15,14 @@ use CuyZ\Valinor\Mapper\Tree\Message\Messages;
 #[AsService]
 final readonly class BuildValidationError
 {
+    private TranslationMessageFormatter $messageFormatter;
+
+    public function __construct()
+    {
+        $this->messageFormatter = (new TranslationMessageFormatter())
+            ->withTranslations(ValidationErrorTranslation::TRANSLATIONS);
+    }
+
     /**
      * @return non-empty-list<non-empty-string>
      */
@@ -24,15 +33,20 @@ final readonly class BuildValidationError
         );
 
         $allMessages = [];
-        foreach ($messages->errors() as $message) {
-            $allMessages[] = $message
-                ->withBody('{node_path}: {original_message}')
+
+        foreach ($messages->errors() as $node) {
+            $message = $this->messageFormatter
+                ->format($node)
                 ->toString();
+
+            if (!$node->node()->isRoot()) {
+                $message = \sprintf('%s: %s', $node->node()->path(), $message);
+            }
+
+            $allMessages[] = $message;
         }
 
-        /**
-         * @var non-empty-list<non-empty-string> $allMessages
-         */
+        /** @var non-empty-list<non-empty-string> $allMessages */
         return $allMessages;
     }
 }

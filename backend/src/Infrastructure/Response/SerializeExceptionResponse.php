@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Response;
 
+use App\Infrastructure\ApiException\ApiBadRequestException;
 use App\Infrastructure\ApiException\ApiErrorResponse;
 use App\Infrastructure\ApiException\ApiException;
 use App\Infrastructure\ApiException\ApiHeaders;
@@ -16,6 +17,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use Webmozart\Assert\InvalidArgumentException;
 
 /**
  * Формирование ответа при ошибках
@@ -35,6 +37,16 @@ final readonly class SerializeExceptionResponse
     public function __invoke(ExceptionEvent $event): void
     {
         $exception = $event->getThrowable();
+
+        if ($exception instanceof InvalidArgumentException) {
+            /** @var non-empty-string $message */
+            $message = $exception->getMessage();
+
+            $exception = new ApiBadRequestException(
+                errors: [$message],
+                previous: $exception,
+            );
+        }
 
         if ($exception instanceof HttpExceptionInterface) {
             $exception = new ApiSystemException(
