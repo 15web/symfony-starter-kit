@@ -193,24 +193,16 @@ components:
               data:
                 type: array
                 items:
-                  properties:
-                    title:
-                      type: string
-                      description: Заголовок
-                    alias:
-                      type: string
-                      description: Алиас
-                    body:
-                      type: string
-                      description: Контент
-                      nullable: true
+                  $ref: '#/components/schemas/adminArticleListItem'
                 example:
-                  - title: Первая статья
+                  - id: 0196a05e-f2bc-7ee0-b394-642978a036ec
+                    title: Первая статья
                     alias: first-article
-                    body: Контент первой статьи
-                  - title: Вторая статья
+                    createdAt: 2025-05-05T15:15:12+00:00
+                  - id: 0196a05e-da4a-7209-821a-d860ec58f714
+                    title: Вторая статья
                     alias: second-article
-                    body: Контент второй статьи
+                    createdAt: 2025-05-04T15:15:12+00:00
       headers:
         X-Request-TraceId:
           $ref: '../common.yaml#/components/headers/requestTraceId'
@@ -256,8 +248,10 @@ components:
           required:
             - id
             - title
+            - body
             - alias
             - createdAt
+            - updatedAt
           properties:
             id:
               type: string
@@ -279,6 +273,25 @@ components:
               $ref: '../common.yaml#/components/schemas/updatedAt'
         status:
           $ref: '../common.yaml#/components/schemas/succeedStatus'
+    adminArticleListItem:
+      type: object
+      required:
+        - id
+        - title
+        - alias
+        - createdAt
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: ID
+          example: dc8dbada-b154-4ffb-b21c-da70162e2704
+        title:
+          $ref: '#/components/schemas/adminArticleTitle'
+        alias:
+          $ref: '#/components/schemas/adminArticleAlias'
+        createdAt:
+          $ref: '../common.yaml#/components/schemas/createdAt'
     adminArticleTitle:
       type: string
       description: Заголовок

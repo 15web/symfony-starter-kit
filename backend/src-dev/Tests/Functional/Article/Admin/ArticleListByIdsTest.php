@@ -55,9 +55,7 @@ final class ArticleListByIdsTest extends ApiWebTestCase
          *          id: string,
          *          title: string,
          *          alias: string,
-         *          body: string,
-         *          createdAt: string|null,
-         *          updatedAt: string|null
+         *          createdAt: string|null
          *     }>,
          *     pagination: array{total: int},
          * } $articles
@@ -69,16 +67,12 @@ final class ArticleListByIdsTest extends ApiWebTestCase
         self::assertSame($articleId2, $articles['data'][0]['id']);
         self::assertSame($title2, $articles['data'][0]['title']);
         self::assertSame($alias2, $articles['data'][0]['alias']);
-        self::assertSame($content2, $articles['data'][0]['body']);
         self::assertNotEmpty($articles['data'][0]['createdAt']);
-        self::assertNull($articles['data'][0]['updatedAt']);
 
         self::assertSame($articleId1, $articles['data'][1]['id']);
         self::assertSame($title1, $articles['data'][1]['title']);
         self::assertSame($alias1, $articles['data'][1]['alias']);
-        self::assertSame($content1, $articles['data'][1]['body']);
         self::assertNotEmpty($articles['data'][1]['createdAt']);
-        self::assertNull($articles['data'][1]['updatedAt']);
 
         self::assertSame(2, $articles['pagination']['total']);
     }
@@ -115,9 +109,7 @@ final class ArticleListByIdsTest extends ApiWebTestCase
          *          id: string,
          *          title: string,
          *          alias: string,
-         *          body: string,
-         *          createdAt: string|null,
-         *          updatedAt: string|null
+         *          createdAt: string|null
          *     }>,
          *     pagination: array{total: int},
          * } $articles
@@ -129,9 +121,7 @@ final class ArticleListByIdsTest extends ApiWebTestCase
         self::assertSame($articleId, $articles['data'][0]['id']);
         self::assertSame($title, $articles['data'][0]['title']);
         self::assertSame($alias, $articles['data'][0]['alias']);
-        self::assertSame($content, $articles['data'][0]['body']);
         self::assertNotEmpty($articles['data'][0]['createdAt']);
-        self::assertNull($articles['data'][0]['updatedAt']);
 
         self::assertSame(1, $articles['pagination']['total']);
     }

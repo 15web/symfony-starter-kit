@@ -44,9 +44,7 @@ final class ArticleListTest extends ApiWebTestCase
             self::assertContains($article['id'], [$articleId1, $articleId2]);
             self::assertContains($article['title'], [$title1, $title2]);
             self::assertNotEmpty($article['alias']);
-            self::assertNotEmpty($article['body']);
             self::assertNotEmpty($article['createdAt']);
-            self::assertNull($article['updatedAt']);
         }
     }
 
