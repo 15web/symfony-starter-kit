@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\User\SignUp\Command;
 
-use App\Infrastructure\AsService;
 use App\Mailer\Notification\EmailConfirmation\ConfirmEmailMessage;
 use App\User\User\Domain\ConfirmToken;
 use App\User\User\Domain\Exception\UserAlreadyExistException;
@@ -23,7 +22,6 @@ use Symfony\Component\Uid\UuidV7;
 /**
  * Хендлер регистрации
  */
-#[AsService]
 final readonly class SignUp
 {
     /**

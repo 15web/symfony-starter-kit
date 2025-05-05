@@ -10,12 +10,9 @@ use Rector\CodeQuality\Rector\Class_\InlineConstructorDefaultToPropertyRector;
 use Rector\CodeQuality\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector;
 use Rector\Config\RectorConfig;
 use Rector\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector;
-use Rector\Doctrine\Set\DoctrineSetList;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\PreferPHPUnitSelfCallRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\PreferPHPUnitThisCallRector;
-use Rector\PHPUnit\Set\PHPUnitSetList;
-use Rector\Symfony\Set\SymfonySetList;
 use Rector\TypeDeclaration\Rector\FunctionLike\AddParamTypeSplFixedArrayRector;
 
 return RectorConfig::configure()
@@ -27,10 +24,11 @@ return RectorConfig::configure()
         __DIR__.'/../../src-dev/Tests',
     ])
     ->withParallel()
-    ->withPhpSets(php83: true)
     ->withImportNames(importShortClasses: false)
-    ->withTypeCoverageLevel(100)
+    ->withPhpSets()
+    ->withAttributesSets()
     ->withComposerBased(
+        twig: true,
         doctrine: true,
         phpunit: true,
         symfony: true,
@@ -38,6 +36,7 @@ return RectorConfig::configure()
     ->withPreparedSets(
         deadCode: true,
         codeQuality: true,
+        typeDeclarations: true,
         privatization: true,
         instanceOf: true,
         earlyReturn: true,
@@ -47,12 +46,6 @@ return RectorConfig::configure()
         doctrineCodeQuality: true,
         symfonyCodeQuality: true,
     )
-    ->withSets([
-        SymfonySetList::SYMFONY_72,
-        DoctrineSetList::ANNOTATIONS_TO_ATTRIBUTES,
-        DoctrineSetList::DOCTRINE_DBAL_40,
-        PHPUnitSetList::PHPUNIT_110,
-    ])
     ->withRules([
         RequestMethodInsteadOfStringRector::class,
         OneFlushInClassRector::class,

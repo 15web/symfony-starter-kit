@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Mailer\Notification\PasswordRecovery;
 
-use App\Infrastructure\AsService;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
@@ -12,7 +11,6 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 /**
  * Отправляет токен для восстановления пароля
  */
-#[AsService]
 #[AsMessageHandler]
 final readonly class SendPasswordRecoveryToken
 {

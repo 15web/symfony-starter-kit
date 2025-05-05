@@ -18,7 +18,7 @@ namespace <?php echo $namespace; ?>;
 /**
  * Репозиторий <?php echo $entity_class_name; ?> todo комментарий
  */
-#[AsService]
+
 final readonly class <?php echo $class_name.PHP_EOL; ?>
 {
     public function __construct(

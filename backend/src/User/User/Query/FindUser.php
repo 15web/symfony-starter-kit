@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\User\User\Query;
 
-use App\Infrastructure\AsService;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
@@ -12,7 +11,6 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 /**
  * Возвращает данные пользоватля по его id или email
  */
-#[AsService]
 final readonly class FindUser
 {
     public function __construct(

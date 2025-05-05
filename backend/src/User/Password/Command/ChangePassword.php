@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\User\Password\Command;
 
-use App\Infrastructure\AsService;
 use App\User\User\Domain\Exception\UserNotFoundException;
 use App\User\User\Domain\UserPassword;
 use App\User\User\Domain\UserRepository;
@@ -13,7 +12,6 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 /**
  * Команда смены текущего пароля
  */
-#[AsService]
 final readonly class ChangePassword
 {
     public function __construct(

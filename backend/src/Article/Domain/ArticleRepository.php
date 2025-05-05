@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Article\Domain;
 
-use App\Infrastructure\AsService;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Uid\Uuid;
@@ -12,7 +11,6 @@ use Symfony\Component\Uid\Uuid;
 /**
  * Репозиторий статей
  */
-#[AsService]
 final readonly class ArticleRepository
 {
     public function __construct(private EntityManagerInterface $entityManager) {}

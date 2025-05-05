@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Dev\Maker\Vendor;
 
-use App\Infrastructure\AsService;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\MakerBundle\Doctrine\DoctrineHelper;
@@ -86,7 +85,6 @@ final readonly class EntityClassGeneratorForModule
         $entityAlias = strtolower($shortEntityClass[0]);
 
         $useStatements = new UseStatementGenerator([
-            AsService::class,
             EntityManagerInterface::class,
             Uuid::class,
         ]);

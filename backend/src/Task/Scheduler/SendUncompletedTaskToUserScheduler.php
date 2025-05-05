@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Task\Scheduler;
 
-use App\Infrastructure\AsService;
 use App\Mailer\Notification\UncompletedTasks\TaskData;
 use App\Mailer\Notification\UncompletedTasks\UncompletedTasksMessage;
 use App\Task\Query\Task\FindUncompletedTasksByUserId\FindUncompletedTasksByUserId;
@@ -19,7 +18,6 @@ use Symfony\Component\Scheduler\Attribute\AsCronTask;
  * Шедулер отправки пользователю списка невыполненных задач
  */
 #[AsCronTask('15 21 */1 * *')]
-#[AsService]
 final readonly class SendUncompletedTaskToUserScheduler
 {
     public function __construct(

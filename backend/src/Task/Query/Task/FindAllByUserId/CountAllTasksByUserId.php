@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace App\Task\Query\Task\FindAllByUserId;
 
-use App\Infrastructure\AsService;
 use Doctrine\DBAL\Connection;
 
 /**
  * Возвращает кол-во всех записей
  */
-#[AsService]
 final readonly class CountAllTasksByUserId
 {
     public function __construct(

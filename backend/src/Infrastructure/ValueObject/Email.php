@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace App\Infrastructure\ValueObject;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\DependencyInjection\Attribute\Exclude;
 use Webmozart\Assert\Assert;
 
 /**
  * Email
  */
+#[Exclude]
 #[ORM\Embeddable]
 final readonly class Email
 {

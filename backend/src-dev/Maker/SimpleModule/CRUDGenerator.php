@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Dev\Maker\SimpleModule;
 
 use App\Infrastructure\ApiException\ApiNotFoundException;
-use App\Infrastructure\AsService;
 use App\Infrastructure\Flush;
 use App\Infrastructure\Request\ApiRequestValueResolver;
 use App\Infrastructure\Response\ApiListObjectResponse;
@@ -38,7 +37,6 @@ use Webmozart\Assert\Assert;
 /**
  * Создает HTTP слой для модуля
  */
-#[AsService]
 final readonly class CRUDGenerator
 {
     public function __construct(
@@ -83,7 +81,6 @@ final readonly class CRUDGenerator
         $useStatements = new UseStatementGenerator([
             $entityClass->getFullName(),
             $entityClass->getFullName().'Repository',
-            AsService::class,
             Assert::class,
             ApiNotFoundException::class,
             ArgumentMetadata::class,

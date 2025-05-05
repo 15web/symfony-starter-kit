@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace App\Task\Query\Task\FindUncompletedTasksByUserId;
 
-use App\Infrastructure\AsService;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Хендлер нахождения незавершенных задач по пользователю
  */
-#[AsService]
 final readonly class FindUncompletedTasksByUserId
 {
     public function __construct(private EntityManagerInterface $entityManager) {}

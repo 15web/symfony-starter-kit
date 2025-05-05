@@ -11,6 +11,7 @@ parameters:
         - ../../src/*/config.php
         - ../Rector/rector.config.php
         - ../Maker
+        - ../PHPCsFixer
     parallel:
         maximumNumberOfProcesses: 8
     checkUninitializedProperties: true

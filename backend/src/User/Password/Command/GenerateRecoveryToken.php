@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\User\Password\Command;
 
-use App\Infrastructure\AsService;
 use App\Mailer\Notification\PasswordRecovery\RecoveryPasswordMessage;
 use App\User\Password\Domain\RecoveryToken;
 use App\User\Password\Domain\RecoveryTokenRepository;
@@ -18,7 +17,6 @@ use Symfony\Component\Uid\UuidV7;
 /**
  * Создает токен восстановления пароля
  */
-#[AsService]
 final readonly class GenerateRecoveryToken
 {
     public function __construct(

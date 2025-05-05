@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Logger\Http;
 
-use App\Infrastructure\AsService;
 use Monolog\Attribute\AsMonologProcessor;
 use Monolog\LogRecord;
 use Monolog\Processor\ProcessorInterface;
@@ -14,7 +13,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 /**
  * Запись идентификатора запроса во все записи журнала
  */
-#[AsService]
 #[AsMonologProcessor]
 final readonly class RequestIdLoggerProcessor implements ProcessorInterface
 {

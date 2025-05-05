@@ -19,7 +19,7 @@ namespace <?php echo $namespace; ?>;
 /**
  * Резолвер для сущности <?php echo $entity_title.PHP_EOL; ?>
  */
-#[AsService]
+
 final readonly class <?php echo $class_name; ?> implements ValueResolverInterface
 {
     public function __construct(

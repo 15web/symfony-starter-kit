@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\User\Security\Service;
 
-use App\Infrastructure\AsService;
 use App\User\User\Domain\AuthToken;
 use App\User\User\Domain\UserToken;
 use App\User\User\Domain\UserTokenRepository;
@@ -15,7 +14,6 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * Хранилище токена пользователя, используется совместно с атрибутом IsGranted.
  */
-#[AsService]
 final readonly class TokenManager
 {
     public const string TOKEN_NAME = 'X-AUTH-TOKEN';

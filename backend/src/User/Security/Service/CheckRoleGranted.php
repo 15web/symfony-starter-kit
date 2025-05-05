@@ -6,7 +6,6 @@ namespace App\User\Security\Service;
 
 use App\Infrastructure\ApiException\ApiAccessForbiddenException;
 use App\Infrastructure\ApiException\ApiUnauthorizedException;
-use App\Infrastructure\AsService;
 use App\User\User\Domain\UserRole;
 use App\User\User\Query\FindUser;
 use App\User\User\Query\FindUserQuery;
@@ -16,7 +15,6 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * Сервис для проверки наличия роли у пользователя
  */
-#[AsService]
 final readonly class CheckRoleGranted
 {
     public function __construct(

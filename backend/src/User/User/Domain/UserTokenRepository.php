@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace App\User\User\Domain;
 
-use App\Infrastructure\AsService;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Репозиторий токенов пользователя
  */
-#[AsService]
 final readonly class UserTokenRepository
 {
     public function __construct(private EntityManagerInterface $entityManager) {}

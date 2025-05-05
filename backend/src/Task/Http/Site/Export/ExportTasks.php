@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Task\Http\Site\Export;
 
-use App\Infrastructure\AsService;
 use App\Task\Query\Task\FindAllByUserId\FindAllTasksByUserId;
 use App\Task\Query\Task\FindAllByUserId\FindAllTasksByUserIdQuery;
 use App\User\User\Domain\UserId;
@@ -15,7 +14,6 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 /**
  * Экспорт задач пользователя в заданном формате
  */
-#[AsService]
 final class ExportTasks
 {
     /**

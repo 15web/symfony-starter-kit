@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace App\Task\Domain;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\DependencyInjection\Attribute\Exclude;
 
 /**
  * Наименование задачи
  */
+#[Exclude]
 #[ORM\Embeddable]
 final readonly class TaskName
 {

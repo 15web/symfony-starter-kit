@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\User\SignIn\Command;
 
-use App\Infrastructure\AsService;
 use App\Infrastructure\ValueObject\Email;
 use App\Mailer\Notification\EmailConfirmation\ConfirmEmailMessage;
 use App\User\User\Domain\Exception\EmailIsNotConfirmedException;
@@ -20,7 +19,6 @@ use Symfony\Component\Messenger\MessageBusInterface;
 /**
  * Хендлер логина
  */
-#[AsService]
 final readonly class SignIn
 {
     /**

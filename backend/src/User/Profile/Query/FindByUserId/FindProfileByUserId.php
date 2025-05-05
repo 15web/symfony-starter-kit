@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace App\User\Profile\Query\FindByUserId;
 
-use App\Infrastructure\AsService;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Хендлер нахождения профиля по пользователю
  */
-#[AsService]
 final readonly class FindProfileByUserId
 {
     public function __construct(private EntityManagerInterface $entityManager) {}

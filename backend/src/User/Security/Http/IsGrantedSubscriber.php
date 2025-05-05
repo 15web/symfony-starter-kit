@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\User\Security\Http;
 
-use App\Infrastructure\AsService;
 use App\User\Security\Service\CheckRoleGranted;
 use Override;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -14,7 +13,6 @@ use Symfony\Component\HttpKernel\KernelEvents;
 /**
  * Аутентификация и авторизация пользователя по токену для контроллеров с атрибутом IsGranted.
  */
-#[AsService]
 final readonly class IsGrantedSubscriber implements EventSubscriberInterface
 {
     public function __construct(

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\User\Password\Command;
 
-use App\Infrastructure\AsService;
 use App\User\Password\Domain\RecoveryToken;
 use App\User\User\Domain\Exception\UserNotFoundException;
 use App\User\User\Domain\UserPassword;
@@ -14,7 +13,6 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 /**
  * Восстанавливает пароль
  */
-#[AsService]
 final readonly class RecoverPassword
 {
     /**

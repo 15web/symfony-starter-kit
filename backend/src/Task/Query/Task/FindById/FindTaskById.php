@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace App\Task\Query\Task\FindById;
 
-use App\Infrastructure\AsService;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Хендлер нахождения задачи по айди
  */
-#[AsService]
 final readonly class FindTaskById
 {
     public function __construct(private EntityManagerInterface $entityManager) {}

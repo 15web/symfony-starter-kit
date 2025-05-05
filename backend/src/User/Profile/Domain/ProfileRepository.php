@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace App\User\Profile\Domain;
 
-use App\Infrastructure\AsService;
 use App\User\User\Domain\UserId;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Репозиторий профилей
  */
-#[AsService]
 final readonly class ProfileRepository
 {
     public function __construct(private EntityManagerInterface $entityManager) {}
