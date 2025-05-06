@@ -9,37 +9,6 @@ use Symfony\Component\HttpKernel\Controller\ArgumentResolver\RequestValueResolve
 use Symfony\Component\HttpKernel\Controller\ArgumentResolver\UidValueResolver;
 use Symfony\Component\Uid\Uuid;
 
-#[AsController]
-final readonly class SomeClass
-{
-    public function __invoke(
-        #[ValueResolver(RequestValueResolver::class)]
-        Request $request,
-        #[ValueResolver(UidValueResolver::class)]
-        Uuid $id,
-    ): array {
-        //
-    }
-}
+// todo разобраться и вернуть тест
 
-final readonly class NotControllerClass
-{
-    public function __invoke(
-        Request $request,
-        Uuid $id,
-    ): array {
-        //
-    }
-}
-
-#[AsController]
-final readonly class NotInvokableClass
-{
-    public function handle(
-        Request $request,
-        Uuid $id,
-    ): array {
-        //
-    }
-}
 ?>

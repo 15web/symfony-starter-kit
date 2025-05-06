@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Infrastructure\Request\Pagination;
 
 use App\Infrastructure\ApiException\ApiBadRequestException;
-use App\Infrastructure\AsService;
 use App\Infrastructure\Request\BuildValidationError;
 use CuyZ\Valinor\Mapper\MappingError;
 use CuyZ\Valinor\MapperBuilder;
@@ -17,7 +16,6 @@ use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 /**
  * Резолвер для запроса на пагинацию
  */
-#[AsService]
 final readonly class PaginationRequestArgumentResolver implements ValueResolverInterface
 {
     private const string QUERY_LIMIT_NAME = 'limit';

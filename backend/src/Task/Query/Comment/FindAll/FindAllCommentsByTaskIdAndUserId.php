@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace App\Task\Query\Comment\FindAll;
 
-use App\Infrastructure\AsService;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Хендлер нахождения комментариев задачи по пользователю
  */
-#[AsService]
 final readonly class FindAllCommentsByTaskIdAndUserId
 {
     public function __construct(private EntityManagerInterface $entityManager) {}

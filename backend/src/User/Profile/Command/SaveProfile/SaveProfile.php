@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace App\User\Profile\Command\SaveProfile;
 
-use App\Infrastructure\AsService;
 use App\User\Profile\Domain\ProfileRepository;
 use App\User\User\Domain\UserId;
 
 /**
  * Хендлер сохранения профиля
  */
-#[AsService]
 final readonly class SaveProfile
 {
     public function __construct(

@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace App\Setting\Domain;
 
-use App\Infrastructure\AsService;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Репозиторий Setting
  */
-#[AsService]
 final readonly class SettingsRepository
 {
     public function __construct(private EntityManagerInterface $entityManager) {}

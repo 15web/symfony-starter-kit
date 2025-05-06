@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\User\Security\Http;
 
 use App\Infrastructure\ApiException\ApiUnauthorizedException;
-use App\Infrastructure\AsService;
 use App\User\Security\Service\TokenException;
 use App\User\Security\Service\TokenManager;
 use App\User\User\Domain\UserId;
@@ -17,7 +16,6 @@ use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 /**
  * Резолвер для айди пользователя
  */
-#[AsService]
 final readonly class UserIdArgumentValueResolver implements ValueResolverInterface
 {
     public function __construct(

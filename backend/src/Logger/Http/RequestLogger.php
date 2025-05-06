@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Logger\Http;
 
-use App\Infrastructure\AsService;
 use App\User\Security\Http\IsGranted;
 use App\User\Security\Service\TokenException;
 use App\User\Security\Service\TokenManager;
@@ -28,7 +27,6 @@ use Symfony\Component\Routing\RouterInterface;
 /**
  * Логирование всех запросов и ответов
  */
-#[AsService]
 final class RequestLogger
 {
     /**

@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace App\User\Profile\Command\SaveProfile;
 
-use App\Infrastructure\AsService;
 use App\Infrastructure\ValueObject\Phone;
 use App\User\Profile\Domain\Profile;
 
 /**
  * Обновляет профиль
  */
-#[AsService]
 final class UpdateProfile
 {
     public function __invoke(

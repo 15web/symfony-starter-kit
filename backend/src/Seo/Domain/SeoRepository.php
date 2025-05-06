@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace App\Seo\Domain;
 
-use App\Infrastructure\AsService;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Репозиторий Seo
  */
-#[AsService]
 final readonly class SeoRepository
 {
     public function __construct(private EntityManagerInterface $entityManager) {}

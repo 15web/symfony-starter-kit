@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace App\User\User\Query;
 
-use App\Infrastructure\AsService;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Хендлер нахождения всех пользователей
  */
-#[AsService]
 final readonly class FindAllUsers
 {
     public function __construct(private EntityManagerInterface $entityManager) {}

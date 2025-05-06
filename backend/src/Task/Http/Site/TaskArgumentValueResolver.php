@@ -6,7 +6,6 @@ namespace App\Task\Http\Site;
 
 use App\Infrastructure\ApiException\ApiBadRequestException;
 use App\Infrastructure\ApiException\ApiNotFoundException;
-use App\Infrastructure\AsService;
 use App\Task\Domain\Task;
 use App\Task\Domain\TaskId;
 use App\Task\Domain\TaskRepository;
@@ -20,7 +19,6 @@ use Symfony\Component\Uid\Uuid;
 /**
  * Резолвер нахождения задачи по айди
  */
-#[AsService]
 final readonly class TaskArgumentValueResolver implements ValueResolverInterface
 {
     public function __construct(

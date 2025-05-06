@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Dev\OpenApi\EventListener;
 
-use App\Infrastructure\AsService;
 use League\OpenAPIValidation\PSR7\OperationAddress;
 use League\OpenAPIValidation\PSR7\RequestValidator;
 use League\OpenAPIValidation\PSR7\ResponseValidator;
@@ -21,7 +20,6 @@ use Symfony\Component\HttpKernel\Event\ResponseEvent;
 /**
  * Проверяет Request и Response на соответствие документации OpenApi
  */
-#[AsService]
 #[When('test')]
 final readonly class ValidateOpenApiSchema
 {

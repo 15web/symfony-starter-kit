@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Logger\Http;
 
-use App\Infrastructure\AsService;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpKernel\Event\KernelEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
@@ -14,7 +13,6 @@ use Symfony\Component\Uid\UuidV7;
 /**
  * Добавление идентификатора запроса в заголовки
  */
-#[AsService]
 final readonly class RequestIdListener
 {
     public const string TRACE_ID_HEADER = 'X-Request-TraceId';

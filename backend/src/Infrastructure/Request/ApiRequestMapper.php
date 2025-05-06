@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Request;
 
-use App\Infrastructure\AsService;
 use CuyZ\Valinor\Mapper\MappingError;
 use CuyZ\Valinor\Mapper\Source\Source;
 use CuyZ\Valinor\Mapper\Tree\Message\ErrorMessage;
@@ -25,7 +24,6 @@ use Webmozart\Assert\InvalidArgumentException as WebmozartInvalidArgumentExcepti
  *  - Переопределяет настройки фильтрации исключений,
  *      установленные в конфигурации config/packages/valinor.yaml.
  */
-#[AsService]
 final readonly class ApiRequestMapper
 {
     private TreeMapper $mapper;

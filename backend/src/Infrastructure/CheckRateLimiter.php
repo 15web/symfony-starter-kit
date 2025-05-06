@@ -12,7 +12,6 @@ use Symfony\Component\RateLimiter\RateLimiterFactory;
 /**
  * Проверка рейт-лимитера
  */
-#[AsService]
 final readonly class CheckRateLimiter
 {
     public function __construct(

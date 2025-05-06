@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Infrastructure\Request;
 
 use App\Infrastructure\ApiException\ApiBadRequestException;
-use App\Infrastructure\AsService;
 use CuyZ\Valinor\Mapper\MappingError;
 use CuyZ\Valinor\Mapper\Source\Exception\InvalidSource;
 use CuyZ\Valinor\Mapper\Source\Source;
@@ -19,7 +18,6 @@ use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
  *
  * @template TApiRequest of object
  */
-#[AsService]
 final readonly class ApiRequestValueResolver implements ValueResolverInterface
 {
     public function __construct(

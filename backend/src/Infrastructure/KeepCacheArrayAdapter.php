@@ -11,7 +11,6 @@ use Symfony\Component\DependencyInjection\Attribute\When;
 /**
  * Array кэш адаптер без сброса кэша между запросами, для тестирования
  */
-#[AsService]
 #[When('test')]
 final class KeepCacheArrayAdapter extends ArrayAdapter
 {

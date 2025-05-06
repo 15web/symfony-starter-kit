@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\User\SignUp\Command;
 
-use App\Infrastructure\AsService;
 use App\User\User\Domain\Exception\EmailAlreadyIsConfirmedException;
 use App\User\User\Domain\Exception\UserNotFoundException;
 use App\User\User\Domain\UserId;
@@ -17,7 +16,6 @@ use Symfony\Component\Uid\Uuid;
 /**
  * Хендлер подтверждения email
  */
-#[AsService]
 final readonly class ConfirmEmail
 {
     public function __construct(

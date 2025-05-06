@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Task\Query\Task\FindAllByUserId;
 
-use App\Infrastructure\AsService;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
@@ -12,7 +11,6 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 /**
  * Возвращает записи с limit и offset
  */
-#[AsService]
 final readonly class FindAllTasksByUserId
 {
     public function __construct(

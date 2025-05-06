@@ -8,7 +8,6 @@ use App\Article\Domain\Article;
 use App\Article\Domain\ArticleRepository;
 use App\Infrastructure\ApiException\ApiBadRequestException;
 use App\Infrastructure\ApiException\ApiNotFoundException;
-use App\Infrastructure\AsService;
 use InvalidArgumentException;
 use Override;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,7 +19,6 @@ use Webmozart\Assert\Assert;
 /**
  * Резолвер для сущности 'статья'
  */
-#[AsService]
 final readonly class ArticleArgumentValueResolver implements ValueResolverInterface
 {
     public function __construct(private ArticleRepository $articleRepository) {}

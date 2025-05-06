@@ -9,7 +9,6 @@ use Doctrine\ORM\EntityManagerInterface;
 /**
  * Флашер
  */
-#[AsService]
 final readonly class Flush
 {
     public function __construct(private EntityManagerInterface $entityManager) {}

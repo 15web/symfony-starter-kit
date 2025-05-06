@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\User\SignIn\Command;
 
-use App\Infrastructure\AsService;
 use App\User\User\Domain\AuthToken;
 use App\User\User\Domain\UserId;
 use App\User\User\Domain\UserToken;
@@ -13,7 +12,6 @@ use App\User\User\Domain\UserTokenRepository;
 /**
  * Хендлер создания токена
  */
-#[AsService]
 final readonly class CreateToken
 {
     public function __construct(

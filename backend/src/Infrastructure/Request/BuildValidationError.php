@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Request;
 
-use App\Infrastructure\AsService;
 use CuyZ\Valinor\Mapper\MappingError;
 use CuyZ\Valinor\Mapper\Tree\Message\Messages;
 
 /**
  * Собирает массив ошибок валидации
  */
-#[AsService]
 final readonly class BuildValidationError
 {
     /**

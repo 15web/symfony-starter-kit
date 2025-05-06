@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Task\Http\Site\Export\Xml;
 
-use App\Infrastructure\AsService;
 use App\Task\Http\Site\Export\Exporter;
 use App\Task\Http\Site\Export\Format;
 use App\Task\Query\Task\FindAllByUserId\TaskData;
@@ -18,7 +17,6 @@ use Symfony\Component\Serializer\SerializerInterface;
 /**
  * Экспорт задач в формат xml
  */
-#[AsService]
 final readonly class XmlExporter implements Exporter
 {
     public function __construct(

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Seo\Command;
 
-use App\Infrastructure\AsService;
 use App\Infrastructure\Flush;
 use App\Seo\Domain\Seo;
 use App\Seo\Domain\SeoRepository;
@@ -12,7 +11,6 @@ use App\Seo\Domain\SeoRepository;
 /**
  * Хендлер сохранения SEO
  */
-#[AsService]
 final readonly class SaveSeo
 {
     public function __construct(private SeoRepository $seoRepository, private Flush $flush) {}

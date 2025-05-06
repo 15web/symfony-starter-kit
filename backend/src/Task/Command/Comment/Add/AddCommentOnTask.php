@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Task\Command\Comment\Add;
 
-use App\Infrastructure\AsService;
 use App\Task\Domain\AddCommentToCompletedTaskException;
 use App\Task\Domain\Task;
 use App\Task\Domain\TaskComment;
@@ -14,7 +13,6 @@ use App\Task\Domain\TaskCommentId;
 /**
  * Хендлер добавления комментария к задаче
  */
-#[AsService]
 final class AddCommentOnTask
 {
     /**

@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace App\User\Password\Domain;
 
-use App\Infrastructure\AsService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Uid\Uuid;
 
 /**
  * Репозиторий паролей восстановления
  */
-#[AsService]
 final readonly class RecoveryTokenRepository
 {
     public function __construct(private EntityManagerInterface $entityManager) {}
