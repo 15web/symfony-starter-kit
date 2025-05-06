@@ -6,6 +6,7 @@ namespace Dev\Tests\Functional\Task\Site;
 
 use Dev\Tests\Functional\SDK\ApiWebTestCase;
 use Dev\Tests\Functional\SDK\Task;
+use Dev\Tests\Functional\SDK\TaskComment;
 use Dev\Tests\Functional\SDK\User;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -46,6 +47,47 @@ final class RemoveTaskTest extends ApiWebTestCase
 
         self::assertCount(1, $tasks);
         self::assertSame($task2Id, $tasks[0]['id']);
+    }
+
+    #[TestDox('Задача с комментариями успешно удалена')]
+    public function testRemoveTaskWithComments(): void
+    {
+        $token = User::auth();
+
+        $taskId = Task::createAndReturnId(
+            taskName: 'Тестовая задача 1',
+            token: $token,
+        );
+
+        TaskComment::create(
+            commentText: 'First comment',
+            taskId: $taskId,
+            token: $token,
+        );
+
+        TaskComment::create(
+            commentText: 'Second comment',
+            taskId: $taskId,
+            token: $token,
+        );
+
+        $response = Task::list($token);
+        $tasks = $response['data'];
+
+        self::assertCount(1, $tasks);
+
+        $response = self::request(
+            method: Request::METHOD_DELETE,
+            uri: \sprintf('/api/tasks/%s', $taskId),
+            token: $token,
+        );
+
+        self::assertSuccessContentResponse($response);
+
+        $response = Task::list($token);
+        $tasks = $response['data'];
+
+        self::assertCount(0, $tasks);
     }
 
     #[TestDox('Задача не найдена')]

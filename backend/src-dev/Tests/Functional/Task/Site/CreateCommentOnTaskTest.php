@@ -6,6 +6,7 @@ namespace Dev\Tests\Functional\Task\Site;
 
 use Dev\Tests\Functional\SDK\ApiWebTestCase;
 use Dev\Tests\Functional\SDK\Task;
+use Dev\Tests\Functional\SDK\TaskComment;
 use Dev\Tests\Functional\SDK\User;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -28,14 +29,9 @@ final class CreateCommentOnTaskTest extends ApiWebTestCase
             token: $token,
         );
 
-        $body = [];
-        $body['commentBody'] = $commentText = 'First comment';
-        $body = json_encode($body, JSON_THROW_ON_ERROR);
-
-        $response = self::request(
-            method: Request::METHOD_POST,
-            uri: \sprintf('/api/tasks/%s/add-comment', $taskId),
-            body: $body,
+        $response = TaskComment::create(
+            commentText: $commentText = 'First comment',
+            taskId: $taskId,
             token: $token,
         );
 
@@ -74,15 +70,9 @@ final class CreateCommentOnTaskTest extends ApiWebTestCase
             token: $token,
         );
 
-        $body = [];
-        $body['commentBody'] = 'First comment';
-        $body = json_encode($body, JSON_THROW_ON_ERROR);
-
-        $taskId = (string) Uuid::v7();
-        $response = self::request(
-            method: Request::METHOD_POST,
-            uri: \sprintf('/api/tasks/%s/add-comment', $taskId),
-            body: $body,
+        $response = TaskComment::create(
+            commentText: 'First comment',
+            taskId: (string) Uuid::v7(),
             token: $token,
         );
 
@@ -104,14 +94,9 @@ final class CreateCommentOnTaskTest extends ApiWebTestCase
             token: $token,
         );
 
-        $body = [];
-        $body['commentBody'] = 'First comment';
-        $body = json_encode($body, JSON_THROW_ON_ERROR);
-
-        $response = self::request(
-            method: Request::METHOD_POST,
-            uri: \sprintf('/api/tasks/%s/add-comment', $taskId),
-            body: $body,
+        $response = TaskComment::create(
+            commentText: 'First comment',
+            taskId: $taskId,
             token: $token,
         );
 
@@ -128,14 +113,9 @@ final class CreateCommentOnTaskTest extends ApiWebTestCase
             token: $token,
         );
 
-        $body = [];
-        $body['commentBody'] = 'First comment';
-        $body = json_encode($body, JSON_THROW_ON_ERROR);
-
-        $response = self::request(
-            method: Request::METHOD_POST,
-            uri: \sprintf('/api/tasks/%s/add-comment', $taskId),
-            body: $body,
+        $response = TaskComment::create(
+            commentText: 'First comment',
+            taskId: $taskId,
             token: $notValidToken,
         );
 
@@ -152,14 +132,9 @@ final class CreateCommentOnTaskTest extends ApiWebTestCase
             token: $adminToken,
         );
 
-        $body = [
-            'commentBody' => 'First comment',
-        ];
-
-        $response = self::request(
-            method: Request::METHOD_POST,
-            uri: \sprintf('/api/tasks/%s/add-comment', $taskId),
-            body: json_encode($body, JSON_THROW_ON_ERROR),
+        $response = TaskComment::create(
+            commentText: 'First comment',
+            taskId: $taskId,
             token: $adminToken,
         );
 
@@ -176,19 +151,14 @@ final class CreateCommentOnTaskTest extends ApiWebTestCase
         );
 
         $tokenSecond = User::registerAndAuth('second@example.com');
-        $taskId = Task::createAndReturnId(
+        $taskSecondId = Task::createAndReturnId(
             taskName: 'Тестовая задача №2 ',
             token: $tokenSecond,
         );
 
-        $body = [];
-        $body['commentBody'] = 'First comment';
-        $body = json_encode($body, JSON_THROW_ON_ERROR);
-
-        $response = self::request(
-            method: Request::METHOD_POST,
-            uri: \sprintf('/api/tasks/%s/add-comment', $taskId),
-            body: $body,
+        $response = TaskComment::create(
+            commentText: 'First comment',
+            taskId: $taskSecondId,
             token: $token,
         );
 
