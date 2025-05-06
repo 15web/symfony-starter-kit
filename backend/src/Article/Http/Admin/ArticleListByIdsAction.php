@@ -55,7 +55,7 @@ final readonly class ArticleListByIdsAction
      * @param non-empty-list<Uuid> $ids
      * @param list<Article> $articles
      *
-     * @return iterable<Article>
+     * @return iterable<ArticleListData>
      */
     private function buildResponseData(array $ids, array $articles): iterable
     {
@@ -71,7 +71,12 @@ final readonly class ArticleListByIdsAction
                 continue;
             }
 
-            yield $article;
+            yield new ArticleListData(
+                id: $article->getId(),
+                title: $article->getTitle(),
+                alias: $article->getAlias(),
+                createdAt: $article->getCreatedAt(),
+            );
         }
     }
 }

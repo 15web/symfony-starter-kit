@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Article\Http\Site;
 
+use App\Article\Domain\Article;
 use App\Article\Domain\ArticleRepository;
 use App\Infrastructure\Request\Pagination\PaginationRequest;
 use App\Infrastructure\Request\Pagination\PaginationRequestArgumentResolver;
@@ -31,22 +32,30 @@ final readonly class ArticleListAction
             limit: $paginationRequest->limit,
             offset: $paginationRequest->offset,
         );
+
         $articlesCount = $this->articleRepository->countAll();
 
-        $data = [];
+        $pagination = new PaginationResponse($articlesCount);
+
+        return new ApiListObjectResponse(
+            data: $this->buildResponseData($articles),
+            pagination: $pagination,
+        );
+    }
+
+    /**
+     * @param list<Article> $articles
+     *
+     * @return iterable<ArticleListData>
+     */
+    private function buildResponseData(array $articles): iterable
+    {
         foreach ($articles as $article) {
-            $data[] = new ArticleListData(
+            yield new ArticleListData(
                 title: $article->getTitle(),
                 alias: $article->getAlias(),
                 body: $article->getBody(),
             );
         }
-
-        $pagination = new PaginationResponse($articlesCount);
-
-        return new ApiListObjectResponse(
-            data: $data,
-            pagination: $pagination,
-        );
     }
 }
