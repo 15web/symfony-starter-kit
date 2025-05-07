@@ -35,7 +35,7 @@ class Task
     /**
      * @var Collection<int, TaskComment>
      */
-    #[ORM\OneToMany(mappedBy: 'task', targetEntity: TaskComment::class, cascade: ['all'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: TaskComment::class, mappedBy: 'task', cascade: ['persist'])]
     private Collection $comments;
 
     #[ORM\Column]
