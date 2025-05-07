@@ -68,6 +68,7 @@ final class SignUpTest extends ApiWebTestCase
     #[TestWith(['', 'password'], 'пустой емейл')]
     #[TestWith(['test', 'password'], 'невалидный емейл')]
     #[TestWith(['test@example.test', ''], 'пустой пароль')]
+    #[TestWith(['test@example.test', '1'], 'короткий пароль')]
     #[TestDox('Неправильный запрос')]
     public function testBadRequest(string $email, string $password): void
     {
