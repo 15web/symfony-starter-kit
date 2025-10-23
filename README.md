@@ -38,7 +38,7 @@ make init
 
 После настройки портов запустить `make up`
 
-Документация OpenAPI доступна по адресу http://localhost:8088/docs
+Документация OpenAPI доступна по адресу (порт указывать из .env) http://localhost:8088/docs
 
 [Исходник OpenAPI документации проекта](backend/src-dev/openapi.yaml)
 
