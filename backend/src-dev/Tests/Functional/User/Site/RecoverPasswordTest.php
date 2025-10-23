@@ -104,7 +104,7 @@ final class RecoverPasswordTest extends ApiWebTestCase
         self::assertNotFound($response);
     }
 
-    #[DataProvider('notValidPasswordDataProvider')]
+    #[DataProvider('notValidEmailDataProvider')]
     #[TestDox('Неверный запрос')]
     public function testBadRequest(?string $email): void
     {
@@ -118,12 +118,60 @@ final class RecoverPasswordTest extends ApiWebTestCase
         self::assertBadRequest($response);
     }
 
-    public static function notValidPasswordDataProvider(): Iterator
+    public static function notValidEmailDataProvider(): Iterator
     {
         yield 'null' => [null];
 
         yield 'Пустая строка' => [''];
 
         yield 'Неверный Email' => ['testEmail'];
+    }
+
+    #[DataProvider('notValidPasswordDataProvider')]
+    #[TestDox('Неверный запрос')]
+    public function testConfirmBadRequest(?string $password): void
+    {
+        $body = [
+            'email' => $userEmail = 'first@example.com',
+            'password' => '123QWE',
+        ];
+
+        $response = self::request(
+            method: Request::METHOD_POST,
+            uri: '/api/sign-up',
+            body: json_encode($body, JSON_THROW_ON_ERROR),
+        );
+        self::assertSuccessResponse($response);
+
+        $response = self::request(
+            method: Request::METHOD_POST,
+            uri: '/api/request-password-recovery',
+            body: json_encode(['email' => $userEmail], JSON_THROW_ON_ERROR),
+        );
+        self::assertSuccessResponse($response);
+
+        /** @var Message $sentEmail */
+        $sentEmail = self::getMailerMessage();
+
+        /** @var string $recoverToken */
+        $recoverToken = $sentEmail->getHeaders()->get('recoverToken')?->getBody();
+
+        $response = self::request(
+            method: Request::METHOD_POST,
+            uri: \sprintf('/api/recover-password/%s', $recoverToken),
+            body: json_encode(['password' => $password], JSON_THROW_ON_ERROR),
+            validateRequestSchema: false,
+        );
+
+        self::assertBadRequest($response);
+    }
+
+    public static function notValidPasswordDataProvider(): Iterator
+    {
+        yield 'null' => [null];
+
+        yield 'Пустой пароль' => [''];
+
+        yield 'Короткий пароль' => ['1'];
     }
 }

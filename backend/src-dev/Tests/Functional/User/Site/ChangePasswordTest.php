@@ -224,5 +224,13 @@ final class ChangePasswordTest extends ApiWebTestCase
                 'newPasswordConfirmation' => 'currentPassword',
             ],
         ];
+
+        yield 'Новый пароль короткий' => [
+            [
+                'currentPassword' => 'currentPassword',
+                'newPassword' => '1',
+                'newPasswordConfirmation' => '1',
+            ],
+        ];
     }
 }
