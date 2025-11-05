@@ -184,7 +184,7 @@ final readonly class EntityGenerator
         return $question;
     }
 
-    private function askForNextField(ConsoleStyle $io, array $fields, string $entityClass, bool $isFirstField): null|ClassProperty|EntityRelation
+    private function askForNextField(ConsoleStyle $io, array $fields, string $entityClass, bool $isFirstField): ClassProperty|EntityRelation|null
     {
         $io->writeln('');
 
@@ -340,7 +340,7 @@ final readonly class EntityGenerator
                     $line .= \sprintf(
                         ' (or %s)',
                         implode(', ', array_map(
-                            static fn ($subType): string => \sprintf('<comment>%s</comment>', $subType),
+                            static fn (string $subType): string => \sprintf('<comment>%s</comment>', $subType),
                             $subTypes,
                         )),
                     );
@@ -668,7 +668,7 @@ final readonly class EntityGenerator
 
     private function getPathOfClass(string $class): string
     {
-        return (new ClassDetails($class))->getPath();
+        return new ClassDetails($class)->getPath();
     }
 
     private function isClassInVendor(string $class): bool

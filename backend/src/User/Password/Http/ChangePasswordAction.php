@@ -29,7 +29,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
-use Symfony\Component\RateLimiter\RateLimiterFactory;
+use Symfony\Component\RateLimiter\RateLimiterFactoryInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 /**
@@ -50,7 +50,7 @@ final readonly class ChangePasswordAction
         private FindUser $findUser,
         private CreateToken $createToken,
         private UserTokenRepository $userTokenRepository,
-        private RateLimiterFactory $changePasswordLimiter,
+        private RateLimiterFactoryInterface $changePasswordLimiter,
         private CheckRateLimiter $checkRateLimiter,
         private Flush $flush,
         private LoggerInterface $logger,

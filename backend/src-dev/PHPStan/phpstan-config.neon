@@ -23,6 +23,8 @@ includes:
     - ../../vendor/phpstan/phpstan-doctrine/extension.neon
     - ../../vendor/phpstan/phpstan-doctrine/rules.neon
     - ../../vendor/phpstan/phpstan-strict-rules/rules.neon
+    - ../../vendor/cuyz/valinor/qa/PHPStan/valinor-phpstan-configuration.php
+    - ../../vendor/cuyz/valinor/qa/PHPStan/valinor-phpstan-suppress-pure-errors.php
     - phpstan-baseline.neon
 
 rules:

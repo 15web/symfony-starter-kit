@@ -107,7 +107,7 @@ final class AuthTokenTest extends TestCase
     /**
      * @param non-empty-string $token
      */
-    #[DataProvider('invalidTokens')]
+    #[DataProvider('provideInvalidTokenFromRequestCases')]
     #[TestDox('Получен невалидный токен')]
     public function testInvalidTokenFromRequest(string $token): void
     {
@@ -118,7 +118,7 @@ final class AuthTokenTest extends TestCase
         );
     }
 
-    public static function invalidTokens(): Iterator
+    public static function provideInvalidTokenFromRequestCases(): Iterator
     {
         yield 'Неверный формат' => ['1q2w3e4r5t'];
 

@@ -7,7 +7,7 @@ namespace App\Infrastructure;
 use App\Infrastructure\ApiException\ApiRateLimiterException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\RateLimiter\LimiterInterface;
-use Symfony\Component\RateLimiter\RateLimiterFactory;
+use Symfony\Component\RateLimiter\RateLimiterFactoryInterface;
 
 /**
  * Проверка рейт-лимитера
@@ -24,7 +24,7 @@ final readonly class CheckRateLimiter
      * @throws ApiRateLimiterException
      */
     public function __invoke(
-        RateLimiterFactory $rateLimiter,
+        RateLimiterFactoryInterface $rateLimiter,
         ?string $key,
     ): LimiterInterface {
         $limiter = $rateLimiter->create($key);

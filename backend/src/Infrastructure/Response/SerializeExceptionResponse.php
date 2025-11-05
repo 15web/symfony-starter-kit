@@ -8,9 +8,9 @@ use App\Infrastructure\ApiException\ApiErrorResponse;
 use App\Infrastructure\ApiException\ApiException;
 use App\Infrastructure\ApiException\ApiHeaders;
 use App\Infrastructure\ApiException\ApiSystemException;
-use CuyZ\Valinor\MapperBuilder;
 use CuyZ\Valinor\Normalizer\Format;
 use CuyZ\Valinor\Normalizer\JsonNormalizer;
+use CuyZ\Valinor\NormalizerBuilder;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,7 +25,7 @@ final readonly class SerializeExceptionResponse
 {
     private JsonNormalizer $normalizer;
 
-    public function __construct(MapperBuilder $builder)
+    public function __construct(NormalizerBuilder $builder)
     {
         $this->normalizer = $builder
             ->normalizer(Format::json())

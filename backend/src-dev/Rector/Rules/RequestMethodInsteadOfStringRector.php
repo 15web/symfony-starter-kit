@@ -27,8 +27,7 @@ final class RequestMethodInsteadOfStringRector extends AbstractRector
             [new CodeSample(
                 <<<'CODE_SAMPLE'
                         #[Route('/admin/articles', methods: ['POST'])]
-                    CODE_SAMPLE
-                ,
+                    CODE_SAMPLE,
                 <<<'CODE_SAMPLE'
                         #[Route('/admin/articles', methods: [Request::METHOD_POST])]
                     CODE_SAMPLE,

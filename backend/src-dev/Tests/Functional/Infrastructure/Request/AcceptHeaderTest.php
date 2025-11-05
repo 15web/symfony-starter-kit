@@ -20,7 +20,7 @@ final class AcceptHeaderTest extends WebTestCase
     /**
      * @param array<string, string> $headers
      */
-    #[DataProvider('validHeader')]
+    #[DataProvider('provideValidHeadersCases')]
     #[TestDox('Допустимые заголовки')]
     public function testValidHeaders(array $headers): void
     {
@@ -33,7 +33,7 @@ final class AcceptHeaderTest extends WebTestCase
         self::assertResponseIsSuccessful();
     }
 
-    public static function validHeader(): Iterator
+    public static function provideValidHeadersCases(): Iterator
     {
         yield 'Пустые заголовки' => [[]];
 
@@ -49,7 +49,7 @@ final class AcceptHeaderTest extends WebTestCase
     /**
      * @param array<string, string> $headers
      */
-    #[DataProvider('notValidAcceptHeader')]
+    #[DataProvider('provideInvalidHeadersCases')]
     #[TestDox('Недопустимые заголовки Accept')]
     public function testInvalidHeaders(array $headers): void
     {
@@ -62,7 +62,7 @@ final class AcceptHeaderTest extends WebTestCase
         self::assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
     }
 
-    public static function notValidAcceptHeader(): Iterator
+    public static function provideInvalidHeadersCases(): Iterator
     {
         yield 'Accept text/html' => [['HTTP_ACCEPT' => 'text/html']];
 

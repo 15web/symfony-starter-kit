@@ -43,8 +43,7 @@ final class OneFlushInClassRector extends AbstractRector
                         $this->em->flush();
                     }
                 }
-                CODE_SAMPLE
-            ,
+                CODE_SAMPLE,
             <<<'CODE_SAMPLE'
                 final class SomeClass
                 {

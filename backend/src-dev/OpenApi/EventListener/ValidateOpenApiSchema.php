@@ -35,7 +35,7 @@ final readonly class ValidateOpenApiSchema
         #[Autowire('%kernel.project_dir%%env(string:OPENAPI_YAML_FILE)%')]
         string $openApiFilePath,
     ) {
-        $validatorBuilder = (new ValidatorBuilder())->fromYamlFile($openApiFilePath);
+        $validatorBuilder = new ValidatorBuilder()->fromYamlFile($openApiFilePath);
         $this->requestValidator = $validatorBuilder->getRequestValidator();
         $this->responseValidator = $validatorBuilder->getResponseValidator();
     }

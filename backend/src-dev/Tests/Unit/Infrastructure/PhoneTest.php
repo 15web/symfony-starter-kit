@@ -26,7 +26,7 @@ final class PhoneTest extends TestCase
         self::assertTrue($profilePhone1->equalTo($profilePhone2));
     }
 
-    #[DataProvider('incorrectPhones')]
+    #[DataProvider('provideIncorrectNumberCases')]
     #[TestDox('Невалидный номер телефона')]
     public function testIncorrectNumber(string $phone): void
     {
@@ -40,7 +40,7 @@ final class PhoneTest extends TestCase
         new Phone($phone);
     }
 
-    public static function incorrectPhones(): Iterator
+    public static function provideIncorrectNumberCases(): Iterator
     {
         yield 'Неверный формат' => ['неправильный телефон'];
 

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Infrastructure\Request;
 
 use CuyZ\Valinor\Mapper\MappingError;
-use CuyZ\Valinor\Mapper\Tree\Message\Messages;
 
 /**
  * Собирает массив ошибок валидации
@@ -17,9 +16,7 @@ final readonly class BuildValidationError
      */
     public function __invoke(MappingError $error): array
     {
-        $messages = Messages::flattenFromNode(
-            node: $error->node(),
-        );
+        $messages = $error->messages();
 
         $allMessages = [];
         foreach ($messages->errors() as $message) {

@@ -165,7 +165,7 @@ final class ChangePasswordTest extends ApiWebTestCase
     /**
      * @param array<array-key, mixed>|null $body
      */
-    #[DataProvider('notValidPasswordDataProvider')]
+    #[DataProvider('provideBadRequestCases')]
     #[TestDox('Неверный запрос')]
     public function testBadRequest(?array $body): void
     {
@@ -182,7 +182,7 @@ final class ChangePasswordTest extends ApiWebTestCase
         self::assertBadRequest($response);
     }
 
-    public static function notValidPasswordDataProvider(): Iterator
+    public static function provideBadRequestCases(): Iterator
     {
         yield 'null' => [[null]];
 

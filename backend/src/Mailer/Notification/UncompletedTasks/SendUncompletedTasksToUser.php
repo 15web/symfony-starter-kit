@@ -18,7 +18,7 @@ final readonly class SendUncompletedTasksToUser
 
     public function __invoke(UncompletedTasksMessage $message): void
     {
-        $email = (new TemplatedEmail())
+        $email = new TemplatedEmail()
             ->to($message->email->value)
             ->subject('Невыполненные задачи')
             ->htmlTemplate('@mails/emails/uncompleted-tasks.html.twig')

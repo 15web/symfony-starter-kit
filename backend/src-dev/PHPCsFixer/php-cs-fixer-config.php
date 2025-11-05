@@ -8,7 +8,7 @@ use PhpCsFixer\Config;
 use PhpCsFixer\Finder;
 use PhpCsFixer\Runner\Parallel\ParallelConfigFactory;
 
-$finder = (new Finder())
+$finder = new Finder()
     ->in([
         __DIR__.'/../../src',
         __DIR__.'/../../src-dev',
@@ -21,7 +21,7 @@ $finder = (new Finder())
         __FILE__,
     ]);
 
-return (new Config())
+return new Config()
     ->setParallelConfig(ParallelConfigFactory::detect())
     ->setCacheFile(__DIR__.'/../../var/cache/.php-cs-fixer')
     ->setRiskyAllowed(true)
@@ -33,11 +33,11 @@ return (new Config())
         '@PER-CS' => true,
         '@PER-CS:risky' => true,
         '@DoctrineAnnotation' => true,
-        '@PHP80Migration:risky' => true,
-        '@PHP83Migration' => true,
+        '@PHP8x0Migration:risky' => true,
+        '@PHP8x3Migration' => true,
         '@PhpCsFixer' => true,
         '@PhpCsFixer:risky' => true,
-        '@PHPUnit100Migration:risky' => true,
+        '@PHPUnit10x0Migration:risky' => true,
 
         'string_implicit_backslashes' => false,
 
@@ -68,6 +68,8 @@ return (new Config())
         'phpdoc_types_order' => ['null_adjustment' => 'always_last'],
 
         'php_unit_test_class_requires_covers' => false,
+
+        'php_unit_data_provider_return_type' => false,
 
         'ClassDocComment/class_doc_comment' => ['exclude' => 'migrations'],
         'Testdox/test_requires_testdox' => ['exclude' => 'SDK'],

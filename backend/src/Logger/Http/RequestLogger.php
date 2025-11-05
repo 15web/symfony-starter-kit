@@ -8,9 +8,9 @@ use App\User\Security\Http\IsGranted;
 use App\User\Security\Service\TokenException;
 use App\User\Security\Service\TokenManager;
 use CuyZ\Valinor\Mapper\Source\JsonSource;
-use CuyZ\Valinor\MapperBuilder;
 use CuyZ\Valinor\Normalizer\ArrayNormalizer;
 use CuyZ\Valinor\Normalizer\Format;
+use CuyZ\Valinor\NormalizerBuilder;
 use Psr\Log\LoggerInterface;
 use ReflectionClass;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
@@ -40,7 +40,7 @@ final class RequestLogger
         private readonly TokenManager $tokenManager,
         private readonly RouterInterface $router,
         private readonly LoggerInterface $logger,
-        MapperBuilder $builder,
+        NormalizerBuilder $builder,
     ) {
         $this->controllerReflection = null;
         $this->normalizer = $builder->normalizer(Format::array());

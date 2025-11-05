@@ -20,9 +20,9 @@ use PhpCsFixer\FixerConfiguration\InvalidOptionsForEnvException;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
 use PhpCsFixer\FixerDefinition\FixerDefinitionInterface;
-use PhpCsFixer\Indicator\PhpUnitTestCaseIndicator;
+use PhpCsFixer\Future;
+use PhpCsFixer\Tokenizer\Analyzer\PhpUnitTestCaseAnalyzer;
 use PhpCsFixer\Tokenizer\Tokens;
-use PhpCsFixer\Utils;
 use PhpCsFixer\WhitespacesFixerConfig;
 use SplFileInfo;
 use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
@@ -151,11 +151,10 @@ final class ExampleTest
             $name = $option->getName();
             if (\array_key_exists($name, $configuration)) {
                 /**
-                 * @psalm-suppress DeprecatedClass
                  * @psalm-suppress InternalClass
                  * @psalm-suppress InternalMethod
                  */
-                Utils::triggerDeprecation(new InvalidArgumentException(\sprintf(
+                Future::triggerDeprecation(new InvalidArgumentException(\sprintf(
                     'Option "%s" for rule "%s" is deprecated and will be removed in version %d.0. %s',
                     $name,
                     $this->getName(),
@@ -210,7 +209,7 @@ final class ExampleTest
         /**
          * @psalm-suppress InternalClass
          */
-        $phpUnitTestCaseIndicator = new PhpUnitTestCaseIndicator();
+        $phpUnitTestCaseIndicator = new PhpUnitTestCaseAnalyzer();
 
         /**
          * @psalm-suppress InternalMethod
@@ -274,7 +273,7 @@ final class ExampleTest
     private function createConfigurationDefinition(): FixerConfigurationResolver
     {
         return new FixerConfigurationResolver([
-            (new FixerOptionBuilder(self::EXCLUDE_KEY, 'Excluded test namespace.'))
+            new FixerOptionBuilder(self::EXCLUDE_KEY, 'Excluded test namespace.')
                 ->setAllowedTypes(['string'])
                 ->setNormalizer(static function (Options $options, string $value): string {
                     if (trim($value) === '') {

@@ -108,7 +108,7 @@ final class SeoSaveTest extends ApiWebTestCase
     /**
      * @param array<int|string> $body
      */
-    #[DataProvider('notValidRequestProvider')]
+    #[DataProvider('provideBadRequestCases')]
     #[TestDox('Неправильный запрос')]
     public function testBadRequest(array $body): void
     {
@@ -126,7 +126,7 @@ final class SeoSaveTest extends ApiWebTestCase
         self::assertBadRequest($response);
     }
 
-    public static function notValidRequestProvider(): Iterator
+    public static function provideBadRequestCases(): Iterator
     {
         yield 'пустой запрос' => [['']];
 
