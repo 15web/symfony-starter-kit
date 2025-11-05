@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Dev\OpenApi\ConsoleCommand;
 
-use Exception;
-use Override;
+use RuntimeException;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -17,10 +16,9 @@ use Symfony\Component\Yaml\Yaml;
  * Собирает файл спецификации OpenApi
  */
 #[AsCommand(name: 'app:generate-openapi', description: 'Собирает файлы спецификации OpenApi')]
-final class GenerateOpenApiSpecCommand extends Command
+final class GenerateOpenApiSpecCommand
 {
-    #[Override]
-    protected function execute(InputInterface $input, OutputInterface $output): int
+    public function __invoke(InputInterface $input, OutputInterface $output): int
     {
         $this->generate(
             resourcesDirs: [__DIR__.'/../resources/admin/'],
@@ -37,7 +35,7 @@ final class GenerateOpenApiSpecCommand extends Command
             resultFileName: 'openapi.yaml',
         );
 
-        (new SymfonyStyle($input, $output))
+        new SymfonyStyle($input, $output)
             ->success('Сборка спецификаций успешно завершена.');
 
         return Command::SUCCESS;
@@ -73,7 +71,7 @@ final class GenerateOpenApiSpecCommand extends Command
             $fileNames = scandir($resourcesDir);
 
             if ($fileNames === false) {
-                throw new Exception(\sprintf('scandir can\'t read list of directory: %s', $resourcesDir));
+                throw new RuntimeException(\sprintf("scandir can't read list of directory: %s", $resourcesDir));
             }
 
             $fileNames = array_diff($fileNames, ['.', '..']);

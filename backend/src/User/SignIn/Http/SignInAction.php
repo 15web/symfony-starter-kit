@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\HttpKernel\Controller\ArgumentResolver\RequestValueResolver;
-use Symfony\Component\RateLimiter\RateLimiterFactory;
+use Symfony\Component\RateLimiter\RateLimiterFactoryInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 /**
@@ -37,7 +37,7 @@ final readonly class SignInAction
         #[Autowire('%app.hash_cost%')]
         private int $hashCost,
         private SignIn $signIn,
-        private RateLimiterFactory $signInLimiter,
+        private RateLimiterFactoryInterface $signInLimiter,
         private CheckRateLimiter $checkRateLimiter,
         private Flush $flush,
     ) {}

@@ -16,14 +16,14 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 #[TestDox('Проверка, что в ручке указаны резолверы ко всем аргументам')]
 final class ResolversInActionTest extends AbstractRectorTestCase
 {
-    #[DataProvider('provideData')]
+    #[DataProvider('provideCases')]
     #[TestDox('Проверка правила')]
     public function test(string $filePath): void
     {
         $this->doTestFile($filePath);
     }
 
-    public static function provideData(): Iterator
+    public static function provideCases(): Iterator
     {
         return self::yieldFilesFromDirectory(__DIR__.'/Fixture');
     }

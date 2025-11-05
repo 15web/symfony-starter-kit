@@ -26,14 +26,14 @@ final class ArticleListByIdsTest extends ApiWebTestCase
         $articleId1 = Article::createAndReturnId(
             title: $title1 = 'Статья1',
             alias: $alias1 = 'statya',
-            content: $content1 = '<p>Контент</p>',
+            content: '<p>Контент</p>',
             token: $token,
         );
 
         $articleId2 = Article::createAndReturnId(
             title: $title2 = 'Статья2',
             alias: $alias2 = 'statya2',
-            content: $content2 = '<p>Контент</p>',
+            content: '<p>Контент</p>',
             token: $token,
         );
 
@@ -85,7 +85,7 @@ final class ArticleListByIdsTest extends ApiWebTestCase
         $articleId = Article::createAndReturnId(
             title: $title = 'Статья1',
             alias: $alias = 'statya',
-            content: $content = '<p>Контент</p>',
+            content: '<p>Контент</p>',
             token: $token,
         );
 
@@ -166,7 +166,7 @@ final class ArticleListByIdsTest extends ApiWebTestCase
     /**
      * @param array{ids: list<string>} $body
      */
-    #[DataProvider('notValidRequestProvider')]
+    #[DataProvider('provideBadRequestCases')]
     #[TestDox('Неправильный запрос')]
     public function testBadRequest(array $body): void
     {
@@ -185,7 +185,7 @@ final class ArticleListByIdsTest extends ApiWebTestCase
         self::assertBadRequest($response);
     }
 
-    public static function notValidRequestProvider(): Iterator
+    public static function provideBadRequestCases(): Iterator
     {
         yield 'пустой запрос' => [['']];
 

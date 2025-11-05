@@ -30,8 +30,7 @@ final class ResolversInActionRector extends AbstractRector
                         Uuid $id,
                         UserId $userId,
                     ): TaskData {}
-                CODE_SAMPLE
-            ,
+                CODE_SAMPLE,
             <<<'CODE_SAMPLE'
                     public function __invoke(
                         #[ValueResolver('TODO: Добавь резолвер')]

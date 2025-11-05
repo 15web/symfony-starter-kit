@@ -18,7 +18,7 @@ final readonly class SendEmailConfirmToken
 
     public function __invoke(ConfirmEmailMessage $message): void
     {
-        $email = (new TemplatedEmail())
+        $email = new TemplatedEmail()
             ->to($message->email->value)
             ->subject('Подтверждение email')
             ->htmlTemplate('@mails/emails/confirm.html.twig')

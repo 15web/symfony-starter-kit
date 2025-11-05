@@ -9,7 +9,12 @@
         findUnusedPsalmSuppress="true"
         cacheDirectory="../var/cache/psalm"
         errorBaseline="psalm-baseline.xml"
+
 >
+    <xi:include href="../vendor/cuyz/valinor/qa/Psalm/valinor-psalm-suppress-pure-errors.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+    <plugins>
+        <pluginClass class="CuyZ\Valinor\QA\Psalm\ValinorPsalmPlugin"/>
+    </plugins>
     <projectFiles>
         <directory name="../src" />
         <directory name="../src-dev/Tests" />

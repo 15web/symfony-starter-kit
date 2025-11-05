@@ -8,7 +8,7 @@ deptrac:
         -   name: Vendor
             collectors:
                 -   type: classLike
-                    value: (Symfony|Sensio|Doctrine|Webmozart|Psr|League|Nyholm|Valinor|ValinorBundle)\\.*
+                    value: (Symfony|Sensio|Doctrine|Webmozart|Psr|League|Nyholm|Valinor|ValinorBundle|Monolog)\\.*
         -   name: Infrastructure
             collectors:
                 -   type: classLike
@@ -53,6 +53,7 @@ deptrac:
             - Infrastructure
             - Vendor
             - Notification
+            - Service
         Console:
             - Domain
             - Command
@@ -60,6 +61,15 @@ deptrac:
             - Infrastructure
             - Vendor
             - Notification
+            - Service
+        Scheduler:
+            - Domain
+            - Command
+            - Query
+            - Infrastructure
+            - Vendor
+            - Notification
+            - Service
         Notification:
             - Domain
             - Infrastructure
@@ -71,16 +81,19 @@ deptrac:
             - Notification
             - Vendor
             - Query
+            - Service
         Query:
             - Infrastructure
             - Vendor
+            - Domain
+        Service:
+            - Infrastructure
+            - Vendor
+            - Query
             - Domain
         Domain:
             - Infrastructure
             - Vendor
         Infrastructure:
-            - Vendor
-        Service:
-            - Infrastructure
             - Vendor
         Vendor: ~

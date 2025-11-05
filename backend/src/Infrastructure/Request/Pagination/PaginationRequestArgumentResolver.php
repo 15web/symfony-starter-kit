@@ -38,7 +38,7 @@ final readonly class PaginationRequestArgumentResolver implements ValueResolverI
         }
 
         try {
-            $paginationRequest = (new MapperBuilder())->mapper()->map(
+            $paginationRequest = new MapperBuilder()->mapper()->map(
                 PaginationRequest::class,
                 [
                     self::QUERY_OFFSET_NAME => $request->query->getInt(self::QUERY_OFFSET_NAME),

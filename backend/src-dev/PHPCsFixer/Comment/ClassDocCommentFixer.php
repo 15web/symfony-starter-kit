@@ -20,10 +20,10 @@ use PhpCsFixer\FixerConfiguration\InvalidOptionsForEnvException;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
 use PhpCsFixer\FixerDefinition\FixerDefinitionInterface;
+use PhpCsFixer\Future;
 use PhpCsFixer\Tokenizer\Analyzer\WhitespacesAnalyzer;
 use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
-use PhpCsFixer\Utils;
 use PhpCsFixer\WhitespacesFixerConfig;
 use SplFileInfo;
 use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
@@ -73,11 +73,10 @@ final class ClassDocCommentFixer implements FixerInterface, WhitespacesAwareFixe
             $name = $option->getName();
             if (\array_key_exists($name, $configuration)) {
                 /**
-                 * @psalm-suppress DeprecatedClass
                  * @psalm-suppress InternalClass
                  * @psalm-suppress InternalMethod
                  */
-                Utils::triggerDeprecation(new InvalidArgumentException(\sprintf(
+                Future::triggerDeprecation(new InvalidArgumentException(\sprintf(
                     'Option "%s" for rule "%s" is deprecated and will be removed in version %d.0. %s',
                     $name,
                     $this->getName(),
@@ -197,7 +196,7 @@ final class Sample
     private function createConfigurationDefinition(): FixerConfigurationResolver
     {
         return new FixerConfigurationResolver([
-            (new FixerOptionBuilder(self::EXCLUDE_KEY, 'Excluded class filepath.'))
+            new FixerOptionBuilder(self::EXCLUDE_KEY, 'Excluded class filepath.')
                 ->setAllowedTypes(['string'])
                 ->setNormalizer(static function (Options $options, string $value): string {
                     if (trim($value) === '') {

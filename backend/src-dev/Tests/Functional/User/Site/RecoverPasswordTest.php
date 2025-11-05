@@ -104,7 +104,7 @@ final class RecoverPasswordTest extends ApiWebTestCase
         self::assertNotFound($response);
     }
 
-    #[DataProvider('notValidPasswordDataProvider')]
+    #[DataProvider('provideBadRequestCases')]
     #[TestDox('Неверный запрос')]
     public function testBadRequest(?string $email): void
     {
@@ -118,7 +118,7 @@ final class RecoverPasswordTest extends ApiWebTestCase
         self::assertBadRequest($response);
     }
 
-    public static function notValidPasswordDataProvider(): Iterator
+    public static function provideBadRequestCases(): Iterator
     {
         yield 'null' => [null];
 

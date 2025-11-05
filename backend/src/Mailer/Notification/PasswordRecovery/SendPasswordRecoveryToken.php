@@ -20,7 +20,7 @@ final readonly class SendPasswordRecoveryToken
     {
         $subject = 'Восстановление пароля';
 
-        $email = (new TemplatedEmail())
+        $email = new TemplatedEmail()
             ->to($message->email->value)
             ->subject($subject)
             ->htmlTemplate('@mails/emails/recoverPassword.html.twig')

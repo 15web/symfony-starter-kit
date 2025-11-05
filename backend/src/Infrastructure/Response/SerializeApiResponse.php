@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Response;
 
-use CuyZ\Valinor\MapperBuilder;
 use CuyZ\Valinor\Normalizer\Format;
 use CuyZ\Valinor\Normalizer\JsonNormalizer;
+use CuyZ\Valinor\NormalizerBuilder;
 use DateTimeImmutable;
 use DateTimeInterface;
 use RuntimeException;
@@ -24,7 +24,7 @@ final readonly class SerializeApiResponse
 {
     private JsonNormalizer $normalizer;
 
-    public function __construct(MapperBuilder $builder)
+    public function __construct(NormalizerBuilder $builder)
     {
         $this->normalizer = $builder
             ->registerTransformer(static fn (Uuid $uuid): string => $uuid->toString())
