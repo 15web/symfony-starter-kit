@@ -20,8 +20,6 @@ doctrine:
                 dir: '%kernel.project_dir%/src/'
                 prefix: 'App\'
                 alias: App
-        controller_resolver:
-            auto_mapping: false
 
 when@test:
     parameters:

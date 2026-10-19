@@ -33,6 +33,9 @@ final class AcceptHeaderTest extends WebTestCase
         self::assertResponseIsSuccessful();
     }
 
+    /**
+     * @return Iterator<array-key, mixed>
+     */
     public static function provideValidHeadersCases(): Iterator
     {
         yield 'Пустые заголовки' => [[]];
@@ -62,6 +65,9 @@ final class AcceptHeaderTest extends WebTestCase
         self::assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
     }
 
+    /**
+     * @return Iterator<array-key, mixed>
+     */
     public static function provideInvalidHeadersCases(): Iterator
     {
         yield 'Accept text/html' => [['HTTP_ACCEPT' => 'text/html']];

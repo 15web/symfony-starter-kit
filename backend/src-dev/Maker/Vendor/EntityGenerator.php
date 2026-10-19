@@ -194,7 +194,7 @@ final readonly class EntityGenerator
             $questionText = 'Add another property? Enter the property name (or press <return> to stop adding fields)';
         }
 
-        $fieldName = $io->ask($questionText, null, function ($name) use ($fields): string|array|null|false|int|float {
+        $fieldName = $io->ask($questionText, null, function ($name) use ($fields): array|false|float|int|string|null {
             // allow it to be empty
             if (!$name) {
                 return $name;

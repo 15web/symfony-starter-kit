@@ -15,7 +15,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 final readonly class ChangePassword
 {
     public function __construct(
-        #[Autowire('%app.hash_cost%')]
+        #[Autowire(param: 'app.hash_cost')]
         private int $hashCost,
         private UserRepository $userRepository,
     ) {}

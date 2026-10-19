@@ -182,6 +182,9 @@ abstract class ApiWebTestCase extends WebTestCase
         self::assertSame(Response::HTTP_TOO_MANY_REQUESTS, $response->getStatusCode());
     }
 
+    /**
+     * @return Iterator<array-key, mixed>
+     */
     final public static function notValidTokenDataProvider(): Iterator
     {
         yield 'пустая строка' => [''];

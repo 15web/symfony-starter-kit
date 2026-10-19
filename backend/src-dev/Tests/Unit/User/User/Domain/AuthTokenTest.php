@@ -118,6 +118,9 @@ final class AuthTokenTest extends TestCase
         );
     }
 
+    /**
+     * @return Iterator<array-key, mixed>
+     */
     public static function provideInvalidTokenFromRequestCases(): Iterator
     {
         yield 'Неверный формат' => ['1q2w3e4r5t'];

@@ -26,6 +26,7 @@ use App\User\User\Query\FindUser;
 use App\User\User\Query\FindUserQuery;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
@@ -44,12 +45,13 @@ final readonly class ChangePasswordAction
      * @param int<min, 4> $hashCost
      */
     public function __construct(
-        #[Autowire('%app.hash_cost%')]
+        #[Autowire(param: 'app.hash_cost')]
         private int $hashCost,
         private ChangePassword $changePassword,
         private FindUser $findUser,
         private CreateToken $createToken,
         private UserTokenRepository $userTokenRepository,
+        #[Target('change_password')]
         private RateLimiterFactoryInterface $changePasswordLimiter,
         private CheckRateLimiter $checkRateLimiter,
         private Flush $flush,

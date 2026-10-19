@@ -13,7 +13,9 @@ use Rector\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\PreferPHPUnitSelfCallRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\PreferPHPUnitThisCallRector;
+use Rector\PHPUnit\PHPUnit100\Rector\Class_\ParentTestClassConstructorRector;
 use Rector\TypeDeclaration\Rector\FunctionLike\AddParamTypeSplFixedArrayRector;
+use Rector\TypeDeclarationDocblocks\Rector\Class_\AddParamTypeToRefactorMethodRector;
 
 return RectorConfig::configure()
     ->withCache(__DIR__.'/../../var/cache/rector')
@@ -53,6 +55,10 @@ return RectorConfig::configure()
         AssertMustHaveMessageRector::class,
     ])
     ->withSkip([
+        // PHPUnit 12.5: TestCase::__construct стал final — правило создаёт фатальный код
+        ParentTestClassConstructorRector::class,
+        // Правило добавляет сужающие @param Xxx $node в refactor(), phpstan падает на контравариантности (method.childParameterType)
+        AddParamTypeToRefactorMethodRector::class,
         ClassPropertyAssignToConstructorPromotionRector::class => [dirname(__DIR__, 2).'/src/*/Domain/*'],
         InlineConstructorDefaultToPropertyRector::class,
         FlipTypeControlToUseExclusiveTypeRector::class,
