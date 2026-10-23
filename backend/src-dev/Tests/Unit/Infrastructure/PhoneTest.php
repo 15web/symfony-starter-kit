@@ -40,6 +40,9 @@ final class PhoneTest extends TestCase
         new Phone($phone);
     }
 
+    /**
+     * @return Iterator<array-key, mixed>
+     */
     public static function provideIncorrectNumberCases(): Iterator
     {
         yield 'Неверный формат' => ['неправильный телефон'];

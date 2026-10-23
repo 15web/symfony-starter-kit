@@ -16,6 +16,7 @@ use App\User\User\Domain\AuthToken;
 use App\User\User\Domain\Exception\EmailIsNotConfirmedException;
 use DomainException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
@@ -34,9 +35,10 @@ final readonly class SignInAction
      * @param int<min, 4> $hashCost
      */
     public function __construct(
-        #[Autowire('%app.hash_cost%')]
+        #[Autowire(param: 'app.hash_cost')]
         private int $hashCost,
         private SignIn $signIn,
+        #[Target('sign_in')]
         private RateLimiterFactoryInterface $signInLimiter,
         private CheckRateLimiter $checkRateLimiter,
         private Flush $flush,

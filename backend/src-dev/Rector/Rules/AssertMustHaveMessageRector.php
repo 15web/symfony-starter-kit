@@ -7,6 +7,7 @@ namespace Dev\Rector\Rules;
 use Override;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\ArgPlaceholder;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
@@ -60,7 +61,7 @@ final class AssertMustHaveMessageRector extends AbstractRector
          */
         $byName = array_filter(
             array: $node->args,
-            callback: static function (Arg|VariadicPlaceholder $arg): bool {
+            callback: static function (Arg|ArgPlaceholder|VariadicPlaceholder $arg): bool {
                 if (!$arg instanceof Arg) {
                     return false;
                 }

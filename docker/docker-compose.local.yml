@@ -1,70 +1,79 @@
 services:
-    backend:
-        build:
-            context: ./backend/
-            target: base
-            args:
-                USER_ID: ${USER_ID}
-        volumes:
-            - ../backend:/app/
-            - composer_cache:/home/dev/.composer
-        env_file: ../backend/.env
-        depends_on:
-            pgsql:
-                condition: service_healthy
-    backend-cli:
-        build:
-            context: ./backend/
-            target: base
-            args:
-                USER_ID: ${USER_ID}
-        volumes:
-            - ../backend:/app/
-            - composer_cache:/home/dev/.composer
-        env_file: ../backend/.env
-        entrypoint: [ "" ]
-        command: [ "php", "-v" ]
-
-    messenger:
-        build:
-            context: ./backend/
-            target: messenger
-            args:
-                USER_ID: ${USER_ID}
-        volumes:
-            - ../backend:/app/
-        env_file: ../backend/.env
-        depends_on:
-            pgsql:
-                condition: service_healthy
-    nginx:
-        build:
-            context: ./nginx/
-        ports:
-            - ${NGINX_PORT}:80
-        depends_on: [ backend ]
-    pgsql:
-        build:
-            context: pgsql
-        ports:
-            - ${PGSQL_PORT}:5432
-        env_file: pgsql/.env
-        volumes:
-            - pgsql:/var/lib/postgresql/data:rw
-        healthcheck:
-            test: /usr/bin/pg_isready
-            interval: 1s
-            timeout: 100s
-            retries: 50
-    mailhog:
-        image: mailhog/mailhog:v1.0.1
-    docs:
-        image: swaggerapi/swagger-ui:v5.21.0
-        environment:
-            SWAGGER_JSON_URL: /docs/openapi.yaml
-            BASE_URL: /docs
-        volumes:
-            - ../backend/src-dev/OpenApi/openapi.yaml:/usr/share/nginx/html/openapi.yaml:ro
+  backend:
+    build:
+      context: ./backend/
+      target: base
+      args:
+        USER_ID: ${USER_ID}
+    volumes:
+      - ../backend:/app/
+      - composer_cache:/home/dev/.composer
+    env_file: ../backend/.env
+    depends_on:
+      pgsql:
+        condition: service_healthy
+  backend-cli:
+    build:
+      context: ./backend/
+      target: base
+      args:
+        USER_ID: ${USER_ID}
+    volumes:
+      - ../backend:/app/
+      - composer_cache:/home/dev/.composer
+    env_file: ../backend/.env
+    entrypoint: [ "" ]
+    command: [ "php", "-v" ]
+  messenger:
+    build:
+      context: ./backend/
+      target: messenger
+      args:
+        USER_ID: ${USER_ID}
+    volumes:
+      - ../backend:/app/
+    env_file: ../backend/.env
+    depends_on:
+      pgsql:
+        condition: service_healthy
+  nginx:
+    build:
+      context: ./nginx/
+    ports:
+      - ${NGINX_PORT}:80
+    depends_on: [ backend ]
+  pgsql:
+    build:
+      context: pgsql
+    ports:
+      - ${PGSQL_PORT}:5432
+    env_file: pgsql/.env
+    volumes:
+      - pgsql:/var/lib/postgresql/data:rw
+    healthcheck:
+      test: /usr/bin/pg_isready
+      interval: 1s
+      timeout: 100s
+      retries: 50
+  mailpit:
+    image: axllent/mailpit:v1.30.2
+    ports:
+      - ${MAILPIT_HTTP_PORT}:8025
+    environment:
+      MP_MAX_MESSAGES: ${MAILPIT_MAX_MESSAGES:-1000}
+      MP_DATABASE: /data/mailpit.db
+    volumes:
+      - mailpit_data:/data
+    logging:
+      driver: 'none'
+  docs:
+    image: swaggerapi/swagger-ui:v5.21.0
+    environment:
+      SWAGGER_JSON_URL: /docs/openapi.yaml
+      BASE_URL: /docs
+    volumes:
+      - ../backend/src-dev/OpenApi/openapi.yaml:/usr/share/nginx/html/openapi.yaml:ro
 volumes:
-    pgsql:
-    composer_cache:
+  pgsql:
+  composer_cache:
+  mailpit_data:

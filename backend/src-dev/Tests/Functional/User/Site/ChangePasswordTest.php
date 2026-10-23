@@ -182,6 +182,9 @@ final class ChangePasswordTest extends ApiWebTestCase
         self::assertBadRequest($response);
     }
 
+    /**
+     * @return Iterator<array-key, mixed>
+     */
     public static function provideBadRequestCases(): Iterator
     {
         yield 'null' => [[null]];

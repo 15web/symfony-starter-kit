@@ -186,9 +186,7 @@ final class Sample
     #[Override]
     public function getConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        if ($this->configurationDefinition === null) {
-            $this->configurationDefinition = $this->createConfigurationDefinition();
-        }
+        $this->configurationDefinition ??= $this->createConfigurationDefinition();
 
         return $this->configurationDefinition;
     }
@@ -343,11 +341,10 @@ final class Sample
 
     private function getDefaultWhitespacesFixerConfig(): WhitespacesFixerConfig
     {
+        /** @var WhitespacesFixerConfig|null $defaultWhitespacesFixerConfig */
         static $defaultWhitespacesFixerConfig = null;
 
-        if ($defaultWhitespacesFixerConfig === null) {
-            $defaultWhitespacesFixerConfig = new WhitespacesFixerConfig('    ', "\n");
-        }
+        $defaultWhitespacesFixerConfig ??= new WhitespacesFixerConfig('    ', "\n");
 
         /** @var WhitespacesFixerConfig $whiteSpaceConfig */
         $whiteSpaceConfig = $defaultWhitespacesFixerConfig;

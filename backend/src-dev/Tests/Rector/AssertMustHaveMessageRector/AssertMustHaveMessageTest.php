@@ -23,6 +23,9 @@ final class AssertMustHaveMessageTest extends AbstractRectorTestCase
         $this->doTestFile($filePath);
     }
 
+    /**
+     * @return Iterator<array-key, mixed>
+     */
     public static function provideCases(): Iterator
     {
         return self::yieldFilesFromDirectory(__DIR__.'/Fixture');

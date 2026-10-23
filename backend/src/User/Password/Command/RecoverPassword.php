@@ -19,7 +19,7 @@ final readonly class RecoverPassword
      * @param int<min, 4> $hashCost
      */
     public function __construct(
-        #[Autowire('%app.hash_cost%')]
+        #[Autowire(param: 'app.hash_cost')]
         private int $hashCost,
         private UserRepository $userRepository,
     ) {}

@@ -1,14 +1,21 @@
-FROM php:8.4.14-fpm AS base
+FROM php:8.5.12-fpm AS base
 
 RUN apt-get update; \
     apt-get install -y --no-install-recommends unzip git;
 
 COPY php.ini /usr/local/etc/php/php.ini
 
-COPY --from=composer:2.8.12 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2.10.3 /usr/bin/composer /usr/bin/composer
 
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
-RUN install-php-extensions pdo_pgsql intl sysvsem pcov bcmath
+RUN install-php-extensions pdo_pgsql intl sysvsem bcmath
+
+# pcov пока недоступен через pecl.php.net для этой среды — ставим из тега на GitHub
+WORKDIR /tmp/pcov-src
+ADD https://github.com/krakjoe/pcov/archive/refs/tags/v1.0.12.zip /tmp/pcov.zip
+RUN unzip -q /tmp/pcov.zip -d /tmp && cd /tmp/pcov-1.0.12 \
+    && phpize && ./configure --enable-pcov && make -j"$(nproc)" && make install \
+    && docker-php-ext-enable pcov && rm -rf /tmp/pcov*
 
 RUN ln -sf /usr/share/zoneinfo/UTC /etc/localtime
 

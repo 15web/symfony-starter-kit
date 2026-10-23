@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Task\Domain;
 
-use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV7;
 
 /**
@@ -12,7 +11,7 @@ use Symfony\Component\Uid\UuidV7;
  */
 final readonly class TaskCommentId
 {
-    private Uuid $value;
+    private UuidV7 $value;
 
     public function __construct()
     {
@@ -27,7 +26,7 @@ final readonly class TaskCommentId
         return $other::class === self::class && $this->value->equals($other->value);
     }
 
-    public function getValue(): Uuid
+    public function getValue(): UuidV7
     {
         return $this->value;
     }
